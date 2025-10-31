@@ -16,6 +16,7 @@ interface Service {
 
 export default function Services() {
   const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -25,8 +26,14 @@ export default function Services() {
   useEffect(() => {
     fetch('/api/services')
       .then((res) => res.json())
-      .then((data) => setServices(data.services || []))
-      .catch((err) => console.error('Error fetching services:', err));
+      .then((data) => {
+        setServices(data.services || []);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error('Error fetching services:', err);
+        setLoading(false);
+      });
   }, []);
 
   const containerVariants = {
@@ -164,10 +171,17 @@ export default function Services() {
             ))}
           </div>
 
-          {services.length === 0 && (
+          {loading && (
             <div className="text-center py-12">
               <p className="text-gray-500 dark:text-gray-400 text-lg">
                 Loading services...
+              </p>
+            </div>
+          )}
+          {!loading && services.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-gray-500 dark:text-gray-400 text-lg">
+                No services available
               </p>
             </div>
           )}
