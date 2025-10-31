@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MarkLine - Creative Marketing Solutions
+
+A modern Next.js application for creative marketing agency showcasing services, portfolio, and client management.
+
+## Features
+
+- 🎨 Modern, responsive design with Tailwind CSS
+- 🌐 Multi-language support (English/Arabic)
+- 🔐 Admin panel for content management
+- 📱 Portfolio showcase
+- 💼 Client management system
+- 📝 Service management
+- 💬 Testimonials and FAQs
+- 📧 Contact forms and inquiries
+
+## Tech Stack
+
+- **Framework**: Next.js 16
+- **Database**: MongoDB with Mongoose
+- **Authentication**: JWT-based authentication
+- **Styling**: Tailwind CSS
+- **Animation**: Framer Motion, GSAP
+- **Rich Text**: TipTap editor
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+ 
+- MongoDB (local or Atlas)
+
+### Installation
 
 ```bash
+# Install dependencies
+npm install
+
+# Set up environment variables
+# Copy .env.example and configure:
+# - MONGODB_URI
+# - JWT_SECRET
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Environment Variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Create a `.env.local` file:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_key
+NODE_ENV=development
+```
 
-## Learn More
+### Database Setup
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Seed initial data
+npm run seed
+# Or visit /api/seed endpoint
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
 
-## Deploy on Vercel
+Quick deployment to Vercel:
+1. Push code to GitHub
+2. Import to Vercel
+3. Set environment variables
+4. Deploy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Project Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+├── src/
+│   ├── app/              # Next.js app router pages
+│   │   ├── api/          # API routes
+│   │   ├── admin/        # Admin panel
+│   │   └── ...
+│   ├── components/       # React components
+│   ├── lib/              # Utilities and helpers
+│   ├── models/           # MongoDB models
+│   └── ...
+├── public/               # Static assets
+└── scripts/              # Utility scripts
+```
+
+## License
+
+Private project - All rights reserved
+

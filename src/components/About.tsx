@@ -1,0 +1,739 @@
+'use client';
+
+import { motion, useAnimation } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useEffect } from 'react';
+
+export default function About() {
+  const controls = useAnimation();
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
+  const { t, isRTL } = useLanguage();
+
+  useEffect(() => {
+    if (inView) {
+      controls.start('visible');
+    }
+  }, [controls, inView]);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30, scale: 0.95 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { 
+        duration: 0.7,
+        ease: [0.25, 0.46, 0.45, 0.94] as any,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, x: -30, rotateY: -15 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      rotateY: 0,
+      transition: { 
+        duration: 0.8,
+        ease: [0.34, 1.56, 0.64, 1] as any,
+      },
+    },
+  };
+
+  return (
+    <section id="about" className="relative py-32 bg-gradient-to-b from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300 overflow-hidden">
+      {/* Animated Background Pattern */}
+      <div className="absolute inset-0 opacity-30 dark:opacity-20">
+        <div className="absolute inset-0" style={{
+          backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(41, 171, 226, 0.15) 1px, transparent 0)',
+          backgroundSize: '40px 40px'
+        }} />
+      </div>
+
+      {/* Floating Gradient Orbs - Only animate when in view */}
+      {inView && (
+        <>
+          <motion.div
+            className="absolute top-20 right-10 w-96 h-96 bg-primary/10 dark:bg-primary/20 rounded-full blur-3xl"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.5, 0.3],
+              x: [0, 50, 0],
+              y: [0, 30, 0],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          />
+          <motion.div
+            className="absolute bottom-20 left-10 w-80 h-80 bg-secondary/10 dark:bg-primary/10 rounded-full blur-3xl"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{
+              scale: [1, 1.3, 1],
+              opacity: [0.2, 0.4, 0.2],
+              x: [0, -30, 0],
+              y: [0, -50, 0],
+            }}
+            transition={{
+              duration: 12,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          />
+        </>
+      )}
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          ref={ref}
+          initial="hidden"
+          animate={inView ? 'visible' : 'hidden'}
+          variants={containerVariants}
+        >
+          {/* Title Section with Modern Blur Text Animation */}
+          <motion.div 
+            variants={itemVariants} 
+            className="text-center mb-24"
+          >
+            <motion.div className="inline-block mb-6">
+              <motion.span
+                className="px-6 py-2 bg-primary/10 dark:bg-primary/20 text-primary rounded-full text-sm font-rb-bold uppercase tracking-wider"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={inView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ duration: 0.6 }}
+              >
+                {isRTL ? 'من نحن' : 'About Us'}
+              </motion.span>
+            </motion.div>
+
+                  <motion.h2 
+                    className="text-5xl sm:text-6xl lg:text-8xl font-rb-bold mb-8 uppercase tracking-tighter"
+                    style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                  >
+                    {isRTL ? (
+                      // Simple fade for Arabic
+                      <motion.span
+                        className="text-gray-900 dark:text-white"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={inView ? { opacity: 1, y: 0 } : {}}
+                        transition={{ duration: 0.8 }}
+                      >
+                        {t.about.title}
+                      </motion.span>
+                    ) : (
+                      // Blur animation for English
+                      t.about.title.split(' ').map((word, wordIndex) => (
+                        <span key={wordIndex} className="inline-block mr-4">
+                          {word.split('').map((char, charIndex) => (
+                            <motion.span
+                              key={charIndex}
+                              className="inline-block"
+                              style={{
+                                backgroundImage: 'linear-gradient(90deg, #1f2937 0%, #29ABE2 50%, #1f2937 100%)',
+                                backgroundSize: '200% 100%',
+                                WebkitBackgroundClip: 'text',
+                                backgroundClip: 'text',
+                                color: 'transparent',
+                              }}
+                              initial={{ filter: 'blur(10px)', opacity: 0 }}
+                              animate={inView ? { filter: 'blur(0px)', opacity: 1 } : {}}
+                              transition={{
+                                duration: 0.6,
+                                delay: (wordIndex * 0.1) + (charIndex * 0.03),
+                                ease: 'easeOut',
+                              }}
+                            >
+                              {char}
+                            </motion.span>
+                          ))}
+                        </span>
+                      ))
+                    )}
+                  </motion.h2>
+
+            <motion.div
+              className="h-2 w-32 bg-gradient-to-r from-primary via-blue-400 to-primary mx-auto mb-8 rounded-full relative overflow-hidden"
+              initial={{ width: 0, opacity: 0 }}
+              animate={inView ? { width: 128, opacity: 1 } : {}}
+              transition={{ duration: 1, delay: 0.5 }}
+            >
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent"
+                animate={{ x: ['-100%', '200%'] }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+              />
+            </motion.div>
+
+            <motion.p 
+              className="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto font-montserrat leading-relaxed"
+              style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.7 }}
+            >
+              {t.about.description}
+            </motion.p>
+          </motion.div>
+
+          {/* Vision & Mission Cards - Modern Glassmorphism Design */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-24">
+            {/* Vision Card */}
+            <motion.div
+              variants={cardVariants}
+              whileHover={{ 
+                scale: 1.03, 
+                y: -10,
+              }}
+              className="group relative p-10 rounded-3xl backdrop-blur-xl bg-white/70 dark:bg-gray-800/70 border border-primary/20 dark:border-primary/30 shadow-2xl hover:shadow-primary/20 transition-all duration-500 cursor-pointer overflow-hidden"
+            >
+              {/* Animated gradient background */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-br from-primary/20 via-blue-400/10 to-transparent dark:from-primary/30 dark:via-blue-400/20 dark:to-transparent opacity-0 group-hover:opacity-100"
+                transition={{ duration: 0.5 }}
+              />
+
+              {/* Floating particles effect */}
+              {inView && [...Array(5)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute w-2 h-2 bg-primary/30 rounded-full"
+                  style={{
+                    left: `${20 + i * 15}%`,
+                    top: `${30 + i * 10}%`,
+                  }}
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{
+                    y: [0, -20, 0],
+                    opacity: [0.2, 0.5, 0.2],
+                    scale: [1, 1.5, 1],
+                  }}
+                  transition={{
+                    duration: 3 + i,
+                    repeat: Infinity,
+                    delay: i * 0.3,
+                  }}
+                />
+              ))}
+
+              <div className="relative z-10">
+                {/* Icon with 3D effect */}
+                <motion.div
+                  className="inline-block mb-6 p-6 rounded-2xl bg-gradient-to-br from-primary/20 to-blue-400/20 dark:from-primary/30 dark:to-blue-400/30"
+                  whileHover={{ 
+                    rotateY: 15,
+                    rotateX: 15,
+                    scale: 1.1,
+                  }}
+                  transition={{ type: 'spring', stiffness: 300 }}
+                >
+                  <motion.div
+                    className="text-6xl"
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={inView ? { 
+                      rotate: [0, -5, 5, 0],
+                      scale: [1, 1.05, 1],
+                      opacity: 1,
+                    } : { opacity: 0, scale: 0 }}
+                    transition={{ duration: 4, repeat: Infinity }}
+                  >
+                    👁️
+                  </motion.div>
+                </motion.div>
+
+                <h3 
+                  className="text-4xl font-rb-bold text-gray-900 dark:text-white mb-6 uppercase tracking-tight"
+                  style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                >
+                  {t.about.vision}
+                </h3>
+                
+                <motion.div 
+                  className="w-16 h-1 bg-gradient-to-r from-primary to-blue-400 rounded-full mb-6"
+                  initial={{ width: 0 }}
+                  animate={inView ? { width: 64 } : {}}
+                  transition={{ duration: 0.8, delay: 0.5 }}
+                />
+                
+                <p 
+                  className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed font-montserrat"
+                  style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                >
+                  {t.about.visionText}
+                </p>
+              </div>
+
+              {/* Corner decoration */}
+              {inView && (
+                <motion.div
+                  className="absolute -bottom-10 -right-10 w-40 h-40 bg-primary/10 dark:bg-primary/20 rounded-full blur-2xl"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.3, 0.5, 0.3],
+                  }}
+                  transition={{ duration: 4, repeat: Infinity }}
+                />
+              )}
+            </motion.div>
+
+            {/* Mission Card */}
+            <motion.div
+              variants={cardVariants}
+              whileHover={{ 
+                scale: 1.03, 
+                y: -10,
+              }}
+              className="group relative p-10 rounded-3xl backdrop-blur-xl bg-white/70 dark:bg-gray-800/70 border border-secondary/20 dark:border-primary/30 shadow-2xl hover:shadow-secondary/20 transition-all duration-500 cursor-pointer overflow-hidden"
+            >
+              {/* Animated gradient background */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-br from-secondary/20 via-gray-400/10 to-transparent dark:from-primary/30 dark:via-gray-600/20 dark:to-transparent opacity-0 group-hover:opacity-100"
+                transition={{ duration: 0.5 }}
+              />
+
+              {/* Floating particles effect */}
+              {inView && [...Array(5)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute w-2 h-2 bg-secondary/30 dark:bg-primary/30 rounded-full"
+                  style={{
+                    right: `${20 + i * 15}%`,
+                    top: `${30 + i * 10}%`,
+                  }}
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{
+                    y: [0, -20, 0],
+                    opacity: [0.2, 0.5, 0.2],
+                    scale: [1, 1.5, 1],
+                  }}
+                  transition={{
+                    duration: 3 + i,
+                    repeat: Infinity,
+                    delay: i * 0.3,
+                  }}
+                />
+              ))}
+
+              <div className="relative z-10">
+                {/* Icon with 3D effect */}
+                <motion.div
+                  className="inline-block mb-6 p-6 rounded-2xl bg-gradient-to-br from-secondary/20 to-gray-400/20 dark:from-primary/30 dark:to-blue-400/30"
+                  whileHover={{ 
+                    rotateY: -15,
+                    rotateX: 15,
+                    scale: 1.1,
+                  }}
+                  transition={{ type: 'spring', stiffness: 300 }}
+                >
+                  <motion.div
+                    className="text-6xl"
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={inView ? { 
+                      scale: [1, 1.1, 1],
+                      rotate: [0, 5, -5, 0],
+                      opacity: 1,
+                    } : { opacity: 0, scale: 0 }}
+                    transition={{ duration: 4, repeat: Infinity }}
+                  >
+                    🎯
+                  </motion.div>
+                </motion.div>
+
+                <h3 
+                  className="text-4xl font-rb-bold text-gray-900 dark:text-white mb-6 uppercase tracking-tight"
+                  style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                >
+                  {t.about.mission}
+                </h3>
+                
+                <motion.div 
+                  className="w-16 h-1 bg-gradient-to-r from-secondary to-gray-600 dark:from-primary dark:to-blue-400 rounded-full mb-6"
+                  initial={{ width: 0 }}
+                  animate={inView ? { width: 64 } : {}}
+                  transition={{ duration: 0.8, delay: 0.5 }}
+                />
+                
+                <p 
+                  className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed font-montserrat"
+                  style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                >
+                  {t.about.missionText}
+                </p>
+              </div>
+
+              {/* Corner decoration */}
+              {inView && (
+                <motion.div
+                  className="absolute -bottom-10 -left-10 w-40 h-40 bg-secondary/10 dark:bg-primary/20 rounded-full blur-2xl"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.3, 0.5, 0.3],
+                  }}
+                  transition={{ duration: 4, repeat: Infinity }}
+                />
+              )}
+            </motion.div>
+          </div>
+
+          {/* Features Grid - Modern Bento Box Style */}
+          <motion.div variants={itemVariants} className="mb-20">
+            <motion.div className="text-center mb-16">
+              <motion.h3 
+                className="text-4xl sm:text-5xl font-rb-bold text-gray-900 dark:text-white mb-4 uppercase tracking-tight"
+                style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={inView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ duration: 0.6 }}
+              >
+                {t.about.unique}
+              </motion.h3>
+              <motion.div 
+                className="h-1.5 w-24 bg-gradient-to-r from-primary to-blue-400 mx-auto rounded-full"
+                initial={{ width: 0 }}
+                animate={inView ? { width: 96 } : {}}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              />
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {t.about.features.map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                  animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+                  transition={{ 
+                    duration: 0.7, 
+                    delay: index * 0.1,
+                    ease: [0.25, 0.46, 0.45, 0.94] as any,
+                  }}
+                  whileHover={{ 
+                    y: -15,
+                    scale: 1.05,
+                    transition: { duration: 0.3 }
+                  }}
+                  className="group relative p-8 rounded-3xl backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 border-2 border-gray-200/50 dark:border-gray-700/50 hover:border-primary dark:hover:border-primary transition-all duration-500 cursor-pointer shadow-lg hover:shadow-2xl hover:shadow-primary/20 overflow-hidden"
+                >
+                  {/* Animated gradient mesh background */}
+                  <motion.div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{
+                      background: 'radial-gradient(circle at 50% 50%, rgba(41, 171, 226, 0.1) 0%, transparent 70%)',
+                    }}
+                  />
+
+                  {/* Floating glow orb */}
+                  {inView && (
+                    <motion.div
+                      className="absolute -top-10 -right-10 w-32 h-32 bg-primary/20 dark:bg-primary/30 rounded-full blur-2xl"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{
+                        scale: [1, 1.2, 1],
+                        opacity: [0.3, 0.6, 0.3],
+                      }}
+                      transition={{
+                        duration: 4,
+                        repeat: Infinity,
+                        delay: index * 0.5,
+                      }}
+                    />
+                  )}
+
+                  <div className="relative z-10">
+                    {/* Icon container with 3D effect */}
+                    <motion.div 
+                      className="inline-block mb-6 p-5 rounded-2xl bg-gradient-to-br from-primary/10 to-blue-400/10 dark:from-primary/20 dark:to-blue-400/20 backdrop-blur-sm overflow-hidden"
+                      whileHover={{ 
+                        rotateY: 180,
+                        scale: 1.1,
+                      }}
+                      transition={{ duration: 0.6, type: 'spring' }}
+                    >
+                      {index === 0 ? (
+                        // Animated Waving Saudi Flag
+                        <motion.div
+                          className="relative"
+                          style={{
+                            width: '60px',
+                            height: '60px',
+                            perspective: '500px',
+                          }}
+                          initial={{ opacity: 0, scale: 0 }}
+                          animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
+                          transition={{ duration: 0.5, delay: index * 0.3 }}
+                        >
+                          {/* Saudi Flag with Wave Effect */}
+                          <motion.div
+                            className="absolute inset-0"
+                            style={{
+                              background: 'linear-gradient(to bottom, #006C35 0%, #006C35 100%)',
+                              borderRadius: '8px',
+                              boxShadow: '0 4px 15px rgba(0, 108, 53, 0.3)',
+                            }}
+                            animate={{
+                              rotateY: [-3, 3, -3],
+                              rotateX: [2, -2, 2],
+                            }}
+                            transition={{
+                              duration: 2,
+                              repeat: Infinity,
+                              ease: 'easeInOut',
+                            }}
+                          >
+                            {/* Flag Pattern - Shahada and Sword */}
+                            <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
+                              <motion.div
+                                className="text-xl font-bold"
+                                animate={{
+                                  scaleX: [1, 1.05, 1],
+                                  x: [0, 2, 0],
+                                }}
+                                transition={{
+                                  duration: 2,
+                                  repeat: Infinity,
+                                  ease: 'easeInOut',
+                                }}
+                              >
+                                ⚔️
+                              </motion.div>
+                              <motion.div
+                                className="text-[8px] leading-tight text-center px-1"
+                                animate={{
+                                  scaleX: [1, 1.03, 1],
+                                }}
+                                transition={{
+                                  duration: 2,
+                                  repeat: Infinity,
+                                  ease: 'easeInOut',
+                                  delay: 0.1,
+                                }}
+                              >
+                                🇸🇦
+                              </motion.div>
+                            </div>
+                            
+                            {/* Wave effect overlay */}
+                            <motion.div
+                              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+                              animate={{
+                                x: ['-100%', '100%'],
+                              }}
+                              transition={{
+                                duration: 2,
+                                repeat: Infinity,
+                                ease: 'linear',
+                              }}
+                            />
+                          </motion.div>
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          className="text-5xl"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={inView ? {
+                            y: [0, -5, 0],
+                            opacity: 1,
+                          } : { opacity: 0, y: 10 }}
+                          transition={{
+                            duration: 3,
+                            repeat: Infinity,
+                            delay: index * 0.3,
+                          }}
+                        >
+                          {index === 1 ? '⚡' : index === 2 ? '👥' : index === 3 ? '✨' : index === 4 ? '🤝' : '💡'}
+                        </motion.div>
+                      )}
+                    </motion.div>
+
+                    {/* Title with hover animation */}
+                    <h4 
+                      className="text-xl font-rb-bold text-gray-900 dark:text-white mb-4 uppercase tracking-wide group-hover:text-primary dark:group-hover:text-primary transition-colors duration-300"
+                      style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                    >
+                      {item.title}
+                    </h4>
+
+                    {/* Animated underline */}
+                    <motion.div 
+                      className="h-0.5 bg-gradient-to-r from-primary to-blue-400 rounded-full mb-4"
+                      initial={{ width: 0 }}
+                      animate={inView ? { width: '60%' } : {}}
+                      transition={{ duration: 0.6, delay: index * 0.1 + 0.3 }}
+                    />
+
+                    {/* Description */}
+                    <p 
+                      className="text-gray-600 dark:text-gray-300 leading-relaxed font-montserrat text-base"
+                      style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                    >
+                      {item.desc}
+                    </p>
+                  </div>
+
+                  {/* Shine effect on hover */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 dark:via-white/10 to-transparent opacity-0 group-hover:opacity-100"
+                    initial={{ x: '-100%' }}
+                    whileHover={{ x: '100%' }}
+                    transition={{ duration: 0.8 }}
+                  />
+
+                  {/* Corner accent */}
+                  <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl from-primary/10 to-transparent dark:from-primary/20 dark:to-transparent rounded-tl-3xl" />
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* CTA Section - Modern Glass Card */}
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ scale: 1.02, y: -5 }}
+            className="relative text-center p-16 rounded-[2.5rem] backdrop-blur-2xl bg-gradient-to-br from-primary/90 to-blue-500/90 dark:from-primary/80 dark:to-gray-800/80 text-white overflow-hidden shadow-2xl"
+          >
+            {/* Animated gradient mesh background */}
+            <motion.div
+              className="absolute inset-0 opacity-30"
+              style={{
+                backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.15) 0%, transparent 50%)',
+              }}
+              animate={{
+                backgroundPosition: ['0% 0%', '100% 100%'],
+              }}
+              transition={{
+                duration: 10,
+                repeat: Infinity,
+                repeatType: 'reverse',
+              }}
+            />
+
+            {/* Floating orbs */}
+            {inView && [...Array(3)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-32 h-32 bg-white/10 rounded-full blur-2xl"
+                style={{
+                  left: `${20 + i * 30}%`,
+                  top: `${30 + i * 20}%`,
+                }}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{
+                  y: [0, -30, 0],
+                  x: [0, 20, 0],
+                  scale: [1, 1.2, 1],
+                  opacity: [0.3, 0.6, 0.3],
+                }}
+                transition={{
+                  duration: 5 + i,
+                  repeat: Infinity,
+                  delay: i * 0.5,
+                }}
+              />
+            ))}
+
+            {/* Shine effect */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+              animate={{
+                x: ['-200%', '200%'],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                repeatDelay: 1,
+              }}
+            />
+
+            <div className="relative z-10">
+              <motion.div
+                className="inline-block mb-6"
+                initial={{ opacity: 0, scale: 0, rotate: -45 }}
+                animate={inView ? {
+                  scale: [1, 1.05, 1],
+                  opacity: 1,
+                  rotate: 0,
+                } : { opacity: 0, scale: 0, rotate: -45 }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                }}
+              >
+                <span className="text-6xl">🚀</span>
+              </motion.div>
+
+              <motion.h3 
+                className="text-4xl sm:text-5xl font-rb-bold mb-6 uppercase tracking-tight"
+                initial={{ opacity: 0, y: -20 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: 0.8 }}
+              >
+                {isRTL ? 'دراسات الحالة' : 'CASE STUDIES'}
+              </motion.h3>
+
+              <motion.div 
+                className="h-1 w-24 bg-white/50 mx-auto mb-8 rounded-full"
+                initial={{ width: 0 }}
+                animate={inView ? { width: 96 } : {}}
+                transition={{ duration: 0.8, delay: 0.9 }}
+              />
+
+              <motion.p 
+                className="text-xl sm:text-2xl mb-10 max-w-3xl mx-auto font-montserrat leading-relaxed text-white/90"
+                initial={{ opacity: 0 }}
+                animate={inView ? { opacity: 1 } : {}}
+                transition={{ duration: 0.6, delay: 1 }}
+              >
+                {isRTL ? 'استكشف أعمالنا لترى كيف يمكننا مساعدتك في تحويل عملك وتحقيق أهدافك' : 'Explore our portfolio to see how we can help you transform your business and achieve your goals'}
+              </motion.p>
+
+              <motion.a
+                href="#work"
+                className="inline-block group relative px-12 py-5 bg-white text-primary rounded-full font-rb-bold uppercase tracking-wider shadow-2xl overflow-hidden"
+                whileHover={{ scale: 1.08, y: -3 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                {/* Button glow effect */}
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-primary/20 to-blue-400/20"
+                  initial={{ x: '-100%' }}
+                  whileHover={{ x: '100%' }}
+                  transition={{ duration: 0.6 }}
+                />
+
+                <span className="relative z-10 flex items-center gap-3">
+                  {isRTL ? 'شاهد أعمالنا' : 'View Our Work'}
+                  <motion.span
+                    animate={{ x: [0, 5, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  >
+                    →
+                  </motion.span>
+                </span>
+              </motion.a>
+            </div>
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+

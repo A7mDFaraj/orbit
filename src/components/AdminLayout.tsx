@@ -1,0 +1,208 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import toast, { Toaster } from 'react-hot-toast';
+
+// Force light theme for admin pages
+const forceLightTheme = () => {
+  if (typeof window !== 'undefined') {
+    document.documentElement.classList.remove('dark');
+    document.documentElement.style.colorScheme = 'light';
+  }
+};
+
+// Create a MutationObserver to prevent dark theme from being applied
+const createThemeObserver = () => {
+  if (typeof window === 'undefined') return null;
+  
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+        if (document.documentElement.classList.contains('dark')) {
+          document.documentElement.classList.remove('dark');
+          document.documentElement.style.colorScheme = 'light';
+        }
+      }
+    });
+  });
+  
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class'],
+  });
+  
+  return observer;
+};
+
+interface AdminLayoutProps {
+  children: React.ReactNode;
+}
+
+export default function AdminLayout({ children }: AdminLayoutProps) {
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    // Force light theme when admin layout mounts
+    forceLightTheme();
+    checkAuth();
+    
+    // Create observer to prevent dark theme from being applied
+    const observer = createThemeObserver();
+    
+    return () => {
+      if (observer) {
+        observer.disconnect();
+      }
+    };
+  }, []);
+
+  const checkAuth = async () => {
+    try {
+      const res = await fetch('/api/auth/me');
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data.user);
+      } else {
+        router.push('/admin');
+      }
+    } catch (error) {
+      router.push('/admin');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      toast.success('Logged out successfully');
+      router.push('/admin');
+    } catch (error) {
+      toast.error('Logout failed');
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl text-gray-600">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
+
+  const menuItems = [
+    { name: 'Dashboard', href: '/admin/dashboard', icon: '📊' },
+    { name: 'Hero Section', href: '/admin/hero', icon: '🌟' },
+    { name: 'Services', href: '/admin/services', icon: '💼' },
+    { name: 'Portfolio', href: '/admin/clients', icon: '🎨' },
+    { name: 'Testimonials', href: '/admin/testimonials', icon: '⭐' },
+    { name: 'FAQs', href: '/admin/faqs', icon: '❓' },
+    { name: 'Video', href: '/admin/video', icon: '🎬' },
+  ];
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex">
+      <Toaster position="top-right" />
+
+      {/* Sidebar */}
+      <aside
+        className={`relative bg-gradient-to-b from-gray-900 to-gray-800 text-white transition-all duration-300 ${
+          sidebarOpen ? 'w-64' : 'w-20'
+        } shadow-2xl overflow-hidden`}
+      >
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-8">
+            {sidebarOpen ? (
+              <Link href="/" className="group">
+                <div className="relative bg-black rounded-sm overflow-hidden shadow-lg group-hover:shadow-xl transition-shadow duration-300" style={{ width: '160px', height: '45px' }}>
+                  <img 
+                    src="/client/logo.jpg" 
+                    alt="Mark Line" 
+                    className="h-full w-full object-cover object-center"
+                    style={{ 
+                      transform: 'scale(1.4)',
+                      objectPosition: 'center center'
+                    }}
+                  />
+                  <div className="absolute inset-0 border-2 border-primary rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
+              </Link>
+            ) : (
+              <Link href="/" className="text-primary text-2xl font-bold">
+                ML
+              </Link>
+            )}
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="p-2 hover:bg-gray-700 rounded-lg transition-colors ml-2"
+            >
+              {sidebarOpen ? '←' : '→'}
+            </button>
+          </div>
+
+          <nav className="space-y-2">
+            {menuItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primary hover:shadow-lg transition-all duration-300 group"
+              >
+                <span className="text-2xl group-hover:scale-110 transition-transform">{item.icon}</span>
+                {sidebarOpen && (
+                  <span className="font-semibold tracking-wide">{item.name}</span>
+                )}
+              </Link>
+            ))}
+          </nav>
+        </div>
+
+        <div className={`absolute bottom-0 left-0 right-0 p-6`}>
+          <button
+            onClick={handleLogout}
+            className={`w-full flex items-center ${sidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-3 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-300 text-white font-semibold`}
+          >
+            <span className="text-2xl">🚪</span>
+            {sidebarOpen && <span>Logout</span>}
+          </button>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 overflow-auto bg-gray-50">
+        {/* Header */}
+        <header className="bg-white shadow-md border-b-4 border-primary">
+          <div className="px-8 py-6 flex items-center justify-between">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900 uppercase tracking-wide">
+                Admin <span className="text-primary">Dashboard</span>
+              </h2>
+              <p className="text-sm text-gray-500 mt-1">Mark Line Control Panel</p>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="text-right">
+                <p className="text-sm text-gray-600">Welcome back,</p>
+                <p className="font-bold text-gray-900">{user.name}</p>
+              </div>
+              <div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                {user.name.charAt(0)}
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Page Content */}
+        <div className="p-8">{children}</div>
+      </main>
+    </div>
+  );
+}
+
