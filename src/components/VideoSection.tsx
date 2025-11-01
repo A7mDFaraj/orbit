@@ -36,8 +36,7 @@ export default function VideoSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { isRTL } = useLanguage();
   const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
+    threshold: 0.5,
   });
 
   useEffect(() => {
@@ -47,6 +46,21 @@ export default function VideoSection() {
       .then((data) => setSettings(data.settings))
       .catch((err) => console.error('Error fetching video settings:', err));
   }, []);
+
+  // Auto-play video when in view, pause when out of view
+  useEffect(() => {
+    if (videoRef.current && mounted) {
+      if (inView) {
+        videoRef.current.play().catch(err => {
+          console.log('Auto-play prevented:', err);
+        });
+        setIsPlaying(true);
+      } else {
+        videoRef.current.pause();
+        setIsPlaying(false);
+      }
+    }
+  }, [inView, mounted]);
 
   const handlePlayClick = () => {
     if (videoRef.current) {

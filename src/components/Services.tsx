@@ -12,11 +12,13 @@ interface Service {
   description: string;
   descriptionAr: string;
   category: string;
+  image?: string;
 }
 
 export default function Services() {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
+  const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set());
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -36,28 +38,45 @@ export default function Services() {
       });
   }, []);
 
+  const toggleFlip = (serviceId: string) => {
+    setFlippedCards(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(serviceId)) {
+        newSet.delete(serviceId);
+      } else {
+        newSet.add(serviceId);
+      }
+      return newSet;
+    });
+  };
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.12,
+        staggerChildren: 0.15,
         delayChildren: 0.2,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 40, scale: 0.9 },
+    hidden: { opacity: 0, y: 50 },
     visible: {
       opacity: 1,
       y: 0,
-      scale: 1,
       transition: { 
-        duration: 0.7,
+        duration: 0.8,
         ease: [0.25, 0.46, 0.45, 0.94] as any,
       },
     },
+  };
+
+  // Split description into bullet points for numbered list
+  const parseDescription = (desc: string) => {
+    const points = desc.split(/(?:\d+\)|\d+\.|[-•])\s*/).filter(p => p.trim().length > 0);
+    return points.length > 0 ? points : [desc];
   };
 
   return (
@@ -109,66 +128,102 @@ export default function Services() {
             </motion.p>
           </motion.div>
 
-          <div className="flex flex-wrap justify-center gap-6">
-            {services.map((service, index) => (
-              <motion.div
-                key={service._id}
-                variants={itemVariants}
-                whileHover={{ 
-                  y: -12,
-                  scale: 1.05,
-                  boxShadow: '0 25px 50px rgba(41, 171, 226, 0.25)',
-                }}
-                className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-lg transition-all cursor-pointer group relative overflow-hidden border-2 border-transparent dark:border-gray-700 hover:border-primary w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] xl:w-[calc(25%-18px)]"
-              >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+            {services.map((service, index) => {
+              const descriptionPoints = parseDescription(isRTL ? service.descriptionAr : service.description);
+              const isFlipped = flippedCards.has(service._id);
+              
+              return (
                 <motion.div
-                  className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100"
-                  transition={{ duration: 0.4 }}
-                />
-                <motion.div
-                  className="absolute -top-12 -right-12 w-32 h-32 bg-primary/10 rounded-full blur-2xl"
-                  animate={{ 
-                    scale: [1, 1.2, 1],
-                    opacity: [0.5, 0.8, 0.5],
-                  }}
-                  transition={{ 
-                    duration: 3,
-                    repeat: Infinity,
-                    delay: index * 0.3,
-                  }}
-                />
-                <div className="relative z-10 text-center">
-                  <motion.div 
-                    className="text-4xl mb-4 inline-block"
-                    whileHover={{ 
-                      rotate: [0, -15, 15, -10, 10, 0],
-                      scale: 1.3,
-                    }}
-                    transition={{ duration: 0.6 }}
+                  key={service._id}
+                  variants={itemVariants}
+                  className="relative h-[500px] perspective-1000"
+                  style={{ perspective: '1000px' }}
+                >
+                  <motion.div
+                    className="relative w-full h-full preserve-3d cursor-pointer"
+                    animate={{ rotateY: isFlipped ? 180 : 0 }}
+                    transition={{ duration: 0.6, ease: 'easeInOut' }}
+                    onClick={() => toggleFlip(service._id)}
+                    onMouseEnter={() => toggleFlip(service._id)}
+                    onMouseLeave={() => toggleFlip(service._id)}
+                    style={{ transformStyle: 'preserve-3d' }}
                   >
-                    {getCategoryIcon(service.category)}
+                    {/* Front Side - Image */}
+                    <div
+                      className="absolute inset-0 w-full h-full backface-hidden rounded-2xl overflow-hidden shadow-lg"
+                      style={{ 
+                        backfaceVisibility: 'hidden',
+                        WebkitBackfaceVisibility: 'hidden',
+                        transform: 'rotateY(0deg)',
+                      }}
+                    >
+                      <div className="relative w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 dark:from-primary/30 dark:to-primary/10">
+                        {service.image ? (
+                          <img
+                            src={service.image}
+                            alt={isRTL ? service.titleAr : service.title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <div className="text-7xl">
+                              {getCategoryIcon(service.category)}
+                            </div>
+                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                        <div className="absolute bottom-0 left-0 right-0 p-6">
+                          <h3 
+                            className="text-2xl font-rb-bold text-white mb-2 uppercase tracking-wide"
+                            style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                          >
+                            {isRTL ? service.titleAr : service.title}
+                          </h3>
+                          <p className="text-white/80 text-sm font-montserrat">
+                            {isRTL ? 'انقر أو مرر للتفاصيل' : 'Click or hover for details'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Back Side - Text Content */}
+                    <div
+                      className="absolute inset-0 w-full h-full backface-hidden rounded-2xl bg-white dark:bg-gray-900 p-8 shadow-lg overflow-y-auto"
+                      style={{ 
+                        backfaceVisibility: 'hidden',
+                        WebkitBackfaceVisibility: 'hidden',
+                        transform: 'rotateY(180deg)',
+                      }}
+                    >
+                      <h3 
+                        className="text-2xl font-rb-bold text-gray-900 dark:text-white mb-4 uppercase tracking-wide"
+                        style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                      >
+                        {isRTL ? service.titleAr : service.title}
+                      </h3>
+                      
+                      {/* Description as numbered list */}
+                      <div className="space-y-3">
+                        {descriptionPoints.map((point, idx) => (
+                          <div key={idx} className="flex items-start gap-3">
+                            <span className="text-primary font-rb-bold text-lg flex-shrink-0 mt-0.5">
+                              {idx + 1}
+                            </span>
+                            <p 
+                              className="text-gray-600 dark:text-gray-300 leading-relaxed font-montserrat flex-1"
+                              style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                            >
+                              {point.trim()}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </motion.div>
-                  <h3 
-                    className="text-xl font-rb-bold text-gray-900 dark:text-white mb-3 group-hover:text-primary transition-colors uppercase tracking-wider"
-                    style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
-                  >
-                    {isRTL ? service.titleAr : service.title}
-                  </h3>
-                  <p 
-                    className="text-gray-600 dark:text-gray-300 leading-relaxed font-montserrat"
-                    style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
-                  >
-                    {isRTL ? service.descriptionAr : service.description}
-                  </p>
-                </div>
-                <motion.div
-                  className="absolute bottom-0 right-0 w-20 h-20 bg-primary/10 rounded-tl-full"
-                  initial={{ scale: 0, opacity: 0 }}
-                  whileHover={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                />
-              </motion.div>
-            ))}
+                </motion.div>
+              );
+            })}
           </div>
 
           {loading && (
@@ -201,4 +256,3 @@ function getCategoryIcon(category: string): string {
   };
   return icons[category] || '✨';
 }
-

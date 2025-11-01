@@ -24,12 +24,22 @@ export default function Navbar() {
     { name: t.nav.contact, href: '#contact' },
   ];
 
+  // For Arabic: order from right: من نحن, خدماتنا, اعمالنا, تواصل معنا
+  const arabicMenuItems = [
+    { name: t.nav.about, href: '#about' },
+    { name: t.nav.services, href: '#services' },
+    { name: t.nav.work, href: '#work' },
+    { name: t.nav.contact, href: '#contact' },
+  ];
+
+  const displayMenuItems = isRTL ? arabicMenuItems : menuItems;
+
   // Force dark navbar on portfolio pages
   const navbarIsDark = isPortfolioPage ? true : isDark;
   
   return (
     <header 
-      className={`fixed top-0 inset-x-0 z-50 ${navbarIsDark ? 'bg-[#2b3440]' : 'bg-gray-50'} border-b ${navbarIsDark ? 'border-gray-800' : 'border-gray-200'}`}
+      className={`fixed top-0 inset-x-0 z-50 ${navbarIsDark ? 'bg-gray-950' : 'bg-gray-50'} border-b ${navbarIsDark ? 'border-gray-800' : 'border-gray-200'}`}
       dir="ltr" // Keep layout LTR (logo left, menu center, buttons right)
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -88,7 +98,7 @@ export default function Navbar() {
 
           {/* Center: Menu */}
           <nav className="hidden lg:flex items-center gap-6 flex-1 justify-center">
-            {menuItems.map((item) => (
+            {(isRTL ? [...displayMenuItems].reverse() : displayMenuItems).map((item) => (
               <a
                 key={item.name}
                 href={item.href}
@@ -117,7 +127,7 @@ export default function Navbar() {
           </nav>
 
           {/* Right: toggles + CTAs - Fixed width to prevent shifting */}
-          <div className="hidden md:flex items-center gap-2 flex-shrink-0" style={{ minWidth: '200px', justifyContent: 'flex-end' }}>
+          <div className={`hidden md:flex items-center gap-2 flex-shrink-0 ${isRTL ? '' : ''}`} style={{ minWidth: '200px', justifyContent: 'flex-end' }}>
             <div className={`flex items-center rounded-full ${navbarIsDark ? 'bg-gray-900 border border-gray-700' : 'bg-white border border-gray-200'} p-1`}> 
               {!isPortfolioPage && <ThemeToggle />}
               <LanguageSwitcher />
@@ -180,7 +190,7 @@ export default function Navbar() {
             </div>
 
             <nav className="grid gap-1">
-              {menuItems.map((item) => (
+              {displayMenuItems.map((item) => (
                 <a
                   key={item.name}
                   href={item.href}
@@ -203,7 +213,7 @@ export default function Navbar() {
                   style={{ 
                     fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined,
                     direction: isRTL ? 'rtl' : 'ltr',
-                    textAlign: 'left',
+                    textAlign: isRTL ? 'right' : 'left',
                   }}
                 >
                   {item.name}
