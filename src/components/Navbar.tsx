@@ -19,15 +19,17 @@ export default function Navbar() {
   const menuItems = [
     { name: t.nav.about, href: '#about' },
     { name: t.nav.services, href: '#services' },
+    { name: t.nav.packages, href: '/packages' },
     { name: t.nav.work, href: '#work' },
     { name: t.nav.portfolio, href: '/portfolio' },
     { name: t.nav.contact, href: '#contact' },
   ];
 
-  // For Arabic: order from right: من نحن, خدماتنا, اعمالنا, تواصل معنا
+  // For Arabic: order from right: من نحن, خدماتنا, باقاتنا, اعمالنا, تواصل معنا
   const arabicMenuItems = [
     { name: t.nav.about, href: '#about' },
     { name: t.nav.services, href: '#services' },
+    { name: t.nav.packages, href: '/packages' },
     { name: t.nav.work, href: '#work' },
     { name: t.nav.contact, href: '#contact' },
   ];
