@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
 
-export default function RequestQuotePage() {
+function RequestQuoteForm() {
   const { t, isRTL } = useLanguage();
   const searchParams = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -469,3 +469,17 @@ export default function RequestQuotePage() {
   );
 }
 
+export default function RequestQuotePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400 font-rb-bold">Loading...</p>
+        </div>
+      </div>
+    }>
+      <RequestQuoteForm />
+    </Suspense>
+  );
+}

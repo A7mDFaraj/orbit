@@ -365,26 +365,30 @@ export default function Hero() {
             style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined, zIndex: 10, position: 'relative' }}
           >
             {/* Enhanced Light Rays Effect Behind Heading - Behind All Content */}
-            <div className="absolute pointer-events-none" style={{ 
-              width: '120%', 
-              height: '600px',
-              top: isRTL ? (isDark ? '-80px' : '-120px') : '-100px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              zIndex: -10
-            }}>
+            <div 
+              key={`rays-${isDark ? 'dark' : 'light'}-${isRTL ? 'rtl' : 'ltr'}`}
+              className="absolute pointer-events-none" 
+              style={{ 
+                width: '120%', 
+                height: '600px',
+                top: isDark ? '-80px' : '-150px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                zIndex: -10
+              }}
+            >
               <LightRays
                 raysOrigin="top-center"
                 raysColor={isDark ? "#29ABE2" : "#1a5a7a"}
                 raysSpeed={0.8}
-                lightSpread={isDark ? 0.6 : 0.4}
-                rayLength={isDark ? 2.2 : 1.7}
+                lightSpread={isDark ? 0.6 : 0.5}
+                rayLength={isDark ? 2.2 : 1.8}
                 followMouse={true}
                 mouseInfluence={0.08}
                 noiseAmount={0.2}
                 distortion={0.1}
-                fadeDistance={isDark ? 1.6 : 1.3}
-                saturation={isDark ? 0.9 : 0.6}
+                fadeDistance={isDark ? 1.6 : 1.4}
+                saturation={isDark ? 0.9 : 0.7}
                 className="hero-light-rays"
               />
             </div>
