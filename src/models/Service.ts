@@ -1,5 +1,10 @@
 import mongoose, { Schema, Model } from 'mongoose';
 
+export interface IServiceItem {
+  text: string;
+  textAr: string;
+}
+
 export interface IService {
   _id: string;
   title: string;
@@ -9,6 +14,7 @@ export interface IService {
   icon?: string;
   category: string;
   order: number;
+  items?: IServiceItem[];
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -44,6 +50,10 @@ const serviceSchema = new Schema<IService>(
       type: Number,
       default: 0,
     },
+    items: [{
+      text: { type: String, required: true },
+      textAr: { type: String, required: true },
+    }],
     isActive: {
       type: Boolean,
       default: true,

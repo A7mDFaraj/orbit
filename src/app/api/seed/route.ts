@@ -24,52 +24,208 @@ export async function POST() {
     // Seed Services
     const servicesData = [
       {
-        title: 'Real Estate & Property Management',
-        titleAr: 'العقارات وإدارة الممتلكات',
-        description: 'Comprehensive property management services including marketing, leasing, maintenance, and tenant relations.',
-        descriptionAr: 'خدمات إدارة الممتلكات الشاملة بما في ذلك التسويق والتأجير والصيانة وعلاقات المستأجرين.',
+        title: 'Real Estate Services',
+        titleAr: 'الخدمات العقارية',
+        description: `<p>Comprehensive real estate solutions covering:</p>
+<ul>
+<li>Sales and Purchase</li>
+<li>Property Management</li>
+<li>Real Estate Development</li>
+<li>Property Marketing</li>
+<li>Leasing Services</li>
+<li>Maintenance Services</li>
+<li>Real Estate Brokerage</li>
+</ul>`,
+        descriptionAr: `<p>حلول عقارية شاملة تغطي:</p>
+<ul>
+<li>بيع وشراء</li>
+<li>إدارة الأملاك</li>
+<li>تطوير عقاري</li>
+<li>تسويق عقارات</li>
+<li>تأجير</li>
+<li>صيانة</li>
+<li>وساطة عقارية</li>
+</ul>`,
+        icon: '🏢',
         category: 'Real Estate',
         order: 1,
+        items: [
+          { text: 'Sales and Purchase', textAr: 'بيع وشراء' },
+          { text: 'Property Management', textAr: 'إدارة الأملاك' },
+          { text: 'Real Estate Development', textAr: 'تطوير عقاري' },
+          { text: 'Property Marketing', textAr: 'تسويق عقارات' },
+          { text: 'Leasing Services', textAr: 'تأجير' },
+          { text: 'Maintenance Services', textAr: 'صيانة' },
+          { text: 'Real Estate Brokerage', textAr: 'وساطة عقارية' },
+        ],
       },
       {
-        title: 'Marketing & Advertising',
-        titleAr: 'التسويق والإعلان',
-        description: 'Strategic marketing campaigns, brand development, digital advertising, and social media management.',
-        descriptionAr: 'حملات تسويقية استراتيجية، تطوير العلامة التجارية، الإعلان الرقمي، وإدارة وسائل التواصل الاجتماعي.',
+        title: 'Marketing',
+        titleAr: 'التسويق',
+        description: `<p>🎯 <strong>Strategic integrated marketing solutions including:</strong></p>
+<ul>
+<li>Developing integrated marketing strategies based on market and target audience analysis</li>
+<li>Managing digital advertising campaigns across platforms (Google – Meta – Snapchat – TikTok)</li>
+<li>Social media account management (design, content writing, scheduling, monitoring)</li>
+<li>Performance analysis and periodic reporting to measure and improve campaign results</li>
+<li>Building brand identity from logo design to long-term marketing plans</li>
+<li>Public relations management and implementing marketing plans to enhance brand reputation</li>
+</ul>`,
+        descriptionAr: `<p>🎯 <strong>التسويق (Marketing)</strong></p>
+<ul>
+<li>إعداد استراتيجيات تسويقية متكاملة مبنية على تحليل السوق والجمهور المستهدف.</li>
+<li>إدارة الحملات الإعلانية الرقمية على مختلف المنصات (Google – Meta – Snapchat – TikTok).</li>
+<li>إدارة حسابات التواصل الاجتماعي (تصميم، كتابة محتوى، جدولة النشر، المتابعة).</li>
+<li>تحليل الأداء وتقديم تقارير دورية لقياس نتائج الحملات وتحسينها.</li>
+<li>بناء الهوية التجارية من تصميم الشعار إلى تطوير الخطط التسويقية طويلة المدى.</li>
+<li>إدارة العلاقات العامة وتنفيذ خطط تسويقية تعزز من سمعة العلامة التجارية.</li>
+</ul>`,
+        icon: '🎯',
         category: 'Marketing',
         order: 2,
+        items: [
+          { text: 'Developing integrated marketing strategies based on market and target audience analysis', textAr: 'إعداد استراتيجيات تسويقية متكاملة مبنية على تحليل السوق والجمهور المستهدف' },
+          { text: 'Managing digital advertising campaigns across platforms (Google – Meta – Snapchat – TikTok)', textAr: 'إدارة الحملات الإعلانية الرقمية على مختلف المنصات (Google – Meta – Snapchat – TikTok)' },
+          { text: 'Social media account management (design, content writing, scheduling, monitoring)', textAr: 'إدارة حسابات التواصل الاجتماعي (تصميم، كتابة محتوى، جدولة النشر، المتابعة)' },
+          { text: 'Performance analysis and periodic reporting to measure and improve campaign results', textAr: 'تحليل الأداء وتقديم تقارير دورية لقياس نتائج الحملات وتحسينها' },
+          { text: 'Building brand identity from logo design to long-term marketing plans', textAr: 'بناء الهوية التجارية من تصميم الشعار إلى تطوير الخطط التسويقية طويلة المدى' },
+          { text: 'Public relations management and implementing marketing plans to enhance brand reputation', textAr: 'إدارة العلاقات العامة وتنفيذ خطط تسويقية تعزز من سمعة العلامة التجارية' },
+        ],
       },
       {
-        title: 'Creative Production',
-        titleAr: 'الإنتاج الإبداعي',
-        description: 'High-quality video production, photography, graphic design, and multimedia content creation.',
-        descriptionAr: 'إنتاج فيديو عالي الجودة، تصوير فوتوغرافي، تصميم جرافيك، وإنشاء محتوى متعدد الوسائط.',
-        category: 'Creative',
+        title: 'Photography & Production',
+        titleAr: 'التصوير والإنتاج الفني',
+        description: `<p>🎥 <strong>Professional photography and artistic production services including:</strong></p>
+<ul>
+<li>Promotional and advertising photography for products, services, and brands</li>
+<li>Photography and videography for events, activities, and marketing campaigns</li>
+<li>Cinematic production including scriptwriting, directing, editing, and color correction</li>
+<li>Creative content photography (UGC Content) for social media platforms</li>
+<li>Shooting location management including coordination, site selection, and lighting</li>
+<li>Complete technical supervision of video projects and commercial advertisements</li>
+</ul>`,
+        descriptionAr: `<p>🎥 <strong>التصوير والإنتاج الفني (Photography & Production)</strong></p>
+<ul>
+<li>تصوير دعائي وإعلاني للمنتجات، والخدمات، والعلامات التجارية.</li>
+<li>تصوير فوتوغرافي ومرئي للمناسبات والفعاليات والحملات التسويقية.</li>
+<li>إنتاج سينمائي يشمل كتابة النصوص، الإخراج، المونتاج، والتصحيح اللوني.</li>
+<li>تصوير المحتوى الإبداعي (UGC Content) لمنصات التواصل الاجتماعي.</li>
+<li>إدارة مواقع التصوير من حيث التنسيق الفني، اختيار المواقع، والإضاءة.</li>
+<li>إشراف فني كامل على مشاريع الفيديوهات والإعلانات التجارية.</li>
+</ul>`,
+        icon: '🎥',
+        category: 'Production',
         order: 3,
-      },
-      {
-        title: 'Advertising Faces',
-        titleAr: 'وجوه إعلانية',
-        description: 'Professional brand ambassadors and promotional staff for events, exhibitions, and marketing campaigns.',
-        descriptionAr: 'سفراء علامة تجارية محترفون وموظفو ترويج للفعاليات والمعارض والحملات التسويقية.',
-        category: 'Advertising',
-        order: 4,
+        items: [
+          { text: 'Promotional and advertising photography for products, services, and brands', textAr: 'تصوير دعائي وإعلاني للمنتجات، والخدمات، والعلامات التجارية' },
+          { text: 'Photography and videography for events, activities, and marketing campaigns', textAr: 'تصوير فوتوغرافي ومرئي للمناسبات والفعاليات والحملات التسويقية' },
+          { text: 'Cinematic production including scriptwriting, directing, editing, and color correction', textAr: 'إنتاج سينمائي يشمل كتابة النصوص، الإخراج، المونتاج، والتصحيح اللوني' },
+          { text: 'Creative content photography (UGC Content) for social media platforms', textAr: 'تصوير المحتوى الإبداعي (UGC Content) لمنصات التواصل الاجتماعي' },
+          { text: 'Shooting location management including coordination, site selection, and lighting', textAr: 'إدارة مواقع التصوير من حيث التنسيق الفني، اختيار المواقع، والإضاءة' },
+          { text: 'Complete technical supervision of video projects and commercial advertisements', textAr: 'إشراف فني كامل على مشاريع الفيديوهات والإعلانات التجارية' },
+        ],
       },
       {
         title: 'Crowd Management',
         titleAr: 'إدارة الحشود',
-        description: 'Expert crowd control and management services for large events, ensuring safety and smooth operations.',
-        descriptionAr: 'خدمات خبيرة في التحكم وإدارة الحشود للفعاليات الكبيرة، لضمان السلامة والعمليات السلسة.',
+        description: `<p>👥 <strong>Professional crowd management services including:</strong></p>
+<ul>
+<li>Planning and executing organizational plans for public events, exhibitions, and festivals</li>
+<li>Providing professional organizers trained in dealing with visitors and crowds</li>
+<li>Organizing entrances and exits ensuring smooth movement and attendee safety</li>
+<li>Managing field teams and coordinating between all event stakeholders</li>
+<li>Implementing safety standards in cooperation with security authorities and supervisors</li>
+<li>Providing post-event organizational reports to measure efficiency and improve future performance</li>
+</ul>`,
+        descriptionAr: `<p>👥 <strong>إدارة الحشود (Crowd Management)</strong></p>
+<ul>
+<li>تخطيط وتنفيذ خطط التنظيم للفعاليات الجماهيرية والمعارض والمهرجانات.</li>
+<li>توفير منظمين محترفين ومدربين على التعامل مع الزوار والجماهير.</li>
+<li>تنظيم المداخل والمخارج بما يضمن انسيابية الحركة وسلامة الحضور.</li>
+<li>إدارة الفرق الميدانية والتنسيق بين جميع الجهات المشاركة في الفعالية.</li>
+<li>تطبيق معايير السلامة بالتعاون مع الجهات الأمنية والمشرفين.</li>
+<li>تقديم تقارير تنظيمية بعد الحدث لقياس الكفاءة وتحسين الأداء مستقبلاً.</li>
+</ul>`,
+        icon: '👥',
         category: 'Events',
-        order: 5,
+        order: 4,
+        items: [
+          { text: 'Planning and executing organizational plans for public events, exhibitions, and festivals', textAr: 'تخطيط وتنفيذ خطط التنظيم للفعاليات الجماهيرية والمعارض والمهرجانات' },
+          { text: 'Providing professional organizers trained in dealing with visitors and crowds', textAr: 'توفير منظمين محترفين ومدربين على التعامل مع الزوار والجماهير' },
+          { text: 'Organizing entrances and exits ensuring smooth movement and attendee safety', textAr: 'تنظيم المداخل والمخارج بما يضمن انسيابية الحركة وسلامة الحضور' },
+          { text: 'Managing field teams and coordinating between all event stakeholders', textAr: 'إدارة الفرق الميدانية والتنسيق بين جميع الجهات المشاركة في الفعالية' },
+          { text: 'Implementing safety standards in cooperation with security authorities and supervisors', textAr: 'تطبيق معايير السلامة بالتعاون مع الجهات الأمنية والمشرفين' },
+          { text: 'Providing post-event organizational reports to measure efficiency and improve future performance', textAr: 'تقديم تقارير تنظيمية بعد الحدث لقياس الكفاءة وتحسين الأداء مستقبلاً' },
+        ],
       },
       {
-        title: 'Event & Exhibition Organization',
-        titleAr: 'تنظيم الفعاليات والمعارض',
-        description: 'Full-service event planning and execution, from concept to completion for corporate events and exhibitions.',
-        descriptionAr: 'تخطيط وتنفيذ شامل للفعاليات، من الفكرة إلى الاكتمال للفعاليات المؤسسية والمعارض.',
+        title: 'Casting Services',
+        titleAr: 'توفير الوجوه الإعلانية',
+        description: `<p>🎭 <strong>Professional talent selection and management including:</strong></p>
+<ul>
+<li>Selecting and nominating suitable talent for advertising projects and promotional videos</li>
+<li>Providing models and actors from various age groups and backgrounds</li>
+<li>Managing casting process from interviews and auditions to contract signing and execution</li>
+<li>Coordinating schedules and permits for production participants</li>
+<li>Providing exclusive advertising faces matching brand identity and client campaign</li>
+<li>Performance monitoring during filming to ensure quality and compliance with required standards</li>
+</ul>`,
+        descriptionAr: `<p>🎭 <strong>توفير الوجوه الإعلانية (Casting Services)</strong></p>
+<ul>
+<li>اختيار وترشيح المواهب المناسبة للمشاريع الإعلانية والفيديوهات الدعائية.</li>
+<li>توفير مودلز وممثلين من مختلف الفئات العمرية والخلفيات.</li>
+<li>إدارة عمليات الكاستنق من المقابلات والتجارب إلى توقيع العقود والتنفيذ.</li>
+<li>تنسيق الجداول والتصاريح الخاصة بالمشاركين في الإنتاج.</li>
+<li>توفير وجوه إعلانية حصرية تناسب هوية العلامة التجارية وحملة العميل.</li>
+<li>متابعة الأداء أثناء التصوير لضمان الجودة والالتزام بالمعايير المطلوبة.</li>
+</ul>`,
+        icon: '🎭',
+        category: 'Advertising',
+        order: 5,
+        items: [
+          { text: 'Selecting and nominating suitable talent for advertising projects and promotional videos', textAr: 'اختيار وترشيح المواهب المناسبة للمشاريع الإعلانية والفيديوهات الدعائية' },
+          { text: 'Providing models and actors from various age groups and backgrounds', textAr: 'توفير مودلز وممثلين من مختلف الفئات العمرية والخلفيات' },
+          { text: 'Managing casting process from interviews and auditions to contract signing and execution', textAr: 'إدارة عمليات الكاستنق من المقابلات والتجارب إلى توقيع العقود والتنفيذ' },
+          { text: 'Coordinating schedules and permits for production participants', textAr: 'تنسيق الجداول والتصاريح الخاصة بالمشاركين في الإنتاج' },
+          { text: 'Providing exclusive advertising faces matching brand identity and client campaign', textAr: 'توفير وجوه إعلانية حصرية تناسب هوية العلامة التجارية وحملة العميل' },
+          { text: 'Performance monitoring during filming to ensure quality and compliance with required standards', textAr: 'متابعة الأداء أثناء التصوير لضمان الجودة والالتزام بالمعايير المطلوبة' },
+        ],
+      },
+      {
+        title: 'Exhibitions & Conferences Management',
+        titleAr: 'تنظيم المعارض والمؤتمرات',
+        description: `<p>🏛️ <strong>Complete end-to-end management including:</strong></p>
+<ul>
+<li>Preparing complete organizational plan for exhibitions and conferences from start to finish</li>
+<li>Designing and implementing pavilions and exhibitions according to event and brand identity</li>
+<li>Managing registration, attendance, coordinating invitations, and scheduling sessions</li>
+<li>Organizing accompanying events such as presentations, opening and closing ceremonies</li>
+<li>Providing complete team of organizers, reception, technical support, and field supervisors</li>
+<li>Coordinating with sponsors and exhibitors to ensure professional experience for visitors and participants</li>
+<li>Media documentation of event through photography, media coverage, and live streaming</li>
+</ul>`,
+        descriptionAr: `<p>🏛️ <strong>تنظيم المعارض والمؤتمرات (Exhibitions & Conferences Management)</strong></p>
+<ul>
+<li>إعداد الخطة التنظيمية الكاملة للمعارض والمؤتمرات من البداية إلى النهاية.</li>
+<li>تصميم وتنفيذ الأجنحة والمعارض وفق هوية الحدث والعلامة التجارية.</li>
+<li>إدارة التسجيل والحضور وتنسيق الدعوات وجدولة الجلسات.</li>
+<li>تنظيم الفعاليات المصاحبة مثل العروض التقديمية وحفلات الافتتاح والختام.</li>
+<li>توفير فريق عمل متكامل من منظمين، استقبال، دعم فني، ومشرفين ميدانيين.</li>
+<li>التنسيق مع الرعاة والعارضين لضمان تجربة احترافية للزوار والمشاركين.</li>
+<li>توثيق الحدث إعلاميًا عبر التصوير والتغطية الإعلامية والبث المباشر.</li>
+</ul>`,
+        icon: '🏛️',
         category: 'Events',
         order: 6,
+        items: [
+          { text: 'Preparing complete organizational plan for exhibitions and conferences from start to finish', textAr: 'إعداد الخطة التنظيمية الكاملة للمعارض والمؤتمرات من البداية إلى النهاية' },
+          { text: 'Designing and implementing pavilions and exhibitions according to event and brand identity', textAr: 'تصميم وتنفيذ الأجنحة والمعارض وفق هوية الحدث والعلامة التجارية' },
+          { text: 'Managing registration, attendance, coordinating invitations, and scheduling sessions', textAr: 'إدارة التسجيل والحضور وتنسيق الدعوات وجدولة الجلسات' },
+          { text: 'Organizing accompanying events such as presentations, opening and closing ceremonies', textAr: 'تنظيم الفعاليات المصاحبة مثل العروض التقديمية وحفلات الافتتاح والختام' },
+          { text: 'Providing complete team of organizers, reception, technical support, and field supervisors', textAr: 'توفير فريق عمل متكامل من منظمين، استقبال، دعم فني، ومشرفين ميدانيين' },
+          { text: 'Coordinating with sponsors and exhibitors to ensure professional experience for visitors and participants', textAr: 'التنسيق مع الرعاة والعارضين لضمان تجربة احترافية للزوار والمشاركين' },
+          { text: 'Media documentation of event through photography, media coverage, and live streaming', textAr: 'توثيق الحدث إعلاميًا عبر التصوير والتغطية الإعلامية والبث المباشر' },
+        ],
       },
     ];
 

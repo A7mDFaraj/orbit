@@ -41,10 +41,19 @@ export default function Portfolio() {
   });
 
   useEffect(() => {
-    fetch('/api/clients')
-      .then((res) => res.json())
-      .then((data) => setClients(data.clients || []))
-      .catch((err) => console.error('Error fetching clients:', err));
+    const fetchClients = async () => {
+      try {
+        const res = await fetch('/api/clients');
+        const data = await res.json();
+        console.log('[Portfolio] Fetched clients:', data.clients?.length || 0); // Debug log
+        setClients(data.clients || []);
+      } catch (err) {
+        console.error('Error fetching clients:', err);
+        setClients([]);
+      }
+    };
+    
+    fetchClients();
   }, []);
 
   const filteredClients =

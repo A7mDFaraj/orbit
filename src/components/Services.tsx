@@ -5,13 +5,20 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { useLanguage } from '@/contexts/LanguageContext';
 
+interface ServiceItem {
+  text: string;
+  textAr: string;
+}
+
 interface Service {
   _id: string;
   title: string;
   titleAr: string;
   description: string;
   descriptionAr: string;
+  icon?: string;
   category: string;
+  items?: ServiceItem[];
   image?: string;
 }
 
@@ -149,7 +156,7 @@ export default function Services() {
                     onMouseLeave={() => toggleFlip(service._id)}
                     style={{ transformStyle: 'preserve-3d' }}
                   >
-                    {/* Front Side - Image */}
+                    {/* Front Side - Icon/Image */}
                     <div
                       className="absolute inset-0 w-full h-full backface-hidden rounded-2xl overflow-hidden shadow-lg"
                       style={{ 
@@ -158,22 +165,103 @@ export default function Services() {
                         transform: 'rotateY(0deg)',
                       }}
                     >
-                      <div className="relative w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 dark:from-primary/30 dark:to-primary/10">
+                      <div className="relative w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 dark:from-primary/30 dark:to-primary/10 overflow-hidden">
+                        {/* Animated background elements - only show when no image */}
+                        {!service.image && (
+                          <>
+                            {/* Floating gradient orbs */}
+                            <motion.div
+                              className="absolute top-0 left-0 w-40 h-40 bg-primary/20 dark:bg-primary/30 rounded-full blur-3xl"
+                              animate={{
+                                x: [0, 100, 0],
+                                y: [0, 80, 0],
+                                scale: [1, 1.2, 1],
+                              }}
+                              transition={{
+                                duration: 8,
+                                repeat: Infinity,
+                                ease: 'easeInOut',
+                              }}
+                            />
+                            <motion.div
+                              className="absolute bottom-0 right-0 w-48 h-48 bg-blue-400/15 dark:bg-blue-400/20 rounded-full blur-3xl"
+                              animate={{
+                                x: [0, -80, 0],
+                                y: [0, -60, 0],
+                                scale: [1, 1.3, 1],
+                              }}
+                              transition={{
+                                duration: 10,
+                                repeat: Infinity,
+                                ease: 'easeInOut',
+                                delay: 1,
+                              }}
+                            />
+                            
+                            {/* Animated grid pattern */}
+                            <motion.div
+                              className="absolute inset-0"
+                              style={{
+                                backgroundImage: `
+                                  linear-gradient(rgba(41, 171, 226, 0.1) 1px, transparent 1px),
+                                  linear-gradient(90deg, rgba(41, 171, 226, 0.1) 1px, transparent 1px)
+                                `,
+                                backgroundSize: '30px 30px',
+                              }}
+                              animate={{
+                                backgroundPosition: ['0px 0px', '30px 30px'],
+                              }}
+                              transition={{
+                                duration: 6,
+                                repeat: Infinity,
+                                ease: 'linear',
+                              }}
+                            />
+                            
+                            {/* Rotating light beam */}
+                            <motion.div
+                              className="absolute inset-0"
+                              style={{
+                                background: 'linear-gradient(45deg, transparent 40%, rgba(41, 171, 226, 0.2) 50%, transparent 60%)',
+                              }}
+                              animate={{
+                                rotate: [0, 360],
+                              }}
+                              transition={{
+                                duration: 12,
+                                repeat: Infinity,
+                                ease: 'linear',
+                              }}
+                            />
+                          </>
+                        )}
+                        
                         {service.image ? (
                           <img
                             src={service.image}
                             alt={isRTL ? service.titleAr : service.title}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover relative z-10"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <div className="text-7xl">
-                              {getCategoryIcon(service.category)}
-                            </div>
+                          <div className="relative z-10 w-full h-full flex items-center justify-center">
+                            <motion.div
+                              className="text-8xl"
+                              animate={{
+                                scale: [1, 1.1, 1],
+                                rotate: [0, 5, -5, 0],
+                              }}
+                              transition={{
+                                duration: 4,
+                                repeat: Infinity,
+                                ease: 'easeInOut',
+                              }}
+                            >
+                              {service.icon || getCategoryIcon(service.category)}
+                            </motion.div>
                           </div>
                         )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                        <div className="absolute bottom-0 left-0 right-0 p-6">
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent z-20" />
+                        <div className="absolute bottom-0 left-0 right-0 p-6 z-30">
                           <h3 
                             className="text-2xl font-rb-bold text-white mb-2 uppercase tracking-wide"
                             style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
@@ -187,38 +275,38 @@ export default function Services() {
                       </div>
                     </div>
 
-                    {/* Back Side - Text Content */}
+                    {/* Back Side - Text Content with Items */}
                     <div
-                      className="absolute inset-0 w-full h-full backface-hidden rounded-2xl bg-white dark:bg-gray-900 p-8 shadow-lg overflow-y-auto"
+                      className="absolute inset-0 w-full h-full backface-hidden rounded-2xl bg-white dark:bg-gray-900 p-8 shadow-lg overflow-y-auto custom-scrollbar"
                       style={{ 
                         backfaceVisibility: 'hidden',
                         WebkitBackfaceVisibility: 'hidden',
                         transform: 'rotateY(180deg)',
                       }}
                     >
-                      <h3 
-                        className="text-2xl font-rb-bold text-gray-900 dark:text-white mb-4 uppercase tracking-wide"
-                        style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
-                      >
-                        {isRTL ? service.titleAr : service.title}
-                      </h3>
-                      
-                      {/* Description as numbered list */}
-                      <div className="space-y-3">
-                        {descriptionPoints.map((point, idx) => (
-                          <div key={idx} className="flex items-start gap-3">
-                            <span className="text-primary font-rb-bold text-lg flex-shrink-0 mt-0.5">
-                              {idx + 1}
-                            </span>
-                            <p 
-                              className="text-gray-600 dark:text-gray-300 leading-relaxed font-montserrat flex-1"
-                              style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
-                            >
-                              {point.trim()}
-                            </p>
-                          </div>
-                        ))}
+                      <div className="flex items-center gap-3 mb-4">
+                        {service.icon && (
+                          <span className="text-4xl">{service.icon}</span>
+                        )}
+                        <h3 
+                          className="text-2xl font-rb-bold text-gray-900 dark:text-white uppercase tracking-wide"
+                          style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                        >
+                          {isRTL ? service.titleAr : service.title}
+                        </h3>
                       </div>
+                      
+                      {/* Render HTML description - Safe for all formats */}
+                      <div 
+                        className="text-gray-600 dark:text-gray-400 text-sm font-montserrat leading-relaxed prose prose-sm dark:prose-invert max-w-none [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-2 [&_li]:leading-relaxed [&_p]:mb-3"
+                        style={{ 
+                          fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined,
+                          direction: isRTL ? 'rtl' : 'ltr',
+                        }}
+                        dangerouslySetInnerHTML={{ 
+                          __html: (isRTL ? service.descriptionAr : service.description) || 'No description available'
+                        }}
+                      />
                     </div>
                   </motion.div>
                 </motion.div>

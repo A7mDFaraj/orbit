@@ -3,11 +3,15 @@ import { connectDB } from '@/lib/mongodb';
 import { Client } from '@/models/Client';
 import { requireAdmin } from '@/lib/auth';
 
-// GET all clients
+// GET all clients - ROBUST: Returns only active clients
 export async function GET() {
   try {
     await connectDB();
-    const clients = await Client.find({ isActive: true }).sort({ order: 1 });
+    // Only return active clients for frontend display
+    const clients = await Client.find({ isActive: true }).sort({ order: 1, createdAt: -1 });
+    
+    console.log(`[API] Found ${clients.length} active clients`); // Debug log
+    
     return NextResponse.json({ clients });
   } catch (error) {
     console.error('Error fetching clients:', error);

@@ -356,29 +356,29 @@ export default function Hero() {
           </motion.div>
           )}
 
-          {/* MAIN HERO FOCUS: Heading is the primary element - Enhanced Dark Mode Visibility */}
+          {/* MAIN HERO FOCUS: Heading is the primary element - Enhanced for Longer Text */}
           <motion.h1
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-rb-bold mb-8 sm:mb-10 md:mb-12 uppercase tracking-tight text-center leading-[1.1] relative px-4"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-rb-bold mb-12 sm:mb-16 md:mb-20 uppercase tracking-tight text-center leading-[1.2] relative px-4 max-w-6xl mx-auto"
             initial={{ opacity: 0, y: 30, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] as any }}
-            style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+            style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined, zIndex: 10, position: 'relative' }}
           >
-            {/* Enhanced Light Rays Effect Behind Heading - Improved Dark Mode Visibility */}
+            {/* Enhanced Light Rays Effect Behind Heading - Behind All Content */}
             <div className="absolute pointer-events-none" style={{ 
               width: '120%', 
-              height: '500px',
-              top: isRTL ? '0px' : '-100px',
+              height: '600px',
+              top: isRTL ? (isDark ? '-80px' : '-120px') : '-100px',
               left: '50%',
               transform: 'translateX(-50%)',
-              zIndex: 0
+              zIndex: -10
             }}>
               <LightRays
                 raysOrigin="top-center"
                 raysColor={isDark ? "#29ABE2" : "#1a5a7a"}
                 raysSpeed={0.8}
                 lightSpread={isDark ? 0.6 : 0.4}
-                rayLength={isDark ? 2 : 1.5}
+                rayLength={isDark ? 2.2 : 1.7}
                 followMouse={true}
                 mouseInfluence={0.08}
                 noiseAmount={0.2}
@@ -403,142 +403,84 @@ export default function Hero() {
                 }}
                 style={{
                   background: 'radial-gradient(ellipse at center, rgba(41, 171, 226, 0.3) 0%, transparent 70%)',
-                  zIndex: -1,
+                  zIndex: -5,
                 }}
               />
             )}
 
-                 {/* Horizontal Lined Text - Exactly Like Logo Pattern */}
+                 {/* Multi-Word Heading with Alternating Styles */}
                   {isRTL ? (
-                    // Simple animation for Arabic - no background-clip issues
-                    <motion.span
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.4, duration: 0.6 }}
-                      className="relative inline-block"
-                      style={{ zIndex: 10, position: 'relative' }}
-                    >
-                      <span className="text-gray-900 dark:text-white font-rb-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] dark:drop-shadow-[0_2px_12px_rgba(41,171,226,0.5)]">
-                        {heroContent.title.split(' ')[0]}
-                      </span>
-                      {' '}
-                      <span className="text-primary font-rb-bold drop-shadow-[0_2px_8px_rgba(41,171,226,0.4)] dark:drop-shadow-[0_2px_16px_rgba(41,171,226,0.8)]">
-                        {heroContent.title.split(' ')[1]}
-                      </span>
-                    </motion.span>
+                    // Arabic version - word-by-word animation
+                    <span className="inline-flex flex-wrap justify-center gap-x-3 gap-y-2" style={{ zIndex: 10, position: 'relative' }}>
+                      {heroContent.title.split(' ').map((word, wordIndex) => (
+                        <motion.span
+                          key={wordIndex}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.4 + wordIndex * 0.1, duration: 0.6 }}
+                          className={wordIndex % 2 === 0 
+                            ? "text-gray-900 dark:text-white font-rb-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] dark:drop-shadow-[0_2px_12px_rgba(41,171,226,0.5)]"
+                            : "text-primary font-rb-bold drop-shadow-[0_2px_8px_rgba(41,171,226,0.4)] dark:drop-shadow-[0_2px_16px_rgba(41,171,226,0.8)]"
+                          }
+                        >
+                          {word}
+                        </motion.span>
+                      ))}
+                    </span>
                   ) : (
-                    // English version with lined pattern
-                    <>
-                      <motion.span
-                        initial={{ display: 'inline-block', opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4, duration: 0.6 }}
-                        className="relative inline-block"
-                        style={{ zIndex: 10 }}
-                      >
+                    // English version - word-by-word with lined pattern
+                    <span className="inline-flex flex-wrap justify-center gap-x-3 gap-y-2" style={{ zIndex: 10 }}>
+                      {heroContent.title.split(' ').map((word, wordIndex) => (
                         <motion.span
+                          key={wordIndex}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.4 + wordIndex * 0.08, duration: 0.6 }}
                           className="relative inline-block"
-                          animate={{
-                            backgroundPosition: ['0px 0px', '0px 10px'],
-                          }}
-                          transition={{
-                            duration: 3,
-                            repeat: Infinity,
-                            ease: 'linear',
-                          }}
-                          style={{
-                            backgroundImage: isDark
-                              ? `
-                                  repeating-linear-gradient(
-                                    0deg,
-                                    #ffffff 0px,
-                                    #ffffff 2px,
-                                    transparent 2px,
-                                    transparent 3px,
-                                    #f0f0f0 3px,
-                                    #f0f0f0 4px,
-                                    transparent 4px,
-                                    transparent 5px
-                                  )
-                                `
-                              : `
-                                  repeating-linear-gradient(
-                                    0deg,
-                                    #000000 0px,
-                                    #000000 2px,
-                                    transparent 2px,
-                                    transparent 3px,
-                                    #1a1a1a 3px,
-                                    #1a1a1a 4px,
-                                    transparent 4px,
-                                    transparent 5px
-                                  )
-                                `,
-                            backgroundClip: 'text',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
-                            backgroundSize: '100% 10px',
-                            backgroundPosition: '0px 0px',
-                            display: 'inline-block',
-                            filter: isDark 
-                              ? 'contrast(1.2) brightness(1.15) drop-shadow(0 2px 12px rgba(255,255,255,0.3))' 
-                              : 'contrast(1.1) brightness(1.05)',
-                          }}
                         >
-                          {heroContent.title.split(' ')[0]}
+                          <motion.span
+                            className="relative inline-block"
+                            animate={{
+                              backgroundPosition: wordIndex % 2 === 0 
+                                ? ['0px 0px', '0px 10px']
+                                : ['0px 0px', '0px -10px'],
+                            }}
+                            transition={{
+                              duration: 3 + (wordIndex % 2),
+                              repeat: Infinity,
+                              ease: 'linear',
+                            }}
+                            style={{
+                              backgroundImage: wordIndex % 2 === 0
+                                ? (isDark
+                                  ? `repeating-linear-gradient(0deg, #ffffff 0px, #ffffff 2px, transparent 2px, transparent 3px, #f0f0f0 3px, #f0f0f0 4px, transparent 4px, transparent 5px)`
+                                  : `repeating-linear-gradient(0deg, #000000 0px, #000000 2px, transparent 2px, transparent 3px, #1a1a1a 3px, #1a1a1a 4px, transparent 4px, transparent 5px)`)
+                                : `repeating-linear-gradient(0deg, #29ABE2 0px, #29ABE2 2px, transparent 2px, transparent 3px, #1e88b8 3px, #1e88b8 4px, transparent 4px, transparent 5px)`,
+                              backgroundClip: 'text',
+                              WebkitBackgroundClip: 'text',
+                              WebkitTextFillColor: 'transparent',
+                              backgroundSize: '100% 10px',
+                              backgroundPosition: '0px 0px',
+                              display: 'inline-block',
+                              filter: wordIndex % 2 === 0
+                                ? (isDark 
+                                  ? 'contrast(1.2) brightness(1.15) drop-shadow(0 2px 12px rgba(255,255,255,0.3))' 
+                                  : 'contrast(1.1) brightness(1.05)')
+                                : (isDark
+                                  ? 'drop-shadow(0 0 40px rgba(41, 171, 226, 0.7)) drop-shadow(0 0 20px rgba(41, 171, 226, 0.5)) brightness(1.15) contrast(1.1)'
+                                  : 'drop-shadow(0 0 30px rgba(41, 171, 226, 0.4)) brightness(1.1)'),
+                            }}
+                          >
+                            {word}
+                          </motion.span>
                         </motion.span>
-                      </motion.span>{' '}
-                      <motion.span
-                        initial={{ display: 'inline-block', opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6, duration: 0.6 }}
-                        className="relative inline-block"
-                        style={{ zIndex: 10 }}
-                      >
-                        <motion.span
-                          className="relative inline-block"
-                          animate={{
-                            backgroundPosition: ['0px 0px', '0px -10px'],
-                          }}
-                          transition={{
-                            duration: 4,
-                            repeat: Infinity,
-                            ease: 'linear',
-                          }}
-                          style={{
-                            backgroundImage: `
-                              repeating-linear-gradient(
-                                0deg,
-                                #29ABE2 0px,
-                                #29ABE2 2px,
-                                transparent 2px,
-                                transparent 3px,
-                                #1e88b8 3px,
-                                #1e88b8 4px,
-                                    transparent 4px,
-                                    transparent 5px
-                              )
-                            `,
-                            backgroundClip: 'text',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
-                            backgroundSize: '100% 10px',
-                            backgroundPosition: '0px 0px',
-                            display: 'inline-block',
-                            filter: isDark
-                              ? 'drop-shadow(0 0 40px rgba(41, 171, 226, 0.7)) drop-shadow(0 0 20px rgba(41, 171, 226, 0.5)) brightness(1.15) contrast(1.1)'
-                              : 'drop-shadow(0 0 30px rgba(41, 171, 226, 0.4)) brightness(1.1)',
-                          }}
-                        >
-                          {heroContent.title.split(' ')[1]}
-                        </motion.span>
-                      </motion.span>
-                    </>
+                      ))}
+                    </span>
                   )}
           </motion.h1>
 
-          {/* Value Proposition Tags - Optimized Spacing */}
-          <motion.div
+          {/* COMMENTED OUT: Value Proposition Tags - Hidden as per client request */}
+          {/* <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
@@ -558,23 +500,19 @@ export default function Hero() {
                   className="group cursor-pointer"
                 >
                   <div className="relative px-5 py-2 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border-2 border-primary/30 dark:border-primary/40 shadow-lg rounded-full overflow-hidden transition-all duration-300 hover:shadow-2xl hover:border-primary">
-                    {/* Animated background waves */}
                     <motion.div
                       className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/20 to-primary/0"
                       animate={{ x: ['-100%', '100%'] }}
                       transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
                     />
                     
-                    {/* Pulsing background on hover */}
                     <motion.div
                       className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10"
                       transition={{ duration: 0.3 }}
                     />
                     
-                           {/* True Focus Style - Individual Letter Animation (disabled for Arabic) */}
                           <span className="relative z-10 flex items-center text-xs sm:text-sm font-rb-bold uppercase tracking-wide" style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}>
                             {isRTL ? (
-                              // Simple animation for Arabic
                               <motion.span
                                 className="inline-block"
                                 style={{
@@ -592,7 +530,6 @@ export default function Hero() {
                                 {subtitle}
                               </motion.span>
                             ) : (
-                              // English version with character animation
                               subtitle.split('').map((char, charIndex) => (
                                 <motion.span
                                   key={charIndex}
@@ -638,62 +575,53 @@ export default function Hero() {
                 </motion.div>
               ))}
             </div>
-          </motion.div>
+          </motion.div> */}
 
-          {/* Description - Improved Spacing & Readability */}
-          <div className="text-base sm:text-lg lg:text-xl mb-10 sm:mb-12 md:mb-14 max-w-3xl mx-auto leading-relaxed font-montserrat font-normal text-center px-4">
-            <motion.p
+          {/* Description - Robust & Production-Ready */}
+          <div className="text-base sm:text-lg lg:text-xl mb-12 sm:mb-14 md:mb-16 max-w-4xl mx-auto leading-[1.8] font-montserrat font-normal text-center px-6 relative z-10">
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-              className="text-gray-600 dark:text-gray-300"
-              style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="relative"
             >
-              {isRTL ? (
-                // Simple fade for Arabic
-                <motion.span
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.8 }}
-                >
-                  {heroContent.description}
-                </motion.span>
-              ) : (
-                // Blur animation for English
-                <span className="flex flex-wrap justify-center gap-x-2 gap-y-1">
-                  {heroContent.description.split(' ').map((word, wordIndex) => (
-                    <span key={wordIndex} className="inline-block">
-                      {word.split('').map((char, charIndex) => (
-                        <motion.span
-                          key={charIndex}
-                          className="inline-block"
-                          initial={{ filter: 'blur(10px)', opacity: 0 }}
-                          animate={{ filter: 'blur(0px)', opacity: 1 }}
-                          transition={{
-                            duration: 0.6,
-                            delay: (wordIndex * 0.03) + (charIndex * 0.02),
-                            ease: 'easeOut',
-                          }}
-                        >
-                          {char}
-                        </motion.span>
-                      ))}
-                      {wordIndex < heroContent.description.split(' ').length - 1 && (
-                        <span className="inline-block">&nbsp;</span>
-                      )}
-                    </span>
-                  ))}
-                </span>
-              )}
-            </motion.p>
+              {/* Subtle Background Glow - Non-animated for stability */}
+              <div
+                className="absolute inset-0 -inset-x-12 -inset-y-6 blur-2xl opacity-20 pointer-events-none"
+                style={{
+                  background: isDark 
+                    ? 'radial-gradient(ellipse, rgba(41, 171, 226, 0.2) 0%, transparent 70%)'
+                    : 'radial-gradient(ellipse, rgba(41, 171, 226, 0.12) 0%, transparent 70%)',
+                  zIndex: -1,
+                }}
+              />
+              
+              <motion.p
+                className="relative text-gray-700 dark:text-gray-200 font-medium"
+                style={{ 
+                  fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined,
+                  willChange: 'opacity',
+                  transform: 'translateZ(0)', // Force GPU acceleration
+                }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.8,
+                  delay: 0.8,
+                  ease: [0.25, 0.46, 0.45, 0.94],
+                }}
+              >
+                {heroContent.description}
+              </motion.p>
+            </motion.div>
           </div>
 
-          {/* CTA Buttons - Better Spacing & Visual Hierarchy */}
+          {/* CTA Buttons - Optimized Spacing for Layout Without Subtitle Tags */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.2 }}
-            className="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center items-center mt-4"
+            className="flex flex-col sm:flex-row gap-5 sm:gap-6 justify-center items-center mt-2 relative z-10"
           >
             {/* Primary CTA - Request Quote */}
             <motion.a
@@ -731,39 +659,56 @@ export default function Hero() {
               />
             </motion.a>
 
-            {/* Secondary CTA */}
+            {/* Secondary CTA - Fixed Animation */}
             <motion.a
               href="#services"
-              className="group relative px-8 py-3 bg-white dark:bg-gray-800 text-primary dark:text-primary rounded-lg font-rb-bold border-2 border-primary uppercase tracking-wider shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
+              className="group relative px-8 py-3 bg-white dark:bg-gray-800 rounded-lg font-rb-bold border-2 border-primary uppercase tracking-wider shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
               style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.98 }}
             >
-              <span className="relative z-10 flex items-center gap-2">
+              {/* Hover background - smooth transition */}
+              <motion.div
+                className="absolute inset-0 bg-primary"
+                initial={{ scale: 0, opacity: 0 }}
+                whileHover={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+              />
+              
+              {/* Button content - changes color on hover */}
+              <span className="relative z-10 flex items-center gap-2 text-gray-900 dark:text-primary group-hover:text-white transition-colors duration-300">
                 {heroContent.cta2}
                 <motion.span
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
+                  animate={{ 
+                    scale: [1, 1.2, 1],
+                    rotate: [0, 10, -10, 0]
+                  }}
+                  transition={{ 
+                    duration: 2, 
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
                 >
                   ✨
                 </motion.span>
               </span>
               
-              {/* Hover background */}
+              {/* Animated border shine effect */}
               <motion.div
-                className="absolute inset-0 bg-primary opacity-0 group-hover:opacity-100"
-                transition={{ duration: 0.3 }}
+                className="absolute inset-0 rounded-lg"
+                style={{
+                  background: 'linear-gradient(90deg, transparent, rgba(41, 171, 226, 0.5), transparent)',
+                }}
+                animate={{
+                  x: ['-100%', '100%'],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "linear",
+                  repeatDelay: 1,
+                }}
               />
-              <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 text-white font-rb-bold uppercase tracking-wider transition-opacity duration-300">
-              {heroContent.cta2}
-                <motion.span
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="ml-2"
-                >
-                  ✨
-                </motion.span>
-              </span>
             </motion.a>
           </motion.div>
 

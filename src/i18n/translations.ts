@@ -24,11 +24,11 @@ export const translations = {
     },
     about: {
       title: 'About Mark Line',
-      description: 'A leading Saudi entity in creative marketing solutions, delivering excellence through innovation and professionalism',
+      description: 'A leading Saudi entity in providing integrated business and service solutions',
       vision: 'VISION',
-      visionText: 'To be a leading Saudi entity in creative marketing solutions and a benchmark in quality and innovation',
+      visionText: 'To be the first choice for delivering integrated solutions that combine marketing, production, management, and real estate in a modern approach aligned with Saudi Vision 2030',
       mission: 'MISSION',
-      missionText: 'Deliver integrated marketing and creative services based on deep client understanding, creativity, and professionalism',
+      missionText: 'Providing comprehensive services that support business development and achieve impact through a specialized team across all tracks with a commitment to innovation and quality',
       unique: 'What Makes Us Unique',
       features: [
         { title: 'Saudi Creativity', desc: 'Local expertise with global standards' },
@@ -40,9 +40,9 @@ export const translations = {
       ],
     },
     services: {
-      title: 'Services',
-      subtitle: '360 Solutions',
-      description: 'From business solutions and creative marketing to event planning and production, we offer a comprehensive range of services tailored to your needs.',
+      title: 'Our Services',
+      subtitle: '360° Integrated Solutions',
+      description: 'From marketing and artistic production to event management and real estate services, we provide comprehensive integrated solutions to meet all your needs.',
     },
     video: {
       title: 'Watch Our Work',
@@ -130,11 +130,11 @@ export const translations = {
     },
     about: {
       title: 'عن مارك لاين',
-      description: 'كيان سعودي رائد في الحلول التسويقية الإبداعية، نقدم التميز من خلال الابتكار والاحترافية',
+      description: 'كيان سعودي رائد في تقديم الحلول المتكاملة للأعمال والخدمات',
       vision: 'الرؤية',
-      visionText: 'أن نكون كياناً سعودياً رائداً في الحلول التسويقية الإبداعية ومعياراً للجودة والابتكار',
+      visionText: 'أن نكون الخيار الأول لتقديم حلول متكاملة تجمع بين التسويق والإنتاج والإدارة والعقارات بأسلوب حديث يواكب رؤية السعودية 2030',
       mission: 'الرسالة',
-      missionText: 'تقديم خدمات تسويقية وإبداعية متكاملة تستند إلى فهم عميق للعميل والإبداع والاحترافية',
+      missionText: 'تقديم خدمات شاملة تدعم تطوير الأعمال وتحقيق الأثر من خلال فريق متخصص في كافة المسارات مع التزام بالابتكار والجودة',
       unique: 'ما يميزنا',
       features: [
         { title: 'إبداع سعودي', desc: 'خبرة محلية بمعايير عالمية' },
@@ -147,8 +147,8 @@ export const translations = {
     },
     services: {
       title: 'خدماتنا',
-      subtitle: 'حلول شاملة 360',
-      description: 'من الحلول التجارية والتسويق الإبداعي إلى تخطيط وإنتاج الفعاليات، نقدم مجموعة شاملة من الخدمات المصممة خصيصاً لاحتياجاتك',
+      subtitle: 'حلول متكاملة 360',
+      description: 'من التسويق والإنتاج الفني وإدارة الفعاليات إلى الخدمات العقارية، نقدم حلول شاملة متكاملة تلبي جميع احتياجاتك',
     },
     video: {
       title: 'شاهد أعمالنا',

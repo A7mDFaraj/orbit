@@ -5,24 +5,30 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import toast, { Toaster } from 'react-hot-toast';
 
-// Force light theme for admin pages
+// Force light theme and LTR for admin pages
 const forceLightTheme = () => {
   if (typeof window !== 'undefined') {
     document.documentElement.classList.remove('dark');
     document.documentElement.style.colorScheme = 'light';
+    document.documentElement.setAttribute('dir', 'ltr');
+    document.body.style.direction = 'ltr';
   }
 };
 
-// Create a MutationObserver to prevent dark theme from being applied
+// Create a MutationObserver to prevent dark theme and RTL from being applied
 const createThemeObserver = () => {
   if (typeof window === 'undefined') return null;
   
   const observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
-      if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-        if (document.documentElement.classList.contains('dark')) {
+      if (mutation.type === 'attributes') {
+        if (mutation.attributeName === 'class' && document.documentElement.classList.contains('dark')) {
           document.documentElement.classList.remove('dark');
           document.documentElement.style.colorScheme = 'light';
+        }
+        if (mutation.attributeName === 'dir' && document.documentElement.getAttribute('dir') !== 'ltr') {
+          document.documentElement.setAttribute('dir', 'ltr');
+          document.body.style.direction = 'ltr';
         }
       }
     });
@@ -30,7 +36,7 @@ const createThemeObserver = () => {
   
   observer.observe(document.documentElement, {
     attributes: true,
-    attributeFilter: ['class'],
+    attributeFilter: ['class', 'dir'],
   });
   
   return observer;
