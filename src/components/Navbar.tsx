@@ -129,11 +129,26 @@ export default function Navbar() {
           </nav>
 
           {/* Right: toggles + CTAs - Fixed width to prevent shifting */}
-          <div className={`hidden md:flex items-center gap-2 flex-shrink-0 ${isRTL ? '' : ''}`} style={{ minWidth: '200px', justifyContent: 'flex-end' }}>
+          <div className={`hidden md:flex items-center gap-2 flex-shrink-0 ${isRTL ? '' : ''}`} style={{ minWidth: '280px', justifyContent: 'flex-end' }}>
             <div className={`flex items-center rounded-full ${navbarIsDark ? 'bg-gray-900 border border-gray-700' : 'bg-white border border-gray-200'} p-1`}> 
               {!isPortfolioPage && <ThemeToggle />}
               <LanguageSwitcher />
             </div>
+            <Link
+              href="/packages"
+              className="ml-2 px-4 py-2 rounded-md text-xs font-rb-bold uppercase tracking-wide shadow-sm whitespace-nowrap transition-all duration-300 bg-white dark:bg-gray-800 text-primary dark:text-primary border-2 border-primary hover:bg-primary hover:text-white"
+              style={{ 
+                fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined,
+                direction: isRTL ? 'rtl' : 'ltr',
+                minWidth: '100px',
+                textAlign: 'center',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              {t.nav.packages}
+            </Link>
             <Link
               href="/join-team"
               className="ml-2 px-4 py-2 rounded-md text-white text-xs font-rb-bold uppercase tracking-wide bg-gradient-to-r from-primary to-blue-600 shadow-sm whitespace-nowrap"
@@ -173,22 +188,40 @@ export default function Navbar() {
                 {!isPortfolioPage && <ThemeToggle />}
                 <LanguageSwitcher />
               </div>
-              <Link
-                href="/join-team"
-                className="px-3 py-2 rounded-md text-white text-xs font-rb-bold uppercase tracking-wide bg-gradient-to-r from-primary to-blue-600 whitespace-nowrap"
-                onClick={() => setIsOpen(false)}
-                style={{ 
-                  fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined,
-                  direction: isRTL ? 'rtl' : 'ltr',
-                  minWidth: '120px',
-                  textAlign: 'center',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                {t.nav.joinUs}
-              </Link>
+              <div className="flex gap-2">
+                <Link
+                  href="/packages"
+                  className="px-3 py-2 rounded-md text-xs font-rb-bold uppercase tracking-wide whitespace-nowrap bg-white dark:bg-gray-800 text-primary border-2 border-primary"
+                  onClick={() => setIsOpen(false)}
+                  style={{ 
+                    fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined,
+                    direction: isRTL ? 'rtl' : 'ltr',
+                    minWidth: '100px',
+                    textAlign: 'center',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  {t.nav.packages}
+                </Link>
+                <Link
+                  href="/join-team"
+                  className="px-3 py-2 rounded-md text-white text-xs font-rb-bold uppercase tracking-wide bg-gradient-to-r from-primary to-blue-600 whitespace-nowrap"
+                  onClick={() => setIsOpen(false)}
+                  style={{ 
+                    fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined,
+                    direction: isRTL ? 'rtl' : 'ltr',
+                    minWidth: '120px',
+                    textAlign: 'center',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  {t.nav.joinUs}
+                </Link>
+              </div>
             </div>
 
             <nav className="grid gap-1">
