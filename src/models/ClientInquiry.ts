@@ -32,6 +32,18 @@ const clientInquirySchema = new mongoose.Schema(
     budget: {
       type: String,
     },
+    selectedPackage: {
+      type: String,
+    },
+    packageName: {
+      type: String,
+    },
+    packageType: {
+      type: String,
+    },
+    packagePrice: {
+      type: String,
+    },
     status: {
       type: String,
       enum: ['new', 'contacted', 'quoted', 'converted', 'closed'],

@@ -185,14 +185,14 @@ export default function PackagesList() {
             </motion.p>
           </motion.div>
 
-          {/* Packages Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-6 items-start">
+          {/* Packages Grid - Equal Height */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-6 items-stretch">
             {packages.map((pkg, index) => (
               <motion.div
                 key={pkg.id}
                 variants={cardVariants}
                 whileHover={{ y: -10, scale: 1.02 }}
-                className={`relative rounded-3xl backdrop-blur-xl border-2 shadow-2xl overflow-hidden transition-all duration-500 ${
+                className={`relative rounded-3xl backdrop-blur-xl border-2 shadow-2xl overflow-hidden transition-all duration-500 flex flex-col ${
                   pkg.highlighted
                     ? 'bg-gradient-to-br from-primary/95 to-blue-600/95 border-primary text-white scale-105 lg:scale-110'
                     : 'bg-white/90 dark:bg-gray-800/90 border-gray-200 dark:border-gray-700'
@@ -235,7 +235,7 @@ export default function PackagesList() {
                   </>
                 )}
 
-                <div className="relative p-8 lg:p-10">
+                <div className="relative p-8 lg:p-10 flex flex-col flex-1">
                   {/* Icon */}
                   <motion.div
                     className={`text-6xl mb-6 ${pkg.highlighted ? '' : 'opacity-80'}`}
@@ -287,8 +287,8 @@ export default function PackagesList() {
                     pkg.highlighted ? 'bg-white/30' : 'bg-gradient-to-r from-primary to-blue-400'
                   }`} />
 
-                  {/* Features List */}
-                  <div className="space-y-4 mb-8">
+                  {/* Features List - Flex grow to push button down */}
+                  <div className="space-y-4 mb-8 flex-1">
                     {(isRTL ? pkg.featuresAr : pkg.features).map((feature, idx) => (
                       <motion.div
                         key={idx}
@@ -314,9 +314,9 @@ export default function PackagesList() {
                     ))}
                   </div>
 
-                  {/* CTA Button */}
+                  {/* CTA Button - Always at bottom */}
                   <Link
-                    href="/request-quote"
+                    href={`/request-quote?package=${pkg.id}&name=${encodeURIComponent(isRTL ? pkg.nameAr : pkg.name)}`}
                     className={`block w-full text-center px-8 py-4 rounded-xl font-rb-bold uppercase tracking-wider transition-all duration-300 ${
                       pkg.highlighted
                         ? 'bg-white text-primary hover:bg-gray-100 shadow-xl hover:shadow-2xl'
@@ -389,19 +389,19 @@ export default function PackagesList() {
             </motion.p>
           </div>
 
-          {/* Charity Packages Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-6 items-start">
+          {/* Charity Packages Grid - Equal Height */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-6 items-stretch">
             {/* Launch Package */}
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 1.3, ease: [0.25, 0.46, 0.45, 0.94] as any }}
               whileHover={{ y: -10, scale: 1.02 }}
-              className="relative rounded-3xl backdrop-blur-xl bg-white/90 dark:bg-gray-800/90 border-2 border-green-200 dark:border-green-700 shadow-2xl overflow-hidden transition-all duration-500"
+              className="relative rounded-3xl backdrop-blur-xl bg-white/90 dark:bg-gray-800/90 border-2 border-green-200 dark:border-green-700 shadow-2xl overflow-hidden transition-all duration-500 flex flex-col"
             >
               <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-green-400 to-green-500" />
               
-              <div className="relative p-8 lg:p-10">
+              <div className="relative p-8 lg:p-10 flex flex-col flex-1">
                 <motion.div
                   className="text-6xl mb-6"
                   animate={{
@@ -445,7 +445,7 @@ export default function PackagesList() {
 
                 <div className="h-1 w-16 bg-gradient-to-r from-green-500 to-green-400 rounded-full mb-8" />
 
-                <div className="space-y-4 mb-8">
+                <div className="space-y-4 mb-8 flex-1">
                   {(isRTL ? [
                     'إعداد خطة تأسيس تسويقية للجمعية',
                     'إنشاء هوية بصرية كاملة (شعار + دليل استخدام)',
@@ -494,7 +494,7 @@ export default function PackagesList() {
                 </div>
 
                 <Link
-                  href="/request-quote"
+                  href={`/request-quote?package=charity-launch&name=${encodeURIComponent(isRTL ? 'باقة الانطلاقة' : 'Launch Package')}&type=charity&price=20000`}
                   className="block w-full text-center px-8 py-4 rounded-xl font-rb-bold uppercase tracking-wider transition-all duration-300 bg-green-600 text-white hover:bg-green-700 shadow-lg hover:shadow-xl"
                   style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
                 >
@@ -511,7 +511,7 @@ export default function PackagesList() {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 1.4, ease: [0.25, 0.46, 0.45, 0.94] as any }}
               whileHover={{ y: -10, scale: 1.02 }}
-              className="relative rounded-3xl backdrop-blur-xl bg-gradient-to-br from-blue-600/95 to-blue-700/95 border-2 border-blue-500 text-white shadow-2xl overflow-hidden transition-all duration-500 scale-105 lg:scale-110"
+              className="relative rounded-3xl backdrop-blur-xl bg-gradient-to-br from-blue-600/95 to-blue-700/95 border-2 border-blue-500 text-white shadow-2xl overflow-hidden transition-all duration-500 scale-105 lg:scale-110 flex flex-col"
             >
               <div className="absolute top-0 right-0 bg-yellow-400 text-gray-900 px-6 py-2 rounded-bl-2xl font-rb-bold text-sm uppercase tracking-wide">
                 {isRTL ? '⭐ الأكثر طلبًا' : '⭐ Most Popular'}
@@ -523,7 +523,7 @@ export default function PackagesList() {
                 transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
               />
               
-              <div className="relative p-8 lg:p-10">
+              <div className="relative p-8 lg:p-10 flex flex-col flex-1">
                 <motion.div
                   className="text-6xl mb-6"
                   animate={{
@@ -567,7 +567,7 @@ export default function PackagesList() {
 
                 <div className="h-1 w-16 bg-white/30 rounded-full mb-8" />
 
-                <div className="space-y-4 mb-8">
+                <div className="space-y-4 mb-8 flex-1">
                   {(isRTL ? [
                     'إعداد خطة تسويقية وتنموية لمدة 6 أشهر',
                     'إنتاج فيلم دعائي احترافي عن الجمعية أو أحد مشاريعها',
@@ -618,7 +618,7 @@ export default function PackagesList() {
                 </div>
 
                 <Link
-                  href="/request-quote"
+                  href={`/request-quote?package=charity-expansion&name=${encodeURIComponent(isRTL ? 'باقة التوسع' : 'Expansion Package')}&type=charity&price=50000`}
                   className="block w-full text-center px-8 py-4 rounded-xl font-rb-bold uppercase tracking-wider transition-all duration-300 bg-white text-blue-600 hover:bg-gray-100 shadow-xl hover:shadow-2xl"
                   style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
                 >
@@ -633,11 +633,11 @@ export default function PackagesList() {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 1.5, ease: [0.25, 0.46, 0.45, 0.94] as any }}
               whileHover={{ y: -10, scale: 1.02 }}
-              className="relative rounded-3xl backdrop-blur-xl bg-white/90 dark:bg-gray-800/90 border-2 border-purple-200 dark:border-purple-700 shadow-2xl overflow-hidden transition-all duration-500"
+              className="relative rounded-3xl backdrop-blur-xl bg-white/90 dark:bg-gray-800/90 border-2 border-purple-200 dark:border-purple-700 shadow-2xl overflow-hidden transition-all duration-500 flex flex-col"
             >
               <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-400 to-purple-600" />
               
-              <div className="relative p-8 lg:p-10">
+              <div className="relative p-8 lg:p-10 flex flex-col flex-1">
                 <motion.div
                   className="text-6xl mb-6"
                   animate={{
@@ -681,7 +681,7 @@ export default function PackagesList() {
 
                 <div className="h-1 w-16 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full mb-8" />
 
-                <div className="space-y-4 mb-8">
+                <div className="space-y-4 mb-8 flex-1">
                   {(isRTL ? [
                     'إعداد خطة إستراتيجية تسويقية متكاملة لمدة عام',
                     'إنتاج فيلم وثائقي توثيقي عن أثر الجمعية',
@@ -734,7 +734,7 @@ export default function PackagesList() {
                 </div>
 
                 <Link
-                  href="/request-quote"
+                  href={`/request-quote?package=charity-professional&name=${encodeURIComponent(isRTL ? 'باقة الاحتراف' : 'Professional Package')}&type=charity&price=80000`}
                   className="block w-full text-center px-8 py-4 rounded-xl font-rb-bold uppercase tracking-wider transition-all duration-300 bg-purple-600 text-white hover:bg-purple-700 shadow-lg hover:shadow-xl"
                   style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
                 >
@@ -783,7 +783,7 @@ export default function PackagesList() {
               }
             </p>
             <Link
-              href="/request-quote"
+              href="/request-quote?package=custom"
               className="inline-block px-10 py-4 bg-primary text-white rounded-xl font-rb-bold uppercase tracking-wider shadow-xl hover:shadow-2xl hover:bg-blue-600 transition-all duration-300"
               style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
             >

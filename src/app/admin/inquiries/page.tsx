@@ -12,6 +12,10 @@ interface ClientInquiry {
   serviceType: string;
   message: string;
   budget?: string;
+  selectedPackage?: string;
+  packageName?: string;
+  packageType?: string;
+  packagePrice?: string;
   status: 'new' | 'contacted' | 'quoted' | 'converted' | 'closed';
   notes?: string;
   createdAt: string;
@@ -24,6 +28,13 @@ export default function InquiriesPage() {
     null
   );
   const [showModal, setShowModal] = useState(false);
+  
+  // CMS Features
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [filterPackageType, setFilterPackageType] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<'date' | 'name' | 'status'>('date');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   useEffect(() => {
     fetchInquiries();
@@ -87,16 +98,210 @@ export default function InquiriesPage() {
     }
   };
 
+  // Filter, Search, and Sort
+  const filteredInquiries = inquiries
+    .filter((inquiry) => {
+      // Search filter
+      const searchLower = searchTerm.toLowerCase();
+      const matchesSearch =
+        inquiry.name.toLowerCase().includes(searchLower) ||
+        inquiry.email.toLowerCase().includes(searchLower) ||
+        inquiry.phone.includes(searchLower) ||
+        (inquiry.company?.toLowerCase().includes(searchLower) || false) ||
+        (inquiry.packageName?.toLowerCase().includes(searchLower) || false);
+
+      // Status filter
+      const matchesStatus = filterStatus === 'all' || inquiry.status === filterStatus;
+
+      // Package type filter
+      const matchesPackageType =
+        filterPackageType === 'all' ||
+        (filterPackageType === 'charity' && inquiry.packageType === 'charity') ||
+        (filterPackageType === 'regular' && inquiry.packageType === 'regular') ||
+        (filterPackageType === 'custom' && inquiry.packageType === 'custom') ||
+        (filterPackageType === 'none' && !inquiry.selectedPackage);
+
+      return matchesSearch && matchesStatus && matchesPackageType;
+    })
+    .sort((a, b) => {
+      let comparison = 0;
+      
+      if (sortBy === 'date') {
+        comparison = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+      } else if (sortBy === 'name') {
+        comparison = a.name.localeCompare(b.name);
+      } else if (sortBy === 'status') {
+        comparison = a.status.localeCompare(b.status);
+      }
+      
+      return sortOrder === 'asc' ? comparison : -comparison;
+    });
+
+  // Export to CSV
+  const exportToCSV = () => {
+    const headers = ['Name', 'Email', 'Phone', 'Company', 'Package', 'Price', 'Service', 'Status', 'Date', 'Message'];
+    const rows = filteredInquiries.map(inquiry => [
+      inquiry.name,
+      inquiry.email,
+      inquiry.phone,
+      inquiry.company || '-',
+      inquiry.packageName || '-',
+      inquiry.packagePrice || '-',
+      inquiry.serviceType || '-',
+      inquiry.status,
+      new Date(inquiry.createdAt).toLocaleDateString(),
+      inquiry.message.replace(/"/g, '""'),
+    ]);
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `client-inquiries-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
+  // Stats
+  const stats = {
+    total: inquiries.length,
+    new: inquiries.filter(i => i.status === 'new').length,
+    withPackage: inquiries.filter(i => i.selectedPackage).length,
+    charity: inquiries.filter(i => i.packageType === 'charity').length,
+  };
+
   return (
     <AdminLayout>
       <div className="p-8">
+        {/* Header with Stats */}
         <div className="mb-8">
-          <h1 className="text-4xl font-rb-bold text-gray-900 dark:text-white uppercase tracking-tighter mb-2">
-            Client Inquiries
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Manage client quote requests and inquiries
-          </p>
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-4xl font-rb-bold text-gray-900 dark:text-white uppercase tracking-tighter mb-2">
+                Client Inquiries
+              </h1>
+              <p className="text-gray-600 dark:text-gray-400">
+                Manage client quote requests and package inquiries
+              </p>
+            </div>
+            <button
+              onClick={exportToCSV}
+              className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-rb-bold uppercase text-sm tracking-wider shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
+            >
+              <span>📥</span> Export CSV
+            </button>
+          </div>
+
+          {/* Stats Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-4 text-white shadow-lg">
+              <p className="text-sm opacity-90 mb-1">Total Inquiries</p>
+              <p className="text-3xl font-rb-bold">{stats.total}</p>
+            </div>
+            <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg p-4 text-white shadow-lg">
+              <p className="text-sm opacity-90 mb-1">New Inquiries</p>
+              <p className="text-3xl font-rb-bold">{stats.new}</p>
+            </div>
+            <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg p-4 text-white shadow-lg">
+              <p className="text-sm opacity-90 mb-1">With Package</p>
+              <p className="text-3xl font-rb-bold">{stats.withPackage}</p>
+            </div>
+            <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-lg p-4 text-white shadow-lg">
+              <p className="text-sm opacity-90 mb-1">Charity Packages</p>
+              <p className="text-3xl font-rb-bold">{stats.charity}</p>
+            </div>
+          </div>
+
+          {/* Filters and Search */}
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+              {/* Search */}
+              <div className="lg:col-span-2">
+                <label className="block text-sm font-rb-bold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wider">
+                  🔍 Search
+                </label>
+                <input
+                  type="text"
+                  placeholder="Search by name, email, phone..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+              </div>
+
+              {/* Status Filter */}
+              <div>
+                <label className="block text-sm font-rb-bold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wider">
+                  Status
+                </label>
+                <select
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value)}
+                  className="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                >
+                  <option value="all">All Status</option>
+                  <option value="new">New</option>
+                  <option value="contacted">Contacted</option>
+                  <option value="quoted">Quoted</option>
+                  <option value="converted">Converted</option>
+                  <option value="closed">Closed</option>
+                </select>
+              </div>
+
+              {/* Package Type Filter */}
+              <div>
+                <label className="block text-sm font-rb-bold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wider">
+                  Package Type
+                </label>
+                <select
+                  value={filterPackageType}
+                  onChange={(e) => setFilterPackageType(e.target.value)}
+                  className="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                >
+                  <option value="all">All Types</option>
+                  <option value="regular">Business</option>
+                  <option value="charity">Charity</option>
+                  <option value="custom">Custom</option>
+                  <option value="none">No Package</option>
+                </select>
+              </div>
+
+              {/* Sort */}
+              <div>
+                <label className="block text-sm font-rb-bold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wider">
+                  Sort By
+                </label>
+                <div className="flex gap-2">
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value as any)}
+                    className="flex-1 px-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  >
+                    <option value="date">Date</option>
+                    <option value="name">Name</option>
+                    <option value="status">Status</option>
+                  </select>
+                  <button
+                    onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                    className="px-3 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                    title={sortOrder === 'asc' ? 'Ascending' : 'Descending'}
+                  >
+                    {sortOrder === 'asc' ? '↑' : '↓'}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Results count */}
+            <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+              Showing <span className="font-bold text-primary">{filteredInquiries.length}</span> of <span className="font-bold">{inquiries.length}</span> inquiries
+            </div>
+          </div>
         </div>
 
         {loading ? (
@@ -113,10 +318,10 @@ export default function InquiriesPage() {
                       Name
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                      Email
+                      Contact
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                      Phone
+                      Package
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Service
@@ -133,22 +338,48 @@ export default function InquiriesPage() {
                   </tr>
                 </thead>
                 <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                  {inquiries.map((inquiry) => (
+                  {filteredInquiries.map((inquiry) => (
                     <tr
                       key={inquiry._id}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-700"
+                      className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                     >
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                        {inquiry.name}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">
+                          {inquiry.name}
+                        </div>
+                        {inquiry.company && (
+                          <div className="text-xs text-gray-500 dark:text-gray-400">
+                            {inquiry.company}
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900 dark:text-white">
+                          {inquiry.email}
+                        </div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">
+                          {inquiry.phone}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        {inquiry.selectedPackage ? (
+                          <div>
+                            <div className="flex items-center gap-1 text-sm font-medium text-gray-900 dark:text-white">
+                              {inquiry.packageType === 'charity' && <span className="text-green-500">💚</span>}
+                              <span className="truncate max-w-[120px]">{inquiry.packageName}</span>
+                            </div>
+                            {inquiry.packagePrice && (
+                              <div className="text-xs text-primary font-bold">
+                                {inquiry.packagePrice} SAR
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="text-xs text-gray-400">No package</span>
+                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                        {inquiry.email}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                        {inquiry.phone}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                        {inquiry.serviceType}
+                        {inquiry.serviceType || '-'}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
@@ -168,13 +399,13 @@ export default function InquiriesPage() {
                             setSelectedInquiry(inquiry);
                             setShowModal(true);
                           }}
-                          className="text-primary hover:text-primary/80"
+                          className="text-primary hover:text-primary/80 transition-colors"
                         >
                           View
                         </button>
                         <button
                           onClick={() => handleDelete(inquiry._id)}
-                          className="text-red-600 hover:text-red-900"
+                          className="text-red-600 hover:text-red-900 transition-colors"
                         >
                           Delete
                         </button>
@@ -185,9 +416,13 @@ export default function InquiriesPage() {
               </table>
             </div>
 
-            {inquiries.length === 0 && (
+            {filteredInquiries.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-gray-500 dark:text-gray-400">No inquiries yet</p>
+                <p className="text-gray-500 dark:text-gray-400">
+                  {searchTerm || filterStatus !== 'all' || filterPackageType !== 'all'
+                    ? 'No inquiries match your filters'
+                    : 'No inquiries yet'}
+                </p>
               </div>
             )}
           </div>
@@ -202,63 +437,97 @@ export default function InquiriesPage() {
               </h2>
 
               <div className="space-y-4 mb-6">
-                <div>
-                  <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
-                    Name
-                  </p>
-                  <p className="text-gray-900 dark:text-white">
-                    {selectedInquiry.name}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
-                    Email
-                  </p>
-                  <p className="text-gray-900 dark:text-white">
-                    {selectedInquiry.email}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
-                    Phone
-                  </p>
-                  <p className="text-gray-900 dark:text-white">
-                    {selectedInquiry.phone}
-                  </p>
-                </div>
-                {selectedInquiry.company && (
-                  <div>
-                    <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
-                      Company
+                {/* Package Info - Highlighted */}
+                {selectedInquiry.selectedPackage && (
+                  <div className="bg-gradient-to-r from-primary/10 to-blue-500/10 dark:from-primary/20 dark:to-blue-500/20 rounded-xl p-4 border-2 border-primary/30">
+                    <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                      📦 Selected Package
                     </p>
-                    <p className="text-gray-900 dark:text-white">
-                      {selectedInquiry.company}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      {selectedInquiry.packageType === 'charity' && (
+                        <span className="text-2xl">💚</span>
+                      )}
+                      <div>
+                        <p className="text-lg font-rb-bold text-gray-900 dark:text-white">
+                          {selectedInquiry.packageName}
+                        </p>
+                        {selectedInquiry.packagePrice && (
+                          <p className="text-sm text-primary font-bold">
+                            {selectedInquiry.packagePrice} SAR
+                          </p>
+                        )}
+                        {selectedInquiry.packageType === 'charity' && (
+                          <span className="inline-block mt-1 text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-2 py-1 rounded-full font-medium">
+                            Charity Package
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 )}
-                <div>
-                  <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
-                    Service Type
-                  </p>
-                  <p className="text-gray-900 dark:text-white">
-                    {selectedInquiry.serviceType}
-                  </p>
-                </div>
-                {selectedInquiry.budget && (
+
+                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
-                      Budget
+                      Name
                     </p>
                     <p className="text-gray-900 dark:text-white">
-                      {selectedInquiry.budget}
+                      {selectedInquiry.name}
                     </p>
                   </div>
-                )}
+                  <div>
+                    <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
+                      Email
+                    </p>
+                    <p className="text-gray-900 dark:text-white">
+                      {selectedInquiry.email}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
+                      Phone
+                    </p>
+                    <p className="text-gray-900 dark:text-white">
+                      {selectedInquiry.phone}
+                    </p>
+                  </div>
+                  {selectedInquiry.company && (
+                    <div>
+                      <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
+                        Company
+                      </p>
+                      <p className="text-gray-900 dark:text-white">
+                        {selectedInquiry.company}
+                      </p>
+                    </div>
+                  )}
+                  {selectedInquiry.serviceType && (
+                    <div>
+                      <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
+                        Service Type
+                      </p>
+                      <p className="text-gray-900 dark:text-white">
+                        {selectedInquiry.serviceType}
+                      </p>
+                    </div>
+                  )}
+                  {selectedInquiry.budget && (
+                    <div>
+                      <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
+                        Budget
+                      </p>
+                      <p className="text-gray-900 dark:text-white">
+                        {selectedInquiry.budget}
+                      </p>
+                    </div>
+                  )}
+                </div>
+                
                 <div>
                   <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
                     Message
                   </p>
-                  <p className="text-gray-900 dark:text-white whitespace-pre-wrap">
+                  <p className="text-gray-900 dark:text-white whitespace-pre-wrap bg-gray-50 dark:bg-gray-900 rounded-lg p-4 mt-2">
                     {selectedInquiry.message}
                   </p>
                 </div>
