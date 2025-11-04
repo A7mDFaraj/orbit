@@ -59,14 +59,14 @@ export default function Navbar() {
                 key={navbarIsDark ? 'dark-logo' : 'light-logo'}
                 src={navbarIsDark ? '/styleguide/SVG/Mark line wordmark.svg' : '/styleguide/SVG/Mark line wordmark light.svg'}
                 alt="Mark Line"
-                className="h-[68px] w-auto"
+                className="h-[44px] w-auto"
                 style={{
                   filter: navbarIsDark
                     ? 'drop-shadow(0 4px 12px rgba(0,0,0,0.4))'
                     : 'drop-shadow(0 1px 2px rgba(0,0,0,0.08))',
                 }}
                 whileHover={{ 
-                  scale: 1.02,
+                  scale: 1.1,
                   filter: navbarIsDark 
                     ? 'drop-shadow(0 6px 16px rgba(41, 171, 226, 0.3))' 
                     : 'drop-shadow(0 2px 8px rgba(41, 171, 226, 0.2))',
