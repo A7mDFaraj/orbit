@@ -37,6 +37,36 @@ const teamApplicationSchema = new mongoose.Schema(
     notes: {
       type: String,
     },
+    // Casting-specific fields
+    isCasting: {
+      type: Boolean,
+      default: false,
+    },
+    age: {
+      type: String,
+    },
+    nationality: {
+      type: String,
+    },
+    weight: {
+      type: String,
+    },
+    height: {
+      type: String,
+    },
+    gender: {
+      type: String,
+      enum: ['male', 'female', 'boy', 'girl', ''],
+    },
+    email: {
+      type: String,
+      trim: true,
+      lowercase: true,
+    },
+    photos: {
+      type: [String], // Array of base64 images or URLs
+      default: [],
+    },
   },
   {
     timestamps: true,

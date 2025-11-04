@@ -46,7 +46,6 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [showCredentials, setShowCredentials] = useState(false);
   const router = useRouter();
 
   // Force light theme and check if already logged in
@@ -189,28 +188,6 @@ export default function AdminLogin() {
           </button>
         </form>
 
-        {showCredentials && (
-          <div className="mt-6 p-5 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg border-l-4 border-primary">
-            <p className="text-sm text-gray-700 text-center">
-              <strong className="text-primary uppercase tracking-wide">Default Credentials:</strong>
-              <br />
-              <span className="font-semibold">Email:</span> admin@markline.sa
-              <br />
-              <span className="font-semibold">Password:</span> Abd123#Abd
-            </p>
-          </div>
-        )}
-
-        {!showCredentials && (
-          <div className="mt-6 text-center">
-            <button
-              onClick={() => setShowCredentials(true)}
-              className="text-sm text-gray-500 hover:text-primary transition-colors underline"
-            >
-              Show test credentials
-            </button>
-          </div>
-        )}
 
         <div className="mt-6 text-center">
           <a
