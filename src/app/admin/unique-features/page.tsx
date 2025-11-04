@@ -31,7 +31,21 @@ export default function UniqueFeaturesPage() {
     try {
       const res = await fetch('/api/unique-features');
       const data = await res.json();
-      setFeatures(data);
+      
+      if (data && data.length > 0) {
+        setFeatures(data);
+      } else {
+        // No features found, seed the database
+        console.log('No unique features found, seeding...');
+        const seedRes = await fetch('/api/unique-features/seed', { method: 'POST' });
+        if (seedRes.ok) {
+          const seedData = await seedRes.json();
+          if (seedData.features) {
+            setFeatures(seedData.features);
+            toast.success('Features loaded from defaults');
+          }
+        }
+      }
     } catch (error) {
       toast.error('Failed to fetch features');
     } finally {
@@ -44,8 +58,12 @@ export default function UniqueFeaturesPage() {
       const res = await fetch('/api/unique-features-settings');
       const data = await res.json();
       if (data.settings) {
-        setSectionTitle(data.settings.sectionTitle || '');
-        setSectionTitleAr(data.settings.sectionTitleAr || '');
+        setSectionTitle(data.settings.sectionTitle || 'What Makes Us Unique');
+        setSectionTitleAr(data.settings.sectionTitleAr || 'ما يميزنا');
+      } else {
+        // Set defaults if no settings exist
+        setSectionTitle('What Makes Us Unique');
+        setSectionTitleAr('ما يميزنا');
       }
     } catch (error) {
       console.error('Failed to fetch settings');

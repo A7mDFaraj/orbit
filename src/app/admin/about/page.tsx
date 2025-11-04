@@ -45,8 +45,20 @@ export default function AboutPage() {
     try {
       const res = await fetch('/api/about-settings');
       const data = await res.json();
+      
       if (data.settings) {
         setSettings(data.settings);
+      } else {
+        // No settings found, seed the database
+        console.log('No about settings found, seeding...');
+        const seedRes = await fetch('/api/about-settings/seed', { method: 'POST' });
+        if (seedRes.ok) {
+          const seedData = await seedRes.json();
+          if (seedData.settings) {
+            setSettings(seedData.settings);
+            toast.success('Settings loaded from defaults');
+          }
+        }
       }
     } catch (error) {
       toast.error('Failed to fetch about settings');
