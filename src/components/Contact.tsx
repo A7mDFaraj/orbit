@@ -223,7 +223,7 @@ export default function Contact() {
       {/* Footer */}
       <footer className="bg-secondary text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
             {/* Logo */}
             <div className="flex flex-col">
               <img 
@@ -237,7 +237,7 @@ export default function Contact() {
             </div>
 
             {/* Navigation Links */}
-            <div className="flex flex-wrap gap-6 uppercase text-sm font-rb-bold tracking-wider justify-center md:justify-start">
+            <div className="flex flex-wrap gap-6 uppercase text-sm font-rb-bold tracking-wider justify-center md:justify-end items-center">
               <a href="#about" className="hover:text-primary transition-colors">
                 {t.nav.about}
               </a>
@@ -249,19 +249,6 @@ export default function Contact() {
               </a>
               <a href="#contact" className="hover:text-primary transition-colors">
                 {t.nav.contact}
-              </a>
-            </div>
-
-            {/* Casting Agency Forum Link */}
-            <div className="flex items-center justify-center md:justify-end">
-              <a
-                href="https://mrcastingksa.com/join"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/80 hover:text-primary transition-colors text-sm font-montserrat underline underline-offset-4"
-                style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
-              >
-                {isRTL ? 'منتدى وكالة التمثيل' : 'Casting Agency Forum'}
               </a>
             </div>
           </div>

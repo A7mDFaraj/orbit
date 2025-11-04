@@ -205,6 +205,18 @@ export default function About() {
               }}
               className="group relative p-10 rounded-3xl backdrop-blur-xl bg-white/70 dark:bg-gray-800/70 border border-primary/20 dark:border-primary/30 shadow-2xl hover:shadow-primary/20 transition-all duration-500 cursor-pointer overflow-hidden"
             >
+              {/* Background Image */}
+              <div 
+                className="absolute inset-0 bg-cover bg-center opacity-30 group-hover:opacity-40 transition-opacity duration-500"
+                style={{
+                  backgroundImage: 'url(/about/vision.jpg)',
+                  backgroundBlendMode: 'overlay',
+                }}
+              />
+              
+              {/* Overlay - More transparent to show the image */}
+              <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-white/70 to-white/60 dark:from-gray-900/70 dark:via-gray-900/80 dark:to-gray-900/70" />
+
               {/* Animated gradient background */}
               <motion.div
                 className="absolute inset-0 bg-gradient-to-br from-primary/20 via-blue-400/10 to-transparent dark:from-primary/30 dark:via-blue-400/20 dark:to-transparent opacity-0 group-hover:opacity-100"
@@ -304,6 +316,18 @@ export default function About() {
               }}
               className="group relative p-10 rounded-3xl backdrop-blur-xl bg-white/70 dark:bg-gray-800/70 border border-secondary/20 dark:border-primary/30 shadow-2xl hover:shadow-secondary/20 transition-all duration-500 cursor-pointer overflow-hidden"
             >
+              {/* Background Image */}
+              <div 
+                className="absolute inset-0 bg-cover bg-center opacity-30 group-hover:opacity-40 transition-opacity duration-500"
+                style={{
+                  backgroundImage: 'url(/about/mission.jpg)',
+                  backgroundBlendMode: 'overlay',
+                }}
+              />
+              
+              {/* Overlay - More transparent to show the image */}
+              <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-white/70 to-white/60 dark:from-gray-900/70 dark:via-gray-900/80 dark:to-gray-900/70" />
+
               {/* Animated gradient background */}
               <motion.div
                 className="absolute inset-0 bg-gradient-to-br from-secondary/20 via-gray-400/10 to-transparent dark:from-primary/30 dark:via-gray-600/20 dark:to-transparent opacity-0 group-hover:opacity-100"
@@ -469,81 +493,21 @@ export default function About() {
                       transition={{ duration: 0.6, type: 'spring' }}
                     >
                       {index === 0 ? (
-                        // Animated Waving Saudi Flag
+                        // Saudi Creativity - Outlined Flag Icon
                         <motion.div
-                          className="relative"
-                          style={{
-                            width: '60px',
-                            height: '60px',
-                            perspective: '500px',
+                          className="w-12 h-12"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={inView ? {
+                            y: [0, -5, 0],
+                            opacity: 1,
+                          } : { opacity: 0, y: 10 }}
+                          transition={{
+                            duration: 3,
+                            repeat: Infinity,
+                            delay: index * 0.3,
                           }}
-                          initial={{ opacity: 0, scale: 0 }}
-                          animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
-                          transition={{ duration: 0.5, delay: index * 0.3 }}
                         >
-                          {/* Saudi Flag with Wave Effect */}
-                          <motion.div
-                            className="absolute inset-0"
-                            style={{
-                              background: 'linear-gradient(to bottom, #006C35 0%, #006C35 100%)',
-                              borderRadius: '8px',
-                              boxShadow: '0 4px 15px rgba(0, 108, 53, 0.3)',
-                            }}
-                            animate={{
-                              rotateY: [-3, 3, -3],
-                              rotateX: [2, -2, 2],
-                            }}
-                            transition={{
-                              duration: 2,
-                              repeat: Infinity,
-                              ease: 'easeInOut',
-                            }}
-                          >
-                            {/* Flag Pattern - Shahada and Sword */}
-                            <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                              <motion.div
-                                className="text-xl font-bold"
-                                animate={{
-                                  scaleX: [1, 1.05, 1],
-                                  x: [0, 2, 0],
-                                }}
-                                transition={{
-                                  duration: 2,
-                                  repeat: Infinity,
-                                  ease: 'easeInOut',
-                                }}
-                              >
-                                ⚔️
-                              </motion.div>
-                              <motion.div
-                                className="text-[8px] leading-tight text-center px-1"
-                                animate={{
-                                  scaleX: [1, 1.03, 1],
-                                }}
-                                transition={{
-                                  duration: 2,
-                                  repeat: Infinity,
-                                  ease: 'easeInOut',
-                                  delay: 0.1,
-                                }}
-                              >
-                                🇸🇦
-                              </motion.div>
-                            </div>
-                            
-                            {/* Wave effect overlay */}
-                            <motion.div
-                              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
-                              animate={{
-                                x: ['-100%', '100%'],
-                              }}
-                              transition={{
-                                duration: 2,
-                                repeat: Infinity,
-                                ease: 'linear',
-                              }}
-                            />
-                          </motion.div>
+                          {getOutlineIcon(index)}
                         </motion.div>
                       ) : (
                         <motion.div
@@ -739,20 +703,28 @@ export default function About() {
 
 function getOutlineIcon(index: number) {
   const icons = [
-    null, // index 0 is Saudi flag
+    // Saudi Creativity - Outlined Flag (outlined)
+    <svg key="0" className="w-full h-full text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+    </svg>,
+    // Complete Implementation - Lightning bolt (outlined)
     <svg key="1" className="w-full h-full text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
     </svg>,
+    // Diverse Expertise - Team (outlined)
     <svg key="2" className="w-full h-full text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
     </svg>,
+    // Attention to Detail - Eye (outlined)
     <svg key="3" className="w-full h-full text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
     </svg>,
-    <svg key="4" className="w-full h-full text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342c-.346 0-.654.105-.867.3a1.5 1.5 0 11-2.015-2.223c.22-.195.52-.3.867-.3.346 0 .654.105.867.3a1.5 1.5 0 112.015 2.223c-.22.195-.52.3-.867.3zm6.368 0c-.346 0-.654.105-.867.3a1.5 1.5 0 11-2.015-2.223c.22-.195.52-.3.867-.3.346 0 .654.105.867.3a1.5 1.5 0 112.015 2.223c-.22.195-.52.3-.867.3zm3.272 0c-.346 0-.654.105-.867.3a1.5 1.5 0 11-2.015-2.223c.22-.195.52-.3.867-.3.346 0 .654.105.867.3a1.5 1.5 0 112.015 2.223c-.22.195-.52.3-.867.3z" />
+    // Trust and Partnership - Shield with checkmark (outlined, fixed)
+    <svg key="4" className="w-full h-full text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
     </svg>,
+    // Focus on Innovation - Lightbulb (outlined)
     <svg key="5" className="w-full h-full text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
     </svg>,

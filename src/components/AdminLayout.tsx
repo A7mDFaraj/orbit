@@ -108,11 +108,14 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const menuItems = [
     { name: 'Dashboard', href: '/admin/dashboard', icon: '📊' },
     { name: 'Hero Section', href: '/admin/hero', icon: '🌟' },
+    { name: 'About Us', href: '/admin/about', icon: '👋' },
+    { name: 'Unique Features', href: '/admin/unique-features', icon: '✨' },
     { name: 'Services', href: '/admin/services', icon: '💼' },
     { name: 'Portfolio', href: '/admin/clients', icon: '🎨' },
     { name: 'Testimonials', href: '/admin/testimonials', icon: '⭐' },
     { name: 'FAQs', href: '/admin/faqs', icon: '❓' },
     { name: 'Video', href: '/admin/video', icon: '🎬' },
+    { name: 'Packages', href: '/admin/packages', icon: '📦' },
   ];
 
   return (

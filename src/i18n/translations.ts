@@ -13,6 +13,7 @@ export const translations = {
       admin: 'Admin',
       creativeMarketing: 'Creative Marketing',
       madeInSaudi: 'Made in Saudi',
+      menu: 'Menu',
     },
     hero: {
       title: 'Creative Marketing Solutions',
@@ -120,6 +121,7 @@ export const translations = {
       admin: 'لوحة التحكم',
       creativeMarketing: 'التسويق الإبداعي',
       madeInSaudi: 'صنع في السعودية',
+      menu: 'القائمة',
     },
     hero: {
       title: 'حلول تسويقية إبداعية',

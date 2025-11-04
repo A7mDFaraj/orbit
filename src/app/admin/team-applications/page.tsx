@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import AdminLayout from '@/components/AdminLayout';
 
 interface TeamApplication {
@@ -15,10 +14,18 @@ interface TeamApplication {
   status: 'pending' | 'reviewed' | 'accepted' | 'rejected';
   notes?: string;
   createdAt: string;
+  // Casting-specific fields
+  isCasting?: boolean;
+  age?: string;
+  nationality?: string;
+  weight?: string;
+  height?: string;
+  gender?: string;
+  email?: string;
+  photos?: string[];
 }
 
 export default function TeamApplicationsPage() {
-  const router = useRouter();
   const [applications, setApplications] = useState<TeamApplication[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedApp, setSelectedApp] = useState<TeamApplication | null>(null);
@@ -97,14 +104,18 @@ export default function TeamApplicationsPage() {
     }
   };
 
+  const isCastingApplication = (app: TeamApplication) => {
+    return app.type === 'cast' || app.isCasting;
+  };
+
   return (
     <AdminLayout>
       <div className="p-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-rb-bold text-gray-900 dark:text-white uppercase tracking-tighter mb-2">
+          <h1 className="text-4xl font-rb-bold text-gray-900 uppercase tracking-tighter mb-2">
             Team Applications
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-gray-600">
             Manage applications from organizers, non-organizers, and cast members
           </p>
         </div>
@@ -114,44 +125,51 @@ export default function TeamApplicationsPage() {
             <p className="text-gray-500">Loading applications...</p>
           </div>
         ) : (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead className="bg-gray-50 dark:bg-gray-900">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 uppercase tracking-wider">
                       Name
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 uppercase tracking-wider">
                       City
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 uppercase tracking-wider">
                       Mobile
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 uppercase tracking-wider">
                       Type
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 uppercase tracking-wider">
                       Date
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody className="bg-white divide-y divide-gray-200">
                   {applications.map((app) => (
-                    <tr key={app._id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                        {app.name}
+                    <tr key={app._id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="text-sm font-medium text-gray-900">{app.name}</div>
+                          {isCastingApplication(app) && (
+                            <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-pink-100 text-pink-800">
+                              🎬 Casting
+                            </span>
+                          )}
+                        </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {app.city}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {app.mobile}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -172,7 +190,7 @@ export default function TeamApplicationsPage() {
                           {app.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {new Date(app.createdAt).toLocaleDateString()}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
@@ -200,7 +218,7 @@ export default function TeamApplicationsPage() {
 
             {applications.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-gray-500 dark:text-gray-400">
+                <p className="text-gray-500">
                   No applications yet
                 </p>
               </div>
@@ -210,79 +228,158 @@ export default function TeamApplicationsPage() {
 
         {/* Modal */}
         {showModal && selectedApp && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-              <h2 className="text-2xl font-rb-bold text-gray-900 dark:text-white mb-6">
-                Application Details
-              </h2>
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-rb-bold text-gray-900">
+                  Application Details
+                  {isCastingApplication(selectedApp) && (
+                    <span className="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-pink-100 text-pink-800">
+                      🎬 Casting Application
+                    </span>
+                  )}
+                </h2>
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
               
-              <div className="space-y-4 mb-6">
-                <div>
-                  <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
-                    Name
-                  </p>
-                  <p className="text-gray-900 dark:text-white">{selectedApp.name}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
-                    City
-                  </p>
-                  <p className="text-gray-900 dark:text-white">{selectedApp.city}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
-                    Mobile
-                  </p>
-                  <p className="text-gray-900 dark:text-white">{selectedApp.mobile}</p>
-                </div>
-                {selectedApp.backupMobile && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                {/* Basic Information */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-rb-bold text-gray-900 border-b pb-2">Basic Information</h3>
                   <div>
-                    <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
-                      Backup Mobile
-                    </p>
-                    <p className="text-gray-900 dark:text-white">
-                      {selectedApp.backupMobile}
-                    </p>
+                    <p className="text-sm font-semibold text-gray-500">Name</p>
+                    <p className="text-gray-900">{selectedApp.name}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-500">City</p>
+                    <p className="text-gray-900">{selectedApp.city}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-500">Mobile</p>
+                    <p className="text-gray-900">{selectedApp.mobile}</p>
+                  </div>
+                  {selectedApp.backupMobile && (
+                    <div>
+                      <p className="text-sm font-semibold text-gray-500">Backup Mobile</p>
+                      <p className="text-gray-900">{selectedApp.backupMobile}</p>
+                    </div>
+                  )}
+                  <div>
+                    <p className="text-sm font-semibold text-gray-500">Type</p>
+                    <span
+                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getTypeBadgeColor(
+                        selectedApp.type
+                      )}`}
+                    >
+                      {selectedApp.type}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Casting Information (if applicable) */}
+                {isCastingApplication(selectedApp) && (
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-rb-bold text-gray-900 border-b pb-2">🎬 Casting Information</h3>
+                    {selectedApp.email && (
+                      <div>
+                        <p className="text-sm font-semibold text-gray-500">Email</p>
+                        <p className="text-gray-900">{selectedApp.email}</p>
+                      </div>
+                    )}
+                    {selectedApp.age && (
+                      <div>
+                        <p className="text-sm font-semibold text-gray-500">Age</p>
+                        <p className="text-gray-900">{selectedApp.age} years old</p>
+                      </div>
+                    )}
+                    {selectedApp.nationality && (
+                      <div>
+                        <p className="text-sm font-semibold text-gray-500">Nationality</p>
+                        <p className="text-gray-900">{selectedApp.nationality}</p>
+                      </div>
+                    )}
+                    {selectedApp.gender && (
+                      <div>
+                        <p className="text-sm font-semibold text-gray-500">Gender</p>
+                        <p className="text-gray-900 capitalize">{selectedApp.gender}</p>
+                      </div>
+                    )}
+                    {selectedApp.height && (
+                      <div>
+                        <p className="text-sm font-semibold text-gray-500">Height</p>
+                        <p className="text-gray-900">{selectedApp.height} cm</p>
+                      </div>
+                    )}
+                    {selectedApp.weight && (
+                      <div>
+                        <p className="text-sm font-semibold text-gray-500">Weight</p>
+                        <p className="text-gray-900">{selectedApp.weight} kg</p>
+                      </div>
+                    )}
                   </div>
                 )}
-                <div>
-                  <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
-                    Type
-                  </p>
-                  <span
-                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getTypeBadgeColor(
-                      selectedApp.type
-                    )}`}
-                  >
-                    {selectedApp.type}
-                  </span>
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2">
-                    Update Status
-                  </p>
-                  <div className="flex gap-2">
-                    {['pending', 'reviewed', 'accepted', 'rejected'].map((status) => (
-                      <button
-                        key={status}
-                        onClick={() => handleUpdateStatus(selectedApp._id, status)}
-                        className={`px-4 py-2 rounded-lg font-semibold text-sm ${
-                          selectedApp.status === status
-                            ? 'bg-primary text-white'
-                            : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
-                        }`}
-                      >
-                        {status}
-                      </button>
+              </div>
+
+              {/* Photos (for casting applications) */}
+              {isCastingApplication(selectedApp) && selectedApp.photos && selectedApp.photos.length > 0 && (
+                <div className="mb-6">
+                  <h3 className="text-lg font-rb-bold text-gray-900 border-b pb-2 mb-4">
+                    Photos ({selectedApp.photos.length})
+                  </h3>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {selectedApp.photos.map((photo, index) => (
+                      <div key={index} className="relative group">
+                        <img
+                          src={photo}
+                          alt={`Photo ${index + 1}`}
+                          className="w-full h-40 object-cover rounded-lg border-2 border-gray-300"
+                        />
+                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                          <a
+                            href={photo}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-white text-sm font-medium bg-primary px-3 py-1 rounded"
+                          >
+                            View Full Size
+                          </a>
+                        </div>
+                      </div>
                     ))}
                   </div>
+                </div>
+              )}
+
+              <div className="mb-6">
+                <p className="text-sm font-semibold text-gray-500 mb-2">Update Status</p>
+                <div className="flex gap-2 flex-wrap">
+                  {['pending', 'reviewed', 'accepted', 'rejected'].map((status) => (
+                    <button
+                      key={status}
+                      onClick={() => handleUpdateStatus(selectedApp._id, status)}
+                      className={`px-4 py-2 rounded-lg font-semibold text-sm ${
+                        selectedApp.status === status
+                          ? 'bg-primary text-white'
+                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      }`}
+                    >
+                      {status}
+                    </button>
+                  ))}
                 </div>
               </div>
 
               <div className="flex gap-4">
                 <button
                   onClick={() => setShowModal(false)}
-                  className="flex-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600"
+                  className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300"
                 >
                   Close
                 </button>
@@ -294,4 +391,3 @@ export default function TeamApplicationsPage() {
     </AdminLayout>
   );
 }
-
