@@ -4,8 +4,20 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 
 export const metadata: Metadata = {
-  title: "Mark Line - Creative Marketing Solutions | مارك لاين - حلول تسويقية إبداعية",
-  description: "Leading Saudi entity in creative marketing solutions | كيان سعودي رائد في الحلول التسويقية الإبداعية",
+  title: "Mark Line - Business Services | مارك لاين - تحويل رؤيتك إلى واقع متكامل",
+  description: "Transform your vision into an integrated reality | تحويل رؤيتك إلى واقع متكامل - خدمات أعمال متكاملة",
+  keywords: "Business Services, Marketing, Events, Real Estate, Saudi Arabia, خدمات أعمال, تسويق, فعاليات",
+  icons: {
+    icon: '/styleguide/SVG/icon.svg',
+    apple: '/styleguide/SVG/icon.svg',
+  },
+  openGraph: {
+    title: "Mark Line - Business Services",
+    description: "Transform your vision into an integrated reality | تحويل رؤيتك إلى واقع متكامل",
+    type: "website",
+    locale: "en_US",
+    alternateLocale: "ar_SA",
+  },
 };
 
 export default function RootLayout({
