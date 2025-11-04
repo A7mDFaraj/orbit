@@ -15,7 +15,7 @@ export async function POST() {
     if (!adminExists) {
       await User.create({
         email: 'admin@markline.sa',
-        password: 'Admin@123',
+        password: 'Abd123#Abd',
         name: 'Mark Line Admin',
         role: 'admin',
       });
@@ -361,7 +361,7 @@ export async function POST() {
       message: 'Database seeded successfully',
       admin: {
         email: 'admin@markline.sa',
-        password: 'Admin@123',
+        password: 'Abd123#Abd',
       },
     });
   } catch (error) {

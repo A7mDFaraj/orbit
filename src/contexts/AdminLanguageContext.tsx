@@ -99,8 +99,20 @@ const AdminLanguageContext = createContext<AdminLanguageContextType | undefined>
 export function AdminLanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<'en' | 'ar'>('en');
 
+  // Load language from localStorage on mount
+  useEffect(() => {
+    const savedLang = localStorage.getItem('adminLanguage') as 'en' | 'ar' | null;
+    if (savedLang) {
+      setLanguage(savedLang);
+    }
+  }, []);
+
   const toggleLanguage = () => {
-    setLanguage((prev) => (prev === 'en' ? 'ar' : 'en'));
+    setLanguage((prev) => {
+      const newLang = prev === 'en' ? 'ar' : 'en';
+      localStorage.setItem('adminLanguage', newLang);
+      return newLang;
+    });
   };
 
   const value = {

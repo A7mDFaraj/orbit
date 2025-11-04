@@ -184,22 +184,6 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
           </nav>
         </div>
 
-        <div className={`absolute bottom-0 left-0 right-0 p-6 space-y-3`}>
-          <button
-            onClick={toggleLanguage}
-            className={`w-full flex items-center ${sidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-3 rounded-lg bg-primary hover:bg-blue-700 transition-colors duration-300 text-white font-semibold`}
-          >
-            <span className="text-2xl">🌐</span>
-            {sidebarOpen && <span>{isArabic ? t.english : t.arabic}</span>}
-          </button>
-          <button
-            onClick={handleLogout}
-            className={`w-full flex items-center ${sidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-3 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-300 text-white font-semibold`}
-          >
-            <span className="text-2xl">🚪</span>
-            {sidebarOpen && <span>{t.logout}</span>}
-          </button>
-        </div>
       </aside>
 
       {/* Main Content */}
@@ -213,7 +197,18 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
               </h2>
               <p className="text-sm text-gray-500 mt-1" dir={isArabic ? 'rtl' : 'ltr'}>{t.controlPanel}</p>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              {/* Language Switcher */}
+              <button
+                onClick={toggleLanguage}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary hover:bg-blue-700 transition-colors text-white font-semibold"
+                title={isArabic ? t.english : t.arabic}
+              >
+                <span className="text-lg">🌐</span>
+                <span className="text-sm">{isArabic ? 'EN' : 'AR'}</span>
+              </button>
+
+              {/* User Info */}
               <div className="text-right" dir={isArabic ? 'rtl' : 'ltr'}>
                 <p className="text-sm text-gray-600">{t.welcome}</p>
                 <p className="font-bold text-gray-900">{user.name}</p>
@@ -221,6 +216,16 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
               <div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
                 {user.name.charAt(0)}
               </div>
+
+              {/* Logout Button */}
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 transition-colors text-white font-semibold"
+                title={t.logout}
+              >
+                <span className="text-lg">🚪</span>
+                <span className="text-sm">{t.logout}</span>
+              </button>
             </div>
           </div>
         </header>
