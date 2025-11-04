@@ -18,8 +18,6 @@ interface AboutSettings {
   missionAr: string;
   missionText: string;
   missionTextAr: string;
-  unique: string;
-  uniqueAr: string;
 }
 
 export default function AboutPage() {
@@ -36,8 +34,6 @@ export default function AboutPage() {
     missionAr: '',
     missionText: '',
     missionTextAr: '',
-    unique: '',
-    uniqueAr: '',
   });
   const [loading, setLoading] = useState(false);
 
@@ -274,39 +270,6 @@ export default function AboutPage() {
             </div>
           </div>
 
-          {/* Unique Section Title */}
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 uppercase border-b pb-3">
-              What Makes Us Unique - Section Title
-            </h2>
-            <div className="grid grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Section Title (English)
-                </label>
-                <input
-                  type="text"
-                  value={settings.unique}
-                  onChange={(e) => handleChange('unique', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Section Title (Arabic)
-                </label>
-                <input
-                  type="text"
-                  value={settings.uniqueAr}
-                  onChange={(e) => handleChange('uniqueAr', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  dir="rtl"
-                  required
-                />
-              </div>
-            </div>
-          </div>
 
           {/* Submit Button */}
           <div className="flex justify-end">

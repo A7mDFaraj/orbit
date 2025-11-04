@@ -1,9 +1,9 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useEffect } from 'react';
 
 export default function About() {
   const controls = useAnimation();
@@ -12,12 +12,59 @@ export default function About() {
     threshold: 0.1,
   });
   const { t, isRTL } = useLanguage();
+  
+  const [aboutData, setAboutData] = useState<any>(null);
+  const [featuresData, setFeaturesData] = useState<any[]>([]);
+  const [uniqueTitle, setUniqueTitle] = useState({ en: '', ar: '' });
 
   useEffect(() => {
     if (inView) {
       controls.start('visible');
     }
   }, [controls, inView]);
+
+  useEffect(() => {
+    fetchAboutData();
+    fetchFeaturesData();
+    fetchUniqueSettings();
+  }, []);
+
+  const fetchAboutData = async () => {
+    try {
+      const res = await fetch('/api/about-settings');
+      const data = await res.json();
+      if (data.settings) {
+        setAboutData(data.settings);
+      }
+    } catch (error) {
+      console.error('Error fetching about data:', error);
+    }
+  };
+
+  const fetchFeaturesData = async () => {
+    try {
+      const res = await fetch('/api/unique-features');
+      const data = await res.json();
+      setFeaturesData(data || []);
+    } catch (error) {
+      console.error('Error fetching features data:', error);
+    }
+  };
+
+  const fetchUniqueSettings = async () => {
+    try {
+      const res = await fetch('/api/unique-features-settings');
+      const data = await res.json();
+      if (data.settings) {
+        setUniqueTitle({
+          en: data.settings.sectionTitle || t.about.unique,
+          ar: data.settings.sectionTitleAr || t.about.unique,
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching unique settings:', error);
+    }
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -137,13 +184,13 @@ export default function About() {
                         animate={inView ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: 0.8 }}
                       >
-                        {t.about.title}
+                        {aboutData ? aboutData.titleAr : t.about.title}
                       </motion.span>
                     ) : (
                       // Blur animation for English
-                      t.about.title.split(' ').map((word, wordIndex) => (
+                      (aboutData ? aboutData.title : t.about.title).split(' ').map((word: string, wordIndex: number) => (
                         <span key={wordIndex} className="inline-block mr-4">
-                          {word.split('').map((char, charIndex) => (
+                          {word.split('').map((char: string, charIndex: number) => (
                             <motion.span
                               key={charIndex}
                               className="inline-block"
@@ -190,7 +237,7 @@ export default function About() {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.7 }}
             >
-              {t.about.description}
+              {aboutData ? (isRTL ? aboutData.descriptionAr : aboutData.description) : t.about.description}
             </motion.p>
           </motion.div>
 
@@ -275,7 +322,7 @@ export default function About() {
                   className="text-4xl font-rb-bold text-gray-900 dark:text-white mb-6 uppercase tracking-tight"
                   style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
                 >
-                  {t.about.vision}
+                  {aboutData ? (isRTL ? aboutData.visionAr : aboutData.vision) : t.about.vision}
                 </h3>
                 
                 <motion.div 
@@ -289,7 +336,7 @@ export default function About() {
                   className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed font-montserrat"
                   style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
                 >
-                  {t.about.visionText}
+                  {aboutData ? (isRTL ? aboutData.visionTextAr : aboutData.visionText) : t.about.visionText}
                 </p>
               </div>
 
@@ -386,7 +433,7 @@ export default function About() {
                   className="text-4xl font-rb-bold text-gray-900 dark:text-white mb-6 uppercase tracking-tight"
                   style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
                 >
-                  {t.about.mission}
+                  {aboutData ? (isRTL ? aboutData.missionAr : aboutData.mission) : t.about.mission}
                 </h3>
                 
                 <motion.div 
@@ -400,7 +447,7 @@ export default function About() {
                   className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed font-montserrat"
                   style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
                 >
-                  {t.about.missionText}
+                  {aboutData ? (isRTL ? aboutData.missionTextAr : aboutData.missionText) : t.about.missionText}
                 </p>
               </div>
 
@@ -429,7 +476,7 @@ export default function About() {
                 animate={inView ? { opacity: 1, scale: 1 } : {}}
                 transition={{ duration: 0.6 }}
               >
-                {t.about.unique}
+                {uniqueTitle ? (isRTL ? uniqueTitle.ar : uniqueTitle.en) : t.about.unique}
               </motion.h3>
               <motion.div 
                 className="h-1.5 w-24 bg-gradient-to-r from-primary to-blue-400 mx-auto rounded-full"
@@ -440,7 +487,11 @@ export default function About() {
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {t.about.features.map((item, index) => (
+              {(featuresData.length > 0 ? featuresData : t.about.features).map((item, index) => {
+                const title = featuresData.length > 0 ? (isRTL ? item.titleAr : item.title) : item.title;
+                const desc = featuresData.length > 0 ? (isRTL ? item.descAr : item.desc) : item.desc;
+                
+                return (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 50, scale: 0.9 }}
@@ -533,7 +584,7 @@ export default function About() {
                       className="text-xl font-rb-bold text-gray-900 dark:text-white mb-4 uppercase tracking-wide group-hover:text-primary dark:group-hover:text-primary transition-colors duration-300"
                       style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
                     >
-                      {item.title}
+                      {title}
                     </h4>
 
                     {/* Animated underline */}
@@ -549,7 +600,7 @@ export default function About() {
                       className="text-gray-600 dark:text-gray-300 leading-relaxed font-montserrat text-base"
                       style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
                     >
-                      {item.desc}
+                      {desc}
                     </p>
                   </div>
 
@@ -564,7 +615,8 @@ export default function About() {
                   {/* Corner accent */}
                   <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl from-primary/10 to-transparent dark:from-primary/20 dark:to-transparent rounded-tl-3xl" />
                 </motion.div>
-              ))}
+                );
+              })}
             </div>
           </motion.div>
 

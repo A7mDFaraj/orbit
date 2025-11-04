@@ -14,8 +14,6 @@ const aboutSettingsSchema = new mongoose.Schema(
     missionAr: { type: String, required: true },
     missionText: { type: String, required: true },
     missionTextAr: { type: String, required: true },
-    unique: { type: String, required: true },
-    uniqueAr: { type: String, required: true },
   },
   { timestamps: true }
 );

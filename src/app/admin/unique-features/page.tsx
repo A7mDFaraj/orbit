@@ -19,9 +19,12 @@ export default function UniqueFeaturesPage() {
   const [loading, setLoading] = useState(true);
   const [editingFeature, setEditingFeature] = useState<UniqueFeature | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [sectionTitle, setSectionTitle] = useState('');
+  const [sectionTitleAr, setSectionTitleAr] = useState('');
 
   useEffect(() => {
     fetchFeatures();
+    fetchSettings();
   }, []);
 
   const fetchFeatures = async () => {
@@ -33,6 +36,35 @@ export default function UniqueFeaturesPage() {
       toast.error('Failed to fetch features');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchSettings = async () => {
+    try {
+      const res = await fetch('/api/unique-features-settings');
+      const data = await res.json();
+      if (data.settings) {
+        setSectionTitle(data.settings.sectionTitle || '');
+        setSectionTitleAr(data.settings.sectionTitleAr || '');
+      }
+    } catch (error) {
+      console.error('Failed to fetch settings');
+    }
+  };
+
+  const handleSaveSettings = async () => {
+    try {
+      const res = await fetch('/api/unique-features-settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sectionTitle, sectionTitleAr }),
+      });
+
+      if (res.ok) {
+        toast.success('Section title updated!');
+      }
+    } catch (error) {
+      toast.error('Failed to update section title');
     }
   };
 
@@ -89,6 +121,48 @@ export default function UniqueFeaturesPage() {
           >
             + Add Feature
           </button>
+        </div>
+
+        {/* Section Title Settings */}
+        <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-4 uppercase border-b pb-3">
+            Section Title
+          </h2>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Title (English)
+              </label>
+              <input
+                type="text"
+                value={sectionTitle}
+                onChange={(e) => setSectionTitle(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary"
+                placeholder="What Makes Us Unique"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Title (Arabic)
+              </label>
+              <input
+                type="text"
+                value={sectionTitleAr}
+                onChange={(e) => setSectionTitleAr(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary"
+                dir="rtl"
+                placeholder="ما يميزنا"
+              />
+            </div>
+          </div>
+          <div className="flex justify-end mt-4">
+            <button
+              onClick={handleSaveSettings}
+              className="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors"
+            >
+              Save Section Title
+            </button>
+          </div>
         </div>
 
         {loading ? (
