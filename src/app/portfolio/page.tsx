@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Navbar from '@/components/Navbar';
+import FloatingWhatsApp from '@/components/FloatingWhatsApp';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import GoogleDriveMedia from '@/components/GoogleDriveMedia';
@@ -318,6 +319,7 @@ export default function PortfolioPage() {
           </motion.div>
         </div>
       </div>
+      <FloatingWhatsApp />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import toast, { Toaster } from 'react-hot-toast';
+import { AdminLanguageProvider, useAdminLanguage } from '@/contexts/AdminLanguageContext';
 
 // Force light theme and LTR for admin pages
 const forceLightTheme = () => {
@@ -47,10 +48,19 @@ interface AdminLayoutProps {
 }
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
+  return (
+    <AdminLanguageProvider>
+      <AdminLayoutInner>{children}</AdminLayoutInner>
+    </AdminLanguageProvider>
+  );
+}
+
+function AdminLayoutInner({ children }: AdminLayoutProps) {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const router = useRouter();
+  const { t, toggleLanguage, isArabic } = useAdminLanguage();
 
   useEffect(() => {
     // Force light theme when admin layout mounts
@@ -106,16 +116,16 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   }
 
   const menuItems = [
-    { name: 'Dashboard', href: '/admin/dashboard', icon: '📊' },
-    { name: 'Hero Section', href: '/admin/hero', icon: '🌟' },
-    { name: 'About Us', href: '/admin/about', icon: '👋' },
-    { name: 'Unique Features', href: '/admin/unique-features', icon: '✨' },
-    { name: 'Services', href: '/admin/services', icon: '💼' },
-    { name: 'Portfolio', href: '/admin/clients', icon: '🎨' },
-    { name: 'Testimonials', href: '/admin/testimonials', icon: '⭐' },
-    { name: 'FAQs', href: '/admin/faqs', icon: '❓' },
-    { name: 'Video', href: '/admin/video', icon: '🎬' },
-    { name: 'Packages', href: '/admin/packages', icon: '📦' },
+    { name: t.dashboard, href: '/admin/dashboard', icon: '📊' },
+    { name: t.heroSection, href: '/admin/hero', icon: '🌟' },
+    { name: t.aboutUs, href: '/admin/about', icon: '👋' },
+    { name: t.uniqueFeatures, href: '/admin/unique-features', icon: '✨' },
+    { name: t.services, href: '/admin/services', icon: '💼' },
+    { name: t.portfolio, href: '/admin/clients', icon: '🎨' },
+    { name: t.testimonials, href: '/admin/testimonials', icon: '⭐' },
+    { name: t.faqs, href: '/admin/faqs', icon: '❓' },
+    { name: t.video, href: '/admin/video', icon: '🎬' },
+    { name: t.packages, href: '/admin/packages', icon: '📦' },
   ];
 
   return (
@@ -174,13 +184,20 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </nav>
         </div>
 
-        <div className={`absolute bottom-0 left-0 right-0 p-6`}>
+        <div className={`absolute bottom-0 left-0 right-0 p-6 space-y-3`}>
+          <button
+            onClick={toggleLanguage}
+            className={`w-full flex items-center ${sidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-3 rounded-lg bg-primary hover:bg-blue-700 transition-colors duration-300 text-white font-semibold`}
+          >
+            <span className="text-2xl">🌐</span>
+            {sidebarOpen && <span>{isArabic ? t.english : t.arabic}</span>}
+          </button>
           <button
             onClick={handleLogout}
             className={`w-full flex items-center ${sidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-3 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-300 text-white font-semibold`}
           >
             <span className="text-2xl">🚪</span>
-            {sidebarOpen && <span>Logout</span>}
+            {sidebarOpen && <span>{t.logout}</span>}
           </button>
         </div>
       </aside>
@@ -191,14 +208,14 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         <header className="bg-white shadow-md border-b-4 border-primary">
           <div className="px-8 py-6 flex items-center justify-between">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 uppercase tracking-wide">
-                Admin <span className="text-primary">Dashboard</span>
+              <h2 className="text-3xl font-bold text-gray-900 uppercase tracking-wide" dir={isArabic ? 'rtl' : 'ltr'}>
+                {t.adminDashboard}
               </h2>
-              <p className="text-sm text-gray-500 mt-1">Mark Line Control Panel</p>
+              <p className="text-sm text-gray-500 mt-1" dir={isArabic ? 'rtl' : 'ltr'}>{t.controlPanel}</p>
             </div>
             <div className="flex items-center gap-4">
-              <div className="text-right">
-                <p className="text-sm text-gray-600">Welcome back,</p>
+              <div className="text-right" dir={isArabic ? 'rtl' : 'ltr'}>
+                <p className="text-sm text-gray-600">{t.welcome}</p>
                 <p className="font-bold text-gray-900">{user.name}</p>
               </div>
               <div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">

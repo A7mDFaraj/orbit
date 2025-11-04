@@ -11,6 +11,7 @@ import Portfolio from '@/components/Portfolio';
 import Testimonials from '@/components/Testimonials';
 import FAQ from '@/components/FAQ';
 import Contact from '@/components/Contact';
+import FloatingWhatsApp from '@/components/FloatingWhatsApp';
 
 export default function Home() {
   const { isRTL } = useLanguage();
@@ -27,6 +28,7 @@ export default function Home() {
       <Testimonials />
       <FAQ />
       <Contact />
+      <FloatingWhatsApp />
     </div>
   );
 }

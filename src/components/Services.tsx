@@ -243,21 +243,21 @@ export default function Services() {
                             className="w-full h-full object-cover relative z-10"
                           />
                         ) : (
-                          <div className="relative z-10 w-full h-full flex items-center justify-center">
-                            <motion.div
-                              className="text-8xl"
+                          <div className="relative z-10 w-full h-full flex items-center justify-center p-12">
+                            <motion.img
+                              src={getCategorySVG(service.category)}
+                              alt={isRTL ? service.titleAr : service.title}
+                              className="w-full h-full object-contain drop-shadow-2xl"
                               animate={{
-                                scale: [1, 1.1, 1],
-                                rotate: [0, 5, -5, 0],
+                                scale: [1, 1.05, 1],
+                                y: [0, -10, 0],
                               }}
                               transition={{
                                 duration: 4,
                                 repeat: Infinity,
                                 ease: 'easeInOut',
                               }}
-                            >
-                              {service.icon || getCategoryIcon(service.category)}
-                            </motion.div>
+                            />
                           </div>
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent z-20" />
@@ -343,4 +343,18 @@ function getCategoryIcon(category: string): string {
     'Events': '🎉',
   };
   return icons[category] || '✨';
+}
+
+function getCategorySVG(category: string): string {
+  const svgs: Record<string, string> = {
+    'Real Estate': '/serivces/real estate.svg',
+    'Marketing': '/serivces/Markting.svg',
+    'Production': '/serivces/Production.svg',
+    'Events': '/serivces/Event.svg',
+    'Casting': '/serivces/casting.svg',
+    'Crowd Management': '/serivces/Crowd.svg',
+    'Creative': '/serivces/Production.svg',
+    'Advertising': '/serivces/Markting.svg',
+  };
+  return svgs[category] || '/serivces/Markting.svg';
 }

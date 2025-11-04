@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Navbar from '@/components/Navbar';
+import FloatingWhatsApp from '@/components/FloatingWhatsApp';
 import Link from 'next/link';
 
 export default function JoinTeamPage() {
@@ -595,6 +596,7 @@ export default function JoinTeamPage() {
           </motion.form>
         </div>
       </div>
+      <FloatingWhatsApp />
     </div>
   );
 }
