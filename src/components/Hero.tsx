@@ -28,6 +28,7 @@ export default function Hero() {
   const { isDark } = useTheme();
   const [heroData, setHeroData] = useState<HeroSettings | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Generate stable random values for moving squares (fixes hydration error)
   const [squarePositions] = useState(() => 
@@ -50,7 +51,11 @@ export default function Hero() {
           setHeroData(data.settings);
         }
       })
-      .catch((err) => console.error('Error fetching hero settings:', err));
+      .catch((err) => console.error('Error fetching hero settings:', err))
+      .finally(() => {
+        // Small delay to ensure smooth rendering
+        setTimeout(() => setIsLoading(false), 100);
+      });
   }, []);
 
   // Use fetched data if available, otherwise fallback to translations (memoized for performance)
@@ -360,7 +365,7 @@ export default function Hero() {
           <motion.h1
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-rb-bold mb-12 sm:mb-16 md:mb-20 uppercase tracking-tight text-center leading-[1.2] relative px-4 max-w-6xl mx-auto"
             initial={{ opacity: 0, y: 30, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
+            animate={{ opacity: isLoading ? 0 : 1, y: isLoading ? 30 : 0, scale: isLoading ? 0.95 : 1 }}
             transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] as any }}
             style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined, zIndex: 10, position: 'relative' }}
           >

@@ -147,7 +147,7 @@ export async function POST() {
 <li>تقديم تقارير تنظيمية بعد الحدث لقياس الكفاءة وتحسين الأداء مستقبلاً.</li>
 </ul>`,
         icon: '👥',
-        category: 'Events',
+        category: 'Crowd Management',
         order: 4,
         items: [
           { text: 'Planning and executing organizational plans for public events, exhibitions, and festivals', textAr: 'تخطيط وتنفيذ خطط التنظيم للفعاليات الجماهيرية والمعارض والمهرجانات' },
@@ -180,7 +180,7 @@ export async function POST() {
 <li>متابعة الأداء أثناء التصوير لضمان الجودة والالتزام بالمعايير المطلوبة.</li>
 </ul>`,
         icon: '🎭',
-        category: 'Advertising',
+        category: 'Casting Services',
         order: 5,
         items: [
           { text: 'Selecting and nominating suitable talent for advertising projects and promotional videos', textAr: 'اختيار وترشيح المواهب المناسبة للمشاريع الإعلانية والفيديوهات الدعائية' },
