@@ -200,13 +200,16 @@ export default function ServicesAdmin() {
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-          <div className="bg-white rounded-2xl max-w-5xl w-full my-8 p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              {editingService ? 'Edit Service' : 'Add Service'}
-            </h2>
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-5xl w-full max-h-[90vh] flex flex-col my-8">
+            <div className="p-8 border-b border-gray-200">
+              <h2 className="text-2xl font-bold text-gray-900">
+                {editingService ? 'Edit Service' : 'Add Service'}
+              </h2>
+            </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+              <div className="overflow-y-auto flex-1 px-8 py-6 space-y-6">
               {/* English Fields */}
               <div className="border-b pb-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">🇬🇧 English Content</h3>
@@ -341,29 +344,30 @@ export default function ServicesAdmin() {
                     htmlFor="isActive"
                     className="ml-2 text-sm font-medium text-gray-700"
                   >
-                    Active
-                  </label>
-                </div>
+                  Active
+                </label>
               </div>
-
-              <div className="flex gap-4 pt-4">
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  className="flex-1 bg-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-400 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
-                >
-                  {editingService ? 'Update Service' : 'Create Service'}
-                </button>
-              </div>
-            </form>
+            </div>
           </div>
-        </div>
+
+          <div className="flex gap-4 p-8 border-t border-gray-200 bg-gray-50">
+            <button
+              type="button"
+              onClick={closeModal}
+              className="flex-1 bg-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-400 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+            >
+              {editingService ? 'Update Service' : 'Create Service'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
       )}
     </AdminLayout>
   );
