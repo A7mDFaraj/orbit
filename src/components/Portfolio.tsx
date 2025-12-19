@@ -81,13 +81,13 @@ export default function Portfolio() {
   };
 
   return (
-    <section id="work" className="py-24 bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 relative overflow-hidden">
+    <section id="clients" className="py-24 bg-gradient-to-br from-gray-50 via-white to-secondary/20 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-30 dark:opacity-20">
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `radial-gradient(circle at 2px 2px, rgba(41, 171, 226, 0.15) 1px, transparent 0)`,
+            backgroundImage: `radial-gradient(circle at 2px 2px, rgba(122, 30, 46, 0.15) 1px, transparent 0)`,
             backgroundSize: '40px 40px',
           }}
         />
@@ -102,22 +102,22 @@ export default function Portfolio() {
         >
           <motion.div variants={itemVariants} className="text-center mb-16">
             <h2 
-              className="text-5xl sm:text-6xl lg:text-7xl font-rb-bold text-gray-900 mb-6 uppercase tracking-tighter"
-              style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+              className="text-5xl sm:text-6xl lg:text-7xl font-heading text-gray-900 mb-6 uppercase tracking-tighter"
+              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
             >
               {t.portfolio.title}
             </h2>
             <p 
-              className="text-xl text-gray-600 max-w-3xl mx-auto font-montserrat mb-6"
-              style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+              className="text-xl text-gray-600 max-w-3xl mx-auto font-gotham mb-6"
+              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
             >
               {t.portfolio.description}
             </p>
             {/* View 3D Portfolio Button */}
             <motion.a
               href="/portfolio"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-primary text-white px-8 py-4 rounded-lg font-rb-bold uppercase tracking-wider shadow-xl hover:shadow-2xl transition-all duration-300"
-              style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-[#9a2d45] text-white px-8 py-4 rounded-lg font-heading uppercase tracking-wider shadow-xl hover:shadow-2xl transition-all duration-300"
+              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
               whileHover={{ scale: 1.05, y: -3 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -132,12 +132,12 @@ export default function Portfolio() {
           <div className="flex flex-wrap justify-center gap-3 mb-12">
             <button
               onClick={() => setSelectedCategory('All')}
-              className={`px-6 py-2 rounded-full font-rb-bold transition-all uppercase tracking-wider ${
+              className={`px-6 py-2 rounded-full font-heading transition-all uppercase tracking-wider ${
                 selectedCategory === 'All'
                   ? 'bg-primary text-white shadow-lg scale-105'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
-              style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
             >
               {t.portfolio.all}
             </button>
@@ -145,7 +145,7 @@ export default function Portfolio() {
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-6 py-2 rounded-full font-rb-bold transition-all uppercase tracking-wider ${
+                className={`px-6 py-2 rounded-full font-heading transition-all uppercase tracking-wider ${
                   selectedCategory === category
                     ? 'bg-primary text-white shadow-lg scale-105'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -226,23 +226,23 @@ export default function Portfolio() {
         >
           <div className="bg-gradient-to-br from-primary/10 to-purple-500/10 dark:from-primary/20 dark:to-purple-500/20 rounded-3xl p-12 border-2 border-primary/30 dark:border-primary/40">
             <motion.h3
-              className="text-4xl sm:text-5xl font-rb-bold text-gray-900 dark:text-white mb-4 uppercase tracking-tighter"
-              style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+              className="text-4xl sm:text-5xl font-heading text-gray-900 dark:text-white mb-4 uppercase tracking-tighter"
+              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
             >
               {t.portfolio.joinTeam}
             </motion.h3>
             <p
-              className="text-xl text-gray-600 dark:text-gray-300 mb-8 font-montserrat"
-              style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+              className="text-xl text-gray-600 dark:text-gray-300 mb-8 font-gotham"
+              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
             >
               {t.portfolio.joinTeamDesc}
             </p>
             <motion.a
               href="/join-team"
-              className="inline-block bg-primary text-white px-12 py-5 rounded-lg font-rb-bold uppercase tracking-wider shadow-xl hover:shadow-2xl transition-all duration-300"
-              style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+              className="inline-block bg-primary text-white px-12 py-5 rounded-lg font-heading uppercase tracking-wider shadow-xl hover:shadow-2xl transition-all duration-300"
+              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
               whileHover={{ scale: 1.05, y: -3 }}
               whileTap={{ scale: 0.98 }}
             >

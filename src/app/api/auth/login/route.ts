@@ -34,6 +34,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Security: Only admin users can access the admin panel
+    if (user.role !== 'admin') {
+      return NextResponse.json(
+        { error: 'Access denied. Admin privileges required.' },
+        { status: 403 }
+      );
+    }
+
     const token = await createToken({
       userId: user._id.toString(),
       email: user.email,

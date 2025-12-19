@@ -11,17 +11,27 @@ export async function POST() {
     await connectDB();
 
     // Create default admin user
-    const adminExists = await User.findOne({ email: 'admin@markline.sa' });
+    const adminExists = await User.findOne({ email: 'admin@orbit.com.sa' });
     if (!adminExists) {
       await User.create({
-        email: 'admin@markline.sa',
+        email: 'admin@orbit.com.sa',
         password: 'Abd123#Abd',
-        name: 'Mark Line Admin',
+        name: 'ORBIT Admin',
         role: 'admin',
       });
     }
 
-    // Seed Services
+    // Clear old services (ORBIT uses static solutions in ProductsShowcase)
+    await Service.deleteMany({});
+
+    // Note: ORBIT solutions are defined statically in ProductsShowcase component:
+    // - SMS Platform
+    // - WhatsApp Business API  
+    // - OTime
+    // - Gov Gate
+    // No need to seed services in database - they are hardcoded in the component
+
+    /* OLD SERVICES - REMOVED (MarkLine project - not needed for ORBIT)
     const servicesData = [
       {
         title: 'Real Estate Services',
@@ -228,9 +238,10 @@ export async function POST() {
         ],
       },
     ];
+    */
 
-    await Service.deleteMany({});
-    await Service.insertMany(servicesData);
+    // Services removed - ORBIT uses static solutions defined in ProductsShowcase component
+    // await Service.insertMany(servicesData);
 
     // Seed Testimonials
     const testimonialsData = [
@@ -249,8 +260,8 @@ export async function POST() {
         nameAr: 'خالد العسيري',
         position: 'CEO',
         positionAr: 'الرئيس التنفيذي',
-        content: 'For those who look for a one-stop service, Mark Line is the answer.',
-        contentAr: 'لأولئك الذين يبحثون عن خدمة شاملة، مارك لاين هو الجواب.',
+        content: 'For those who look for a one-stop service, ORBIT is the answer.',
+        contentAr: 'لأولئك الذين يبحثون عن خدمة شاملة، أوربيت هو الجواب.',
         rating: 5,
         order: 2,
       },
@@ -333,8 +344,8 @@ export async function POST() {
       {
         question: 'Why should I hire an agency instead of developing and marketing my business by myself?',
         questionAr: 'لماذا يجب أن أستأجر وكالة بدلاً من تطوير وتسويق عملي بنفسي؟',
-        answer: 'By choosing Mark Line as your success partner, you will have an entire team of experts to handle each aspect at the highest level.',
-        answerAr: 'من خلال اختيار مارك لاين كشريك نجاحك، سيكون لديك فريق كامل من الخبراء للتعامل مع كل جانب بأعلى مستوى.',
+        answer: 'By choosing ORBIT as your success partner, you will have an entire team of experts to handle each aspect at the highest level.',
+        answerAr: 'من خلال اختيار أوربيت كشريك نجاحك، سيكون لديك فريق كامل من الخبراء للتعامل مع كل جانب بأعلى مستوى.',
         order: 8,
       },
     ];
@@ -360,7 +371,7 @@ export async function POST() {
     return NextResponse.json({
       message: 'Database seeded successfully',
       admin: {
-        email: 'admin@markline.sa',
+        email: 'admin@orbit.com.sa',
         password: 'Abd123#Abd',
       },
     });

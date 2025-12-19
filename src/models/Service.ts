@@ -15,6 +15,7 @@ export interface IService {
   category: string;
   order: number;
   items?: IServiceItem[];
+  slug?: string;
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -54,6 +55,11 @@ const serviceSchema = new Schema<IService>(
       text: { type: String, required: true },
       textAr: { type: String, required: true },
     }],
+    slug: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
     isActive: {
       type: Boolean,
       default: true,

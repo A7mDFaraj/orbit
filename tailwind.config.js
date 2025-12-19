@@ -9,16 +9,21 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#29ABE2',
-        secondary: '#000000',
-        accent: '#FFFFFF',
-        neutral: '#E0E0E0',
+        // ORBIT Brand Colors (Verified from PDF)
+        primary: '#7A1E2E', // Burgundy - Main brand color
+        secondary: '#E8DCCB', // Beige - Complementary color
+        neutral: '#A7A9AC', // Cool Gray - Balance color
+        // Standard colors
+        black: '#161616', // ORBIT Black
+        white: '#FFFFFF',
       },
       fontFamily: {
-        sans: ['Montserrat', 'sans-serif'],
-        heading: ['RB', 'sans-serif'],
-        rb: ['RB', 'sans-serif'],
-        montserrat: ['Montserrat', 'sans-serif'],
+        // ORBIT Brand Fonts
+        sans: ['Gotham', 'sans-serif'], // Default - English text (body, headings, UI)
+        heading: ['Gotham', 'sans-serif'], // Headings (h1-h6) - English
+        gotham: ['Gotham', 'sans-serif'], // Gotham font utility - English
+        somar: ['Somar', 'sans-serif'], // Somar font utility - Arabic/RTL
+        'ibm-plex': ['IBM Plex Sans', 'Gotham', 'sans-serif'], // IBM Plex for enterprise/professional pages
       },
       letterSpacing: {
         tighter: '-0.02em',

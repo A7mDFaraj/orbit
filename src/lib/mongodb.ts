@@ -1,6 +1,10 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/markline';
+// ORBIT Database Connection
+// ⚠️ IMPORTANT: This connects to the 'orbit' database, NOT 'markline'
+// Make sure your .env.local has: MONGODB_URI=.../orbit?appName=...
+// The database name is specified in the connection string (last part before ?)
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/orbit';
 
 if (!MONGODB_URI) {
   throw new Error('Please define the MONGODB_URI environment variable');

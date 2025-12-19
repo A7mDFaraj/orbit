@@ -14,7 +14,7 @@ export default function ThemeToggle() {
       className={`relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
         isDark
           ? 'bg-primary/20 border-2 border-primary/40'
-          : 'bg-gray-100 border-2 border-gray-200'
+          : 'bg-secondary/50 border-2 border-secondary/60'
       }`}
       aria-label="Toggle theme"
     >

@@ -6,30 +6,27 @@ import Link from 'next/link';
 
 export default function Dashboard() {
   const [stats, setStats] = useState({
-    services: 0,
     clients: 0,
     testimonials: 0,
     faqs: 0,
-    teamApplications: 0,
+    packages: 0,
     clientInquiries: 0,
   });
 
   useEffect(() => {
-    // Fetch stats
+    // Fetch stats for ORBIT content
     Promise.all([
-      fetch('/api/services').then((r) => r.json()),
-      fetch('/api/clients').then((r) => r.json()),
-      fetch('/api/testimonials').then((r) => r.json()),
-      fetch('/api/faqs').then((r) => r.json()),
-      fetch('/api/team-applications').then((r) => r.json()),
-      fetch('/api/client-inquiries').then((r) => r.json()),
-    ]).then(([services, clients, testimonials, faqs, applications, inquiries]) => {
+      fetch('/api/clients').then((r) => r.json()).catch(() => ({ clients: [] })),
+      fetch('/api/testimonials').then((r) => r.json()).catch(() => ({ testimonials: [] })),
+      fetch('/api/faqs').then((r) => r.json()).catch(() => ({ faqs: [] })),
+      fetch('/api/packages').then((r) => r.json()).catch(() => ({ packages: [] })),
+      fetch('/api/client-inquiries').then((r) => r.json()).catch(() => ({ inquiries: [] })),
+    ]).then(([clients, testimonials, faqs, packages, inquiries]) => {
       setStats({
-        services: services.services?.length || 0,
         clients: clients.clients?.length || 0,
         testimonials: testimonials.testimonials?.length || 0,
         faqs: faqs.faqs?.length || 0,
-        teamApplications: applications.applications?.length || 0,
+        packages: packages.packages?.length || 0,
         clientInquiries: inquiries.inquiries?.length || 0,
       });
     });
@@ -37,42 +34,35 @@ export default function Dashboard() {
 
   const cards = [
     {
-      title: 'Services',
-      count: stats.services,
-      icon: '💼',
-      href: '/admin/services',
-      color: 'from-blue-500 to-blue-600',
-    },
-    {
       title: 'Clients',
       count: stats.clients,
-      icon: '🏢',
+      icon: '🎨',
       href: '/admin/clients',
-      color: 'from-green-500 to-green-600',
+      color: 'from-primary to-primary/80',
+    },
+    {
+      title: 'Packages',
+      count: stats.packages,
+      icon: '📦',
+      href: '/admin/packages',
+      color: 'from-secondary/80 to-secondary/60',
     },
     {
       title: 'Testimonials',
       count: stats.testimonials,
-      icon: '⭐',
+      icon: '💬',
       href: '/admin/testimonials',
-      color: 'from-yellow-500 to-yellow-600',
+      color: 'from-primary/80 to-primary/60',
     },
     {
       title: 'FAQs',
       count: stats.faqs,
       icon: '❓',
       href: '/admin/faqs',
-      color: 'from-purple-500 to-purple-600',
+      color: 'from-neutral/60 to-neutral/40',
     },
     {
-      title: 'Team Applications',
-      count: stats.teamApplications,
-      icon: '👥',
-      href: '/admin/team-applications',
-      color: 'from-pink-500 to-pink-600',
-    },
-    {
-      title: 'Client Inquiries',
+      title: 'Inquiries',
       count: stats.clientInquiries,
       icon: '📧',
       href: '/admin/inquiries',
@@ -83,10 +73,10 @@ export default function Dashboard() {
   return (
     <AdminLayout>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Welcome to Admin Dashboard
+        <h1 className="text-3xl font-heading font-bold text-gray-900 mb-2">
+          Welcome to ORBIT Admin Dashboard
         </h1>
-        <p className="text-gray-600">
+        <p className="text-gray-600 font-gotham">
           Manage your website content from here
         </p>
       </div>
@@ -99,130 +89,164 @@ export default function Dashboard() {
             >
               <div className="flex items-center justify-between mb-4">
                 <span className="text-5xl">{card.icon}</span>
-                <span className="text-3xl font-bold">{card.count}</span>
+                <span className="text-3xl font-heading font-bold">{card.count}</span>
               </div>
-              <h3 className="text-xl font-semibold">{card.title}</h3>
+              <h3 className="text-xl font-heading font-semibold">{card.title}</h3>
             </div>
           </Link>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-2xl shadow-lg">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">
+        <div className="bg-white p-6 rounded-2xl shadow-lg border border-neutral/10">
+          <h3 className="text-xl font-heading font-bold text-gray-900 mb-4">
             Quick Actions
           </h3>
           <div className="space-y-3">
             <Link
-              href="/admin/services"
-              className="block p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+              href="/admin/hero"
+              className="block p-4 bg-primary/5 rounded-lg hover:bg-primary/10 border border-primary/20 transition-colors"
             >
               <div className="flex items-center gap-3">
-                <span className="text-2xl">➕</span>
-                <span className="font-medium text-gray-900">
-                  Add New Service
+                <span className="text-2xl">✏️</span>
+                <span className="font-heading font-medium text-gray-900">
+                  Edit Hero Section
+                </span>
+              </div>
+            </Link>
+            <Link
+              href="/admin/about"
+              className="block p-4 bg-primary/5 rounded-lg hover:bg-primary/10 border border-primary/20 transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">✏️</span>
+                <span className="font-heading font-medium text-gray-900">
+                  Edit About Section
+                </span>
+              </div>
+            </Link>
+            <Link
+              href="/admin/unique-features"
+              className="block p-4 bg-secondary/30 rounded-lg hover:bg-secondary/40 border border-secondary/40 transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">✏️</span>
+                <span className="font-heading font-medium text-gray-900">
+                  Edit Unique Features
                 </span>
               </div>
             </Link>
             <Link
               href="/admin/clients"
-              className="block p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
+              className="block p-4 bg-secondary/30 rounded-lg hover:bg-secondary/40 border border-secondary/40 transition-colors"
             >
               <div className="flex items-center gap-3">
                 <span className="text-2xl">➕</span>
-                <span className="font-medium text-gray-900">
+                <span className="font-heading font-medium text-gray-900">
                   Add New Client
                 </span>
               </div>
             </Link>
             <Link
-              href="/admin/testimonials"
-              className="block p-4 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition-colors"
+              href="/admin/packages"
+              className="block p-4 bg-primary/5 rounded-lg hover:bg-primary/10 border border-primary/20 transition-colors"
             >
               <div className="flex items-center gap-3">
                 <span className="text-2xl">➕</span>
-                <span className="font-medium text-gray-900">
+                <span className="font-heading font-medium text-gray-900">
+                  Add New Package
+                </span>
+              </div>
+            </Link>
+            <Link
+              href="/admin/testimonials"
+              className="block p-4 bg-secondary/30 rounded-lg hover:bg-secondary/40 border border-secondary/40 transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">➕</span>
+                <span className="font-heading font-medium text-gray-900">
                   Add New Testimonial
                 </span>
               </div>
             </Link>
             <Link
               href="/admin/faqs"
-              className="block p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors"
+              className="block p-4 bg-primary/5 rounded-lg hover:bg-primary/10 border border-primary/20 transition-colors"
             >
               <div className="flex items-center gap-3">
                 <span className="text-2xl">➕</span>
-                <span className="font-medium text-gray-900">Add New FAQ</span>
-              </div>
-            </Link>
-            <Link
-              href="/admin/team-applications"
-              className="block p-4 bg-pink-50 rounded-lg hover:bg-pink-100 transition-colors"
-            >
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">👥</span>
-                <span className="font-medium text-gray-900">
-                  View Team Applications
-                </span>
+                <span className="font-heading font-medium text-gray-900">Add New FAQ</span>
               </div>
             </Link>
             <Link
               href="/admin/inquiries"
-              className="block p-4 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors"
+              className="block p-4 bg-orange-50 rounded-lg hover:bg-orange-100 border border-orange-200 transition-colors"
             >
               <div className="flex items-center gap-3">
                 <span className="text-2xl">📧</span>
-                <span className="font-medium text-gray-900">
-                  View Client Inquiries
+                <span className="font-heading font-medium text-gray-900">
+                  View Client Inquiries ({stats.clientInquiries})
                 </span>
               </div>
             </Link>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl shadow-lg">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">
+        <div className="bg-white p-6 rounded-2xl shadow-lg border border-neutral/10">
+          <h3 className="text-xl font-heading font-bold text-gray-900 mb-4">
             System Information
           </h3>
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Database Status</span>
-              <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
+              <span className="text-gray-600 font-gotham">Database Status</span>
+              <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-heading font-semibold">
                 Connected
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Total Content Items</span>
-              <span className="font-bold text-gray-900">
-                {stats.services +
-                  stats.clients +
+              <span className="text-gray-600 font-gotham">Total Content Items</span>
+              <span className="font-heading font-bold text-gray-900">
+                {stats.clients +
                   stats.testimonials +
-                  stats.faqs}
+                  stats.faqs +
+                  stats.packages}
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Pending Applications</span>
-              <span className="font-bold text-gray-900">
-                {stats.teamApplications}
+              <span className="text-gray-600 font-gotham">Packages</span>
+              <span className="font-heading font-bold text-gray-900">
+                {stats.packages}
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">New Inquiries</span>
-              <span className="font-bold text-gray-900">
+              <span className="text-gray-600 font-gotham">Testimonials</span>
+              <span className="font-heading font-bold text-gray-900">
+                {stats.testimonials}
+              </span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-gray-600 font-gotham">FAQs</span>
+              <span className="font-heading font-bold text-gray-900">
+                {stats.faqs}
+              </span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-gray-600 font-gotham">New Inquiries</span>
+              <span className="font-heading font-bold text-gray-900">
                 {stats.clientInquiries}
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Last Updated</span>
-              <span className="text-gray-900">
+              <span className="text-gray-600 font-gotham">Last Updated</span>
+              <span className="text-gray-900 font-gotham">
                 {new Date().toLocaleDateString()}
               </span>
             </div>
-            <div className="pt-4 border-t">
+            <div className="pt-4 border-t border-neutral/20">
               <a
                 href="/"
                 target="_blank"
-                className="block text-center bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                className="block text-center bg-primary text-white py-3 rounded-lg font-heading font-semibold hover:bg-primary/90 transition-colors"
               >
                 View Live Website →
               </a>

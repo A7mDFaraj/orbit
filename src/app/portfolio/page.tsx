@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Navbar from '@/components/Navbar';
-import FloatingWhatsApp from '@/components/FloatingWhatsApp';
+import Footer from '@/components/Footer';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import GoogleDriveMedia from '@/components/GoogleDriveMedia';
@@ -134,9 +134,9 @@ export default function PortfolioPage() {
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-rb-bold text-white mb-4 sm:mb-6 uppercase tracking-tight"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading text-white mb-4 sm:mb-6 uppercase tracking-tight"
             style={{ 
-              fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined,
+              fontFamily: isRTL ? 'Somar, sans-serif' : undefined,
               direction: isRTL ? 'rtl' : 'ltr',
             }}
           >
@@ -149,7 +149,7 @@ export default function PortfolioPage() {
             transition={{ delay: 0.2 }}
             className="text-white/60 mb-4 sm:mb-6 text-sm sm:text-base lg:text-lg hidden sm:block"
             style={{ 
-              fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined,
+              fontFamily: isRTL ? 'Somar, sans-serif' : undefined,
               direction: isRTL ? 'rtl' : 'ltr',
             }}
           >
@@ -165,9 +165,9 @@ export default function PortfolioPage() {
           >
             <div className="px-6 sm:px-8 py-2 sm:py-3 bg-white/5 backdrop-blur-md border border-white/10 rounded-full hover:bg-white/10 transition-all">
               <span 
-                className="text-white font-rb-bold uppercase tracking-wider text-xs sm:text-sm"
+                className="text-white font-heading uppercase tracking-wider text-xs sm:text-sm"
                 style={{ 
-                  fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined,
+                  fontFamily: isRTL ? 'Somar, sans-serif' : undefined,
                   direction: isRTL ? 'rtl' : 'ltr',
                 }}
               >
@@ -199,7 +199,7 @@ export default function PortfolioPage() {
                 </button>
 
                 <div className="mb-8 sm:mb-12">
-                  <h2 className="text-2xl sm:text-3xl font-rb-bold text-white mb-4 sm:mb-6 uppercase">Services</h2>
+                  <h2 className="text-2xl sm:text-3xl font-heading text-white mb-4 sm:mb-6 uppercase">Services</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                     {serviceCategories.map((service) => (
                       <button
@@ -213,7 +213,7 @@ export default function PortfolioPage() {
                 </div>
 
                 <div>
-                  <h2 className="text-2xl sm:text-3xl font-rb-bold text-white mb-4 sm:mb-6 uppercase">Industry</h2>
+                  <h2 className="text-2xl sm:text-3xl font-heading text-white mb-4 sm:mb-6 uppercase">Industry</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                     {industryCategories.map((industry) => (
                       <button
@@ -286,9 +286,9 @@ export default function PortfolioPage() {
             className="bg-gradient-to-br from-primary/10 to-purple-500/10 backdrop-blur-xl rounded-2xl p-6 sm:p-8"
           >
             <h3 
-              className="text-2xl sm:text-3xl font-rb-bold text-white mb-3 sm:mb-4 uppercase"
+              className="text-2xl sm:text-3xl font-heading text-white mb-3 sm:mb-4 uppercase"
               style={{ 
-                fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined,
+                fontFamily: isRTL ? 'Somar, sans-serif' : undefined,
                 direction: isRTL ? 'rtl' : 'ltr',
               }}
             >
@@ -297,7 +297,7 @@ export default function PortfolioPage() {
             <p 
               className="text-white/70 mb-4 sm:mb-6 text-sm sm:text-base"
               style={{ 
-                fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined,
+                fontFamily: isRTL ? 'Somar, sans-serif' : undefined,
                 direction: isRTL ? 'rtl' : 'ltr',
               }}
             >
@@ -305,11 +305,11 @@ export default function PortfolioPage() {
             </p>
             <Link href="/join-team">
               <motion.button
-                className="px-8 sm:px-10 py-3 sm:py-4 bg-primary hover:bg-primary/90 text-white font-rb-bold uppercase tracking-wider rounded-lg shadow-xl transition-all text-sm sm:text-base"
+                className="px-8 sm:px-10 py-3 sm:py-4 bg-primary hover:bg-primary/90 text-white font-heading uppercase tracking-wider rounded-lg shadow-xl transition-all text-sm sm:text-base"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 style={{ 
-                  fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined,
+                  fontFamily: isRTL ? 'Somar, sans-serif' : undefined,
                   direction: isRTL ? 'rtl' : 'ltr',
                 }}
               >
@@ -319,7 +319,7 @@ export default function PortfolioPage() {
           </motion.div>
         </div>
       </div>
-      <FloatingWhatsApp />
+      <Footer />
     </div>
   );
 }
@@ -577,7 +577,7 @@ function ClientGalleryModal({ client, onClose }: { client: Client; onClose: () =
         <div className="p-4 sm:p-8 space-y-4 sm:space-y-6">
           {/* Header */}
           <div className="text-center sm:text-left">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-rb-bold text-white uppercase tracking-tight mb-2 sm:mb-3">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-heading text-white uppercase tracking-tight mb-2 sm:mb-3">
               {client.name}
             </h2>
             <div className="flex flex-wrap justify-center sm:justify-start gap-2">
@@ -598,7 +598,7 @@ function ClientGalleryModal({ client, onClose }: { client: Client; onClose: () =
 
           {/* Services */}
           <div className="pt-3 sm:pt-4 border-t border-white/10">
-            <h3 className="text-base sm:text-lg font-rb-bold text-white mb-3 sm:mb-4 uppercase">
+            <h3 className="text-base sm:text-lg font-heading text-white mb-3 sm:mb-4 uppercase">
               {isRTL ? 'الخدمات المقدمة' : 'Services Provided'}
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -623,7 +623,7 @@ function ClientGalleryModal({ client, onClose }: { client: Client; onClose: () =
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.99 }}
               >
-                <h3 className="text-base sm:text-lg font-rb-bold text-white uppercase">
+                <h3 className="text-base sm:text-lg font-heading text-white uppercase">
                   {isRTL ? 'تفاصيل المشروع' : 'Project Details'}
                 </h3>
                 <motion.div
@@ -723,7 +723,7 @@ function ClientGalleryModal({ client, onClose }: { client: Client; onClose: () =
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4 sm:pt-6">
             <Link href="/request-quote" className="flex-1">
               <motion.button
-                className="w-full px-6 sm:px-8 py-3 sm:py-4 bg-primary hover:bg-primary/90 text-white font-rb-bold uppercase tracking-wider rounded-lg shadow-xl transition-all text-xs sm:text-sm"
+                className="w-full px-6 sm:px-8 py-3 sm:py-4 bg-primary hover:bg-primary/90 text-white font-heading uppercase tracking-wider rounded-lg shadow-xl transition-all text-xs sm:text-sm"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -732,7 +732,7 @@ function ClientGalleryModal({ client, onClose }: { client: Client; onClose: () =
             </Link>
             <motion.button
               onClick={onClose}
-              className="px-6 sm:px-8 py-3 sm:py-4 bg-white/5 hover:bg-white/10 border border-white/20 text-white font-rb-bold uppercase tracking-wider rounded-lg transition-all text-xs sm:text-sm"
+              className="px-6 sm:px-8 py-3 sm:py-4 bg-white/5 hover:bg-white/10 border border-white/20 text-white font-heading uppercase tracking-wider rounded-lg transition-all text-xs sm:text-sm"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -892,7 +892,7 @@ function InfiniteScrollRow({
                 </div>
               ) : (
                 <div className="flex-1 flex items-center justify-center text-center">
-                  <h3 className="text-sm sm:text-base lg:text-lg font-rb-bold text-white/80 group-hover:text-white uppercase transition-colors leading-tight">
+                  <h3 className="text-sm sm:text-base lg:text-lg font-heading text-white/80 group-hover:text-white uppercase transition-colors leading-tight">
                     {client.name}
                   </h3>
                 </div>

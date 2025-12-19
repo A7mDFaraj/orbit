@@ -1,20 +1,57 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import LanguageSwitcher from './LanguageSwitcher';
 import ThemeToggle from './ThemeToggle';
 
+// Solutions from ProductsShowcase - Current solutions on landing page
+const solutionsList = [
+  { slug: 'sms-platform', nameEn: 'SMS Platform', nameAr: 'الرسائل النصية' },
+  { slug: 'whatsapp-business-api', nameEn: 'WhatsApp Business API', nameAr: 'واتساب اعمال API' },
+  { slug: 'otime', nameEn: 'OTime - Attendance & HR', nameAr: 'اوتايم OTime' },
+  { slug: 'gov-gate', nameEn: 'Gov Gate - Government Portal', nameAr: 'البوابة الحكومية Gov Gate' },
+];
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [solutionsOpen, setSolutionsOpen] = useState(false);
+  const [isInDarkSection, setIsInDarkSection] = useState(false);
   const pathname = usePathname();
-  const { t, isRTL } = useLanguage();
+  const router = useRouter();
+  const { t, isRTL, setLanguage } = useLanguage();
   const { isDark } = useTheme();
-  const isPortfolioPage = pathname?.startsWith('/portfolio');
+  const solutionsRef = useRef<HTMLDivElement>(null);
+
+  // Detect if we're in a dark section (WhyOrbit) using Intersection Observer
+  useEffect(() => {
+    const whyOrbitSection = document.getElementById('why-orbit');
+    if (!whyOrbitSection) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          // If section is intersecting (visible in viewport)
+          setIsInDarkSection(entry.isIntersecting);
+        });
+      },
+      {
+        threshold: 0.1, // Trigger when 10% of section is visible
+        rootMargin: '-80px 0px 0px 0px', // Account for navbar height
+      }
+    );
+
+    observer.observe(whyOrbitSection);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   // Lock body scroll when mobile menu is open
   const toggleMenu = () => {
@@ -26,6 +63,17 @@ export default function Navbar() {
     }
   };
 
+  // Close solutions dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (solutionsRef.current && !solutionsRef.current.contains(event.target as Node)) {
+        setSolutionsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
@@ -33,237 +81,243 @@ export default function Navbar() {
     };
   }, []);
 
-  // Center navigation items - same for both languages
+  // Navigation items
   const centerMenuItems = [
-    { name: t.nav.about, href: '#about' },
-    { name: t.nav.services, href: '#services' },
-    { name: t.nav.work, href: '#work' },
-    { name: t.nav.portfolio, href: '/portfolio' },
-    { name: t.nav.contact, href: '#contact' },
+    { name: isRTL ? 'الرئيسية' : 'HOME', href: '/' },
   ];
 
-  // Force dark navbar on portfolio pages
-  const navbarIsDark = isPortfolioPage ? true : isDark;
+  // Industry landing pages
+  const industryPages = [
+    { name: t.nav.enterprise, href: '/enterprise' },
+    { name: t.nav.healthcare, href: '/healthcare' },
+  ];
+
+  // Navbar should be light when in dark section (WhyOrbit) for better contrast
+  const navbarIsDark = isInDarkSection ? false : isDark;
   
+  // Detect pages where navbar needs better text contrast (light pages with white background)
+  const needsHighContrast = pathname === '/enterprise' || pathname === '/healthcare' || pathname === '/packages' || pathname === '/request-quote';
+  const isLandingPage = pathname === '/';
+  
+  // Navbar background opacity based on page
+  const navbarBgOpacity = navbarIsDark 
+    ? 'bg-[#161616]/95' 
+    : isLandingPage 
+      ? 'bg-white/60' // Very transparent on landing page like before
+      : needsHighContrast
+        ? 'bg-white/88' // More visible on business pages but still transparent
+        : 'bg-white/80'; // Default transparent for other pages
+  
+  // Border opacity based on page
+  const navbarBorder = navbarIsDark 
+    ? 'border-white/10' 
+    : isLandingPage
+      ? 'border-gray-200/20'
+      : needsHighContrast
+        ? 'border-gray-300/50'
+        : 'border-gray-200/35';
+  
+  // Shadow based on page
+  const navbarShadow = navbarIsDark 
+    ? 'shadow-lg shadow-black/20' 
+    : isLandingPage
+      ? 'shadow-sm shadow-gray-900/2'
+      : needsHighContrast
+        ? 'shadow-lg shadow-gray-900/8'
+        : 'shadow-md shadow-gray-900/5';
+  
+  const textColorClass = navbarIsDark 
+    ? 'text-gray-100' 
+    : 'text-gray-900'; // Always use dark text in light theme for maximum visibility
+
   return (
-    <header 
-      className={`fixed top-0 inset-x-0 z-50 ${navbarIsDark ? 'bg-gray-950' : 'bg-gray-50'} border-b ${navbarIsDark ? 'border-gray-800' : 'border-gray-200'}`}
-      dir="ltr" // Keep layout LTR (logo left, menu center, buttons right)
+    <header
+      className={`fixed top-0 inset-x-0 z-50 ${navbarBgOpacity} backdrop-blur-xl border-b ${navbarBorder} transition-all duration-300 ${navbarShadow} gpu-accelerated`}
+      dir="ltr"
+      style={{ willChange: 'transform' }}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="h-20 flex items-center justify-between gap-4 relative">
-          {/* Left: Logo & Badge */}
-          <div className="flex items-center gap-4 flex-shrink-0 min-w-[280px]">
+          {/* Left: Logo */}
+          <div className="flex items-center gap-4 flex-shrink-0">
             <Link href="/" className="flex items-center group">
-              <motion.img
-                key={navbarIsDark ? 'dark-logo' : 'light-logo'}
-                src={navbarIsDark ? '/styleguide/SVG/Mark line wordmark.svg' : '/styleguide/SVG/Mark line wordmark light.svg'}
-                alt="Mark Line"
-                className="h-[44px] w-auto"
-                style={{
-                  filter: navbarIsDark
-                    ? 'drop-shadow(0 4px 12px rgba(0,0,0,0.4))'
-                    : 'drop-shadow(0 1px 2px rgba(0,0,0,0.08))',
-                }}
-                whileHover={{ 
-                  scale: 1.1,
-                  filter: navbarIsDark 
-                    ? 'drop-shadow(0 6px 16px rgba(41, 171, 226, 0.3))' 
-                    : 'drop-shadow(0 2px 8px rgba(41, 171, 226, 0.2))',
-                }}
-                transition={{ duration: 0.3, ease: 'easeOut' }}
-              />
+              <motion.div
+                className="relative flex items-center justify-center"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.2, type: 'spring', stiffness: 300 }}
+              >
+                {/* Hidden previous logo */}
+                <img
+                  src="/logo/orbit-logo-navbar.svg"
+                  alt=""
+                  className="hidden"
+                  aria-hidden="true"
+                />
+                {/* Main logo - larger, clearer sizing with width focus */}
+                <img
+                  src="/logo/شعار المدار-02.svg"
+                  alt="ORBIT Logo"
+                  className="w-auto object-contain max-w-none"
+                  style={{
+                    height: 'clamp(72px, 8vw, 140px)',
+                    minHeight: '72px',
+                    minWidth: '220px',
+                    filter: navbarIsDark
+                      ? 'brightness(1.2) contrast(1.2) saturate(1.1) drop-shadow(0 2px 8px rgba(122, 30, 46, 0.4))'
+                      : 'brightness(1) contrast(1.35) saturate(1.1) drop-shadow(0 3px 12px rgba(0, 0, 0, 0.25)) drop-shadow(0 2px 8px rgba(122, 30, 46, 0.3)) drop-shadow(0 1px 4px rgba(122, 30, 46, 0.2))',
+                    imageRendering: 'auto',
+                    transform: 'translateZ(0)',
+                    willChange: 'transform',
+                  } as React.CSSProperties}
+                />
+              </motion.div>
             </Link>
-            <div className={`hidden xl:flex items-center pl-4 ${navbarIsDark ? 'border-l-2 border-gray-700' : 'border-l-2 border-gray-300'}`}>
-              <div className="flex flex-col gap-1 relative">
-                {/* Made in Saudi */}
-                <motion.div 
-                  className="relative"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: 0.4 }}
-                >
-                  <motion.span
-                    className="uppercase text-xs font-extrabold leading-none tracking-wider relative z-10 inline-block"
-                    style={{ 
-                      fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined,
-                      background: 'linear-gradient(90deg, #29ABE2 0%, #1e88b8 50%, #29ABE2 100%)',
-                      backgroundSize: '200% auto',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text',
-                    }}
-                    animate={{
-                      backgroundPosition: ['0% center', '200% center'],
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: 'linear',
-                    }}
-                  >
-                    {t.nav.madeInSaudi}
-                  </motion.span>
-                  
-                  {/* Animated underline */}
-                  <motion.div
-                    className="absolute -bottom-0.5 left-0 h-[2px] bg-gradient-to-r from-primary via-blue-400 to-primary"
-                    style={{ width: '100%' }}
-                    animate={{
-                      scaleX: [1, 1.1, 1],
-                      opacity: [0.6, 1, 0.6],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: 'easeInOut',
-                    }}
-                  />
-                  
-                  {/* Glow effect */}
-                  <motion.div
-                    className="absolute inset-0 blur-md opacity-40"
-                    style={{
-                      background: 'linear-gradient(90deg, #29ABE2, #1e88b8)',
-                    }}
-                    animate={{
-                      opacity: [0.2, 0.5, 0.2],
-                      scale: [1, 1.05, 1],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: 'easeInOut',
-                    }}
-                  />
-                </motion.div>
-              </div>
-            </div>
           </div>
 
           {/* Center: Navigation Menu */}
-          <nav className="hidden lg:flex items-center gap-1 flex-1 justify-center px-4">
-            {(isRTL ? [...centerMenuItems].reverse() : centerMenuItems).map((item, index) => (
-              <motion.a
-                key={item.href}
-                href={item.href}
-                onClick={(e) => {
-                  if (!item.href.startsWith('/')) {
-                    e.preventDefault();
-                    const id = item.href.replace('#', '');
-                    const el = document.getElementById(id);
-                    if (el) {
-                      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    } else {
-                      window.location.href = `/${item.href}`;
-                    }
-                  }
-                }}
-                className={`relative ${isRTL ? 'px-4 py-2' : 'px-3.5 py-2'} ${isRTL ? 'text-[13px]' : 'text-[11px]'} font-rb-bold uppercase tracking-wider whitespace-nowrap overflow-hidden group ${navbarIsDark ? 'text-gray-300' : 'text-gray-700'}`}
-                style={{ 
-                  fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined,
-                  letterSpacing: isRTL ? '0.05em' : '0.08em',
-                }}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ 
-                  duration: 0.3,
-                  delay: index * 0.1,
-                  ease: 'easeOut',
-                }}
-                whileHover={{ 
-                  y: -2,
-                  transition: { duration: 0.2 },
-                }}
-                whileTap={{ y: 0 }}
+          <nav className="hidden lg:flex items-center gap-2 flex-1 justify-center px-4">
+            {/* Home */}
+            <NavLink item={{ name: isRTL ? 'الرئيسية' : 'HOME', href: '/' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} />
+
+            {/* Solutions Dropdown */}
+            <div ref={solutionsRef} className="relative">
+              <motion.button
+                onClick={() => setSolutionsOpen(!solutionsOpen)}
+                className={`relative px-4 py-2 ${isRTL ? 'text-[13px]' : 'text-[11px]'} font-heading uppercase tracking-wider whitespace-nowrap overflow-hidden group ${textColorClass} flex items-center gap-1 ${isRTL ? 'font-somar' : ''} transition-colors duration-200`}
+                dir={isRTL ? 'rtl' : 'ltr'}
+                whileHover={{ y: -2 }}
+                onHoverStart={() => setSolutionsOpen(true)}
+                onHoverEnd={() => setSolutionsOpen(false)}
               >
-                {/* Background glow on hover */}
+                {/* Background on hover - more visible */}
                 <motion.span
-                  className={`absolute inset-0 rounded-md ${navbarIsDark ? 'bg-primary/10' : 'bg-primary/5'}`}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileHover={{ 
-                    opacity: 1, 
-                    scale: 1,
-                    transition: { duration: 0.2 },
-                  }}
+                  className={`absolute inset-0 rounded-md ${navbarIsDark ? 'bg-white/10' : 'bg-primary/12'}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: solutionsOpen ? 1 : 0 }}
+                  whileHover={{ opacity: 1 }}
+                  transition={{ duration: 0.2 }}
                 />
                 
-                {/* Text with color change */}
-                <motion.span 
-                  className="relative z-10 inline-block"
-                  whileHover={{
-                    color: '#29ABE2',
-                    transition: { duration: 0.2 },
-                  }}
+                <span className="relative z-10 font-semibold">{t.nav.solutions}</span>
+                <motion.svg
+                  className="w-4 h-4 relative z-10"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  animate={{ rotate: solutionsOpen ? 180 : 0 }}
+                  transition={{ duration: 0.3 }}
                 >
-                  {item.name}
-                </motion.span>
-                
-                {/* Bottom border with gradient */}
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </motion.svg>
+
+                {/* Bottom border with gradient - more prominent */}
                 <motion.span
-                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-blue-400 to-primary rounded-full"
+                  className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-primary via-secondary to-primary rounded-full"
                   initial={{ scaleX: 0, opacity: 0 }}
-                  whileHover={{ 
-                    scaleX: 1,
-                    opacity: 1,
-                    transition: { duration: 0.3, ease: 'easeOut' },
-                  }}
+                  animate={{ scaleX: solutionsOpen ? 1 : 0, opacity: solutionsOpen ? 1 : 0 }}
+                  transition={{ duration: 0.3 }}
                 />
-                
-                {/* Sparkle effect on hover */}
-                <motion.span
-                  className="absolute top-1/2 left-1/2 w-1 h-1 bg-primary rounded-full"
-                  initial={{ scale: 0, opacity: 0 }}
-                  whileHover={{
-                    scale: [0, 4, 0],
-                    opacity: [0, 1, 0],
-                    transition: { 
-                      duration: 0.6,
-                      ease: 'easeOut',
-                    },
-                  }}
-                  style={{
-                    transform: 'translate(-50%, -50%)',
-                    boxShadow: '0 0 10px rgba(41, 171, 226, 0.5)',
-                  }}
-                />
-              </motion.a>
+              </motion.button>
+
+              {/* Solutions Dropdown Menu */}
+              <AnimatePresence>
+                {solutionsOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 ${navbarIsDark ? 'bg-[#161616]/95' : 'bg-white'} rounded-xl shadow-2xl border ${navbarIsDark ? 'border-white/10' : 'border-gray-200'} overflow-hidden`}
+                    onMouseEnter={() => setSolutionsOpen(true)}
+                    onMouseLeave={() => setSolutionsOpen(false)}
+                  >
+                    <div className="p-2">
+                      {solutionsList.map((solution, index) => (
+                        <motion.div
+                          key={solution.slug}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.05 }}
+                        >
+                          <Link
+                            href={`/solutions/${solution.slug}`}
+                            className={`block px-4 py-3 rounded-lg transition-all ${navbarIsDark ? 'hover:bg-white/5 text-gray-200' : needsHighContrast ? 'hover:bg-primary/10 text-gray-900' : 'hover:bg-primary/10 text-gray-700'} ${isRTL ? 'font-somar' : 'font-gotham'}`}
+                            dir={isRTL ? 'rtl' : 'ltr'}
+                            onClick={() => setSolutionsOpen(false)}
+                          >
+                            <div className="font-heading text-sm mb-1">{isRTL ? solution.nameAr : solution.nameEn}</div>
+                          </Link>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* Other Menu Items */}
+            {centerMenuItems.slice(1).map((item, index) => (
+              <NavLink key={item.href} item={item} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={index + 1} />
+            ))}
+
+            {/* Industry Landing Pages */}
+            {industryPages.map((item, index) => (
+              <NavLink key={item.href} item={item} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={centerMenuItems.length + index} />
             ))}
           </nav>
 
-          {/* Right: Actions */}
-          <div className="hidden md:flex items-center gap-3 flex-shrink-0 min-w-[280px] justify-end">
-            <div className={`flex items-center rounded-full ${navbarIsDark ? 'bg-gray-900/80 border border-gray-700' : 'bg-white/90 border border-gray-200'} p-1.5 backdrop-blur-sm`}> 
-              {!isPortfolioPage && <ThemeToggle />}
+          {/* Right: Language Switcher, Theme Toggle, and Contact Button */}
+          <div className="hidden md:flex items-center gap-3 flex-shrink-0 justify-end min-w-0">
+            {/* Language & Theme Controls */}
+            <div className={`flex items-center rounded-full ${navbarIsDark ? 'bg-white/5 border border-white/10' : 'bg-secondary/40 border border-secondary/50'} p-1.5 backdrop-blur-md gap-1 shadow-sm flex-shrink-0`}>
+              <ThemeToggle />
               <LanguageSwitcher />
             </div>
-            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-              <Link
-                href="/packages"
-                className={`${isRTL ? 'px-5 py-2.5 text-[13px]' : 'px-4 py-2.5 text-[11px]'} rounded-lg font-rb-bold uppercase tracking-wider whitespace-nowrap transition-all duration-200 ${navbarIsDark ? 'bg-gray-800 text-primary border-2 border-primary hover:bg-primary hover:text-white' : 'bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white shadow-sm hover:shadow-md'}`}
-                style={{ 
-                  fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined,
+
+            {/* Contact Button */}
+            <div className="flex-shrink-0 overflow-visible">
+              <motion.button
+                onClick={(e) => {
+                  e.preventDefault();
+                  const config = (() => {
+                    if (pathname?.startsWith('/solutions')) {
+                      return { href: '/request-quote' };
+                    }
+                    if (pathname === '/request-quote') {
+                      return { href: '/contact' };
+                    }
+                    return { href: '/contact' };
+                  })();
+
+                  router.push(config.href);
                 }}
+                className={`flex items-center justify-center min-w-[140px] px-5 py-2.5 ${isRTL ? 'text-[13px]' : 'text-[11px]'} rounded-lg text-white font-heading uppercase tracking-wider whitespace-nowrap bg-gradient-to-r from-primary via-primary to-[#9a2d45] hover:from-[#9a2d45] hover:to-primary shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden group ${isRTL ? 'font-somar' : ''}`}
+                dir={isRTL ? 'rtl' : 'ltr'}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.2, ease: 'easeOut' }}
               >
-                {t.nav.packages}
-              </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-              <Link
-                href="/join-team"
-                className={`${isRTL ? 'px-5 py-2.5 text-[13px]' : 'px-4 py-2.5 text-[11px]'} rounded-lg text-white font-rb-bold uppercase tracking-wider whitespace-nowrap bg-gradient-to-r from-primary to-blue-600 hover:from-blue-700 hover:to-primary shadow-md hover:shadow-lg transition-all duration-300`}
-                style={{ 
-                  fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined,
-                }}
-              >
-                {t.nav.joinUs}
-              </Link>
-            </motion.div>
+                <span className="relative z-10">
+                  {(() => {
+                    if (pathname?.startsWith('/solutions')) return t.clientInquiryPage.title;
+                    if (pathname === '/request-quote') return t.nav.contact;
+                    return t.nav.contact;
+                  })()}
+                </span>
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-secondary/20 to-primary/20 pointer-events-none"
+                  initial={{ x: '-100%' }}
+                  whileHover={{ x: '100%' }}
+                  transition={{ duration: 0.5 }}
+                />
+              </motion.button>
+            </div>
           </div>
 
-          {/* Mobile menu button - Animated Hamburger */}
+          {/* Mobile menu button */}
           <motion.button
-            className={`lg:hidden p-2 rounded-lg relative z-50 ${navbarIsDark ? 'text-gray-200 hover:bg-gray-800' : 'text-gray-800 hover:bg-gray-100'}`}
+            className={`lg:hidden p-2 rounded-lg relative z-50 ${navbarIsDark ? 'text-gray-100 hover:bg-white/10' : 'text-gray-800 hover:bg-gray-100'}`}
             onClick={toggleMenu}
             aria-label="Toggle navigation"
             whileHover={{ scale: 1.05 }}
@@ -271,7 +325,7 @@ export default function Navbar() {
           >
             <div className="w-6 h-5 flex flex-col justify-between">
               <motion.span
-                className={`block h-0.5 w-full rounded-full ${navbarIsDark ? 'bg-gray-200' : 'bg-gray-800'}`}
+                className={`block h-0.5 w-full rounded-full ${navbarIsDark ? 'bg-white' : 'bg-gray-800'}`}
                 animate={{
                   rotate: isOpen ? 45 : 0,
                   y: isOpen ? 10 : 0,
@@ -279,7 +333,7 @@ export default function Navbar() {
                 transition={{ duration: 0.3, ease: 'easeInOut' }}
               />
               <motion.span
-                className={`block h-0.5 w-full rounded-full ${navbarIsDark ? 'bg-gray-200' : 'bg-gray-800'}`}
+                className={`block h-0.5 w-full rounded-full ${navbarIsDark ? 'bg-white' : 'bg-gray-800'}`}
                 animate={{
                   opacity: isOpen ? 0 : 1,
                   x: isOpen ? -20 : 0,
@@ -287,7 +341,7 @@ export default function Navbar() {
                 transition={{ duration: 0.3, ease: 'easeInOut' }}
               />
               <motion.span
-                className={`block h-0.5 w-full rounded-full ${navbarIsDark ? 'bg-gray-200' : 'bg-gray-800'}`}
+                className={`block h-0.5 w-full rounded-full ${navbarIsDark ? 'bg-white' : 'bg-gray-800'}`}
                 animate={{
                   rotate: isOpen ? -45 : 0,
                   y: isOpen ? -10 : 0,
@@ -299,199 +353,317 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu - Full Screen with Animations */}
-      <motion.div
-        initial={false}
-        animate={isOpen ? 'open' : 'closed'}
-        variants={{
-          open: { opacity: 1, pointerEvents: 'auto' },
-          closed: { opacity: 0, pointerEvents: 'none' },
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isOpen && (
+          <MobileMenu
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            navbarIsDark={navbarIsDark}
+            isRTL={isRTL}
+            centerMenuItems={centerMenuItems}
+            solutionsList={solutionsList}
+            industryPages={industryPages}
+            textColorClass={textColorClass}
+            needsHighContrast={needsHighContrast}
+            t={t}
+            pathname={pathname}
+            router={router}
+          />
+        )}
+      </AnimatePresence>
+    </header>
+  );
+}
+
+// NavLink Component
+function NavLink({ item, isRTL, navbarIsDark, textColorClass, index = 0 }: { item: { name: string; href: string }, isRTL: boolean, navbarIsDark: boolean, textColorClass: string, index?: number }) {
+  const isHashLink = item.href.startsWith('#');
+  const isExternalLink = item.href.startsWith('http');
+  
+  if (isHashLink || isExternalLink) {
+    return (
+      <motion.a
+        href={item.href}
+        onClick={(e) => {
+          if (isHashLink) {
+            e.preventDefault();
+            const id = item.href.replace('#', '');
+            const el = document.getElementById(id);
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }
         }}
-        transition={{ duration: 0.3 }}
-        className="fixed inset-0 z-40 lg:hidden"
+        className={`relative px-4 py-2 ${isRTL ? 'text-[13px]' : 'text-[11px]'} font-heading uppercase tracking-wider whitespace-nowrap overflow-hidden group ${textColorClass} ${isRTL ? 'font-somar' : ''} transition-colors duration-200`}
+        dir={isRTL ? 'rtl' : 'ltr'}
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          duration: 0.3,
+          delay: index * 0.1,
+          ease: 'easeOut',
+        }}
+        whileHover={{ y: -2 }}
+        whileTap={{ y: 0 }}
       >
-        {/* Backdrop with blur */}
-        <motion.div
-          className="absolute inset-0 backdrop-blur-md"
-          style={{
-            backgroundColor: navbarIsDark ? 'rgba(0, 0, 0, 0.7)' : 'rgba(0, 0, 0, 0.3)',
-          }}
-          variants={{
-            open: { opacity: 1 },
-            closed: { opacity: 0 },
-          }}
-          transition={{ duration: 0.3 }}
-          onClick={toggleMenu}
+        {/* Background on hover - more visible */}
+        <motion.span
+          className={`absolute inset-0 rounded-md ${navbarIsDark ? 'bg-white/10' : 'bg-primary/12'}`}
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileHover={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.2 }}
         />
 
-        {/* Menu Panel */}
-        <motion.div
-          className={`absolute top-20 ${isRTL ? 'right-0' : 'left-0'} w-full max-w-md h-[calc(100vh-5rem)] overflow-y-auto ${navbarIsDark ? 'bg-gray-950/95' : 'bg-white/95'} backdrop-blur-xl border-t ${navbarIsDark ? 'border-gray-800' : 'border-gray-200'} shadow-2xl`}
-          variants={{
-            open: { x: 0 },
-            closed: { x: isRTL ? '100%' : '-100%' },
-          }}
-          transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        >
-          <div className="p-6 space-y-8">
-            {/* Theme & Language Controls */}
-            <motion.div
-              variants={{
-                open: { opacity: 1, y: 0 },
-                closed: { opacity: 0, y: -20 },
-              }}
-              transition={{ delay: 0.1 }}
-              className={`flex items-center gap-3 p-4 rounded-2xl ${navbarIsDark ? 'bg-gray-900/50 border border-gray-800' : 'bg-gray-50 border border-gray-200'}`}
-            >
-              <div className="flex items-center gap-2">
-                {!isPortfolioPage && (
-                  <div className={`p-1.5 rounded-lg ${navbarIsDark ? 'bg-gray-800' : 'bg-white'}`}>
-                    <ThemeToggle />
-                  </div>
-                )}
-                <div className={`p-1.5 rounded-lg ${navbarIsDark ? 'bg-gray-800' : 'bg-white'}`}>
-                  <LanguageSwitcher />
-                </div>
+        {/* Text with better contrast */}
+        <span className="relative z-10 inline-block font-semibold">{item.name}</span>
+
+        {/* Bottom border with gradient - more prominent */}
+        <motion.span
+          className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-primary via-secondary to-primary rounded-full"
+          initial={{ scaleX: 0, opacity: 0 }}
+          whileHover={{ scaleX: 1, opacity: 1 }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
+        />
+      </motion.a>
+    );
+  }
+
+  return (
+    <motion.div
+      className="relative"
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.3,
+        delay: index * 0.1,
+        ease: 'easeOut',
+      }}
+    >
+      <Link
+        href={item.href}
+        className={`relative px-4 py-2 ${isRTL ? 'text-[13px]' : 'text-[11px]'} font-heading uppercase tracking-wider whitespace-nowrap overflow-hidden group ${navbarIsDark ? 'text-gray-100' : 'text-gray-900'} ${isRTL ? 'font-somar' : ''} block transition-colors duration-200`}
+        dir={isRTL ? 'rtl' : 'ltr'}
+      >
+        {/* Background on hover - more visible */}
+        <motion.span
+          className={`absolute inset-0 rounded-md ${navbarIsDark ? 'bg-white/10' : 'bg-primary/12'}`}
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileHover={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.2 }}
+        />
+
+        {/* Text with better contrast */}
+        <span className="relative z-10 inline-block font-semibold">{item.name}</span>
+
+        {/* Bottom border with gradient - more prominent */}
+        <motion.span
+          className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-primary via-secondary to-primary rounded-full"
+          initial={{ scaleX: 0, opacity: 0 }}
+          whileHover={{ scaleX: 1, opacity: 1 }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
+        />
+      </Link>
+    </motion.div>
+  );
+}
+
+// Mobile Menu Component
+function MobileMenu({ isOpen, setIsOpen, navbarIsDark, isRTL, centerMenuItems, solutionsList, industryPages, textColorClass, needsHighContrast, t, pathname, router }: any) {
+  const [solutionsOpen, setSolutionsOpen] = useState(false);
+
+  return (
+    <>
+      {/* Backdrop */}
+      <motion.div
+        className="fixed inset-0 z-40 lg:hidden backdrop-blur-md"
+        style={{
+          backgroundColor: navbarIsDark ? 'rgba(0, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.3)',
+        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
+        onClick={() => setIsOpen(false)}
+      />
+
+      {/* Menu Panel */}
+      <motion.div
+        className={`fixed top-20 ${isRTL ? 'right-0' : 'left-0'} w-full max-w-md h-[calc(100vh-5rem)] overflow-y-auto z-40 lg:hidden ${navbarIsDark ? 'bg-[#161616]/95' : 'bg-white/95'} backdrop-blur-xl border-t ${navbarIsDark ? 'border-white/10' : 'border-gray-200'} shadow-2xl`}
+        initial={{ x: isRTL ? '100%' : '-100%' }}
+        animate={{ x: 0 }}
+        exit={{ x: isRTL ? '100%' : '-100%' }}
+        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+      >
+        <div className="p-6 space-y-4">
+          {/* Theme & Language Controls */}
+          <div className={`flex items-center gap-3 p-4 rounded-2xl ${navbarIsDark ? 'bg-white/5 border border-white/10' : 'bg-secondary/40 border border-secondary/50'} backdrop-blur-md`}>
+            <div className="flex items-center gap-2">
+              <div className={`p-1.5 rounded-lg ${navbarIsDark ? 'bg-black/50' : 'bg-white'}`}>
+                <ThemeToggle />
               </div>
-            </motion.div>
-
-            {/* Navigation Links */}
-            <nav className="space-y-2">
-              <motion.div
-                variants={{
-                  open: { opacity: 1, y: 0 },
-                  closed: { opacity: 0, y: -20 },
-                }}
-                transition={{ delay: 0.15 }}
-                className={`text-xs font-rb-bold uppercase tracking-wider px-4 py-2 ${navbarIsDark ? 'text-gray-500' : 'text-gray-400'}`}
-                style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
-              >
-                {t.nav.menu || 'Menu'}
-              </motion.div>
-
-              {centerMenuItems.map((item, index) => (
-                <motion.a
-                  key={item.href}
-                  href={item.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    document.body.style.overflow = 'unset';
-                    setIsOpen(false);
-                    if (item.href.startsWith('/')) {
-                      window.location.href = item.href;
-                    } else {
-                      const id = item.href.replace('#', '');
-                      setTimeout(() => {
-                        const el = document.getElementById(id);
-                        if (el) {
-                          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        } else {
-                          window.location.href = `/${item.href}`;
-                        }
-                      }, 100);
-                    }
-                  }}
-                  className={`group flex items-center justify-between px-4 py-4 rounded-xl transition-all duration-300 ${navbarIsDark ? 'hover:bg-gray-900/70 text-gray-200' : 'hover:bg-gray-100 text-gray-800'}`}
-                  style={{ 
-                    fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined,
-                  }}
-                  variants={{
-                    open: { opacity: 1, x: 0 },
-                    closed: { opacity: 0, x: isRTL ? 50 : -50 },
-                  }}
-                  transition={{ delay: 0.2 + index * 0.05 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <span className="text-lg font-rb-bold">{item.name}</span>
-                  <motion.svg
-                    className="w-5 h-5 text-primary"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    initial={{ x: 0, opacity: 0.5 }}
-                    whileHover={{ x: isRTL ? -5 : 5, opacity: 1 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d={isRTL ? "M15 19l-7-7 7-7" : "M9 5l7 7-7 7"}
-                    />
-                  </motion.svg>
-                </motion.a>
-              ))}
-            </nav>
-
-            {/* CTA Buttons */}
-            <motion.div
-              variants={{
-                open: { opacity: 1, y: 0 },
-                closed: { opacity: 0, y: 20 },
-              }}
-              transition={{ delay: 0.4 }}
-              className="space-y-3 pt-6 border-t"
-              style={{
-                borderColor: navbarIsDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
-              }}
-            >
-              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                <Link
-                  href="/packages"
-                  className={`w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-rb-bold text-base tracking-wide transition-all duration-300 ${navbarIsDark ? 'bg-gray-900 text-primary border-2 border-primary hover:bg-primary hover:text-white' : 'bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white shadow-md hover:shadow-xl'}`}
-                  onClick={() => {
-                    document.body.style.overflow = 'unset';
-                    setIsOpen(false);
-                  }}
-                  style={{ 
-                    fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined,
-                  }}
-                >
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                  </svg>
-                  {t.nav.packages}
-                </Link>
-              </motion.div>
-
-              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                <Link
-                  href="/join-team"
-                  className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl text-white font-rb-bold text-base tracking-wide bg-gradient-to-r from-primary to-blue-600 hover:from-blue-700 hover:to-primary shadow-lg hover:shadow-2xl transition-all duration-300"
-                  onClick={() => {
-                    document.body.style.overflow = 'unset';
-                    setIsOpen(false);
-                  }}
-                  style={{ 
-                    fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined,
-                  }}
-                >
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                  {t.nav.joinUs}
-                </Link>
-              </motion.div>
-            </motion.div>
-
-            {/* Footer Info */}
-            <motion.div
-              variants={{
-                open: { opacity: 1, y: 0 },
-                closed: { opacity: 0, y: 20 },
-              }}
-              transition={{ delay: 0.5 }}
-              className={`text-center pt-6 ${navbarIsDark ? 'text-gray-500' : 'text-gray-400'}`}
-            >
-              <div className="flex items-center justify-center gap-2">
-                <span className="text-sm font-extrabold text-primary" style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}>
-                  {t.nav.madeInSaudi}
-                </span>
+              <div className={`p-1.5 rounded-lg ${navbarIsDark ? 'bg-black/50' : 'bg-white'}`}>
+                <LanguageSwitcher />
               </div>
-            </motion.div>
+            </div>
           </div>
-        </motion.div>
+
+          {/* Navigation Links */}
+          <nav className="space-y-2">
+            {/* Home */}
+            <MobileNavLink item={{ name: isRTL ? 'الرئيسية' : 'HOME', href: '/' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} setIsOpen={setIsOpen} />
+
+            {/* Solutions with Accordion */}
+            <div>
+              <button
+                onClick={() => setSolutionsOpen(!solutionsOpen)}
+                className={`w-full flex items-center justify-between px-4 py-4 rounded-xl transition-all duration-300 ${navbarIsDark ? 'hover:bg-white/5 text-gray-100' : 'hover:bg-gray-100 text-gray-800'} ${isRTL ? 'font-somar' : 'font-heading'}`}
+                dir={isRTL ? 'rtl' : 'ltr'}
+              >
+                <span className="text-lg font-heading">{t.nav.solutions}</span>
+                <motion.svg
+                  className="w-5 h-5 text-primary"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  animate={{ rotate: solutionsOpen ? 180 : 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </motion.svg>
+              </button>
+              <AnimatePresence>
+                {solutionsOpen && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="pl-4 space-y-1">
+                      {solutionsList.map((solution: { slug: string; nameEn: string; nameAr: string }) => (
+                        <Link
+                          key={solution.slug}
+                          href={`/solutions/${solution.slug}`}
+                          className={`block px-4 py-3 rounded-lg transition-all ${navbarIsDark ? 'hover:bg-white/5 text-gray-200' : needsHighContrast ? 'hover:bg-gray-100 text-gray-900' : 'hover:bg-gray-100 text-gray-700'} ${isRTL ? 'font-somar' : 'font-gotham'}`}
+                          dir={isRTL ? 'rtl' : 'ltr'}
+                          onClick={() => setIsOpen(false)}
+                        >
+                          {isRTL ? solution.nameAr : solution.nameEn}
+                        </Link>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* Other Links */}
+            {centerMenuItems.slice(1).map((item: any) => (
+              <MobileNavLink key={item.href} item={item} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} setIsOpen={setIsOpen} />
+            ))}
+
+            {/* Industry Landing Pages */}
+            {industryPages.map((item: any) => (
+              <MobileNavLink key={item.href} item={item} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} setIsOpen={setIsOpen} />
+            ))}
+          </nav>
+
+          {/* Contact Button */}
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setIsOpen(false);
+
+              const config = (() => {
+                if (pathname?.startsWith('/solutions')) {
+                  return { href: '/request-quote' };
+                }
+                if (pathname === '/request-quote') {
+                  return { href: '/contact' };
+                }
+                return { href: '/contact' };
+              })();
+
+              router.push(config.href);
+            }}
+            className={`w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl text-white font-heading text-base tracking-wide bg-gradient-to-r from-primary to-[#9a2d45] hover:from-[#9a2d45] hover:to-primary shadow-lg hover:shadow-2xl transition-all duration-300 ${isRTL ? 'font-somar' : ''}`}
+            dir={isRTL ? 'rtl' : 'ltr'}
+          >
+            {(() => {
+              if (pathname?.startsWith('/solutions')) return t.clientInquiryPage.title;
+              if (pathname === '/request-quote') return t.nav.contact;
+              return t.nav.contact;
+            })()}
+          </button>
+        </div>
       </motion.div>
-    </header>
+    </>
+  );
+}
+
+// Mobile NavLink Component
+function MobileNavLink({ item, isRTL, navbarIsDark, textColorClass, setIsOpen }: any) {
+  const isHashLink = item.href.startsWith('#');
+  
+  if (isHashLink) {
+    return (
+      <a
+        href={item.href}
+        onClick={(e) => {
+          e.preventDefault();
+          document.body.style.overflow = 'unset';
+          setIsOpen(false);
+          const id = item.href.replace('#', '');
+          setTimeout(() => {
+            const el = document.getElementById(id);
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }, 100);
+        }}
+        className={`group flex items-center justify-between px-4 py-4 rounded-xl transition-all duration-300 ${navbarIsDark ? 'hover:bg-white/5 text-gray-100' : `hover:bg-gray-100 ${textColorClass}`} ${isRTL ? 'font-somar' : 'font-heading'}`}
+        dir={isRTL ? 'rtl' : 'ltr'}
+      >
+        <span className="text-lg font-heading">{item.name}</span>
+        <motion.svg
+          className="w-5 h-5 text-primary"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          initial={{ x: 0, opacity: 0.5 }}
+          whileHover={{ x: isRTL ? -5 : 5, opacity: 1 }}
+          transition={{ duration: 0.2 }}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isRTL ? "M15 19l-7-7 7-7" : "M9 5l7 7-7 7"} />
+        </motion.svg>
+      </a>
+    );
+  }
+
+  return (
+    <Link
+      href={item.href}
+      onClick={() => {
+        document.body.style.overflow = 'unset';
+        setIsOpen(false);
+      }}
+      className={`group flex items-center justify-between px-4 py-4 rounded-xl transition-all duration-300 ${navbarIsDark ? 'hover:bg-white/5 text-gray-100' : 'hover:bg-gray-100 text-gray-800'} ${isRTL ? 'font-somar' : 'font-heading'}`}
+      dir={isRTL ? 'rtl' : 'ltr'}
+    >
+      <span className="text-lg font-heading">{item.name}</span>
+      <motion.svg
+        className="w-5 h-5 text-primary"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        initial={{ x: 0, opacity: 0.5 }}
+        whileHover={{ x: isRTL ? -5 : 5, opacity: 1 }}
+        transition={{ duration: 0.2 }}
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isRTL ? "M15 19l-7-7 7-7" : "M9 5l7 7-7 7"} />
+      </motion.svg>
+    </Link>
   );
 }

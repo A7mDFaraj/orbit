@@ -1,5 +1,5 @@
 {
-  "name": "mark-line",
+  "name": "orbit",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -32,6 +32,8 @@
     "mongoose": "^8.19.2",
     "next": "16.0.0",
     "ogl": "^1.0.11",
+    "pdf-parse": "^2.4.5",
+    "pdf2json": "^4.0.0",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-hot-toast": "^2.6.0",

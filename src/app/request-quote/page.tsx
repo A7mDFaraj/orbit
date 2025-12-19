@@ -5,6 +5,8 @@ import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import OrbitSectionBackground from '@/components/OrbitSectionBackground';
 import Link from 'next/link';
 
 function RequestQuoteForm() {
@@ -26,25 +28,85 @@ function RequestQuoteForm() {
     packageName: '',
     packageType: '',
     packagePrice: '',
+    packageMessages: '',
   });
 
-  // Get package info from URL params
+  const [source, setSource] = useState<string>('');
+  const [contextMessage, setContextMessage] = useState<string>('');
+
+  // Get package info from URL params and auto-select service type
   useEffect(() => {
     const packageId = searchParams.get('package');
     const packageName = searchParams.get('name');
     const packageType = searchParams.get('type');
     const packagePrice = searchParams.get('price');
+    const sourceParam = searchParams.get('source');
+    const serviceTypeParam = searchParams.get('serviceType');
 
-    if (packageId) {
+    // Set source and context
+    if (sourceParam) {
+      setSource(sourceParam);
+      // Set context-specific messages
+      if (sourceParam === 'healthcare') {
+        setContextMessage(isRTL 
+          ? 'نحن هنا لمساعدتك في تحسين تجربة مرضاك من خلال حلول التواصل الذكية'
+          : 'We\'re here to help you improve your patient experience through smart communication solutions'
+        );
+      } else if (sourceParam === 'enterprise') {
+        setContextMessage(isRTL
+          ? 'دعنا نساعدك في بناء حلول تواصل فعالة لعملك'
+          : 'Let us help you build effective communication solutions for your business'
+        );
+      }
+    }
+
+    // Auto-select service type from URL if provided
+    if (serviceTypeParam) {
       setFormData(prev => ({
         ...prev,
-        selectedPackage: packageId,
-        packageName: packageName || '',
-        packageType: packageType || 'regular',
-        packagePrice: packagePrice || '',
+        serviceType: serviceTypeParam,
       }));
     }
-  }, [searchParams]);
+
+    if (packageId) {
+      // Parse SMS package (e.g., sms-3000)
+      if (packageId.startsWith('sms-')) {
+        const messages = packageId.replace('sms-', '');
+        setFormData(prev => ({
+          ...prev,
+          selectedPackage: packageId,
+          packageName: isRTL 
+            ? `باقة ${messages} رسالة` 
+            : `${messages} Messages Package`,
+          packageType: 'sms',
+          packagePrice: packagePrice || '',
+          packageMessages: messages,
+          serviceType: serviceTypeParam || 'sms-platform', // Auto-select SMS Platform
+        }));
+      }
+      // Parse OTime package (e.g., otime-1, otime-2, otime-3)
+      else if (packageId.startsWith('otime-')) {
+        setFormData(prev => ({
+          ...prev,
+          selectedPackage: packageId,
+          packageName: packageName || (isRTL ? 'باقة OTime' : 'OTime Package'),
+          packageType: 'otime',
+          packagePrice: packagePrice || '',
+          serviceType: serviceTypeParam || 'otime', // Auto-select OTime
+        }));
+      }
+      // Other packages
+      else {
+        setFormData(prev => ({
+          ...prev,
+          selectedPackage: packageId,
+          packageName: packageName || '',
+          packageType: packageType || 'regular',
+          packagePrice: packagePrice || '',
+        }));
+      }
+    }
+  }, [searchParams, isRTL]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,7 +119,10 @@ function RequestQuoteForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          source: source || 'general', // Include source in submission
+        }),
       });
 
       if (!response.ok) throw new Error('Failed to submit');
@@ -75,6 +140,7 @@ function RequestQuoteForm() {
         packageName: '',
         packageType: '',
         packagePrice: '',
+        packageMessages: '',
       });
 
       setTimeout(() => {
@@ -99,12 +165,16 @@ function RequestQuoteForm() {
     });
   };
 
+  const hasPackageFromURL = !!formData.selectedPackage;
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
       <Navbar />
 
-      <div className="pt-32 pb-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto">
+      <section className="relative pt-32 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        <OrbitSectionBackground alignment="both" density="medium" />
+        
+        <div className="relative z-10 max-w-3xl mx-auto">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -113,11 +183,13 @@ function RequestQuoteForm() {
             className="text-center mb-12"
           >
             <Link
-              href="/"
-              className="inline-block mb-6 text-primary hover:text-primary/80 transition-colors"
+              href={source === 'healthcare' ? '/healthcare' : source === 'enterprise' ? '/enterprise' : '/packages'}
+              className="inline-flex items-center gap-2 mb-6 text-primary hover:text-primary/80 transition-colors font-gotham"
+              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              dir={isRTL ? 'rtl' : 'ltr'}
             >
               <svg
-                className="w-6 h-6 inline-block mr-2"
+                className={`w-5 h-5 ${isRTL ? 'rotate-180' : ''}`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -126,21 +198,28 @@ function RequestQuoteForm() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  d={isRTL ? "M14 5l7 7m0 0l-7 7m7-7H3" : "M10 19l-7-7m0 0l7-7m-7 7h18"}
                 />
               </svg>
-              {isRTL ? 'العودة للرئيسية' : 'Back to Home'}
+              {source === 'healthcare' 
+                ? (isRTL ? 'العودة لحلول القطاع الصحي' : 'Back to Healthcare Solutions')
+                : source === 'enterprise'
+                ? (isRTL ? 'العودة لحلول المؤسسات' : 'Back to Enterprise Solutions')
+                : (isRTL ? 'العودة للباقات' : 'Back to Packages')
+              }
             </Link>
 
             <h1
-              className="text-5xl sm:text-6xl lg:text-7xl font-rb-bold text-gray-900 dark:text-white mb-4 uppercase tracking-tighter"
-              style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+              className="text-4xl sm:text-5xl lg:text-6xl font-heading text-gray-900 dark:text-white mb-4 uppercase tracking-tighter"
+              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              dir={isRTL ? 'rtl' : 'ltr'}
             >
               {t.clientInquiryPage.title}
             </h1>
             <p
-              className="text-xl text-gray-600 dark:text-gray-300 font-montserrat"
-              style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+              className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 font-gotham"
+              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              dir={isRTL ? 'rtl' : 'ltr'}
             >
               {t.clientInquiryPage.subtitle}
             </p>
@@ -168,112 +247,157 @@ function RequestQuoteForm() {
             </motion.div>
           )}
 
+          {/* Context Banner - Shows when user comes from specific source */}
+          {source && contextMessage && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6 p-6 bg-gradient-to-r from-primary/10 via-primary/5 to-secondary/10 dark:from-primary/20 dark:via-primary/10 dark:to-secondary/20 rounded-xl border-2 border-primary/30 dark:border-primary/40 shadow-lg"
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-lg bg-primary/20 dark:bg-primary/30 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <h3 
+                    className="text-lg font-heading text-gray-900 dark:text-white mb-2"
+                    style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                    dir={isRTL ? 'rtl' : 'ltr'}
+                  >
+                    {isRTL ? 'مرحباً بك!' : 'Welcome!'}
+                  </h3>
+                  <p 
+                    className="text-gray-700 dark:text-gray-300 font-gotham"
+                    style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                    dir={isRTL ? 'rtl' : 'ltr'}
+                  >
+                    {contextMessage}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
           {/* Form */}
           <motion.form
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             onSubmit={handleSubmit}
-            className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 sm:p-12 space-y-6"
+            className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-3xl shadow-2xl border-2 border-gray-200/50 dark:border-gray-700/50 p-8 sm:p-12 space-y-6"
           >
-            {/* Package Info Display */}
-            {formData.selectedPackage && (
+            {/* Package Info Display - Only show if package selected from URL */}
+            {hasPackageFromURL && (
               <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                className="bg-gradient-to-r from-primary/10 to-blue-500/10 dark:from-primary/20 dark:to-blue-500/20 rounded-xl p-6 border-2 border-primary/30"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-gradient-to-r from-primary/10 via-primary/5 to-secondary/10 dark:from-primary/20 dark:via-primary/10 dark:to-secondary/20 rounded-xl p-6 border-2 border-primary/30 dark:border-primary/40 shadow-lg"
               >
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="text-2xl">
-                    {formData.packageType === 'charity' ? '💚' : '📦'}
-                  </span>
-                  <div className="flex-1">
-                    <h3 
-                      className="text-xl font-rb-bold text-gray-900 dark:text-white mb-1"
-                      style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
-                    >
-                      {formData.packageName}
-                    </h3>
-                    {formData.packagePrice && (
-                      <p className="text-sm text-primary font-rb-bold">
-                        {formData.packagePrice} {isRTL ? 'ريال' : 'SAR'}
-                      </p>
-                    )}
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-4 flex-1">
+                    <div className="w-12 h-12 rounded-lg bg-primary/20 dark:bg-primary/30 flex items-center justify-center">
+                      <span className="text-2xl">📦</span>
+                    </div>
+                    <div className="flex-1">
+                      <h3 
+                        className="text-lg font-heading text-gray-900 dark:text-white mb-1"
+                        style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                        dir={isRTL ? 'rtl' : 'ltr'}
+                      >
+                        {formData.packageName}
+                      </h3>
+                      {formData.packagePrice && (
+                        <p className="text-lg text-primary font-heading font-bold">
+                          {formData.packagePrice} {isRTL ? 'ريال' : 'SAR'}
+                        </p>
+                      )}
+                      {formData.packageMessages && (
+                        <p className="text-sm text-gray-600 dark:text-gray-400 font-gotham">
+                          {isRTL ? `${formData.packageMessages} رسالة` : `${formData.packageMessages} Messages`}
+                        </p>
+                      )}
+                    </div>
                   </div>
                   <button
                     type="button"
-                    onClick={() => setFormData(prev => ({ ...prev, selectedPackage: '', packageName: '', packageType: '', packagePrice: '' }))}
-                    className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                    onClick={() => {
+                      setFormData(prev => ({ 
+                        ...prev, 
+                        selectedPackage: '', 
+                        packageName: '', 
+                        packageType: '', 
+                        packagePrice: '',
+                        packageMessages: ''
+                      }));
+                    }}
+                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                    aria-label={isRTL ? 'إزالة الباقة' : 'Remove package'}
                   >
-                    ✕
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                   </button>
                 </div>
-                {formData.packageType === 'charity' && (
-                  <p className="text-sm text-green-600 dark:text-green-400 font-medium">
-                    {isRTL ? '🌟 باقة خيرية مميزة' : '🌟 Special Charity Package'}
-                  </p>
-                )}
               </motion.div>
             )}
 
-            {/* Package Selection Dropdown */}
-            <div>
-              <label
-                htmlFor="selectedPackage"
-                className="block text-sm font-rb-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2"
-                style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
-              >
-                {isRTL ? 'اختر الباقة (اختياري)' : 'Select Package (Optional)'}
-              </label>
-              <select
-                id="selectedPackage"
-                name="selectedPackage"
-                value={formData.selectedPackage}
-                onChange={(e) => {
-                  const selected = e.target.value;
-                  const packages: Record<string, { name: string, nameAr: string, type: string, price?: string }> = {
-                    'basic': { name: 'Basic Package', nameAr: 'الباقة الأساسية', type: 'regular' },
-                    'professional': { name: 'Professional Package', nameAr: 'الباقة الاحترافية', type: 'regular' },
-                    'premium': { name: 'Premium Package', nameAr: 'الباقة المتميزة', type: 'regular' },
-                    'charity-launch': { name: 'Launch Package', nameAr: 'باقة الانطلاقة', type: 'charity', price: '20000' },
-                    'charity-expansion': { name: 'Expansion Package', nameAr: 'باقة التوسع', type: 'charity', price: '50000' },
-                    'charity-professional': { name: 'Professional Package', nameAr: 'باقة الاحتراف', type: 'charity', price: '80000' },
-                    'custom': { name: 'Custom Package', nameAr: 'باقة مخصصة', type: 'custom' },
-                  };
-                  
-                  const pkg = packages[selected];
-                  setFormData(prev => ({
-                    ...prev,
-                    selectedPackage: selected,
-                    packageName: isRTL ? (pkg?.nameAr || '') : (pkg?.name || ''),
-                    packageType: pkg?.type || '',
-                    packagePrice: pkg?.price || '',
-                  }));
-                }}
-                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
-                style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
-              >
-                <option value="">{isRTL ? 'لم يتم تحديد باقة' : 'No package selected'}</option>
-                <optgroup label={isRTL ? 'باقات الأعمال' : 'Business Packages'}>
-                  <option value="basic">{isRTL ? 'الباقة الأساسية' : 'Basic Package'}</option>
-                  <option value="professional">{isRTL ? 'الباقة الاحترافية' : 'Professional Package'}</option>
-                  <option value="premium">{isRTL ? 'الباقة المتميزة' : 'Premium Package'}</option>
-                </optgroup>
-                <optgroup label={isRTL ? 'باقات الجمعيات الخيرية' : 'Charity Packages'}>
-                  <option value="charity-launch">{isRTL ? 'باقة الانطلاقة (20,000 ريال)' : 'Launch Package (20,000 SAR)'}</option>
-                  <option value="charity-expansion">{isRTL ? 'باقة التوسع (50,000 ريال)' : 'Expansion Package (50,000 SAR)'}</option>
-                  <option value="charity-professional">{isRTL ? 'باقة الاحتراف (80,000 ريال)' : 'Professional Package (80,000 SAR)'}</option>
-                </optgroup>
-                <option value="custom">{isRTL ? 'باقة مخصصة' : 'Custom Package'}</option>
-              </select>
-            </div>
+            {/* Package Selection Dropdown - Only show if NO package from URL */}
+            {!hasPackageFromURL && (
+              <div>
+                <label
+                  htmlFor="selectedPackage"
+                  className="block text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2"
+                  style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                  dir={isRTL ? 'rtl' : 'ltr'}
+                >
+                  {isRTL ? 'اختر الباقة (اختياري)' : 'Select Package (Optional)'}
+                </label>
+                <select
+                  id="selectedPackage"
+                  name="selectedPackage"
+                  value={formData.selectedPackage}
+                  onChange={(e) => {
+                    const selected = e.target.value;
+                    if (!selected) {
+                      setFormData(prev => ({
+                        ...prev,
+                        selectedPackage: '',
+                        packageName: '',
+                        packageType: '',
+                        packagePrice: '',
+                        packageMessages: '',
+                      }));
+                      return;
+                    }
+                    // Only allow custom package selection
+                    if (selected === 'custom') {
+                      setFormData(prev => ({
+                        ...prev,
+                        selectedPackage: 'custom',
+                        packageName: isRTL ? 'باقة مخصصة' : 'Custom Package',
+                        packageType: 'custom',
+                        packagePrice: '',
+                      }));
+                    }
+                  }}
+                  className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+                  style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                  dir={isRTL ? 'rtl' : 'ltr'}
+                >
+                  <option value="">{isRTL ? 'لا يوجد باقة محددة' : 'No package selected'}</option>
+                  <option value="custom">{isRTL ? 'باقة مخصصة' : 'Custom Package'}</option>
+                </select>
+              </div>
+            )}
 
             {/* Name */}
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-rb-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2"
-                style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                className="block text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2"
+                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : undefined }}
               >
                 {t.clientInquiryPage.name}
               </label>
@@ -284,8 +408,9 @@ function RequestQuoteForm() {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
-                style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors font-gotham"
+                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                dir={isRTL ? 'rtl' : 'ltr'}
               />
             </div>
 
@@ -293,8 +418,8 @@ function RequestQuoteForm() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-rb-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2"
-                style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                className="block text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2"
+                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : undefined }}
               >
                 {t.clientInquiryPage.email}
               </label>
@@ -305,8 +430,9 @@ function RequestQuoteForm() {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
-                style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors font-gotham"
+                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                dir="ltr"
               />
             </div>
 
@@ -314,8 +440,8 @@ function RequestQuoteForm() {
             <div>
               <label
                 htmlFor="phone"
-                className="block text-sm font-rb-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2"
-                style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                className="block text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2"
+                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : undefined }}
               >
                 {t.clientInquiryPage.phone}
               </label>
@@ -326,8 +452,9 @@ function RequestQuoteForm() {
                 value={formData.phone}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
-                style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors font-gotham"
+                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                dir="ltr"
               />
             </div>
 
@@ -335,10 +462,16 @@ function RequestQuoteForm() {
             <div>
               <label
                 htmlFor="company"
-                className="block text-sm font-rb-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2"
-                style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                className="block text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2"
+                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                dir={isRTL ? 'rtl' : 'ltr'}
               >
-                {t.clientInquiryPage.company}
+                {source === 'healthcare' 
+                  ? (isRTL ? 'اسم المنشأة الصحية' : 'Healthcare Facility Name')
+                  : source === 'enterprise'
+                  ? (isRTL ? 'اسم الشركة' : 'Company Name')
+                  : t.clientInquiryPage.company
+                }
               </label>
               <input
                 type="text"
@@ -346,46 +479,60 @@ function RequestQuoteForm() {
                 name="company"
                 value={formData.company}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
-                style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                placeholder={
+                  source === 'healthcare'
+                    ? (isRTL ? 'مثال: مستشفى الملك فهد، عيادة النور...' : 'e.g., King Fahd Hospital, Al-Noor Clinic...')
+                    : source === 'enterprise'
+                    ? (isRTL ? 'مثال: شركة التقنية المتقدمة، مؤسسة الأعمال...' : 'e.g., Advanced Tech Company, Business Corporation...')
+                    : (isRTL ? 'اسم الشركة أو المؤسسة' : 'Company or Organization Name')
+                }
+                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors font-gotham placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                dir={isRTL ? 'rtl' : 'ltr'}
               />
             </div>
 
             {/* Service Type */}
             <div>
-              <label
-                htmlFor="serviceType"
-                className="block text-sm font-rb-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2"
-                style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
-              >
-                {t.clientInquiryPage.serviceType}
-              </label>
+              <div className="flex items-center justify-between mb-2">
+                <label
+                  htmlFor="serviceType"
+                  className="block text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300"
+                  style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                  dir={isRTL ? 'rtl' : 'ltr'}
+                >
+                  {isRTL ? 'نوع الحل' : 'Solution Type'}
+                </label>
+                {(hasPackageFromURL || source) && formData.serviceType && (
+                  <span className="text-xs text-primary font-gotham" style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }} dir={isRTL ? 'rtl' : 'ltr'}>
+                    {isRTL ? '✓ تم التحديد تلقائياً' : '✓ Auto-selected'}
+                  </span>
+                )}
+              </div>
               <select
                 id="serviceType"
                 name="serviceType"
                 value={formData.serviceType}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
-                style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors font-gotham"
+                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                dir={isRTL ? 'rtl' : 'ltr'}
               >
                 <option value="">
-                  {isRTL ? 'اختر نوع الخدمة' : 'Select Service Type'}
+                  {isRTL ? 'اختر نوع الحل' : 'Select Solution Type'}
                 </option>
-                <option value="branding">
-                  {isRTL ? 'الهوية التجارية' : 'Branding'}
+                <option value="sms-platform">
+                  {isRTL ? 'منصة الرسائل النصية' : 'SMS Platform'}
                 </option>
-                <option value="marketing">
-                  {isRTL ? 'التسويق' : 'Marketing'}
+                <option value="whatsapp-business-api">
+                  {isRTL ? 'واتساب أعمال API' : 'WhatsApp Business API'}
                 </option>
-                <option value="events">
-                  {isRTL ? 'الفعاليات' : 'Events'}
+                <option value="otime">
+                  {isRTL ? 'اوتايم OTime' : 'OTime - Attendance & HR'}
                 </option>
-                <option value="real-estate">
-                  {isRTL ? 'العقارات' : 'Real Estate'}
-                </option>
-                <option value="advertising">
-                  {isRTL ? 'الإعلان' : 'Advertising'}
+                <option value="gov-gate">
+                  {isRTL ? 'البوابة الحكومية Gov Gate' : 'Gov Gate - Government Portal'}
                 </option>
                 <option value="other">{isRTL ? 'أخرى' : 'Other'}</option>
               </select>
@@ -395,8 +542,9 @@ function RequestQuoteForm() {
             <div>
               <label
                 htmlFor="message"
-                className="block text-sm font-rb-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2"
-                style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                className="block text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2"
+                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                dir={isRTL ? 'rtl' : 'ltr'}
               >
                 {t.clientInquiryPage.message}
               </label>
@@ -407,17 +555,38 @@ function RequestQuoteForm() {
                 onChange={handleChange}
                 required
                 rows={5}
-                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors resize-none"
-                style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                placeholder={
+                  source === 'healthcare'
+                    ? (isRTL 
+                        ? 'أخبرنا عن احتياجاتك: عدد المواعيد الشهرية، عدد المرضى، نوع التذكيرات المطلوبة...'
+                        : 'Tell us about your needs: monthly appointments, number of patients, types of reminders needed...')
+                    : source === 'enterprise'
+                    ? (isRTL
+                        ? 'أخبرنا عن عملك: حجم الشركة، عدد الموظفين، احتياجات التواصل...'
+                        : 'Tell us about your business: company size, number of employees, communication needs...')
+                    : (isRTL
+                        ? 'أخبرنا عن احتياجاتك ومتطلباتك...'
+                        : 'Tell us about your needs and requirements...')
+                }
+                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors resize-none font-gotham placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                dir={isRTL ? 'rtl' : 'ltr'}
               />
+              {(source === 'healthcare' || source === 'enterprise') && (
+                <p className="mt-2 text-xs text-gray-500 dark:text-gray-400 font-gotham" style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }} dir={isRTL ? 'rtl' : 'ltr'}>
+                  {isRTL 
+                    ? '💡 نصيحة: كلما زادت التفاصيل، كلما استطعنا تقديم عرض أفضل'
+                    : '💡 Tip: The more details you provide, the better we can tailor our solution'}
+                </p>
+              )}
             </div>
 
             {/* Budget */}
             <div>
               <label
                 htmlFor="budget"
-                className="block text-sm font-rb-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2"
-                style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                className="block text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2"
+                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : undefined }}
               >
                 {t.clientInquiryPage.budget}
               </label>
@@ -427,7 +596,7 @@ function RequestQuoteForm() {
                 value={formData.budget}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
-                style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : undefined }}
               >
                 <option value="">
                   {isRTL ? 'اختر الميزانية' : 'Select Budget Range'}
@@ -451,10 +620,11 @@ function RequestQuoteForm() {
             <motion.button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-primary text-white py-4 px-8 rounded-lg font-rb-bold uppercase tracking-wider shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-gradient-to-r from-primary to-[#9a2d45] text-white py-4 px-8 rounded-lg font-heading uppercase tracking-wider shadow-lg hover:shadow-xl hover:from-[#9a2d45] hover:to-primary transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
               whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
-              style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
+              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              dir={isRTL ? 'rtl' : 'ltr'}
             >
               {isSubmitting
                 ? isRTL
@@ -464,7 +634,8 @@ function RequestQuoteForm() {
             </motion.button>
           </motion.form>
         </div>
-      </div>
+      </section>
+      <Footer />
     </div>
   );
 }
@@ -472,10 +643,10 @@ function RequestQuoteForm() {
 export default function RequestQuotePage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 flex items-center justify-center">
+      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400 font-rb-bold">Loading...</p>
+          <p className="text-gray-600 dark:text-gray-400 font-heading">Loading...</p>
         </div>
       </div>
     }>

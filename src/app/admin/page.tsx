@@ -100,35 +100,29 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-white to-secondary/10">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-secondary/30 via-white to-primary/5">
       <Toaster position="top-right" />
       <div className="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-md border-t-4 border-primary">
         <div className="text-center mb-8">
           {/* Logo */}
           <div className="flex justify-center mb-6">
-            <div className="relative bg-black rounded-sm overflow-hidden shadow-lg" style={{ width: '180px', height: '50px' }}>
-              <img 
-                src="/client/logo.jpg" 
-                alt="Mark Line" 
-                className="h-full w-full object-cover object-center"
-                style={{ 
-                  transform: 'scale(1.4)',
-                  objectPosition: 'center center'
-                }}
-              />
+            <div className="relative flex items-center justify-center">
+              <div className="text-5xl font-heading font-bold text-primary tracking-tight">
+                ORBIT
+              </div>
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2 uppercase font-heading tracking-wide">
+          <h1 className="text-3xl font-heading font-bold text-gray-900 mb-2 uppercase tracking-wide">
             Admin <span className="text-primary">Portal</span>
           </h1>
-          <p className="text-gray-600">Sign in to manage your website</p>
+          <p className="text-gray-600 font-gotham">Sign in to manage your website</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide"
+              className="block text-sm font-heading font-semibold text-gray-700 mb-2 uppercase tracking-wide"
             >
               Email Address
             </label>
@@ -137,8 +131,8 @@ export default function AdminLogin() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all"
-              placeholder="email@markline.com"
+              className="w-full px-4 py-3 border-2 border-neutral/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all font-gotham"
+              placeholder="admin@orbit.com.sa"
               required
             />
           </div>
@@ -146,7 +140,7 @@ export default function AdminLogin() {
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide"
+              className="block text-sm font-heading font-semibold text-gray-700 mb-2 uppercase tracking-wide"
             >
               Password
             </label>
@@ -156,7 +150,7 @@ export default function AdminLogin() {
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 pr-12 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                className="w-full px-4 py-3 pr-12 border-2 border-neutral/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all font-gotham"
                 placeholder="••••••••"
                 required
               />
@@ -182,7 +176,7 @@ export default function AdminLogin() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-primary text-white py-4 font-bold hover:bg-secondary hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider text-lg"
+            className="w-full bg-primary text-white py-4 font-heading font-bold hover:bg-primary/90 hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider text-lg"
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
@@ -192,7 +186,7 @@ export default function AdminLogin() {
         <div className="mt-6 text-center">
           <a
             href="/"
-            className="text-primary hover:text-secondary font-bold uppercase tracking-wide transition-colors"
+            className="text-primary hover:text-primary/80 font-heading font-bold uppercase tracking-wide transition-colors"
           >
             ← Back to Website
           </a>

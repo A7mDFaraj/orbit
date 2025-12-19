@@ -105,8 +105,8 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl text-gray-600">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-xl text-gray-600 font-heading">Loading...</div>
       </div>
     );
   }
@@ -120,12 +120,11 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
     { name: t.heroSection, href: '/admin/hero', icon: '🌟' },
     { name: t.aboutUs, href: '/admin/about', icon: '👋' },
     { name: t.uniqueFeatures, href: '/admin/unique-features', icon: '✨' },
-    { name: t.services, href: '/admin/services', icon: '💼' },
     { name: t.portfolio, href: '/admin/clients', icon: '🎨' },
-    { name: t.testimonials, href: '/admin/testimonials', icon: '⭐' },
-    { name: t.faqs, href: '/admin/faqs', icon: '❓' },
-    { name: t.video, href: '/admin/video', icon: '🎬' },
     { name: t.packages, href: '/admin/packages', icon: '📦' },
+    { name: 'Testimonials', href: '/admin/testimonials', icon: '💬' },
+    { name: 'FAQs', href: '/admin/faqs', icon: '❓' },
+    { name: 'Inquiries', href: '/admin/inquiries', icon: '📧' },
   ];
 
   return (
@@ -134,7 +133,7 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
 
       {/* Sidebar */}
       <aside
-        className={`relative bg-gradient-to-b from-gray-900 to-gray-800 text-white transition-all duration-300 ${
+        className={`relative bg-gradient-to-b from-primary via-primary/95 to-primary/90 text-white transition-all duration-300 ${
           sidebarOpen ? 'w-64' : 'w-20'
         } shadow-2xl overflow-hidden`}
       >
@@ -142,27 +141,20 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
           <div className="flex items-center justify-between mb-8">
             {sidebarOpen ? (
               <Link href="/" className="group">
-                <div className="relative bg-black rounded-sm overflow-hidden shadow-lg group-hover:shadow-xl transition-shadow duration-300" style={{ width: '160px', height: '45px' }}>
-                  <img 
-                    src="/client/logo.jpg" 
-                    alt="Mark Line" 
-                    className="h-full w-full object-cover object-center"
-                    style={{ 
-                      transform: 'scale(1.4)',
-                      objectPosition: 'center center'
-                    }}
-                  />
-                  <div className="absolute inset-0 border-2 border-primary rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative flex items-center justify-center">
+                  <div className="text-2xl font-heading font-bold tracking-tight group-hover:scale-105 transition-transform">
+                    ORBIT
+                  </div>
                 </div>
               </Link>
             ) : (
-              <Link href="/" className="text-primary text-2xl font-bold">
-                ML
+              <Link href="/" className="text-white text-2xl font-heading font-bold">
+                O
               </Link>
             )}
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 hover:bg-gray-700 rounded-lg transition-colors ml-2"
+              className="p-2 hover:bg-primary/80 rounded-lg transition-colors ml-2"
             >
               {sidebarOpen ? '←' : '→'}
             </button>
@@ -173,11 +165,11 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primary hover:shadow-lg transition-all duration-300 group"
+                className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/20 hover:shadow-lg transition-all duration-300 group"
               >
                 <span className="text-2xl group-hover:scale-110 transition-transform">{item.icon}</span>
                 {sidebarOpen && (
-                  <span className="font-semibold tracking-wide">{item.name}</span>
+                  <span className="font-heading font-semibold tracking-wide">{item.name}</span>
                 )}
               </Link>
             ))}
@@ -192,16 +184,16 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
         <header className="bg-white shadow-md border-b-4 border-primary">
           <div className="px-8 py-6 flex items-center justify-between">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 uppercase tracking-wide" dir={isArabic ? 'rtl' : 'ltr'}>
+              <h2 className="text-3xl font-heading font-bold text-gray-900 uppercase tracking-wide" dir={isArabic ? 'rtl' : 'ltr'}>
                 {t.adminDashboard}
               </h2>
-              <p className="text-sm text-gray-500 mt-1" dir={isArabic ? 'rtl' : 'ltr'}>{t.controlPanel}</p>
+              <p className="text-sm text-gray-500 mt-1 font-gotham" dir={isArabic ? 'rtl' : 'ltr'}>{t.controlPanel}</p>
             </div>
             <div className="flex items-center gap-3">
               {/* Language Switcher */}
               <button
                 onClick={toggleLanguage}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary hover:bg-blue-700 transition-colors text-white font-semibold"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary hover:bg-primary/90 transition-colors text-white font-heading font-semibold"
                 title={isArabic ? t.english : t.arabic}
               >
                 <span className="text-lg">🌐</span>
@@ -210,17 +202,17 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
 
               {/* User Info */}
               <div className="text-right" dir={isArabic ? 'rtl' : 'ltr'}>
-                <p className="text-sm text-gray-600">{t.welcome}</p>
-                <p className="font-bold text-gray-900">{user.name}</p>
+                <p className="text-sm text-gray-600 font-gotham">{t.welcome}</p>
+                <p className="font-heading font-bold text-gray-900">{user.name}</p>
               </div>
-              <div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
+              <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center text-white font-heading font-bold text-xl shadow-lg">
                 {user.name.charAt(0)}
               </div>
 
               {/* Logout Button */}
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 transition-colors text-white font-semibold"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 transition-colors text-white font-heading font-semibold"
                 title={t.logout}
               >
                 <span className="text-lg">🚪</span>

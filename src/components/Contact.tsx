@@ -2,311 +2,303 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useTheme } from '@/contexts/ThemeContext';
+import OrbitSectionBackground from './OrbitSectionBackground';
 
 export default function Contact() {
   const { t, isRTL } = useLanguage();
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
+  const { isDark } = useTheme();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
+    subject: '',
     message: '',
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // TODO: API integration when backend is ready
-    setTimeout(() => {
+    setShowError(false);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) throw new Error('Failed to submit');
+
+      setShowSuccess(true);
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: '',
+      });
+
+      setTimeout(() => {
+        setShowSuccess(false);
+      }, 5000);
+    } catch (error) {
+      console.error('Error submitting contact form:', error);
+      setShowError(true);
+      setTimeout(() => {
+        setShowError(false);
+      }, 5000);
+    } finally {
       setIsSubmitting(false);
-      setFormData({ name: '', email: '', message: '' });
-    }, 1000);
+    }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData(prev => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
   return (
-    <>
-      {/* Hero Section */}
-      <section id="contact" className="py-24 bg-gradient-to-br from-blue-50/50 via-white to-slate-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 text-gray-900 dark:text-white transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative py-32 lg:py-40 bg-white dark:bg-gray-900 overflow-hidden">
+      <OrbitSectionBackground alignment="both" density="medium" />
+      
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
           <motion.div
-            ref={ref}
-            initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8 }}
-            className="text-center"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
           >
-            <h2 
-              className="text-5xl sm:text-6xl lg:text-7xl font-rb-bold mb-6 uppercase tracking-tighter"
-              style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
-            >
-              {t.contact.title}
+            <h2 className={`text-4xl sm:text-5xl lg:text-6xl font-heading font-bold mb-6 text-gray-900 dark:text-white ${isRTL ? 'font-somar' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
+              {isRTL ? 'تواصل معنا' : 'Contact Us'}
             </h2>
-            <p 
-              className="text-2xl mb-12 max-w-3xl mx-auto font-montserrat font-medium"
-              style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
-            >
-              {t.contact.description}
+            <p className={`text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+              {isRTL 
+                ? 'نحن هنا للإجابة على استفساراتك ومساعدتك في العثور على الحل المناسب لاحتياجاتك'
+                : 'We\'re here to answer your inquiries and help you find the right solution for your needs'
+              }
             </p>
-
-            <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
-              <a
-                href="mailto:info@markline.sa"
-                className="bg-primary text-white px-10 py-5 rounded-sm font-rb-bold text-lg hover:bg-primary/90 transition-all hover:scale-105 shadow-xl uppercase tracking-wider"
-                style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
-              >
-                {t.contact.email}
-              </a>
-              <a
-                href="/request-quote"
-                className="bg-transparent border-2 border-primary text-primary dark:text-white dark:border-white px-10 py-5 rounded-sm font-rb-bold text-lg hover:bg-primary hover:text-white transition-all hover:scale-105 uppercase tracking-wider"
-                style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
-              >
-                {t.contact.quote}
-              </a>
-            </div>
           </motion.div>
-        </div>
-      </section>
 
-      {/* Contact Form Section */}
-      <section className="py-24 bg-black text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8 }}
-            className="border border-primary/30 rounded-lg p-8 lg:p-12"
-          >
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-              {/* Left Column - Contact Form */}
-              <div className="space-y-6">
-                <h2 
-                  className="text-3xl lg:text-4xl font-rb-bold mb-2 uppercase tracking-tighter"
-                  style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
-                >
-                  {isRTL ? 'للاستفسارات أو الأسئلة، لا تتردد في التواصل معنا' : 'For your inquiries or questions, do not hesitate to contact us'}
-                </h2>
-                
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      placeholder={isRTL ? 'الاسم' : 'Name'}
-                      required
-                      className="w-full px-4 py-3 bg-white text-gray-900 rounded-md placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary"
-                      style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
-                    />
+          <div className="grid lg:grid-cols-2 gap-12">
+            {/* Contact Information */}
+            <motion.div
+              initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="space-y-8"
+            >
+              <div>
+                <h3 className={`text-2xl font-heading font-semibold mb-6 text-gray-900 dark:text-white ${isRTL ? 'font-somar' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                  {isRTL ? 'معلومات الاتصال' : 'Contact Information'}
+                </h3>
+                <div className="space-y-6">
+                  {/* Phone */}
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-lg bg-primary/10 dark:bg-primary/20 flex items-center justify-center flex-shrink-0">
+                      <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className={`text-sm text-gray-500 dark:text-gray-400 mb-1 ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                        {isRTL ? 'هاتف' : 'Phone'}
+                      </p>
+                      <a href="tel:920006900" className={`text-lg font-semibold text-gray-900 dark:text-white hover:text-primary transition-colors ${isRTL ? 'font-somar' : 'font-gotham'}`} dir="ltr">
+                        920006900
+                      </a>
+                    </div>
                   </div>
-                  <div>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder={isRTL ? 'البريد الإلكتروني' : 'Email'}
-                      required
-                      className="w-full px-4 py-3 bg-white text-gray-900 rounded-md placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary"
-                      style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
-                    />
-                  </div>
-                  <div>
-                    <textarea
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
-                      placeholder={isRTL ? 'النص' : 'Text'}
-                      required
-                      rows={6}
-                      className="w-full px-4 py-3 bg-white text-gray-900 rounded-md placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary resize-none"
-                      style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full bg-primary text-white px-6 py-3 rounded-md font-rb-bold uppercase tracking-wide hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}
-                  >
-                    {isRTL ? 'إرسال' : 'Submit'}
-                  </button>
-                </form>
-              </div>
 
-              {/* Right Column - Contact Information Grid */}
-              <div className="grid grid-cols-2 gap-6 lg:gap-8">
-                {/* Email */}
-                <div className="flex flex-col items-center text-center space-y-3">
-                  <div className="w-16 h-16 rounded-full border-2 border-primary flex items-center justify-center">
-                    <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="font-rb-bold text-lg mb-1 uppercase" style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}>
-                      {isRTL ? 'البريد الإلكتروني' : 'Email'}
-                    </p>
-                    <a href="mailto:info@markline.sa" className="text-primary hover:text-primary/80 transition-colors text-base">
-                      info@markline.sa
-                    </a>
+                  {/* Email */}
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-lg bg-primary/10 dark:bg-primary/20 flex items-center justify-center flex-shrink-0">
+                      <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className={`text-sm text-gray-500 dark:text-gray-400 mb-1 ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                        {isRTL ? 'البريد الإلكتروني' : 'Email'}
+                      </p>
+                      <a href="mailto:info@ot.com.sa" className={`text-lg font-semibold text-gray-900 dark:text-white hover:text-primary transition-colors ${isRTL ? 'font-somar' : 'font-gotham'}`} dir="ltr">
+                        info@ot.com.sa
+                      </a>
+                    </div>
                   </div>
                 </div>
+              </div>
+            </motion.div>
 
-                {/* Website */}
-                <div className="flex flex-col items-center text-center space-y-3">
-                  <div className="w-16 h-16 rounded-full border-2 border-primary flex items-center justify-center">
-                    <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="font-rb-bold text-lg mb-1 uppercase" style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}>
-                      {isRTL ? 'الموقع الإلكتروني' : 'Website'}
+            {/* Contact Form */}
+            <motion.div
+              initial={{ opacity: 0, x: isRTL ? -20 : 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <motion.form
+                onSubmit={handleSubmit}
+                className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-3xl shadow-2xl border-2 border-gray-200/50 dark:border-gray-700/50 p-8 sm:p-12 space-y-6"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
+                {/* Success Message */}
+                {showSuccess && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg"
+                  >
+                    <p className={`text-green-800 dark:text-green-300 ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                      {isRTL 
+                        ? 'تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.'
+                        : 'Your message has been sent successfully! We\'ll get back to you soon.'
+                      }
                     </p>
-                    <a href="https://markline.sa" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 transition-colors text-base">
-                      markline.sa
-                    </a>
-                  </div>
+                  </motion.div>
+                )}
+
+                {/* Error Message */}
+                {showError && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg"
+                  >
+                    <p className={`text-red-800 dark:text-red-300 ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                      {isRTL 
+                        ? 'فشل إرسال الرسالة. يرجى المحاولة مرة أخرى.'
+                        : 'Failed to send message. Please try again.'
+                      }
+                    </p>
+                  </motion.div>
+                )}
+
+                {/* Name */}
+                <div>
+                  <label htmlFor="name" className={`block text-sm font-semibold mb-2 text-gray-900 dark:text-white ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                    {isRTL ? 'الاسم الكامل' : 'Full Name'} <span className="text-primary">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    value={formData.name}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors ${isRTL ? 'font-somar' : 'font-gotham'}`}
+                    dir={isRTL ? 'rtl' : 'ltr'}
+                    placeholder={isRTL ? 'أدخل اسمك الكامل' : 'Enter your full name'}
+                  />
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label htmlFor="email" className={`block text-sm font-semibold mb-2 text-gray-900 dark:text-white ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                    {isRTL ? 'البريد الإلكتروني' : 'Email'} <span className="text-primary">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors ${isRTL ? 'font-somar' : 'font-gotham'}`}
+                    dir="ltr"
+                    placeholder="example@email.com"
+                  />
                 </div>
 
                 {/* Phone */}
-                <div className="flex flex-col items-center text-center space-y-3">
-                  <div className="w-16 h-16 rounded-full border-2 border-primary flex items-center justify-center">
-                    <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="font-rb-bold text-lg mb-1 uppercase" style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}>
-                      {isRTL ? 'الهاتف' : 'Phone'}
-                    </p>
-                    <a href="tel:+966548467106" className="text-primary hover:text-primary/80 transition-colors text-base" dir="ltr">
-                      +966 54 846 7106
-                    </a>
-                  </div>
+                <div>
+                  <label htmlFor="phone" className={`block text-sm font-semibold mb-2 text-gray-900 dark:text-white ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                    {isRTL ? 'رقم الهاتف' : 'Phone Number'} <span className="text-primary">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    required
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors ${isRTL ? 'font-somar' : 'font-gotham'}`}
+                    dir="ltr"
+                    placeholder={isRTL ? '05xxxxxxxx' : '05xxxxxxxx'}
+                  />
                 </div>
 
-                {/* Social Media */}
-                <div className="flex flex-col items-center text-center space-y-3">
-                  <div className="w-16 h-16 rounded-full border-2 border-primary flex items-center justify-center">
-                    <svg className="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="font-rb-bold text-lg mb-1 uppercase" style={{ fontFamily: isRTL ? 'Tajawal, sans-serif' : undefined }}>
-                      {isRTL ? 'وسائل التواصل' : 'Social Media'}
-                    </p>
-                    <p className="text-primary text-base">@markline.bs</p>
-                  </div>
+                {/* Subject */}
+                <div>
+                  <label htmlFor="subject" className={`block text-sm font-semibold mb-2 text-gray-900 dark:text-white ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                    {isRTL ? 'الموضوع' : 'Subject'}
+                  </label>
+                  <input
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors ${isRTL ? 'font-somar' : 'font-gotham'}`}
+                    dir={isRTL ? 'rtl' : 'ltr'}
+                    placeholder={isRTL ? 'موضوع الاستفسار' : 'Inquiry subject'}
+                  />
                 </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
 
-      {/* Footer */}
-      <footer className="bg-secondary text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-            {/* Logo */}
-            <div className="flex flex-col">
-              <img 
-                src="/styleguide/SVG/Mark line wordmark.svg" 
-                alt="Mark Line" 
-                className="h-20 w-auto mb-4"
-                style={{
-                  filter: 'brightness(0) invert(1)',
-                }}
-              />
-            </div>
+                {/* Message */}
+                <div>
+                  <label htmlFor="message" className={`block text-sm font-semibold mb-2 text-gray-900 dark:text-white ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                    {isRTL ? 'الرسالة' : 'Message'} <span className="text-primary">*</span>
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    required
+                    rows={5}
+                    value={formData.message}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors resize-none ${isRTL ? 'font-somar' : 'font-gotham'}`}
+                    dir={isRTL ? 'rtl' : 'ltr'}
+                    placeholder={isRTL ? 'اكتب رسالتك هنا...' : 'Write your message here...'}
+                  />
+                </div>
 
-            {/* Navigation Links */}
-            <div className="flex flex-wrap gap-6 uppercase text-sm font-rb-bold tracking-wider justify-center md:justify-end items-center">
-              <a href="#about" className="hover:text-primary transition-colors">
-                {t.nav.about}
-              </a>
-              <a href="#services" className="hover:text-primary transition-colors">
-                {t.nav.services}
-              </a>
-              <a href="#work" className="hover:text-primary transition-colors">
-                {t.nav.work}
-              </a>
-              <a href="#contact" className="hover:text-primary transition-colors">
-                {t.nav.contact}
-              </a>
-            </div>
-          </div>
-
-          {/* Social Media Icons */}
-          <div className="flex flex-col items-center gap-4 mb-8">
-            <div className="flex items-center gap-4">
-              <a
-                href="https://instagram.com/markline.bs"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-primary transition-all"
-              >
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                </svg>
-              </a>
-              <a
-                href="https://twitter.com/markline.bs"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-primary transition-all"
-              >
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-              </a>
-              <a
-                href="https://facebook.com/markline.bs"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-primary transition-all"
-              >
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.917 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
-              </a>
-              <a
-                href="https://linkedin.com/company/markline.bs"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-primary transition-all"
-              >
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                </svg>
-              </a>
-            </div>
-            <p className="text-sm text-white/80"><span className="text-primary">@</span>MARKLINE.BS</p>
-          </div>
-
-          {/* Copyright */}
-          <div className="text-center text-white/60 font-montserrat text-sm border-t border-white/10 pt-8">
-            <p>{t.contact.copyright}</p>
-            <p className="mt-2">{t.contact.country}</p>
+                {/* Submit Button */}
+                <motion.button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={`w-full px-8 py-4 bg-gradient-to-r from-primary to-[#9a2d45] text-white rounded-xl font-heading uppercase tracking-wider shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${isRTL ? 'font-somar' : ''}`}
+                  dir={isRTL ? 'rtl' : 'ltr'}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {isSubmitting 
+                    ? (isRTL ? 'جاري الإرسال...' : 'Sending...')
+                    : (isRTL ? 'إرسال الرسالة' : 'Send Message')
+                  }
+                </motion.button>
+              </motion.form>
+            </motion.div>
           </div>
         </div>
-      </footer>
-    </>
+      </div>
+    </section>
   );
 }
+

@@ -1,6 +1,6 @@
-# MarkLine - Creative Marketing Solutions
+# ORBIT - Smart Technical Solutions
 
-A modern Next.js application for creative marketing agency showcasing services, portfolio, and client management.
+A modern Next.js application for ORBIT, a leading Saudi company providing smart technical solutions including SMS platforms, WhatsApp Business API, HR management systems, and government portals.
 
 ## Features
 
@@ -56,10 +56,20 @@ NODE_ENV=development
 
 ### Database Setup
 
+**⚠️ IMPORTANT**: ORBIT uses a separate database from MarkLine. See [ORBIT_DATABASE_SETUP.md](./ORBIT_DATABASE_SETUP.md) for detailed setup instructions.
+
+Quick setup:
+1. Create `orbit` database in MongoDB Atlas
+2. Update `.env.local` with `MONGODB_URI=.../orbit?appName=...`
+3. Seed initial data:
+
 ```bash
-# Seed initial data
-npm run seed
-# Or visit /api/seed endpoint
+# Start dev server first
+npm run dev
+
+# Then in another terminal:
+node scripts/init-db.js
+# Or visit POST /api/seed endpoint
 ```
 
 ## Deployment

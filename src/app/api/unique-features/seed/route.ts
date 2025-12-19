@@ -26,48 +26,48 @@ export async function POST() {
       { upsert: true }
     );
 
-    // Seed features with default data
+    // Seed features with ORBIT Technical Solutions data
     const features = [
       {
-        title: 'Saudi Creativity',
-        titleAr: 'إبداع سعودي',
-        desc: 'Local expertise with global standards',
-        descAr: 'خبرة محلية بمعايير عالمية',
+        title: 'Local Expertise',
+        titleAr: 'خبرة محلية وفهم لاحتياجات السوق',
+        desc: 'Local experience and understanding of market needs',
+        descAr: 'خبرة محلية عميقة بفهم احتياجات السوق',
         order: 1,
       },
       {
-        title: 'End-to-End Execution',
-        titleAr: 'تنفيذ شامل',
-        desc: 'From idea to impact, we handle it all',
-        descAr: 'من الفكرة إلى التأثير، نتولى كل شيء',
+        title: 'High-Performance Infrastructure',
+        titleAr: 'بنية تقنية عالية الأداء',
+        desc: 'High-performance technical infrastructure',
+        descAr: 'بنية تقنية متطورة وعالية الأداء',
         order: 2,
       },
       {
-        title: 'Diverse Expertise',
-        titleAr: 'خبرات متنوعة',
-        desc: 'Team of specialized professionals',
-        descAr: 'فريق من المحترفين المتخصصين',
+        title: 'Specialized Support',
+        titleAr: 'دعم فني واستشارات متخصصة',
+        desc: 'Technical support and specialized consultations',
+        descAr: 'دعم فني واستشارات متخصصة',
         order: 3,
       },
       {
-        title: 'Attention to Detail',
-        titleAr: 'الاهتمام بالتفاصيل',
-        desc: 'Excellence in every aspect',
-        descAr: 'التميز في كل جانب',
+        title: 'Scalable Solutions',
+        titleAr: 'حلول قابلة للتوسع',
+        desc: 'Solutions that can grow with your business',
+        descAr: 'حلول قابلة للتوسع والنمو',
         order: 4,
       },
       {
-        title: 'Trust & Partnership',
-        titleAr: 'الثقة والشراكة',
-        desc: 'Building long-term relationships',
-        descAr: 'بناء علاقات طويلة الأمد',
+        title: 'Government Compliance',
+        titleAr: 'توافق كامل مع المتطلبات الحكومية',
+        desc: 'Full compliance with government requirements',
+        descAr: 'توافق كامل مع المتطلبات الحكومية',
         order: 5,
       },
       {
-        title: 'Innovation Focus',
-        titleAr: 'التركيز على الابتكار',
-        desc: 'Creative solutions that work',
-        descAr: 'حلول إبداعية تعمل',
+        title: 'Fast Deployment',
+        titleAr: 'سرعة تشغيل وتكامل سلس مع الأنظمة',
+        desc: 'Quick deployment and seamless system integration',
+        descAr: 'سرعة تشغيل وتكامل سلس مع الأنظمة',
         order: 6,
       },
     ];

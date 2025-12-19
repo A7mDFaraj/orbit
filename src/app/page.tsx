@@ -5,13 +5,10 @@ import { useTheme } from '@/contexts/ThemeContext';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import About from '@/components/About';
-import Services from '@/components/Services';
-import VideoSection from '@/components/VideoSection';
-import Portfolio from '@/components/Portfolio';
-import Testimonials from '@/components/Testimonials';
-import FAQ from '@/components/FAQ';
-import Contact from '@/components/Contact';
-import FloatingWhatsApp from '@/components/FloatingWhatsApp';
+import ProductsShowcase from '@/components/ProductsShowcase';
+import WhyOrbit from '@/components/WhyOrbit';
+import Footer from '@/components/Footer';
+import AnimatedSection from '@/components/AnimatedSection';
 
 export default function Home() {
   const { isRTL } = useLanguage();
@@ -21,14 +18,20 @@ export default function Home() {
     <div className="min-h-screen">
       <Navbar />
       <Hero key={`hero-${isRTL ? 'rtl' : 'ltr'}-${isDark ? 'dark' : 'light'}`} />
-      <About />
-      <Services />
-      <VideoSection />
-      <Portfolio />
-      <Testimonials />
-      <FAQ />
-      <Contact />
-      <FloatingWhatsApp />
+
+      <AnimatedSection delay={0.2}>
+        <About />
+      </AnimatedSection>
+
+      <AnimatedSection delay={0.2}>
+        <ProductsShowcase />
+      </AnimatedSection>
+
+      <AnimatedSection delay={0.2}>
+        <WhyOrbit />
+      </AnimatedSection>
+
+      <Footer />
     </div>
   );
 }

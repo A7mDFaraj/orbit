@@ -15,20 +15,20 @@ export async function POST() {
       });
     }
 
-    // Seed with default data from translations
+    // Seed with default data from translations - ORBIT Technical Solutions
     const settings = await AboutSettings.create({
-      title: 'About Mark Line',
-      titleAr: 'عن مارك لاين',
-      description: 'A leading Saudi entity in providing integrated business and service solutions',
-      descriptionAr: 'كيان سعودي رائد في تقديم الحلول المتكاملة للأعمال والخدمات',
+      title: 'About ORBIT',
+      titleAr: 'عن أوربيت',
+      description: 'A leading Saudi company providing smart technical solutions, enabling organizations to evolve through modern technologies that ensure higher efficiency, faster communication, and an integrated digital experience',
+      descriptionAr: 'المدار شركة سعودية رائدة في تقديم الحلول التقنية الذكية، نعمل على تمكين المؤسسات من التطور عبر تقنيات حديثة تضمن كفاءة أعلى، تواصل أسرع، وتجربة رقمية متكاملة',
       vision: 'VISION',
       visionAr: 'الرؤية',
-      visionText: 'To be the first choice for delivering integrated solutions that combine marketing, production, management, and real estate in a modern approach aligned with Saudi Vision 2030',
-      visionTextAr: 'أن نكون الخيار الأول لتقديم حلول متكاملة تجمع بين التسويق والإنتاج والإدارة والعقارات بأسلوب حديث يواكب رؤية السعودية 2030',
+      visionText: 'To be the first and most trusted technical partner in the Kingdom and beyond',
+      visionTextAr: 'أن نكون الشريك التقني الأول والأكثر ثقة في المملكة وخارجها',
       mission: 'MISSION',
       missionAr: 'الرسالة',
-      missionText: 'Providing comprehensive services that support business development and achieve impact through a specialized team across all tracks with a commitment to innovation and quality',
-      missionTextAr: 'تقديم خدمات شاملة تدعم تطوير الأعمال وتحقيق الأثر من خلال فريق متخصص في كافة المسارات مع التزام بالابتكار والجودة',
+      missionText: 'Providing innovative technical solutions with quality and professionalism that meet our clients\' changing needs',
+      missionTextAr: 'تقديم حلول تقنية مبتكرة بجودة واحترافية تلبي احتياجات عملائنا المتغيرة',
     });
 
     return NextResponse.json({

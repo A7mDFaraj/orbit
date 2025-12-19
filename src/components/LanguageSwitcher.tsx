@@ -16,7 +16,7 @@ export default function LanguageSwitcher() {
       className={`relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 overflow-hidden ${
         isDark
           ? 'bg-primary/20 border-2 border-primary/40'
-          : 'bg-gray-100 border-2 border-gray-200'
+          : 'bg-secondary/50 border-2 border-secondary/60'
       }`}
       aria-label="Switch language"
     >
@@ -33,7 +33,7 @@ export default function LanguageSwitcher() {
               transformStyle: 'preserve-3d',
               backfaceVisibility: 'hidden',
             }}
-            className={`text-xs font-rb-bold absolute ${
+            className={`text-xs font-heading absolute ${
               isDark ? 'text-primary' : 'text-gray-700'
             }`}
           >

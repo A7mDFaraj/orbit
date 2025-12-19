@@ -1,46 +1,113 @@
-/* Import Arabic font from Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap');
-
-/* Custom Brand Fonts */
+/* ORBIT Brand Fonts - Gotham (English) */
+/* Note: Font files need to be added to /public/fonts/gotham/ */
 @font-face {
-  font-family: 'RB';
-  src: url('/styleguide/RB REGULAR.TTF') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'RB';
-  src: url('/styleguide/RB LIGHT.TTF') format('truetype');
+  font-family: 'Gotham';
+  src: url('/fonts/gotham/Gotham-Light.otf') format('opentype');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'RB';
-  src: url('/styleguide/RB BOLD.TTF') format('truetype');
+  font-family: 'Gotham';
+  src: url('/fonts/gotham/Gotham-LightItalic.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gotham';
+  src: url('/fonts/gotham/Gotham-Book.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gotham';
+  src: url('/fonts/gotham/Gotham-BookItalic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gotham';
+  src: url('/fonts/gotham/Gotham-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gotham';
+  src: url('/fonts/gotham/Gotham-MediumItalic.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gotham';
+  src: url('/fonts/gotham/Gotham-Bold.otf') format('opentype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Montserrat';
-  src: url('/styleguide/Montserrat-VariableFont_wght.ttf') format('truetype');
-  font-weight: 100 900;
+  font-family: 'Gotham';
+  src: url('/fonts/gotham/Gotham-BoldItalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gotham';
+  src: url('/fonts/gotham/Gotham-Black.otf') format('opentype');
+  font-weight: 900;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Montserrat';
-  src: url('/styleguide/Montserrat-Italic-VariableFont_wght.ttf') format('truetype');
-  font-weight: 100 900;
+  font-family: 'Gotham';
+  src: url('/fonts/gotham/Gotham-BlackItalic.otf') format('opentype');
+  font-weight: 900;
   font-style: italic;
   font-display: swap;
 }
+
+/* ORBIT Brand Fonts - Somar (Arabic) */
+/* Note: Font files need to be added to /public/fonts/somar/ */
+@font-face {
+  font-family: 'Somar';
+  src: url('/fonts/somar/Somar-ExtraLight.otf') format('opentype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Somar';
+  src: url('/fonts/somar/Somar-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Somar';
+  src: url('/fonts/somar/Somar-ExtraBold.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* IBM Plex Sans - Professional Enterprise Font */
+/* Loaded via Google Fonts in layout.tsx */
 
 @tailwind base;
 @tailwind components;
@@ -55,8 +122,16 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --font-rb: 'RB', sans-serif;
-  --font-montserrat: 'Montserrat', sans-serif;
+  /* ORBIT Brand Fonts */
+  --font-gotham: 'Gotham', sans-serif;
+  --font-somar: 'Somar', sans-serif;
+  --font-ibm-plex: 'IBM Plex Sans', 'Gotham', sans-serif;
+  /* ORBIT Brand Colors (Verified from PDF) */
+  --color-primary: #7A1E2E; /* Burgundy */
+  --color-secondary: #E8DCCB; /* Beige */
+  --color-neutral: #A7A9AC; /* Cool Gray */
+  --color-black: #161616; /* ORBIT Black */
+  --color-white: #FFFFFF;
 }
 
 .dark {
@@ -72,14 +147,14 @@ html {
 }
 
 html[dir="rtl"] body {
-  font-family: 'Tajawal', 'Arial', sans-serif !important;
+  font-family: var(--font-somar), 'Arial', sans-serif !important;
   direction: rtl;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-montserrat);
+  font-family: var(--font-gotham);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -104,33 +179,23 @@ body {
   -webkit-backface-visibility: hidden;
 }
 
-/* Custom Typography Classes */
-.font-rb {
-  font-family: var(--font-rb);
-  font-weight: 400;
-  letter-spacing: 0.02em;
+/* Custom Typography Classes - ORBIT Brand */
+.font-gotham {
+  font-family: var(--font-gotham);
 }
 
-.font-rb-light {
-  font-family: var(--font-rb);
-  font-weight: 300;
-  letter-spacing: 0.03em;
+.font-somar {
+  font-family: var(--font-somar);
 }
 
-.font-rb-bold {
-  font-family: var(--font-rb);
-  font-weight: 700;
-  letter-spacing: 0.01em;
+.font-ibm-plex {
+  font-family: var(--font-ibm-plex);
 }
 
-.font-montserrat {
-  font-family: var(--font-montserrat);
-}
-
-/* Heading Styles with RB Font */
+/* Heading Styles - ORBIT Brand (Gotham) */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-rb);
-  font-weight: 700;
+  font-family: var(--font-gotham);
+  font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 1.2;
 }
@@ -151,29 +216,29 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #29ABE2 0%, #1e88b8 100%);
+  background: linear-gradient(180deg, var(--color-primary) 0%, #5a1623 100%);
   border-radius: 10px;
   border: 2px solid transparent;
   background-clip: padding-box;
 }
 
 .dark ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #29ABE2 0%, #1e88b8 100%);
+  background: linear-gradient(180deg, var(--color-primary) 0%, #5a1623 100%);
   border: 2px solid #1f2937;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #1e88b8 0%, #29ABE2 100%);
+  background: linear-gradient(180deg, #5a1623 0%, var(--color-primary) 100%);
 }
 
-/* Selection color */
+/* Selection color - ORBIT Brand (Burgundy) */
 ::selection {
-  background-color: #29ABE2;
+  background-color: var(--color-primary);
   color: white;
 }
 
 ::-moz-selection {
-  background-color: #29ABE2;
+  background-color: var(--color-primary);
   color: white;
 }
 

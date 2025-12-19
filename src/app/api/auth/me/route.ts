@@ -25,6 +25,14 @@ export async function GET() {
       );
     }
 
+    // Security: Only admin users can access the admin panel
+    if (user.role !== 'admin') {
+      return NextResponse.json(
+        { error: 'Access denied. Admin privileges required.' },
+        { status: 403 }
+      );
+    }
+
     return NextResponse.json({
       user: {
         id: user._id,
