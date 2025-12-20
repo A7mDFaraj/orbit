@@ -53,19 +53,20 @@ export default function About() {
     ],
   };
 
-  // Font sizes - decreasing from first to last
+  // Font sizes - hierarchy: 0 (largest), 2 (medium-large), 1 (medium), 3 (smallest)
   const getFontSize = (index: number) => {
-    if (index === 0) return 'text-2xl sm:text-3xl lg:text-4xl';
-    if (index === 1) return 'text-xl sm:text-2xl lg:text-3xl';
-    if (index === 2) return 'text-lg sm:text-xl lg:text-2xl';
-    return 'text-lg sm:text-xl lg:text-2xl';
+    if (index === 0) return 'text-xl sm:text-2xl lg:text-3xl xl:text-3xl'; // Largest - reduced size
+    if (index === 2) return 'text-xl sm:text-2xl lg:text-3xl xl:text-3xl'; // Medium-large (bigger than index 1)
+    if (index === 1) return 'text-lg sm:text-xl lg:text-2xl xl:text-2xl'; // Medium
+    return 'text-sm sm:text-base lg:text-lg xl:text-lg'; // Smallest (index 3) - noticeably smaller
   };
 
-  // Padding sizes - decreasing from first to last
+  // Padding sizes - hierarchy: 0 (largest), 2 (medium-large), 1 (medium), 3 (smallest)
   const getPadding = (index: number) => {
-    if (index === 0) return 'pt-10 pb-8 px-6 sm:px-8';
-    if (index === 1) return 'pt-8 pb-6 px-5 sm:px-6';
-    return 'pt-6 pb-5 px-4 sm:px-5';
+    if (index === 0) return 'pt-7 pb-6 px-5 sm:px-6 lg:px-7'; // Largest - reduced padding
+    if (index === 2) return 'pt-7 pb-5 px-5 sm:px-6 lg:px-7'; // Medium-large (bigger than index 1)
+    if (index === 1) return 'pt-6 pb-5 px-4 sm:px-5 lg:px-6'; // Medium
+    return 'pt-5 pb-4 px-4 sm:px-5 lg:px-5'; // Smallest (index 3)
   };
 
   return (
@@ -263,9 +264,12 @@ export default function About() {
                   }`}
                 >
                   {/* Decorative Circle Badge - Without Number */}
-                  <div className={`absolute -top-3 -left-3 rounded-full bg-gradient-to-br from-primary to-secondary shadow-lg z-10 opacity-80 group-hover:opacity-100 transition-opacity duration-300 ${
-                    index === 0 ? 'w-14 h-14' : 'w-12 h-12'
-                  }`} />
+                  <div 
+                    className={`absolute ${isRTL ? '-top-3 -right-3' : '-top-3 -left-3'} rounded-full bg-gradient-to-br from-primary to-secondary shadow-lg z-10 opacity-80 group-hover:opacity-100 transition-opacity duration-300 ${
+                      index === 0 ? 'w-14 h-14' : 'w-12 h-12'
+                    }`}
+                    style={index === 2 ? { width: '3.25rem', height: '3.25rem' } : {}}
+                  />
 
                   {/* Content Card */}
                   <div className={`relative rounded-2xl bg-gradient-to-br from-white/90 to-gray-50/90 dark:from-gray-800/90 dark:to-gray-900/90 backdrop-blur-xl border-2 border-gray-200/50 dark:border-gray-700/50 group-hover:border-primary dark:group-hover:border-primary transition-all duration-500 shadow-md group-hover:shadow-xl group-hover:shadow-primary/20 overflow-hidden ${getPadding(index)}`}>
@@ -275,12 +279,18 @@ export default function About() {
                     />
 
                     {/* Decorative Corner */}
-                    <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-primary/5 to-transparent rounded-bl-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    {isRTL ? (
+                      <div className="absolute top-0 left-0 w-20 h-20 bg-gradient-to-br from-primary/5 to-transparent rounded-br-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    ) : (
+                      <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-primary/5 to-transparent rounded-bl-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    )}
 
                     <div className="relative z-10">
                       <motion.h4
-                        className={`font-heading text-gray-900 dark:text-white uppercase tracking-tight group-hover:text-primary dark:group-hover:text-primary transition-colors duration-300 ${getFontSize(index)}`}
-                        style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                        className={`font-heading text-gray-900 dark:text-white uppercase tracking-tight group-hover:text-primary dark:group-hover:text-primary transition-colors duration-300 ${getFontSize(index)} ${isRTL ? 'font-somar' : 'font-heading'} leading-tight`}
+                        style={{ 
+                          fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif',
+                        }}
                         dir={isRTL ? 'rtl' : 'ltr'}
                         initial={{ opacity: 0 }}
                         animate={inView ? { opacity: 1 } : {}}
@@ -292,7 +302,7 @@ export default function About() {
                       {/* Elegant Underline */}
                       <motion.div
                         className={`h-0.5 bg-gradient-to-r from-primary via-secondary to-primary rounded-full ${
-                          index === 0 ? 'mt-6' : index === 1 ? 'mt-5' : 'mt-4'
+                          index === 0 ? 'mt-4' : index === 2 ? 'mt-4' : index === 1 ? 'mt-3' : 'mt-3'
                         }`}
                         initial={{ width: 0 }}
                         animate={inView ? { width: '100%' } : {}}

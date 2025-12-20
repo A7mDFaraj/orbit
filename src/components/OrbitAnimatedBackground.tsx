@@ -7,12 +7,14 @@ interface OrbitAnimatedBackgroundProps {
   opacity?: number;
   speed?: number;
   size?: 'small' | 'medium' | 'large';
+  color?: string; // Custom color override (e.g., 'rgba(255, 255, 255, 0.3)' for white on dark backgrounds)
 }
 
 export default function OrbitAnimatedBackground({ 
   opacity = 0.03,
   speed = 1,
-  size = 'large'
+  size = 'large',
+  color
 }: OrbitAnimatedBackgroundProps) {
   const { isDark } = useTheme();
   
@@ -28,9 +30,9 @@ export default function OrbitAnimatedBackground({
     { radius: baseSize * 0.7, speed: 40 * speed, delay: 8 },
   ];
 
-  const orbitColor = isDark 
+  const orbitColor = color || (isDark 
     ? 'rgba(122, 30, 46, 0.15)' // Primary burgundy for dark mode
-    : 'rgba(122, 30, 46, 0.08)'; // Lighter burgundy for light mode
+    : 'rgba(122, 30, 46, 0.08)'); // Lighter burgundy for light mode
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden gpu-accelerated" style={{ zIndex: 0 }}>
@@ -142,15 +144,17 @@ export default function OrbitAnimatedBackground({
           <motion.div
             key={particleIndex}
             className="absolute rounded-full"
-            style={{
-              width: 4,
-              height: 4,
-              background: isDark ? 'rgba(122, 30, 46, 0.4)' : 'rgba(122, 30, 46, 0.2)',
-              left: '50%',
-              top: '50%',
-              transformOrigin: 'center',
-              willChange: 'transform',
-            }}
+              style={{
+                width: 4,
+                height: 4,
+                background: color 
+                  ? color.replace(/[\d.]+\)$/, '0.6)') // Use custom color with higher opacity for particles
+                  : (isDark ? 'rgba(122, 30, 46, 0.4)' : 'rgba(122, 30, 46, 0.2)'),
+                left: '50%',
+                top: '50%',
+                transformOrigin: 'center',
+                willChange: 'transform',
+              }}
             animate={{
               rotate: [0, 360],
               x: [
