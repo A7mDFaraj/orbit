@@ -9,11 +9,12 @@ export const runtime = 'nodejs';
 // GET single news by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     await connectDB();
-    const news = await News.findById(params.id);
+    const news = await News.findById(id);
     
     if (!news) {
       return NextResponse.json(
@@ -35,16 +36,17 @@ export async function GET(
 // PUT update news by ID (Admin only)
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireAdmin();
     
+    const { id } = await params;
     const body = await request.json();
     await connectDB();
     
     const news = await News.findByIdAndUpdate(
-      params.id,
+      id,
       body,
       { new: true, runValidators: true }
     );
@@ -69,13 +71,14 @@ export async function PUT(
 // DELETE news by ID (Admin only)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireAdmin();
+    const { id } = await params;
     await connectDB();
     
-    const news = await News.findByIdAndDelete(params.id);
+    const news = await News.findByIdAndDelete(id);
     
     if (!news) {
       return NextResponse.json(
