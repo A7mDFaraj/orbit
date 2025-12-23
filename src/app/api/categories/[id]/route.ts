@@ -9,11 +9,12 @@ export const runtime = 'nodejs';
 // GET single category by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     await connectDB();
-    const category = await Category.findById(params.id);
+    const category = await Category.findById(id);
     
     if (!category) {
       return NextResponse.json(
@@ -35,16 +36,17 @@ export async function GET(
 // PUT update category by ID (Admin only)
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireAdmin();
     
+    const { id } = await params;
     const body = await request.json();
     await connectDB();
     
     const category = await Category.findByIdAndUpdate(
-      params.id,
+      id,
       body,
       { new: true, runValidators: true }
     );
@@ -69,13 +71,14 @@ export async function PUT(
 // DELETE category by ID (Admin only)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireAdmin();
+    const { id } = await params;
     await connectDB();
     
-    const category = await Category.findByIdAndDelete(params.id);
+    const category = await Category.findByIdAndDelete(id);
     
     if (!category) {
       return NextResponse.json(
