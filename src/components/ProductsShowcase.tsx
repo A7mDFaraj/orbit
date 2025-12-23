@@ -117,15 +117,15 @@ export default function ProductsShowcase() {
               className="text-4xl sm:text-5xl lg:text-6xl font-heading mb-6 text-gray-900 dark:text-white"
               style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
             >
-              {isRTL ? 'حلولنا' : 'Our Solutions'}
+              {isRTL ? 'استكشف حلولنا بالتفصيل' : 'Explore Our Solutions in Detail'}
             </motion.h2>
             <motion.p
               className="text-xl sm:text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto font-gotham"
               style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
             >
               {isRTL
-                ? 'حلول تقنية شاملة مصممة خصيصاً لاحتياجات عملك'
-                : 'Comprehensive technology solutions designed specifically for your business needs'}
+                ? 'اكتشف كيف يمكن لحلولنا أن تحول عملك وتدفع به نحو النجاح'
+                : 'Discover how our solutions can transform your business and drive success'}
             </motion.p>
           </motion.div>
 
@@ -211,8 +211,37 @@ export default function ProductsShowcase() {
                         className="text-gray-600 dark:text-gray-400 mb-6 font-gotham leading-relaxed relative z-10"
                         style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
                       >
-                        {shortDesc}
+                        {isRTL ? solution.descriptionAr : solution.descriptionEn}
                       </p>
+
+                      {/* Features List */}
+                      <div className="mb-6 relative z-10">
+                        <ul className="space-y-2">
+                          {(isRTL ? solution.featuresAr : solution.features).map((feature, featureIndex) => (
+                            <motion.li
+                              key={featureIndex}
+                              className="flex items-start gap-2 text-sm sm:text-base text-gray-600 dark:text-gray-400 font-gotham"
+                              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={inView ? { opacity: 1, x: 0 } : {}}
+                              transition={{ delay: index * 0.1 + featureIndex * 0.05 }}
+                            >
+                              <motion.span
+                                className="text-primary mt-1 flex-shrink-0"
+                                animate={{ scale: [1, 1.2, 1] }}
+                                transition={{
+                                  duration: 2,
+                                  repeat: Infinity,
+                                  delay: featureIndex * 0.3,
+                                }}
+                              >
+                                •
+                              </motion.span>
+                              <span>{feature}</span>
+                            </motion.li>
+                          ))}
+                        </ul>
+                      </div>
 
                       <motion.div
                         className="flex items-center gap-2 text-primary font-heading uppercase tracking-wider text-sm relative z-10"

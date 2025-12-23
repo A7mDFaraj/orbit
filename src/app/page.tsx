@@ -20,15 +20,15 @@ export default function Home() {
       <Hero key={`hero-${isRTL ? 'rtl' : 'ltr'}-${isDark ? 'dark' : 'light'}`} />
 
       <AnimatedSection delay={0.2}>
+        <WhyOrbit />
+      </AnimatedSection>
+
+      <AnimatedSection delay={0.2}>
         <About />
       </AnimatedSection>
 
       <AnimatedSection delay={0.2}>
         <ProductsShowcase />
-      </AnimatedSection>
-
-      <AnimatedSection delay={0.2}>
-        <WhyOrbit />
       </AnimatedSection>
 
       <Footer />

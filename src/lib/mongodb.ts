@@ -27,28 +27,40 @@ if (!global.mongoose) {
 }
 
 export async function connectDB() {
-  if (cached.conn) {
-    return cached.conn;
-  }
-
-  if (!cached.promise) {
-    const opts = {
-      bufferCommands: false,
-    };
-
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      console.log('✅ MongoDB Connected');
-      return mongoose;
-    });
-  }
-
   try {
-    cached.conn = await cached.promise;
-  } catch (e) {
-    cached.promise = null;
-    throw e;
-  }
+    if (cached.conn) {
+      return cached.conn;
+    }
 
-  return cached.conn;
+    if (!cached.promise) {
+      const opts = {
+        bufferCommands: false,
+      };
+
+      cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+        console.log('✅ MongoDB Connected');
+        return mongoose;
+      }).catch((error) => {
+        cached.promise = null;
+        console.error('❌ MongoDB Connection Error:', error);
+        throw new Error(`MongoDB connection failed: ${error.message}`);
+      });
+    }
+
+    try {
+      cached.conn = await cached.promise;
+    } catch (e) {
+      cached.promise = null;
+      throw e;
+    }
+
+    return cached.conn;
+  } catch (error) {
+    cached.promise = null;
+    cached.conn = null;
+    const errorMessage = error instanceof Error ? error.message : 'Unknown database error';
+    console.error('Database connection error:', errorMessage);
+    throw new Error(`Database connection failed: ${errorMessage}. Please check your MONGODB_URI in .env.local`);
+  }
 }
 

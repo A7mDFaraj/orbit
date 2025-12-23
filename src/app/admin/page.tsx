@@ -57,12 +57,22 @@ export default function AdminLogin() {
     const observer = createThemeObserver();
     
     fetch('/api/auth/me')
-      .then((res) => {
+      .then(async (res) => {
         if (res.ok) {
-          router.push('/admin/dashboard');
+          try {
+            const contentType = res.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+              await res.json();
+              router.push('/admin/dashboard');
+            }
+          } catch (error) {
+            // Ignore JSON parse errors, user is not logged in
+          }
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        // Ignore errors, user is not logged in
+      });
     
     return () => {
       if (observer) {
@@ -82,7 +92,25 @@ export default function AdminLogin() {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await res.json();
+      // Check if response is JSON
+      const contentType = res.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await res.text();
+        console.error('Non-JSON response:', text.substring(0, 200));
+        toast.error('Server returned an invalid response. Please check the server logs.');
+        setLoading(false);
+        return;
+      }
+
+      let data;
+      try {
+        data = await res.json();
+      } catch (jsonError) {
+        console.error('JSON parse error:', jsonError);
+        toast.error('Invalid response from server. Please try again.');
+        setLoading(false);
+        return;
+      }
 
       if (res.ok) {
         toast.success('Login successful!');
@@ -90,10 +118,20 @@ export default function AdminLogin() {
           router.push('/admin/dashboard');
         }, 1000);
       } else {
-        toast.error(data.error || 'Login failed');
+        // Show more specific error messages
+        if (res.status === 401) {
+          toast.error(data.error || 'Invalid email or password');
+        } else if (res.status === 403) {
+          toast.error(data.error || 'Admin access required');
+        } else if (res.status === 500) {
+          toast.error(data.error || 'Server error. Please check if the database is connected.');
+        } else {
+          toast.error(data.error || 'Login failed. Please try again.');
+        }
       }
     } catch (error) {
-      toast.error('An error occurred');
+      console.error('Login error:', error);
+      toast.error('Network error. Please check if the server is running.');
     } finally {
       setLoading(false);
     }
@@ -182,6 +220,20 @@ export default function AdminLogin() {
           </button>
         </form>
 
+        <div className="mt-6 pt-6 border-t border-neutral/20">
+          <p className="text-xs text-gray-500 text-center mb-3 font-gotham">
+            Don't have an admin account?
+          </p>
+          <a
+            href="/admin/setup"
+            className="block w-full text-center bg-secondary text-primary py-3 px-4 rounded-lg font-heading font-semibold hover:bg-secondary/80 transition-colors uppercase tracking-wide text-sm mb-3"
+          >
+            Create Admin Account
+          </a>
+          <p className="text-xs text-gray-400 text-center font-gotham">
+            Or use API: POST /api/auth/create-admin
+          </p>
+        </div>
 
         <div className="mt-6 text-center">
           <a

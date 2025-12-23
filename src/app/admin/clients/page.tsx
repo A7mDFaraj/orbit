@@ -484,7 +484,7 @@ export default function ClientsAdmin() {
                   </div>
                   {(newVideoUrl.includes('drive.google.com') || newVideoUrl.includes('imgur.com')) && (
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-2 text-xs text-blue-700">
-                      <strong>💡 Tip:</strong> Google Drive and Imgur links will be automatically converted to direct video URLs.
+                      <strong className="font-heading">Tip:</strong> Google Drive and Imgur links will be automatically converted to direct video URLs.
                     </div>
                   )}
                   {formData.workVideo.length > 0 && (
@@ -549,7 +549,7 @@ export default function ClientsAdmin() {
                   </div>
                   {(newImageUrl.includes('drive.google.com') || newImageUrl.includes('imgur.com')) && (
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-2 text-xs text-blue-700">
-                      <strong>💡 Tip:</strong> Google Drive and Imgur links will be automatically converted to direct image URLs.
+                      <strong className="font-heading">Tip:</strong> Google Drive and Imgur links will be automatically converted to direct image URLs.
                     </div>
                   )}
                   {formData.workImages.length > 0 && (

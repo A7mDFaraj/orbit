@@ -182,7 +182,7 @@ export default function InquiriesPage() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-4xl font-rb-bold text-gray-900 dark:text-white uppercase tracking-tighter mb-2">
+              <h1 className="text-4xl font-heading font-bold text-gray-900 dark:text-white uppercase tracking-tighter mb-2">
                 Client Inquiries
               </h1>
               <p className="text-gray-600 dark:text-gray-400">
@@ -191,7 +191,7 @@ export default function InquiriesPage() {
             </div>
             <button
               onClick={exportToCSV}
-              className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-rb-bold uppercase text-sm tracking-wider shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
+              className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-heading font-bold uppercase text-sm tracking-wider shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
             >
               <span>📥</span> Export CSV
             </button>
@@ -201,19 +201,19 @@ export default function InquiriesPage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-4 text-white shadow-lg">
               <p className="text-sm opacity-90 mb-1">Total Inquiries</p>
-              <p className="text-3xl font-rb-bold">{stats.total}</p>
+              <p className="text-3xl font-heading font-bold">{stats.total}</p>
             </div>
             <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg p-4 text-white shadow-lg">
               <p className="text-sm opacity-90 mb-1">New Inquiries</p>
-              <p className="text-3xl font-rb-bold">{stats.new}</p>
+              <p className="text-3xl font-heading font-bold">{stats.new}</p>
             </div>
             <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg p-4 text-white shadow-lg">
               <p className="text-sm opacity-90 mb-1">With Package</p>
-              <p className="text-3xl font-rb-bold">{stats.withPackage}</p>
+              <p className="text-3xl font-heading font-bold">{stats.withPackage}</p>
             </div>
             <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-lg p-4 text-white shadow-lg">
               <p className="text-sm opacity-90 mb-1">Charity Packages</p>
-              <p className="text-3xl font-rb-bold">{stats.charity}</p>
+              <p className="text-3xl font-heading font-bold">{stats.charity}</p>
             </div>
           </div>
 
@@ -222,7 +222,7 @@ export default function InquiriesPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
               {/* Search */}
               <div className="lg:col-span-2">
-                <label className="block text-sm font-rb-bold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wider">
+                <label className="block text-sm font-heading font-bold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wider">
                   🔍 Search
                 </label>
                 <input
@@ -236,7 +236,7 @@ export default function InquiriesPage() {
 
               {/* Status Filter */}
               <div>
-                <label className="block text-sm font-rb-bold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wider">
+                <label className="block text-sm font-heading font-bold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wider">
                   Status
                 </label>
                 <select
@@ -255,7 +255,7 @@ export default function InquiriesPage() {
 
               {/* Package Type Filter */}
               <div>
-                <label className="block text-sm font-rb-bold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wider">
+                <label className="block text-sm font-heading font-bold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wider">
                   Package Type
                 </label>
                 <select
@@ -273,7 +273,7 @@ export default function InquiriesPage() {
 
               {/* Sort */}
               <div>
-                <label className="block text-sm font-rb-bold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wider">
+                <label className="block text-sm font-heading font-bold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wider">
                   Sort By
                 </label>
                 <div className="flex gap-2">
@@ -314,25 +314,25 @@ export default function InquiriesPage() {
               <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead className="bg-gray-50 dark:bg-gray-900">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-heading font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Name
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-heading font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Contact
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-heading font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Package
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-heading font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Service
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-heading font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-heading font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Date
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-heading font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
@@ -365,7 +365,11 @@ export default function InquiriesPage() {
                         {inquiry.selectedPackage ? (
                           <div>
                             <div className="flex items-center gap-1 text-sm font-medium text-gray-900 dark:text-white">
-                              {inquiry.packageType === 'charity' && <span className="text-green-500">💚</span>}
+                              {inquiry.packageType === 'charity' && (
+                                <svg className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                              )}
                               <span className="truncate max-w-[120px]">{inquiry.packageName}</span>
                             </div>
                             {inquiry.packagePrice && (
@@ -432,7 +436,7 @@ export default function InquiriesPage() {
         {showModal && selectedInquiry && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-white dark:bg-gray-800 rounded-lg p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-              <h2 className="text-2xl font-rb-bold text-gray-900 dark:text-white mb-6">
+              <h2 className="text-2xl font-heading font-bold text-gray-900 dark:text-white mb-6">
                 Inquiry Details
               </h2>
 
@@ -440,15 +444,20 @@ export default function InquiriesPage() {
                 {/* Package Info - Highlighted */}
                 {selectedInquiry.selectedPackage && (
                   <div className="bg-gradient-to-r from-primary/10 to-blue-500/10 dark:from-primary/20 dark:to-blue-500/20 rounded-xl p-4 border-2 border-primary/30">
-                    <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                      📦 Selected Package
+                    <p className="text-sm font-heading font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                      <svg className="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                      </svg>
+                      Selected Package
                     </p>
                     <div className="flex items-center gap-2">
                       {selectedInquiry.packageType === 'charity' && (
-                        <span className="text-2xl">💚</span>
+                        <svg className="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
                       )}
                       <div>
-                        <p className="text-lg font-rb-bold text-gray-900 dark:text-white">
+                        <p className="text-lg font-heading font-bold text-gray-900 dark:text-white">
                           {selectedInquiry.packageName}
                         </p>
                         {selectedInquiry.packagePrice && (

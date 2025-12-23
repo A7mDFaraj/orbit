@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useAnimationControls, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import Orb from './Orb';
@@ -11,7 +12,12 @@ export default function Hero() {
   const { isRTL } = useLanguage();
   const { isDark } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [isMarqueePaused, setIsMarqueePaused] = useState(false);
+  const [currentSolutionIndex, setCurrentSolutionIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
+  const marqueeControls = useAnimationControls();
+  const carouselRef = useRef<NodeJS.Timeout | null>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end start'],
@@ -34,12 +40,88 @@ export default function Hero() {
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    if (mounted) {
+      if (!isMarqueePaused) {
+        marqueeControls.start({
+          x: ['0%', '-50%'],
+          transition: {
+            repeat: Infinity,
+            repeatType: 'loop',
+            duration: 30,
+            ease: 'linear',
+          },
+        });
+      } else {
+        marqueeControls.stop();
+      }
+    }
+  }, [isMarqueePaused, marqueeControls, mounted]);
+
+  // Solutions data
+  const solutions = [
+    {
+      slug: 'sms-platform',
+      titleEn: 'SMS Platform',
+      titleAr: 'الرسائل النصية',
+      descriptionEn: 'An intelligent messaging platform that ensures your messages reach the right time with the highest delivery rate.',
+      descriptionAr: 'منصة رسائل ذكية تضمن وصول رسائلك في الوقت المناسب وبأعلى نسبة تسليم',
+      icon: '📱',
+      image: undefined, // Will be added in future: '/solutions/sms-platform.jpg'
+    },
+    {
+      slug: 'whatsapp-business-api',
+      titleEn: 'WhatsApp Business API',
+      titleAr: 'واتساب اعمال API',
+      descriptionEn: 'An integrated solution for official customer communication via WhatsApp with message automation.',
+      descriptionAr: 'حل متكامل للتواصل الرسمي مع العملاء عبر واتساب مع أتمتة الرسائل',
+      icon: '💬',
+      image: undefined, // Will be added in future: '/solutions/whatsapp.jpg'
+    },
+    {
+      slug: 'otime',
+      titleEn: 'OTime - Attendance & HR',
+      titleAr: 'اوتايم OTime',
+      descriptionEn: 'A smart attendance and departure system that helps you manage work hours accurately.',
+      descriptionAr: 'نظام حضور وانصراف ذكي يساعدك على إدارة أوقات العمل بدقة',
+      icon: '⏰',
+      image: undefined, // Will be added in future: '/solutions/otime.jpg'
+    },
+    {
+      slug: 'gov-gate',
+      titleEn: 'Gov Gate - Government Portal',
+      titleAr: 'البوابة الحكومية Gov Gate',
+      descriptionEn: 'An official messaging portal designed for government entities with highest security levels.',
+      descriptionAr: 'بوابة مراسلات رسمية مصممة للجهات الحكومية بأعلى مستويات الأمان',
+      icon: '🏛️',
+      image: undefined, // Will be added in future: '/solutions/gov-gate.jpg'
+    },
+  ];
+
+  // Auto-play carousel
+  useEffect(() => {
+    if (mounted && isAutoPlaying) {
+      carouselRef.current = setInterval(() => {
+        setCurrentSolutionIndex((prev) => (prev + 1) % solutions.length);
+      }, 5000);
+
+      return () => {
+        if (carouselRef.current) {
+          clearInterval(carouselRef.current);
+        }
+      };
+    }
+  }, [mounted, isAutoPlaying, solutions.length]);
+
+  const goToSolution = (index: number) => {
+    setCurrentSolutionIndex(index);
+    setIsAutoPlaying(false);
+    setTimeout(() => setIsAutoPlaying(true), 10000);
+  };
+
   // Use ORBIT translations directly - no API fetch
   const heroContent = {
     title: isRTL ? 'أوربيت نجاحك' : 'ORBIT Your Success',
-    description: isRTL
-      ? 'المدار شركة سعودية رائدة في تقديم الحلول التقنية الذكية، نعمل على تمكين المؤسسات من التطور عبر تقنيات حديثة تضمن كفاءة أعلى، تواصل أسرع، وتجربة رقمية متكاملة'
-      : 'ORBIT is a leading Saudi company providing smart technical solutions. We work to enable organizations to evolve through modern technologies that ensure higher efficiency, faster communication, and an integrated digital experience',
   };
 
   return (
@@ -202,7 +284,7 @@ export default function Hero() {
 
       {/* Main Content - GPU accelerated for smooth parallax */}
       <motion.div
-        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 gpu-accelerated"
+        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 gpu-accelerated"
         style={{
           opacity,
           scale,
@@ -216,249 +298,318 @@ export default function Hero() {
           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
           className="text-center"
         >
-          {/* Enhanced Glow Behind Title - Optimized blur */}
+          {/* Solutions Carousel - Full Space */}
           <motion.div
-            className="absolute inset-0 flex items-center justify-center pointer-events-none gpu-accelerated"
-            style={{ zIndex: -1, willChange: 'transform, opacity' }}
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={{
-              opacity: [0.25, 0.45, 0.25],
-              scale: [0.95, 1.05, 0.95],
-            }}
-            transition={{
-              duration: 5,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-          >
-            <div
-              className="w-full max-w-5xl h-40 blur-2xl"
-              style={{
-                background: `radial-gradient(ellipse, ${isDark ? 'rgba(122, 30, 46, 0.4)' : 'rgba(122, 30, 46, 0.2)'} 0%, transparent 70%)`,
-                transform: 'translateZ(0)',
-              }}
-            />
-          </motion.div>
-
-          {/* Main Title - Enhanced Staggered Word Animation */}
-          <motion.h1
-            className={`font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl mb-8 sm:mb-12 leading-tight relative ${isRTL ? 'font-somar' : ''}`}
-            style={{
-              color: isDark ? '#FFFFFF' : '#161616',
-              textShadow: isDark
-                ? '0 0 80px rgba(122, 30, 46, 0.5), 0 0 120px rgba(122, 30, 46, 0.4), 0 4px 20px rgba(0,0,0,0.6)'
-                : '0 2px 40px rgba(122, 30, 46, 0.25), 0 4px 20px rgba(0,0,0,0.15)',
-            }}
-            dir={isRTL ? 'rtl' : 'ltr'}
-          >
-            {heroContent.title.split(' ').map((word, wordIndex) => (
-              <motion.span
-                key={wordIndex}
-                className="inline-block relative gpu-accelerated"
-                initial={{
-                  opacity: 0,
-                  y: 50,
-                  rotateX: -90,
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                  rotateX: 0,
-                }}
-                style={{
-                  ...{
-                    marginRight: isRTL ? '0' : '0.25em',
-                    marginLeft: isRTL ? '0.25em' : '0',
-                    transformStyle: 'preserve-3d',
-                  },
-                  willChange: 'transform, opacity',
-                  transform: 'translateZ(0)',
-                }}
-                transition={{
-                  duration: 1.2,
-                  delay: 0.6 + wordIndex * 0.18,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                whileHover={{
-                  scale: 1.08,
-                  y: -5,
-                  transition: { duration: 0.3, ease: 'easeOut' },
-                }}
-              >
-                <span className="relative z-10">{word}</span>
-                {/* Subtle underline effect on hover */}
-                <motion.span
-                  className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-primary rounded-full"
-                  initial={{ scaleX: 0, opacity: 0 }}
-                  whileHover={{ scaleX: 1, opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                />
-              </motion.span>
-            ))}
-          </motion.h1>
-
-          {/* Enhanced Animated Divider with Gradient Flow */}
-          <motion.div
-            className="h-1 w-32 bg-gradient-to-r from-primary via-secondary to-primary mx-auto mb-8 sm:mb-12 rounded-full overflow-hidden relative"
-            initial={{ width: 0, opacity: 0 }}
-            animate={{ width: 128, opacity: 1 }}
-            transition={{
-              duration: 1.5,
-              delay: 1.5,
-              ease: [0.16, 1, 0.3, 1],
-            }}
-          >
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-              animate={{
-                x: ['-100%', '200%'],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: 'linear',
-              }}
-            />
-            {/* Pulsing dot in center */}
-            <motion.div
-              className="absolute inset-0 flex items-center justify-center"
-              animate={{
-                scale: [1, 1.5, 1],
-                opacity: [0.5, 1, 0.5],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-            >
-              <div className="w-2 h-2 rounded-full bg-primary" />
-            </motion.div>
-          </motion.div>
-
-          {/* Enhanced Description with Character Reveal Effect */}
-          <motion.p
-            className={`font-gotham text-lg sm:text-xl md:text-2xl mb-8 max-w-4xl mx-auto leading-relaxed relative ${isRTL ? 'font-somar' : ''}`}
-            style={{
-              color: isDark ? '#E8DCCB' : '#161616',
-              textShadow: isDark
-                ? '0 2px 15px rgba(0,0,0,0.4)'
-                : '0 1px 8px rgba(0,0,0,0.15)',
-            }}
-            dir={isRTL ? 'rtl' : 'ltr'}
+            className="w-full max-w-7xl mx-auto relative"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
               duration: 1.2,
-              delay: 1.8,
+              delay: 0.6,
               ease: [0.16, 1, 0.3, 1],
             }}
+            onMouseEnter={() => setIsAutoPlaying(false)}
+            onMouseLeave={() => setIsAutoPlaying(true)}
           >
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{
-                duration: 1,
-                delay: 2,
-                ease: 'easeOut',
-              }}
-              className="inline-block gpu-accelerated"
-              style={{ willChange: 'opacity' }}
-            >
-              {heroContent.description}
-            </motion.span>
-          </motion.p>
+            {/* Navigation Arrows - Outside content */}
+            <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between pointer-events-none z-20">
+              <motion.button
+                className="pointer-events-auto w-12 h-12 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-neutral/20 flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition-all shadow-lg -translate-x-4 sm:-translate-x-6"
+                onClick={() =>
+                  goToSolution(
+                    (currentSolutionIndex - 1 + solutions.length) % solutions.length
+                  )
+                }
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d={isRTL ? 'M9 5l7 7-7 7' : 'M15 19l-7-7 7-7'}
+                  />
+                </svg>
+              </motion.button>
+              <motion.button
+                className="pointer-events-auto w-12 h-12 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-neutral/20 flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition-all shadow-lg translate-x-4 sm:translate-x-6"
+                onClick={() => goToSolution((currentSolutionIndex + 1) % solutions.length)}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d={isRTL ? 'M15 19l-7-7 7-7' : 'M9 5l7 7-7 7'}
+                  />
+                </svg>
+              </motion.button>
+            </div>
 
-          {/* Decorative Elements - Subtle Accents */}
+            <div className="relative bg-white/10 dark:bg-black/20 backdrop-blur-xl rounded-2xl p-6 sm:p-8 lg:p-10 border border-white/20 dark:border-white/10 overflow-hidden">
+              <div className="relative z-10">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentSolutionIndex}
+                    initial={{ opacity: 0, x: 50, scale: 0.95 }}
+                    animate={{ opacity: 1, x: 0, scale: 1 }}
+                    exit={{ opacity: 0, x: -50, scale: 0.95 }}
+                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center"
+                  >
+                    {/* Icon/Image Side */}
+                    <div className="relative flex items-center justify-center">
+                      <motion.div
+                        className="relative w-full h-48 sm:h-64 md:h-80 lg:h-96 rounded-xl overflow-hidden bg-gradient-to-br from-primary/20 via-secondary/20 to-transparent flex items-center justify-center"
+                        whileHover={{ scale: 1.02 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        {solutions[currentSolutionIndex].image ? (
+                          // Image support for future
+                          <img
+                            src={solutions[currentSolutionIndex].image}
+                            alt={isRTL ? solutions[currentSolutionIndex].titleAr : solutions[currentSolutionIndex].titleEn}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                        ) : (
+                          // Icon fallback
+                          <motion.div
+                            className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl"
+                            animate={{
+                              rotate: [0, 5, -5, 0],
+                              scale: [1, 1.1, 1],
+                            }}
+                            transition={{
+                              duration: 4,
+                              repeat: Infinity,
+                              ease: 'easeInOut',
+                            }}
+                          >
+                            {solutions[currentSolutionIndex].icon}
+                          </motion.div>
+                        )}
+                      </motion.div>
+                    </div>
+
+                    {/* Content Side */}
+                    <div className="space-y-4 sm:space-y-6 flex flex-col justify-center">
+                      <motion.h3
+                        className={`font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold ${isRTL ? 'font-somar' : ''}`}
+                        style={{
+                          color: isDark ? '#E8DCCB' : '#161616',
+                          textShadow: isDark
+                            ? '0 2px 10px rgba(0,0,0,0.3)'
+                            : '0 1px 5px rgba(0,0,0,0.1)',
+                        }}
+                        dir={isRTL ? 'rtl' : 'ltr'}
+                      >
+                        {isRTL
+                          ? solutions[currentSolutionIndex].titleAr
+                          : solutions[currentSolutionIndex].titleEn}
+                      </motion.h3>
+                      <motion.p
+                        className={`text-base sm:text-lg md:text-xl lg:text-2xl text-gray-700 dark:text-gray-300 leading-relaxed ${isRTL ? 'font-somar' : 'font-gotham'}`}
+                        style={{
+                          color: isDark ? '#E8DCCB' : '#161616',
+                        }}
+                        dir={isRTL ? 'rtl' : 'ltr'}
+                      >
+                        {isRTL
+                          ? solutions[currentSolutionIndex].descriptionAr
+                          : solutions[currentSolutionIndex].descriptionEn}
+                      </motion.p>
+                      <Link href={`/solutions/${solutions[currentSolutionIndex].slug}`}>
+                        <motion.div
+                          whileHover={{ x: isRTL ? -5 : 5 }}
+                          className="flex items-center gap-2 text-primary font-heading font-medium cursor-pointer text-base sm:text-lg md:text-xl"
+                        >
+                          <span className={isRTL ? 'font-somar' : ''}>
+                            {isRTL ? 'اكتشف المزيد' : 'Discover More'}
+                          </span>
+                          <motion.svg
+                            className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            animate={{ x: [0, isRTL ? -5 : 5, 0] }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d={isRTL ? 'M15 19l-7-7 7-7' : 'M9 5l7 7-7 7'}
+                            />
+                          </motion.svg>
+                        </motion.div>
+                      </Link>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+
+                {/* Navigation Dots */}
+                <div className="flex items-center justify-center gap-3 mt-6 sm:mt-8">
+                  {solutions.map((_, index) => (
+                    <motion.button
+                      key={index}
+                      className={`relative w-3 h-3 rounded-full transition-all ${
+                        index === currentSolutionIndex
+                          ? 'bg-primary'
+                          : 'bg-white/40 dark:bg-white/20 hover:bg-white/60'
+                      }`}
+                      onClick={() => goToSolution(index)}
+                      whileHover={{ scale: 1.2 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      {index === currentSolutionIndex && (
+                        <motion.div
+                          className="absolute inset-0 rounded-full bg-primary"
+                          layoutId="activeDot"
+                          transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                        />
+                      )}
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
+
+      {/* Trusted By Section - Horizontal Looping Marquee */}
+      <motion.div
+        className="absolute bottom-0 left-0 right-0 z-10 overflow-hidden pb-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{
+          duration: 1.2,
+          delay: 2.6,
+          ease: [0.16, 1, 0.3, 1],
+        }}
+      >
+        {/* Backdrop Blur/Shadow */}
+        <div
+          className="absolute inset-0 -z-10"
+          style={{
+            background: isDark
+              ? 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 50%, transparent 100%)'
+              : 'linear-gradient(to top, rgba(248,249,250,0.95) 0%, rgba(248,249,250,0.7) 50%, transparent 100%)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+          }}
+        />
+
+        {/* Trusted By Heading */}
+        <motion.div
+          className="text-center mb-4 relative z-10 px-4"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 2.8 }}
+        >
+          <motion.p
+            className={`font-heading text-sm sm:text-base md:text-lg font-medium tracking-wider ${isRTL ? 'font-somar' : ''}`}
+            style={{
+              color: isDark ? '#E8DCCB' : '#161616',
+              textShadow: isDark
+                ? '0 2px 8px rgba(0,0,0,0.4)'
+                : '0 1px 4px rgba(0,0,0,0.08)',
+            }}
+            dir={isRTL ? 'rtl' : 'ltr'}
+          >
+            {isRTL ? 'شركاء النجاح' : 'Success Partners'}
+          </motion.p>
+        </motion.div>
+
+        {/* Horizontal Looping Marquee */}
+        <div className="relative w-full overflow-hidden">
+          {/* Gradient Fade Edges */}
+          <div
+            className="absolute left-0 top-0 bottom-0 w-32 z-20 pointer-events-none"
+            style={{
+              background: isDark
+                ? 'linear-gradient(to right, rgba(0,0,0,0.8) 0%, transparent 100%)'
+                : 'linear-gradient(to right, rgba(248,249,250,0.9) 0%, transparent 100%)',
+            }}
+          />
+          <div
+            className="absolute right-0 top-0 bottom-0 w-32 z-20 pointer-events-none"
+            style={{
+              background: isDark
+                ? 'linear-gradient(to left, rgba(0,0,0,0.8) 0%, transparent 100%)'
+                : 'linear-gradient(to left, rgba(248,249,250,0.9) 0%, transparent 100%)',
+            }}
+          />
+
+          {/* Marquee Container */}
           <motion.div
-            className="flex items-center justify-center gap-4 mt-12 mb-8"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{
-              duration: 1,
-              delay: 2.3,
-              ease: 'easeOut',
+            className="flex items-center gap-12 sm:gap-16 lg:gap-20"
+            animate={marqueeControls}
+            style={{
+              width: 'fit-content',
             }}
           >
-            {[...Array(3)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="w-2 h-2 rounded-full"
-                style={{
-                  background: i === 1 ? '#7A1E2E' : '#E8DCCB',
-                  opacity: 0.6,
-                }}
-                animate={{
-                  scale: [1, 1.5, 1],
-                  opacity: [0.6, 1, 0.6],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                  delay: i * 0.3,
-                }}
-              />
+            {/* Duplicate logos for seamless loop */}
+            {[...Array(2)].map((_, duplicateIndex) => (
+              <div key={duplicateIndex} className="flex items-center gap-12 sm:gap-16 lg:gap-20">
+                {[
+                  '/trustedby/National_Water_Company_Logo_2021.png',
+                  '/trustedby/salogos.org-logo-1.svg',
+                  '/trustedby/salogos.org-شركة-المياه.svg',
+                ].map((logo, index) => (
+                  <motion.div
+                    key={`${duplicateIndex}-${index}`}
+                    className="flex items-center justify-center flex-shrink-0 group"
+                    whileHover={{
+                      scale: 1.1,
+                      transition: { duration: 0.3, ease: 'easeOut' },
+                    }}
+                  >
+                    <motion.div
+                      className="relative px-4 py-2 transition-all duration-300"
+                      initial={{
+                        filter: isDark
+                          ? 'brightness(0) invert(1) opacity(0.7)'
+                          : 'brightness(0) opacity(0.6)',
+                      }}
+                      whileHover={{
+                        filter: 'none',
+                        opacity: 1,
+                      }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <img
+                        src={logo}
+                        alt={`Trusted partner ${index + 1}`}
+                        className="h-16 sm:h-20 lg:h-24 xl:h-28 w-auto object-contain gpu-accelerated"
+                        style={{
+                          maxWidth: '220px',
+                        }}
+                        loading="lazy"
+                      />
+                    </motion.div>
+                  </motion.div>
+                ))}
+              </div>
             ))}
           </motion.div>
-        </motion.div>
+        </div>
       </motion.div>
 
-      {/* Enhanced Scroll Indicator with Magnetic Effect */}
-      <motion.div
-        className="absolute bottom-8 right-8 z-10"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.2, delay: 2.5 }}
-      >
-        <motion.div
-          className="flex flex-col items-center gap-2 cursor-pointer group"
-          onClick={() => {
-            window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
-          }}
-          animate={{ y: [0, 12, 0] }}
-          transition={{
-            duration: 2.5,
-            repeat: Infinity,
-            ease: [0.4, 0, 0.6, 1],
-          }}
-          whileHover={{ scale: 1.15, y: 0 }}
-        >
-          <motion.span
-            className={`font-gotham text-sm text-neutral transition-colors ${isRTL ? 'font-somar' : ''}`}
-            dir={isRTL ? 'rtl' : 'ltr'}
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            whileHover={{ color: '#7A1E2E' }}
-          >
-            {isRTL ? 'انتقل للأسفل' : 'Scroll'}
-          </motion.span>
-          <motion.div
-            className="w-6 h-10 border-2 border-neutral rounded-full flex items-start justify-center p-2 relative overflow-hidden transition-colors"
-            whileHover={{ borderColor: '#7A1E2E' }}
-            transition={{ duration: 0.3 }}
-          >
-            {/* Animated gradient background on hover */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-b from-primary/20 to-transparent rounded-full"
-              initial={{ opacity: 0 }}
-              whileHover={{ opacity: 1 }}
-            />
-            <motion.div
-              className="w-1.5 h-1.5 bg-primary rounded-full relative z-10"
-              animate={{
-                y: [0, 12, 0],
-                opacity: [1, 0.4, 1],
-              }}
-              transition={{
-                duration: 2.5,
-                repeat: Infinity,
-                ease: [0.4, 0, 0.6, 1],
-              }}
-            />
-          </motion.div>
-        </motion.div>
-      </motion.div>
     </section>
   );
 }

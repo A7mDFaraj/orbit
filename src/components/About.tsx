@@ -104,6 +104,245 @@ export default function About() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* About Description */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="text-center mb-16 lg:mb-20 relative"
+        >
+          {/* Animated Background Orbs */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+            {[...Array(3)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute rounded-full"
+                style={{
+                  width: `${100 + i * 80}px`,
+                  height: `${100 + i * 80}px`,
+                  background: `radial-gradient(circle, rgba(122, 30, 46, ${0.1 - i * 0.02}) 0%, transparent 70%)`,
+                  left: `${20 + i * 30}%`,
+                  top: `${30 + i * 20}%`,
+                }}
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.3, 0.6, 0.3],
+                  x: [0, 20, 0],
+                  y: [0, -15, 0],
+                }}
+                transition={{
+                  duration: 4 + i * 2,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                  delay: i * 0.5,
+                }}
+              />
+            ))}
+          </div>
+
+          <motion.div
+            className="relative bg-gradient-to-br from-white/90 dark:from-gray-800/90 via-secondary/10 dark:via-secondary/5 to-white/80 dark:to-gray-800/80 backdrop-blur-md rounded-2xl p-8 sm:p-10 lg:p-12 border-2 border-primary/30 dark:border-primary/40 shadow-2xl max-w-5xl mx-auto group overflow-hidden"
+            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+            animate={inView ? { scale: 1, opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            whileHover={{ 
+              scale: 1.02,
+              borderColor: 'rgba(122, 30, 46, 0.5)',
+              transition: { duration: 0.3 }
+            }}
+          >
+            {/* Animated Gradient Overlay */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+              animate={{
+                x: ['-100%', '200%'],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: 'linear',
+                repeatDelay: 2,
+              }}
+            />
+
+            {/* Animated Corner Elements */}
+            <motion.div
+              className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-primary/40 rounded-tl-2xl"
+              animate={{
+                borderColor: ['rgba(122, 30, 46, 0.4)', 'rgba(122, 30, 46, 0.7)', 'rgba(122, 30, 46, 0.4)'],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+            />
+            <motion.div
+              className="absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-primary/40 rounded-tr-2xl"
+              animate={{
+                borderColor: ['rgba(122, 30, 46, 0.4)', 'rgba(122, 30, 46, 0.7)', 'rgba(122, 30, 46, 0.4)'],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: 'easeInOut',
+                delay: 0.5,
+              }}
+            />
+            <motion.div
+              className="absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-primary/40 rounded-bl-2xl"
+              animate={{
+                borderColor: ['rgba(122, 30, 46, 0.4)', 'rgba(122, 30, 46, 0.7)', 'rgba(122, 30, 46, 0.4)'],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: 'easeInOut',
+                delay: 1,
+              }}
+            />
+            <motion.div
+              className="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-primary/40 rounded-br-2xl"
+              animate={{
+                borderColor: ['rgba(122, 30, 46, 0.4)', 'rgba(122, 30, 46, 0.7)', 'rgba(122, 30, 46, 0.4)'],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: 'easeInOut',
+                delay: 1.5,
+              }}
+            />
+
+            {/* Content with Staggered Animation */}
+            <motion.div
+              className="relative z-10"
+              initial="hidden"
+              animate={inView ? 'visible' : 'hidden'}
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.1,
+                    delayChildren: 0.5,
+                  },
+                },
+              }}
+            >
+              <motion.p
+                className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-relaxed font-medium ${isRTL ? 'font-somar' : 'font-gotham'}`}
+                style={{
+                  fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif',
+                  color: '#161616',
+                }}
+                dir={isRTL ? 'rtl' : 'ltr'}
+              >
+                <motion.span
+                  className="text-primary font-bold inline-block relative"
+                  variants={{
+                    hidden: { opacity: 0, scale: 0.8, y: 20 },
+                    visible: { 
+                      opacity: 1, 
+                      scale: 1, 
+                      y: 0,
+                      transition: {
+                        type: 'spring',
+                        stiffness: 200,
+                        damping: 15,
+                      },
+                    },
+                  }}
+                  whileHover={{
+                    scale: 1.1,
+                    transition: { duration: 0.2 },
+                  }}
+                >
+                  {isRTL ? 'المدار' : 'ORBIT'}
+                  {/* Glow effect on hover */}
+                  <motion.span
+                    className="absolute inset-0 blur-xl bg-primary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{ zIndex: -1 }}
+                  />
+                </motion.span>
+                {' '}
+                <motion.span
+                  variants={{
+                    hidden: { opacity: 0, x: 20 },
+                    visible: { 
+                      opacity: 1, 
+                      x: 0,
+                      transition: {
+                        duration: 0.6,
+                        ease: 'easeOut',
+                      },
+                    },
+                  }}
+                >
+                  {isRTL
+                    ? 'شركة سعودية رائدة في تقديم الحلول التقنية الذكية، نعمل على تمكين المؤسسات من التطور عبر تقنيات حديثة تضمن كفاءة أعلى، تواصل أسرع، وتجربة رقمية متكاملة'
+                    : 'is a leading Saudi company providing smart technical solutions. We work to enable organizations to evolve through modern technologies that ensure higher efficiency, faster communication, and an integrated digital experience'}
+                </motion.span>
+              </motion.p>
+            </motion.div>
+
+            {/* Animated Bottom Decorative Line */}
+            <motion.div
+              className="mt-8 relative h-1 overflow-hidden"
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : {}}
+              transition={{ duration: 0.8, delay: 0.8 }}
+            >
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-primary to-transparent"
+                initial={{ x: '-100%' }}
+                animate={inView ? { x: '100%' } : {}}
+                transition={{
+                  duration: 2,
+                  delay: 1,
+                  ease: 'easeInOut',
+                }}
+              />
+              <motion.div
+                className="h-full bg-gradient-to-r from-primary/20 via-primary/60 to-primary/20"
+                initial={{ width: 0 }}
+                animate={inView ? { width: '100%' } : {}}
+                transition={{
+                  duration: 1.5,
+                  delay: 1.2,
+                  ease: 'easeOut',
+                }}
+              />
+            </motion.div>
+
+            {/* Floating Particles */}
+            {[...Array(5)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute rounded-full"
+                style={{
+                  width: `${4 + i * 2}px`,
+                  height: `${4 + i * 2}px`,
+                  background: `radial-gradient(circle, rgba(122, 30, 46, ${0.6 - i * 0.1}) 0%, transparent 70%)`,
+                  left: `${10 + i * 20}%`,
+                  top: `${15 + i * 15}%`,
+                }}
+                animate={{
+                  y: [0, -20, 0],
+                  opacity: [0.3, 0.8, 0.3],
+                  scale: [1, 1.5, 1],
+                }}
+                transition={{
+                  duration: 3 + i,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                  delay: i * 0.4,
+                }}
+              />
+            ))}
+          </motion.div>
+        </motion.div>
+
         <motion.div
           ref={ref}
           initial="hidden"

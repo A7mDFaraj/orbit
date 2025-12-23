@@ -16,6 +16,8 @@ const solutionsList = [
   { slug: 'whatsapp-business-api', nameEn: 'WhatsApp Business API', nameAr: 'واتساب اعمال API' },
   { slug: 'otime', nameEn: 'OTime - Attendance & HR', nameAr: 'اوتايم OTime' },
   { slug: 'gov-gate', nameEn: 'Gov Gate - Government Portal', nameAr: 'البوابة الحكومية Gov Gate' },
+  { slug: 'enterprise', nameEn: 'Business & Enterprise', nameAr: 'الشركات والمؤسسات' },
+  { slug: 'healthcare', nameEn: 'Healthcare', nameAr: 'القطاع الصحي' },
 ];
 
 export default function Navbar() {
@@ -81,22 +83,14 @@ export default function Navbar() {
     };
   }, []);
 
-  // Navigation items
-  const centerMenuItems = [
-    { name: isRTL ? 'الرئيسية' : 'HOME', href: '/' },
-  ];
-
-  // Industry landing pages
-  const industryPages = [
-    { name: t.nav.enterprise, href: '/enterprise' },
-    { name: t.nav.healthcare, href: '/healthcare' },
-  ];
+  // Navigation items - ordered from right to left: الرئيسية - من نحن - حلولنا - الاخبار - العروض
+  // Note: Items are rendered individually in the nav for proper ordering
 
   // Navbar should be light when in dark section (WhyOrbit) for better contrast
   const navbarIsDark = isInDarkSection ? false : isDark;
   
   // Detect pages where navbar needs better text contrast (light pages with white background)
-  const needsHighContrast = pathname === '/enterprise' || pathname === '/healthcare' || pathname === '/packages' || pathname === '/request-quote';
+  const needsHighContrast = pathname === '/enterprise' || pathname === '/healthcare' || pathname === '/packages' || pathname === '/offers' || pathname === '/news' || pathname === '/request-quote';
   const isLandingPage = pathname === '/';
   
   // Navbar background opacity based on page
@@ -176,11 +170,14 @@ export default function Navbar() {
           </div>
 
           {/* Center: Navigation Menu */}
-          <nav className="hidden lg:flex items-center gap-2 flex-1 justify-center px-4">
-            {/* Home */}
+          <nav className="hidden lg:flex items-center gap-2 flex-1 justify-center px-4" dir={isRTL ? 'rtl' : 'ltr'}>
+            {/* Home - الرئيسية */}
             <NavLink item={{ name: isRTL ? 'الرئيسية' : 'HOME', href: '/' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} />
 
-            {/* Solutions Dropdown */}
+            {/* About - من نحن */}
+            <NavLink item={{ name: t.nav.about, href: '/#about' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={1} />
+
+            {/* Solutions Dropdown - حلولنا */}
             <div ref={solutionsRef} className="relative">
               <motion.button
                 onClick={() => setSolutionsOpen(!solutionsOpen)}
@@ -256,15 +253,11 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
 
-            {/* Other Menu Items */}
-            {centerMenuItems.slice(1).map((item, index) => (
-              <NavLink key={item.href} item={item} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={index + 1} />
-            ))}
+            {/* News - الاخبار */}
+            <NavLink item={{ name: t.nav.news, href: '/news' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={3} />
 
-            {/* Industry Landing Pages */}
-            {industryPages.map((item, index) => (
-              <NavLink key={item.href} item={item} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={centerMenuItems.length + index} />
-            ))}
+            {/* Offers - العروض */}
+            <NavLink item={{ name: t.nav.offers, href: '/offers' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={4} />
           </nav>
 
           {/* Right: Language Switcher, Theme Toggle, and Contact Button */}
@@ -361,9 +354,7 @@ export default function Navbar() {
             setIsOpen={setIsOpen}
             navbarIsDark={navbarIsDark}
             isRTL={isRTL}
-            centerMenuItems={centerMenuItems}
             solutionsList={solutionsList}
-            industryPages={industryPages}
             textColorClass={textColorClass}
             needsHighContrast={needsHighContrast}
             t={t}
@@ -469,7 +460,7 @@ function NavLink({ item, isRTL, navbarIsDark, textColorClass, index = 0 }: { ite
 }
 
 // Mobile Menu Component
-function MobileMenu({ isOpen, setIsOpen, navbarIsDark, isRTL, centerMenuItems, solutionsList, industryPages, textColorClass, needsHighContrast, t, pathname, router }: any) {
+function MobileMenu({ isOpen, setIsOpen, navbarIsDark, isRTL, solutionsList, textColorClass, needsHighContrast, t, pathname, router }: any) {
   const [solutionsOpen, setSolutionsOpen] = useState(false);
 
   return (
@@ -559,15 +550,12 @@ function MobileMenu({ isOpen, setIsOpen, navbarIsDark, isRTL, centerMenuItems, s
               </AnimatePresence>
             </div>
 
-            {/* Other Links */}
-            {centerMenuItems.slice(1).map((item: any) => (
-              <MobileNavLink key={item.href} item={item} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} setIsOpen={setIsOpen} />
-            ))}
+            {/* News - الاخبار */}
+            <MobileNavLink item={{ name: t.nav.news, href: '/news' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} setIsOpen={setIsOpen} />
 
-            {/* Industry Landing Pages */}
-            {industryPages.map((item: any) => (
-              <MobileNavLink key={item.href} item={item} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} setIsOpen={setIsOpen} />
-            ))}
+            {/* Offers - العروض */}
+            <MobileNavLink item={{ name: t.nav.offers, href: '/offers' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} setIsOpen={setIsOpen} />
+
           </nav>
 
           {/* Contact Button */}

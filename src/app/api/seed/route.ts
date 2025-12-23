@@ -1,14 +1,55 @@
 import { NextResponse } from 'next/server';
-import { connectDB } from '@/lib/mongodb';
-import { User } from '@/models/User';
-import { Service } from '@/models/Service';
-import { Client } from '@/models/Client';
-import { Testimonial } from '@/models/Testimonial';
-import { FAQ } from '@/models/FAQ';
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
+// Lazy load modules to avoid Turbopack symlink issues
+async function loadModules() {
+  try {
+    const [{ connectDB }, { User }, { Service }, { Client }, { Testimonial }, { FAQ }] = await Promise.all([
+      import('@/lib/mongodb'),
+      import('@/models/User'),
+      import('@/models/Service'),
+      import('@/models/Client'),
+      import('@/models/Testimonial'),
+      import('@/models/FAQ'),
+    ]);
+    return { connectDB, User, Service, Client, Testimonial, FAQ };
+  } catch (error) {
+    console.error('Module loading error:', error);
+    throw new Error(`Failed to load modules: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
+}
 
 export async function POST() {
   try {
-    await connectDB();
+    // Load modules dynamically
+    let modules;
+    try {
+      modules = await loadModules();
+    } catch (moduleError) {
+      console.error('Module loading error:', moduleError);
+      return NextResponse.json(
+        { 
+          error: 'Failed to load required modules. This might be a Turbopack/Windows permission issue.', 
+          details: moduleError instanceof Error ? moduleError.message : 'Unknown error',
+          solution: 'Try running PowerShell as Administrator, or restart the dev server without Turbopack (remove --turbo flag)'
+        },
+        { status: 500 }
+      );
+    }
+
+    const { connectDB, User, Service, Client, Testimonial, FAQ } = modules;
+
+    try {
+      await connectDB();
+    } catch (dbError) {
+      console.error('Database connection error:', dbError);
+      return NextResponse.json(
+        { error: 'Database connection failed. Please check your MongoDB connection.', details: dbError instanceof Error ? dbError.message : 'Unknown error' },
+        { status: 500 }
+      );
+    }
 
     // Create default admin user
     const adminExists = await User.findOne({ email: 'admin@orbit.com.sa' });
@@ -377,8 +418,22 @@ export async function POST() {
     });
   } catch (error) {
     console.error('Seed error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    
+    // Check if it's a Turbopack/module loading error
+    if (errorMessage.includes('symlink') || errorMessage.includes('Turbopack') || errorMessage.includes('privilege')) {
+      return NextResponse.json(
+        { 
+          error: 'Turbopack Windows Permission Error',
+          details: errorMessage,
+          solution: 'Run PowerShell as Administrator, or restart dev server without --turbo flag'
+        },
+        { status: 500 }
+      );
+    }
+    
     return NextResponse.json(
-      { error: 'Failed to seed database' },
+      { error: 'Failed to seed database', details: errorMessage },
       { status: 500 }
     );
   }

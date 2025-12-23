@@ -22,6 +22,8 @@ export const translations = {
       team: 'Our Team',
       enterprise: 'Business & Enterprise',
       healthcare: 'Healthcare',
+      news: 'News',
+      offers: 'Offers',
     },
     hero: {
       title: 'ORBIT Your Success',
@@ -156,6 +158,8 @@ export const translations = {
       team: 'فريقنا',
       enterprise: 'الشركات والمؤسسات',
       healthcare: 'القطاع الصحي',
+      news: 'الاخبار',
+      offers: 'العروض',
     },
     hero: {
       title: 'أوربيت نجاحك',

@@ -53,6 +53,7 @@ export function convertGoogleDriveVideoUrl(url: string): string {
  * Checks if a URL is a Google Drive video URL
  */
 export function isGoogleDriveVideo(url: string): boolean {
+  if (!url || typeof url !== 'string') return false;
   return url.includes('drive.google.com');
 }
 

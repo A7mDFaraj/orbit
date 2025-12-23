@@ -254,7 +254,7 @@ export default function VideoSettingsPage() {
                         required
                       />
                       <p className="text-sm text-gray-500 mt-1">
-                        💡 Upload a file above OR paste a video URL/path manually
+                        Upload a file above OR paste a video URL/path manually
                       </p>
                     </div>
 
@@ -294,7 +294,7 @@ export default function VideoSettingsPage() {
 
             <div className="mt-4 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
               <p className="text-sm text-gray-700">
-                <strong className="text-blue-600">💡 Tip:</strong> Upload videos to <code className="bg-white px-2 py-1 rounded">public/video/</code> folder and reference them as <code className="bg-white px-2 py-1 rounded">/video/filename.mp4</code>
+                <strong className="text-blue-600 font-heading">Tip:</strong> Upload videos to <code className="bg-white px-2 py-1 rounded">public/video/</code> folder and reference them as <code className="bg-white px-2 py-1 rounded">/video/filename.mp4</code>
               </p>
             </div>
           </div>

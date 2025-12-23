@@ -125,7 +125,7 @@ export default function UniqueFeaturesPage() {
       <div className="p-8">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-4xl font-rb-bold text-gray-900 uppercase tracking-tighter mb-2">
+            <h1 className="text-4xl font-heading font-bold text-gray-900 uppercase tracking-tighter mb-2">
               What Makes Us Unique
             </h1>
             <p className="text-gray-600">Manage the unique features displayed in the About section</p>
@@ -195,10 +195,12 @@ export default function UniqueFeaturesPage() {
                 className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow"
               >
                 <div className="flex items-start justify-between mb-4">
-                  <div className="text-3xl">
-                    {index === 0 ? '🏴' : index === 1 ? '⚡' : index === 2 ? '👥' : index === 3 ? '👁️' : index === 4 ? '🛡️' : '💡'}
+                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                    <svg className="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                    </svg>
                   </div>
-                  <span className="text-sm text-gray-500">#{feature.order || index + 1}</span>
+                  <span className="text-sm text-gray-500 font-heading font-semibold">#{feature.order || index + 1}</span>
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">{feature.title}</h3>
                 <p className="text-sm text-gray-600 mb-3">{feature.desc}</p>

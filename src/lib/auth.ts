@@ -29,12 +29,17 @@ export async function verifyToken(token: string): Promise<TokenPayload | null> {
 }
 
 export async function getSession(): Promise<TokenPayload | null> {
-  const cookieStore = await cookies();
-  const token = cookieStore.get('token')?.value;
-  
-  if (!token) return null;
-  
-  return verifyToken(token);
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('token')?.value;
+    
+    if (!token) return null;
+    
+    return await verifyToken(token);
+  } catch (error) {
+    console.error('Error getting session:', error);
+    return null;
+  }
 }
 
 export async function getSessionFromRequest(request: NextRequest): Promise<TokenPayload | null> {

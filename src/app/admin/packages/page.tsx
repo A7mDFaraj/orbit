@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link';
+import AdminLayout from '@/components/AdminLayout';
+import toast from 'react-hot-toast';
 
 interface Package {
   _id?: string;
@@ -37,7 +38,7 @@ export default function AdminPackages() {
     durationAr: '',
     features: [''],
     featuresAr: [''],
-    icon: '📦',
+    icon: '',
     highlighted: false,
   };
 
@@ -49,9 +50,26 @@ export default function AdminPackages() {
     try {
       const res = await fetch('/api/packages');
       const data = await res.json();
-      setPackages(data);
+      const fetchedPackages = Array.isArray(data) ? data : [];
+      
+      // If no packages exist, seed them automatically
+      if (fetchedPackages.length === 0) {
+        const seedRes = await fetch('/api/packages/seed', { method: 'POST' });
+        if (seedRes.ok) {
+          const seedData = await seedRes.json();
+          // Fetch again after seeding
+          const newRes = await fetch('/api/packages');
+          const newData = await newRes.json();
+          setPackages(Array.isArray(newData) ? newData : []);
+        } else {
+          setPackages([]);
+        }
+      } else {
+        setPackages(fetchedPackages);
+      }
     } catch (error) {
       console.error('Error fetching packages:', error);
+      setPackages([]);
     } finally {
       setLoading(false);
     }
@@ -72,12 +90,17 @@ export default function AdminPackages() {
       });
 
       if (res.ok) {
+        toast.success(editingPackage?._id ? 'Package updated!' : 'Package created!');
         fetchPackages();
         setIsModalOpen(false);
         setEditingPackage(null);
+      } else {
+        const errorData = await res.json();
+        toast.error(errorData.error || 'Failed to save package');
       }
     } catch (error) {
       console.error('Error saving package:', error);
+      toast.error('Failed to save package');
     }
   };
 
@@ -88,11 +111,16 @@ export default function AdminPackages() {
       });
 
       if (res.ok) {
+        toast.success('Package deleted!');
         fetchPackages();
         setDeleteConfirm(null);
+      } else {
+        const errorData = await res.json();
+        toast.error(errorData.error || 'Failed to delete package');
       }
     } catch (error) {
       console.error('Error deleting package:', error);
+      toast.error('Failed to delete package');
     }
   };
 
@@ -118,60 +146,53 @@ export default function AdminPackages() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {/* Header */}
-      <div className="bg-white dark:bg-gray-800 shadow-lg border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link
-                href="/admin"
-                className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary transition-colors"
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                Back to Dashboard
-              </Link>
-              <div className="h-6 w-px bg-gray-300 dark:bg-gray-600"></div>
-              <h1 className="text-3xl font-rb-bold text-gray-900 dark:text-white uppercase tracking-tight">
-                📦 Packages Management
-              </h1>
-            </div>
-            
-            <div className="flex gap-3">
-              {packages.length === 0 && (
-                <motion.button
-                  onClick={async () => {
-                    const res = await fetch('/api/packages/seed', { method: 'POST' });
-                    if (res.ok) fetchPackages();
-                  }}
-                  className="flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg font-rb-bold uppercase tracking-wider shadow-lg hover:shadow-xl transition-all"
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                  </svg>
-                  Seed Packages
-                </motion.button>
-              )}
-              <motion.button
-                onClick={openCreateModal}
-                className="flex items-center gap-2 bg-gradient-to-r from-primary to-blue-600 text-white px-6 py-3 rounded-lg font-rb-bold uppercase tracking-wider shadow-lg hover:shadow-xl transition-all"
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                Create Package
-              </motion.button>
-            </div>
-          </div>
+    <AdminLayout>
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-3xl font-heading font-bold text-gray-900 uppercase tracking-wide">
+          Packages Management
+        </h1>
+        <div className="flex gap-3">
+          {packages.length === 0 && (
+            <button
+              onClick={async () => {
+                try {
+                  toast.loading('Importing packages...', { id: 'import' });
+                  const res = await fetch('/api/packages/seed', { method: 'POST' });
+                  if (res.ok) {
+                    const data = await res.json();
+                    toast.success(`Successfully imported ${data.count} packages!`, { id: 'import' });
+                    fetchPackages();
+                  } else {
+                    const error = await res.json();
+                    toast.error(error.error || 'Failed to import packages', { id: 'import' });
+                  }
+                } catch (error) {
+                  toast.error('Failed to import packages', { id: 'import' });
+                }
+              }}
+              className="bg-secondary text-primary px-6 py-3 rounded-lg font-heading font-semibold hover:bg-secondary/80 transition-all flex items-center gap-2"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              Import Existing Packages
+            </button>
+          )}
+          <button
+            onClick={openCreateModal}
+            className="bg-primary text-white px-6 py-3 rounded-lg font-heading font-semibold hover:bg-primary/90 transition-all flex items-center gap-2"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Add Package
+          </button>
+        </div>
+      </div>
 
-          {/* Stats */}
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* Stats */}
+      {packages.length > 0 && (
+        <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-gradient-to-br from-primary/10 to-blue-400/10 dark:from-primary/20 dark:to-blue-400/20 rounded-xl p-4 border border-primary/20">
               <div className="flex items-center gap-3">
                 <div className="bg-primary/20 p-3 rounded-lg">
@@ -181,7 +202,7 @@ export default function AdminPackages() {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Total Packages</p>
-                  <p className="text-2xl font-rb-bold text-gray-900 dark:text-white">{packages.length}</p>
+                  <p className="text-2xl font-heading font-bold text-gray-900 dark:text-white">{packages.length}</p>
                 </div>
               </div>
             </div>
@@ -195,7 +216,7 @@ export default function AdminPackages() {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Highlighted</p>
-                  <p className="text-2xl font-rb-bold text-gray-900 dark:text-white">
+                  <p className="text-2xl font-heading font-bold text-gray-900 dark:text-white">
                     {packages.filter(p => p.highlighted).length}
                   </p>
                 </div>
@@ -211,32 +232,35 @@ export default function AdminPackages() {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Total Features</p>
-                  <p className="text-2xl font-rb-bold text-gray-900 dark:text-white">
+                  <p className="text-2xl font-heading font-bold text-gray-900 dark:text-white">
                     {packages.reduce((sum, pkg) => sum + pkg.features.length, 0)}
                   </p>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+      )}
 
       {/* Packages Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div>
         {packages.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-12 text-center border border-gray-200 dark:border-gray-700"
           >
-            <div className="text-6xl mb-4">📦</div>
-            <h3 className="text-2xl font-rb-bold text-gray-900 dark:text-white mb-2">No Packages Yet</h3>
+            <div className="mb-4">
+              <svg className="w-16 h-16 mx-auto text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+              </svg>
+            </div>
+            <h3 className="text-2xl font-heading font-bold text-gray-900 dark:text-white mb-2">No Packages Yet</h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
               Create your first package to get started
             </p>
             <button
               onClick={openCreateModal}
-              className="bg-primary text-white px-6 py-3 rounded-lg font-rb-bold uppercase hover:bg-primary/90 transition-colors"
+              className="bg-primary text-white px-6 py-3 rounded-lg font-heading font-bold uppercase hover:bg-primary/90 transition-colors"
             >
               Create First Package
             </button>
@@ -258,8 +282,8 @@ export default function AdminPackages() {
                 {/* Highlighted Badge */}
                 {pkg.highlighted && (
                   <div className="absolute top-4 right-4 z-10">
-                    <div className="bg-gradient-to-r from-primary to-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg">
-                      ⭐ Popular
+                    <div className="bg-gradient-to-r from-primary to-primary/80 text-white px-3 py-1 rounded-full text-xs font-heading font-bold uppercase tracking-wider shadow-lg">
+                      Popular
                     </div>
                   </div>
                 )}
@@ -274,8 +298,12 @@ export default function AdminPackages() {
                       className="absolute inset-0 bg-black/80 backdrop-blur-sm z-20 flex items-center justify-center p-6"
                     >
                       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 text-center max-w-sm">
-                        <div className="text-4xl mb-4">⚠️</div>
-                        <h4 className="text-lg font-rb-bold text-gray-900 dark:text-white mb-2">
+                        <div className="mb-4">
+                          <svg className="w-12 h-12 mx-auto text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                          </svg>
+                        </div>
+                        <h4 className="text-lg font-heading font-bold text-gray-900 dark:text-white mb-2">
                           Delete Package?
                         </h4>
                         <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
@@ -304,8 +332,10 @@ export default function AdminPackages() {
                   {/* Icon & Title */}
                   <div className="flex items-start justify-between mb-4">
                     <div>
-                      <div className="text-4xl mb-2">{pkg.icon}</div>
-                      <h3 className="text-xl font-rb-bold text-gray-900 dark:text-white mb-1">
+                      {pkg.icon && (
+                        <div className="text-4xl mb-2">{pkg.icon}</div>
+                      )}
+                      <h3 className="text-xl font-heading font-bold text-gray-900 dark:text-white mb-1">
                         {pkg.name}
                       </h3>
                       <p className="text-sm text-gray-600 dark:text-gray-400 font-medium mb-2">
@@ -379,7 +409,7 @@ export default function AdminPackages() {
           />
         )}
       </AnimatePresence>
-    </div>
+    </AdminLayout>
   );
 }
 
@@ -447,7 +477,7 @@ function PackageModal({
         <form onSubmit={handleSubmit}>
           {/* Modal Header */}
           <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-            <h2 className="text-2xl font-rb-bold text-gray-900 dark:text-white uppercase">
+            <h2 className="text-2xl font-heading font-bold text-gray-900 dark:text-white uppercase">
               {pkg._id ? 'Edit Package' : 'Create Package'}
             </h2>
             <button
@@ -467,8 +497,8 @@ function PackageModal({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Icon */}
               <div>
-                <label className="block text-sm font-rb-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2">
-                  Icon (Emoji)
+                <label className="block text-sm font-heading font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2">
+                  Icon (Optional Emoji)
                 </label>
                 <input
                   type="text"
@@ -482,7 +512,7 @@ function PackageModal({
 
               {/* ID */}
               <div>
-                <label className="block text-sm font-rb-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-heading font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2">
                   Package ID
                 </label>
                 <input
@@ -499,7 +529,7 @@ function PackageModal({
             {/* Name EN & AR */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-rb-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-heading font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2">
                   Name (English)
                 </label>
                 <input
@@ -512,7 +542,7 @@ function PackageModal({
               </div>
 
               <div>
-                <label className="block text-sm font-rb-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-heading font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2">
                   Name (Arabic)
                 </label>
                 <input
@@ -529,7 +559,7 @@ function PackageModal({
             {/* Description EN & AR */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-rb-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-heading font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2">
                   Description (English)
                 </label>
                 <textarea
@@ -542,7 +572,7 @@ function PackageModal({
               </div>
 
               <div>
-                <label className="block text-sm font-rb-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-heading font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2">
                   Description (Arabic)
                 </label>
                 <textarea
@@ -559,7 +589,7 @@ function PackageModal({
             {/* Duration EN & AR */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
-                <label className="block text-sm font-rb-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-heading font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2">
                   Duration (English)
                 </label>
                 <input
@@ -573,7 +603,7 @@ function PackageModal({
               </div>
 
               <div>
-                <label className="block text-sm font-rb-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-heading font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2">
                   Duration (Arabic)
                 </label>
                 <input
@@ -605,7 +635,7 @@ function PackageModal({
             {/* Features EN */}
             <div>
               <div className="flex items-center justify-between mb-3">
-                <label className="block text-sm font-rb-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
+                <label className="block text-sm font-heading font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
                   Features (English)
                 </label>
                 <button
@@ -649,7 +679,7 @@ function PackageModal({
             {/* Features AR */}
             <div>
               <div className="flex items-center justify-between mb-3">
-                <label className="block text-sm font-rb-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
+                <label className="block text-sm font-heading font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
                   Features (Arabic)
                 </label>
                 <button
@@ -697,13 +727,13 @@ function PackageModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg font-rb-bold uppercase tracking-wider hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+              className="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg font-heading font-bold uppercase tracking-wider hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
             >
               Cancel
             </button>
             <motion.button
               type="submit"
-              className="px-6 py-3 bg-gradient-to-r from-primary to-blue-600 text-white rounded-lg font-rb-bold uppercase tracking-wider shadow-lg hover:shadow-xl transition-all"
+              className="px-6 py-3 bg-gradient-to-r from-primary to-blue-600 text-white rounded-lg font-heading font-bold uppercase tracking-wider shadow-lg hover:shadow-xl transition-all"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

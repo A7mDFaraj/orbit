@@ -112,7 +112,7 @@ export default function TeamApplicationsPage() {
     <AdminLayout>
       <div className="p-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-rb-bold text-gray-900 uppercase tracking-tighter mb-2">
+          <h1 className="text-4xl font-heading font-bold text-gray-900 uppercase tracking-tighter mb-2">
             Team Applications
           </h1>
           <p className="text-gray-600">
@@ -130,25 +130,25 @@ export default function TeamApplicationsPage() {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-heading font-bold text-gray-500 uppercase tracking-wider">
                       Name
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-heading font-bold text-gray-500 uppercase tracking-wider">
                       City
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-heading font-bold text-gray-500 uppercase tracking-wider">
                       Mobile
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-heading font-bold text-gray-500 uppercase tracking-wider">
                       Type
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-heading font-bold text-gray-500 uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-heading font-bold text-gray-500 uppercase tracking-wider">
                       Date
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-rb-bold text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-heading font-bold text-gray-500 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
@@ -161,7 +161,7 @@ export default function TeamApplicationsPage() {
                           <div className="text-sm font-medium text-gray-900">{app.name}</div>
                           {isCastingApplication(app) && (
                             <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-pink-100 text-pink-800">
-                              🎬 Casting
+                              Casting
                             </span>
                           )}
                         </div>
@@ -231,11 +231,11 @@ export default function TeamApplicationsPage() {
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-rb-bold text-gray-900">
+                <h2 className="text-2xl font-heading font-bold text-gray-900">
                   Application Details
                   {isCastingApplication(selectedApp) && (
                     <span className="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-pink-100 text-pink-800">
-                      🎬 Casting Application
+                      Casting Application
                     </span>
                   )}
                 </h2>
@@ -252,7 +252,7 @@ export default function TeamApplicationsPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 {/* Basic Information */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-rb-bold text-gray-900 border-b pb-2">Basic Information</h3>
+                  <h3 className="text-lg font-heading font-bold text-gray-900 border-b pb-2">Basic Information</h3>
                   <div>
                     <p className="text-sm font-semibold text-gray-500">Name</p>
                     <p className="text-gray-900">{selectedApp.name}</p>
@@ -286,7 +286,7 @@ export default function TeamApplicationsPage() {
                 {/* Casting Information (if applicable) */}
                 {isCastingApplication(selectedApp) && (
                   <div className="space-y-4">
-                    <h3 className="text-lg font-rb-bold text-gray-900 border-b pb-2">🎬 Casting Information</h3>
+                    <h3 className="text-lg font-heading font-bold text-gray-900 border-b pb-2">Casting Information</h3>
                     {selectedApp.email && (
                       <div>
                         <p className="text-sm font-semibold text-gray-500">Email</p>
@@ -330,7 +330,7 @@ export default function TeamApplicationsPage() {
               {/* Photos (for casting applications) */}
               {isCastingApplication(selectedApp) && selectedApp.photos && selectedApp.photos.length > 0 && (
                 <div className="mb-6">
-                  <h3 className="text-lg font-rb-bold text-gray-900 border-b pb-2 mb-4">
+                  <h3 className="text-lg font-heading font-bold text-gray-900 border-b pb-2 mb-4">
                     Photos ({selectedApp.photos.length})
                   </h3>
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

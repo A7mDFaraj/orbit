@@ -27,7 +27,7 @@ export default function ServicesAdmin() {
     description: '',
     descriptionAr: '',
     icon: '',
-    category: 'Real Estate',
+    category: 'Business Services',
     order: 0,
     isActive: true,
   });
@@ -112,7 +112,7 @@ export default function ServicesAdmin() {
         description: '',
         descriptionAr: '',
         icon: '',
-        category: 'Real Estate',
+        category: 'Business Services',
         order: services.length,
         isActive: true,
       });
@@ -305,11 +305,11 @@ export default function ServicesAdmin() {
                     }
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 bg-white"
                   >
-                    <option>Real Estate</option>
-                    <option>Marketing</option>
-                    <option>Production</option>
-                    <option>Events</option>
-                    <option>Advertising</option>
+                    <option>Business Services</option>
+                    <option>Technical Solutions</option>
+                    <option>Communication</option>
+                    <option>Enterprise</option>
+                    <option>Healthcare</option>
                   </select>
                 </div>
 
