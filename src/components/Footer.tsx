@@ -55,7 +55,7 @@ export default function Footer() {
               />
             </motion.div>
             <p 
-              className={`text-gray-400 mb-4 ${isRTL ? 'font-somar' : 'font-gotham'}`}
+              className={`text-gray-400 mb-4 ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
               dir={isRTL ? 'rtl' : 'ltr'}
             >
               {isRTL
@@ -63,7 +63,7 @@ export default function Footer() {
                 : 'Official company licensed by the Saudi Communications and Information Technology Commission'}
             </p>
             <div className="flex items-center gap-2 text-sm text-gray-400">
-              <span className={`font-heading ${isRTL ? 'font-somar' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
+              <span className={`font-heading ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
                 {t.nav.madeInSaudi}
               </span>
             </div>
@@ -72,7 +72,7 @@ export default function Footer() {
           {/* Quick Links */}
           <div>
             <h4 
-              className={`text-lg font-heading mb-4 text-white ${isRTL ? 'font-somar' : ''}`}
+              className={`text-lg font-heading mb-4 text-white ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
               dir={isRTL ? 'rtl' : 'ltr'}
             >
               {isRTL ? 'روابط سريعة' : 'Quick Links'}
@@ -97,7 +97,7 @@ export default function Footer() {
                         }
                       }
                     }}
-                    className={`text-gray-400 hover:text-primary transition-colors ${isRTL ? 'font-somar' : 'font-gotham'}`}
+                    className={`text-gray-400 hover:text-primary transition-colors ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
                     dir={isRTL ? 'rtl' : 'ltr'}
                   >
                     {link.name}
@@ -110,7 +110,7 @@ export default function Footer() {
           {/* Solutions */}
           <div>
             <h4 
-              className={`text-lg font-heading mb-4 text-white ${isRTL ? 'font-somar' : ''}`}
+              className={`text-lg font-heading mb-4 text-white ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
               dir={isRTL ? 'rtl' : 'ltr'}
             >
               {isRTL ? 'حلولنا' : 'Our Solutions'}
@@ -125,7 +125,7 @@ export default function Footer() {
                 >
                   <Link
                     href={solution.href}
-                    className={`text-gray-400 hover:text-primary transition-colors ${isRTL ? 'font-somar' : 'font-gotham'}`}
+                    className={`text-gray-400 hover:text-primary transition-colors ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
                     dir={isRTL ? 'rtl' : 'ltr'}
                   >
                     {solution.name}
@@ -138,7 +138,7 @@ export default function Footer() {
           {/* Contact Info */}
           <div>
             <h4 
-              className={`text-lg font-heading mb-6 text-white ${isRTL ? 'font-somar' : ''}`}
+              className={`text-lg font-heading mb-6 text-white ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
               dir={isRTL ? 'rtl' : 'ltr'}
             >
               {isRTL ? 'معلومات الاتصال' : 'Contact Information'}
@@ -157,10 +157,10 @@ export default function Footer() {
                   </svg>
                 </div>
                 <div>
-                  <p className={`text-gray-400 text-sm mb-1 ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                  <p className={`text-gray-400 text-sm mb-1 ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
                     {isRTL ? 'هاتف' : 'Phone'}
                   </p>
-                  <a href="tel:920006900" className={`text-white hover:text-primary transition-colors ${isRTL ? 'font-somar' : 'font-gotham'}`} dir="ltr">
+                  <a href="tel:920006900" className={`text-white hover:text-primary transition-colors ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir="ltr">
                     920006900
                   </a>
                 </div>
@@ -179,10 +179,10 @@ export default function Footer() {
                   </svg>
                 </div>
                 <div>
-                  <p className={`text-gray-400 text-sm mb-1 ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                  <p className={`text-gray-400 text-sm mb-1 ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
                     {isRTL ? 'جوال' : 'Mobile'}
                   </p>
-                  <a href="tel:0544752974" className={`text-white hover:text-primary transition-colors ${isRTL ? 'font-somar' : 'font-gotham'}`} dir="ltr">
+                  <a href="tel:0544752974" className={`text-white hover:text-primary transition-colors ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir="ltr">
                     0544752974
                   </a>
                 </div>
@@ -201,10 +201,10 @@ export default function Footer() {
                   </svg>
                 </div>
                 <div>
-                  <p className={`text-gray-400 text-sm mb-1 ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                  <p className={`text-gray-400 text-sm mb-1 ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
                     {isRTL ? 'ايميل' : 'Email'}
                   </p>
-                  <a href="mailto:info@ot.com.sa" className={`text-white hover:text-primary transition-colors ${isRTL ? 'font-somar' : 'font-gotham'}`} dir="ltr">
+                  <a href="mailto:info@ot.com.sa" className={`text-white hover:text-primary transition-colors ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir="ltr">
                     info@ot.com.sa
                   </a>
                 </div>
@@ -224,10 +224,10 @@ export default function Footer() {
                   </svg>
                 </div>
                 <div>
-                  <p className={`text-gray-400 text-sm mb-1 ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                  <p className={`text-gray-400 text-sm mb-1 ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
                     {isRTL ? 'العنوان' : 'Address'}
                   </p>
-                  <p className={`text-white ${isRTL ? 'font-somar' : 'font-gotham'}`} dir="rtl">
+                  <p className={`text-white ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir="rtl">
                     المدينة المنورة, شارع الأمير عبدالمجيد - الذهبية بلازا
                   </p>
                 </div>
@@ -272,7 +272,7 @@ export default function Footer() {
 
         {/* Copyright */}
         <motion.div
-          className="text-center text-white/60 font-gotham text-sm border-t border-white/10 pt-8"
+          className="text-center text-white/60  text-sm border-t border-white/10 pt-8"
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ duration: 0.8, delay: 0.9 }}

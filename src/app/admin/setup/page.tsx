@@ -136,7 +136,7 @@ export default function AdminSetup() {
           <h1 className="text-3xl font-heading font-bold text-gray-900 mb-2 uppercase tracking-wide">
             Admin <span className="text-primary">Setup</span>
           </h1>
-          <p className="text-gray-600 font-gotham">Create your admin account</p>
+          <p className="text-gray-600 ">Create your admin account</p>
         </div>
 
         {adminExists ? (
@@ -148,15 +148,15 @@ export default function AdminSetup() {
                 </svg>
                 <h3 className="text-lg font-heading font-bold text-green-800">Admin User Exists</h3>
               </div>
-              <p className="text-gray-700 font-gotham mb-4">
+              <p className="text-gray-700  mb-4">
                 An admin user has already been created. You can now log in to the admin panel.
               </p>
               <div className="bg-white p-4 rounded border border-green-200">
                 <p className="text-sm font-heading font-semibold text-gray-700 mb-2">Default Credentials:</p>
-                <p className="text-sm font-gotham text-gray-600 mb-1">
+                <p className="text-sm  text-gray-600 mb-1">
                   <span className="font-semibold">Email:</span> admin@orbit.com.sa
                 </p>
-                <p className="text-sm font-gotham text-gray-600">
+                <p className="text-sm  text-gray-600">
                   <span className="font-semibold">Password:</span> Abd123#Abd
                 </p>
               </div>
@@ -177,7 +177,7 @@ export default function AdminSetup() {
                 </svg>
                 <h3 className="text-lg font-heading font-bold text-yellow-800">No Admin User Found</h3>
               </div>
-              <p className="text-gray-700 font-gotham mb-4">
+              <p className="text-gray-700  mb-4">
                 You need to seed the database first. This will create the admin user and populate initial data (testimonials, FAQs, clients).
               </p>
             </div>
@@ -189,7 +189,7 @@ export default function AdminSetup() {
               >
                 {loading ? 'Seeding Database...' : '🌱 Seed Database (Recommended)'}
               </button>
-              <p className="text-xs text-gray-500 text-center font-gotham">OR</p>
+              <p className="text-xs text-gray-500 text-center ">OR</p>
               <button
                 onClick={createAdmin}
                 disabled={loading}
@@ -202,7 +202,7 @@ export default function AdminSetup() {
         )}
 
         <div className="mt-6 pt-6 border-t border-neutral/20">
-          <p className="text-xs text-gray-500 text-center font-gotham mb-3">
+          <p className="text-xs text-gray-500 text-center  mb-3">
             Make sure your MongoDB connection is configured in <code className="bg-gray-100 px-2 py-1 rounded">.env.local</code>
           </p>
           <div className="flex gap-2">

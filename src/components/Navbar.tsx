@@ -181,7 +181,7 @@ export default function Navbar() {
             <div ref={solutionsRef} className="relative">
               <motion.button
                 onClick={() => setSolutionsOpen(!solutionsOpen)}
-                className={`relative px-4 py-2 ${isRTL ? 'text-[13px]' : 'text-[11px]'} font-heading uppercase tracking-wider whitespace-nowrap overflow-hidden group ${textColorClass} flex items-center gap-1 ${isRTL ? 'font-somar' : ''} transition-colors duration-200`}
+                className={`relative px-4 py-2 ${isRTL ? 'text-[13px]' : 'text-[11px]'} font-heading uppercase tracking-wider whitespace-nowrap overflow-hidden group ${textColorClass} flex items-center gap-1 ${isRTL ? 'font-ibm-plex-arabic' : ''} transition-colors duration-200`}
                 dir={isRTL ? 'rtl' : 'ltr'}
                 whileHover={{ y: -2 }}
                 onHoverStart={() => setSolutionsOpen(true)}
@@ -239,7 +239,7 @@ export default function Navbar() {
                         >
                           <Link
                             href={`/solutions/${solution.slug}`}
-                            className={`block px-4 py-3 rounded-lg transition-all ${navbarIsDark ? 'hover:bg-white/5 text-gray-200' : needsHighContrast ? 'hover:bg-primary/10 text-gray-900' : 'hover:bg-primary/10 text-gray-700'} ${isRTL ? 'font-somar' : 'font-gotham'}`}
+                            className={`block px-4 py-3 rounded-lg transition-all ${navbarIsDark ? 'hover:bg-white/5 text-gray-200' : needsHighContrast ? 'hover:bg-primary/10 text-gray-900' : 'hover:bg-primary/10 text-gray-700'} ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
                             dir={isRTL ? 'rtl' : 'ltr'}
                             onClick={() => setSolutionsOpen(false)}
                           >
@@ -285,7 +285,7 @@ export default function Navbar() {
 
                   router.push(config.href);
                 }}
-                className={`flex items-center justify-center min-w-[140px] px-5 py-2.5 ${isRTL ? 'text-[13px]' : 'text-[11px]'} rounded-lg text-white font-heading uppercase tracking-wider whitespace-nowrap bg-gradient-to-r from-primary via-primary to-[#9a2d45] hover:from-[#9a2d45] hover:to-primary shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden group ${isRTL ? 'font-somar' : ''}`}
+                className={`flex items-center justify-center min-w-[140px] px-5 py-2.5 ${isRTL ? 'text-[13px]' : 'text-[11px]'} rounded-lg text-white font-heading uppercase tracking-wider whitespace-nowrap bg-gradient-to-r from-primary via-primary to-[#9a2d45] hover:from-[#9a2d45] hover:to-primary shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden group ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
                 dir={isRTL ? 'rtl' : 'ltr'}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -386,7 +386,7 @@ function NavLink({ item, isRTL, navbarIsDark, textColorClass, index = 0 }: { ite
             }
           }
         }}
-        className={`relative px-4 py-2 ${isRTL ? 'text-[13px]' : 'text-[11px]'} font-heading uppercase tracking-wider whitespace-nowrap overflow-hidden group ${textColorClass} ${isRTL ? 'font-somar' : ''} transition-colors duration-200`}
+        className={`relative px-4 py-2 ${isRTL ? 'text-[13px]' : 'text-[11px]'} font-heading uppercase tracking-wider whitespace-nowrap overflow-hidden group ${textColorClass} ${isRTL ? 'font-ibm-plex-arabic' : ''} transition-colors duration-200`}
         dir={isRTL ? 'rtl' : 'ltr'}
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -433,7 +433,7 @@ function NavLink({ item, isRTL, navbarIsDark, textColorClass, index = 0 }: { ite
     >
       <Link
         href={item.href}
-        className={`relative px-4 py-2 ${isRTL ? 'text-[13px]' : 'text-[11px]'} font-heading uppercase tracking-wider whitespace-nowrap overflow-hidden group ${navbarIsDark ? 'text-gray-100' : 'text-gray-900'} ${isRTL ? 'font-somar' : ''} block transition-colors duration-200`}
+        className={`relative px-4 py-2 ${isRTL ? 'text-[13px]' : 'text-[11px]'} font-heading uppercase tracking-wider whitespace-nowrap overflow-hidden group ${navbarIsDark ? 'text-gray-100' : 'text-gray-900'} ${isRTL ? 'font-ibm-plex-arabic' : ''} block transition-colors duration-200`}
         dir={isRTL ? 'rtl' : 'ltr'}
       >
         {/* Background on hover - more visible */}
@@ -508,7 +508,7 @@ function MobileMenu({ isOpen, setIsOpen, navbarIsDark, isRTL, solutionsList, tex
             <div>
               <button
                 onClick={() => setSolutionsOpen(!solutionsOpen)}
-                className={`w-full flex items-center justify-between px-4 py-4 rounded-xl transition-all duration-300 ${navbarIsDark ? 'hover:bg-white/5 text-gray-100' : 'hover:bg-gray-100 text-gray-800'} ${isRTL ? 'font-somar' : 'font-heading'}`}
+                className={`w-full flex items-center justify-between px-4 py-4 rounded-xl transition-all duration-300 ${navbarIsDark ? 'hover:bg-white/5 text-gray-100' : 'hover:bg-gray-100 text-gray-800'} ${isRTL ? 'font-ibm-plex-arabic' : 'font-heading'}`}
                 dir={isRTL ? 'rtl' : 'ltr'}
               >
                 <span className="text-lg font-heading">{t.nav.solutions}</span>
@@ -537,7 +537,7 @@ function MobileMenu({ isOpen, setIsOpen, navbarIsDark, isRTL, solutionsList, tex
                         <Link
                           key={solution.slug}
                           href={`/solutions/${solution.slug}`}
-                          className={`block px-4 py-3 rounded-lg transition-all ${navbarIsDark ? 'hover:bg-white/5 text-gray-200' : needsHighContrast ? 'hover:bg-gray-100 text-gray-900' : 'hover:bg-gray-100 text-gray-700'} ${isRTL ? 'font-somar' : 'font-gotham'}`}
+                          className={`block px-4 py-3 rounded-lg transition-all ${navbarIsDark ? 'hover:bg-white/5 text-gray-200' : needsHighContrast ? 'hover:bg-gray-100 text-gray-900' : 'hover:bg-gray-100 text-gray-700'} ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
                           dir={isRTL ? 'rtl' : 'ltr'}
                           onClick={() => setIsOpen(false)}
                         >
@@ -576,7 +576,7 @@ function MobileMenu({ isOpen, setIsOpen, navbarIsDark, isRTL, solutionsList, tex
 
               router.push(config.href);
             }}
-            className={`w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl text-white font-heading text-base tracking-wide bg-gradient-to-r from-primary to-[#9a2d45] hover:from-[#9a2d45] hover:to-primary shadow-lg hover:shadow-2xl transition-all duration-300 ${isRTL ? 'font-somar' : ''}`}
+            className={`w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl text-white font-heading text-base tracking-wide bg-gradient-to-r from-primary to-[#9a2d45] hover:from-[#9a2d45] hover:to-primary shadow-lg hover:shadow-2xl transition-all duration-300 ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
             dir={isRTL ? 'rtl' : 'ltr'}
           >
             {(() => {
@@ -611,7 +611,7 @@ function MobileNavLink({ item, isRTL, navbarIsDark, textColorClass, setIsOpen }:
             }
           }, 100);
         }}
-        className={`group flex items-center justify-between px-4 py-4 rounded-xl transition-all duration-300 ${navbarIsDark ? 'hover:bg-white/5 text-gray-100' : `hover:bg-gray-100 ${textColorClass}`} ${isRTL ? 'font-somar' : 'font-heading'}`}
+        className={`group flex items-center justify-between px-4 py-4 rounded-xl transition-all duration-300 ${navbarIsDark ? 'hover:bg-white/5 text-gray-100' : `hover:bg-gray-100 ${textColorClass}`} ${isRTL ? 'font-ibm-plex-arabic' : 'font-heading'}`}
         dir={isRTL ? 'rtl' : 'ltr'}
       >
         <span className="text-lg font-heading">{item.name}</span>
@@ -637,7 +637,7 @@ function MobileNavLink({ item, isRTL, navbarIsDark, textColorClass, setIsOpen }:
         document.body.style.overflow = 'unset';
         setIsOpen(false);
       }}
-      className={`group flex items-center justify-between px-4 py-4 rounded-xl transition-all duration-300 ${navbarIsDark ? 'hover:bg-white/5 text-gray-100' : 'hover:bg-gray-100 text-gray-800'} ${isRTL ? 'font-somar' : 'font-heading'}`}
+      className={`group flex items-center justify-between px-4 py-4 rounded-xl transition-all duration-300 ${navbarIsDark ? 'hover:bg-white/5 text-gray-100' : 'hover:bg-gray-100 text-gray-800'} ${isRTL ? 'font-ibm-plex-arabic' : 'font-heading'}`}
       dir={isRTL ? 'rtl' : 'ltr'}
     >
       <span className="text-lg font-heading">{item.name}</span>

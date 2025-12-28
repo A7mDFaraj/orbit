@@ -193,7 +193,7 @@ export default function PortfolioDetailPage() {
             <Link
               href="/portfolio"
               className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary transition-colors font-heading uppercase tracking-wider text-sm"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
             >
               <motion.svg
                 className="w-5 h-5"
@@ -254,7 +254,7 @@ export default function PortfolioDetailPage() {
                 <div className="flex-1">
                   <motion.h1
                     className="text-4xl sm:text-5xl lg:text-7xl font-heading text-gray-900 dark:text-white mb-4 uppercase tracking-tighter"
-                    style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                    style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                     dir={isRTL ? 'rtl' : 'ltr'}
                   >
                     {client.name}
@@ -287,8 +287,8 @@ export default function PortfolioDetailPage() {
                     visible: { opacity: 1, y: 0 },
                   }}
                   transition={{ delay: 0.6 }}
-                  className="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 font-gotham leading-relaxed max-w-4xl"
-                  style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                  className="text-xl sm:text-2xl text-gray-600 dark:text-gray-300  leading-relaxed max-w-4xl"
+                  style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                   dir={isRTL ? 'rtl' : 'ltr'}
                 >
                   {client.description}
@@ -469,7 +469,7 @@ export default function PortfolioDetailPage() {
               >
                 <h3
                   className="text-3xl sm:text-4xl font-heading text-gray-900 dark:text-white mb-8 uppercase tracking-tight"
-                  style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                  style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                   dir={isRTL ? 'rtl' : 'ltr'}
                 >
                   {isRTL ? 'الخدمات المقدمة' : 'Services Provided'}
@@ -487,8 +487,8 @@ export default function PortfolioDetailPage() {
                       <div className="flex items-center gap-3">
                         <div className="w-3 h-3 bg-primary rounded-full group-hover:scale-125 transition-transform" />
                         <span
-                          className="text-gray-900 dark:text-white font-gotham text-lg"
-                          style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                          className="text-gray-900 dark:text-white  text-lg"
+                          style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                           dir={isRTL ? 'rtl' : 'ltr'}
                         >
                           {service}
@@ -518,7 +518,7 @@ export default function PortfolioDetailPage() {
                 >
                   <h3
                     className="text-2xl sm:text-3xl font-heading text-gray-900 dark:text-white uppercase tracking-tight"
-                    style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                    style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                     dir={isRTL ? 'rtl' : 'ltr'}
                   >
                     {isRTL ? 'تفاصيل المشروع' : 'Project Details'}
@@ -547,7 +547,7 @@ export default function PortfolioDetailPage() {
                           className="prose prose-lg dark:prose-invert max-w-none text-gray-700 dark:text-gray-300"
                           dangerouslySetInnerHTML={{ __html: client.blogText }}
                           style={{
-                            fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif',
+                            fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif',
                             direction: isRTL ? 'rtl' : 'ltr',
                           }}
                         />
@@ -575,14 +575,14 @@ export default function PortfolioDetailPage() {
                 <div className="relative z-10">
                   <h3
                     className="text-3xl sm:text-4xl lg:text-5xl font-heading text-gray-900 dark:text-white mb-6 uppercase tracking-tighter"
-                    style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                    style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                     dir={isRTL ? 'rtl' : 'ltr'}
                   >
                     {isRTL ? 'جاهز لبدء مشروعك؟' : 'Ready to Start Your Project?'}
                   </h3>
                   <p
-                    className="text-xl text-gray-600 dark:text-gray-300 mb-10 font-gotham max-w-2xl mx-auto"
-                    style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                    className="text-xl text-gray-600 dark:text-gray-300 mb-10  max-w-2xl mx-auto"
+                    style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                     dir={isRTL ? 'rtl' : 'ltr'}
                   >
                     {isRTL 
@@ -594,7 +594,7 @@ export default function PortfolioDetailPage() {
                     <Link href="/request-quote">
                       <motion.button
                         className="px-10 py-5 bg-primary text-white rounded-xl font-heading uppercase tracking-wider shadow-2xl hover:shadow-primary/30 text-lg transition-all duration-300 relative overflow-hidden group"
-                        style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                        style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                         whileHover={{ scale: 1.05, y: -3 }}
                         whileTap={{ scale: 0.98 }}
                       >
@@ -622,7 +622,7 @@ export default function PortfolioDetailPage() {
                     <Link href="/portfolio">
                       <motion.button
                         className="px-10 py-5 bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-2 border-gray-300 dark:border-gray-600 rounded-xl font-heading uppercase tracking-wider shadow-lg hover:shadow-xl text-lg transition-all duration-300"
-                        style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                        style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                         whileHover={{ scale: 1.05, y: -3 }}
                         whileTap={{ scale: 0.98 }}
                       >

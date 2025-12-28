@@ -184,8 +184,8 @@ function RequestQuoteForm() {
           >
             <Link
               href={source === 'healthcare' ? '/healthcare' : source === 'enterprise' ? '/enterprise' : '/packages'}
-              className="inline-flex items-center gap-2 mb-6 text-primary hover:text-primary/80 transition-colors font-gotham"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              className="inline-flex items-center gap-2 mb-6 text-primary hover:text-primary/80 transition-colors "
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
               dir={isRTL ? 'rtl' : 'ltr'}
             >
               <svg
@@ -211,14 +211,14 @@ function RequestQuoteForm() {
 
             <h1
               className="text-4xl sm:text-5xl lg:text-6xl font-heading text-gray-900 dark:text-white mb-4 uppercase tracking-tighter"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
               dir={isRTL ? 'rtl' : 'ltr'}
             >
               {t.clientInquiryPage.title}
             </h1>
             <p
-              className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 font-gotham"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 "
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
               dir={isRTL ? 'rtl' : 'ltr'}
             >
               {t.clientInquiryPage.subtitle}
@@ -263,14 +263,14 @@ function RequestQuoteForm() {
                 <div className="flex-1">
                   <h3 
                     className="text-lg font-heading text-gray-900 dark:text-white mb-2"
-                    style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                    style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                     dir={isRTL ? 'rtl' : 'ltr'}
                   >
                     {isRTL ? 'مرحباً بك!' : 'Welcome!'}
                   </h3>
                   <p 
-                    className="text-gray-700 dark:text-gray-300 font-gotham"
-                    style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                    className="text-gray-700 dark:text-gray-300 "
+                    style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                     dir={isRTL ? 'rtl' : 'ltr'}
                   >
                     {contextMessage}
@@ -303,7 +303,7 @@ function RequestQuoteForm() {
                     <div className="flex-1">
                       <h3 
                         className="text-lg font-heading text-gray-900 dark:text-white mb-1"
-                        style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                        style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                         dir={isRTL ? 'rtl' : 'ltr'}
                       >
                         {formData.packageName}
@@ -314,7 +314,7 @@ function RequestQuoteForm() {
                         </p>
                       )}
                       {formData.packageMessages && (
-                        <p className="text-sm text-gray-600 dark:text-gray-400 font-gotham">
+                        <p className="text-sm text-gray-600 dark:text-gray-400 ">
                           {isRTL ? `${formData.packageMessages} رسالة` : `${formData.packageMessages} Messages`}
                         </p>
                       )}
@@ -349,7 +349,7 @@ function RequestQuoteForm() {
                 <label
                   htmlFor="selectedPackage"
                   className="block text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2"
-                  style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                  style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                   dir={isRTL ? 'rtl' : 'ltr'}
                 >
                   {isRTL ? 'اختر الباقة (اختياري)' : 'Select Package (Optional)'}
@@ -383,7 +383,7 @@ function RequestQuoteForm() {
                     }
                   }}
                   className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
-                  style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                  style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                   dir={isRTL ? 'rtl' : 'ltr'}
                 >
                   <option value="">{isRTL ? 'لا يوجد باقة محددة' : 'No package selected'}</option>
@@ -397,7 +397,7 @@ function RequestQuoteForm() {
               <label
                 htmlFor="name"
                 className="block text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2"
-                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : undefined }}
+                style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : undefined }}
               >
                 {t.clientInquiryPage.name}
               </label>
@@ -408,8 +408,8 @@ function RequestQuoteForm() {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors font-gotham"
-                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors "
+                style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                 dir={isRTL ? 'rtl' : 'ltr'}
               />
             </div>
@@ -419,7 +419,7 @@ function RequestQuoteForm() {
               <label
                 htmlFor="email"
                 className="block text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2"
-                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : undefined }}
+                style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : undefined }}
               >
                 {t.clientInquiryPage.email}
               </label>
@@ -430,8 +430,8 @@ function RequestQuoteForm() {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors font-gotham"
-                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors "
+                style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                 dir="ltr"
               />
             </div>
@@ -441,7 +441,7 @@ function RequestQuoteForm() {
               <label
                 htmlFor="phone"
                 className="block text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2"
-                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : undefined }}
+                style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : undefined }}
               >
                 {t.clientInquiryPage.phone}
               </label>
@@ -452,8 +452,8 @@ function RequestQuoteForm() {
                 value={formData.phone}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors font-gotham"
-                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors "
+                style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                 dir="ltr"
               />
             </div>
@@ -463,7 +463,7 @@ function RequestQuoteForm() {
               <label
                 htmlFor="company"
                 className="block text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2"
-                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                 dir={isRTL ? 'rtl' : 'ltr'}
               >
                 {source === 'healthcare' 
@@ -486,8 +486,8 @@ function RequestQuoteForm() {
                     ? (isRTL ? 'مثال: شركة التقنية المتقدمة، مؤسسة الأعمال...' : 'e.g., Advanced Tech Company, Business Corporation...')
                     : (isRTL ? 'اسم الشركة أو المؤسسة' : 'Company or Organization Name')
                 }
-                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors font-gotham placeholder:text-gray-400 dark:placeholder:text-gray-500"
-                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors  placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                 dir={isRTL ? 'rtl' : 'ltr'}
               />
             </div>
@@ -498,13 +498,13 @@ function RequestQuoteForm() {
                 <label
                   htmlFor="serviceType"
                   className="block text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300"
-                  style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                  style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                   dir={isRTL ? 'rtl' : 'ltr'}
                 >
                   {isRTL ? 'نوع الحل' : 'Solution Type'}
                 </label>
                 {(hasPackageFromURL || source) && formData.serviceType && (
-                  <span className="text-xs text-primary font-gotham" style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }} dir={isRTL ? 'rtl' : 'ltr'}>
+                  <span className="text-xs text-primary " style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }} dir={isRTL ? 'rtl' : 'ltr'}>
                     {isRTL ? '✓ تم التحديد تلقائياً' : '✓ Auto-selected'}
                   </span>
                 )}
@@ -515,8 +515,8 @@ function RequestQuoteForm() {
                 value={formData.serviceType}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors font-gotham"
-                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors "
+                style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                 dir={isRTL ? 'rtl' : 'ltr'}
               >
                 <option value="">
@@ -543,7 +543,7 @@ function RequestQuoteForm() {
               <label
                 htmlFor="message"
                 className="block text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2"
-                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                 dir={isRTL ? 'rtl' : 'ltr'}
               >
                 {t.clientInquiryPage.message}
@@ -568,12 +568,12 @@ function RequestQuoteForm() {
                         ? 'أخبرنا عن احتياجاتك ومتطلباتك...'
                         : 'Tell us about your needs and requirements...')
                 }
-                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors resize-none font-gotham placeholder:text-gray-400 dark:placeholder:text-gray-500"
-                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors resize-none  placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                 dir={isRTL ? 'rtl' : 'ltr'}
               />
               {(source === 'healthcare' || source === 'enterprise') && (
-                <p className="mt-2 text-xs text-gray-500 dark:text-gray-400 font-gotham" style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }} dir={isRTL ? 'rtl' : 'ltr'}>
+                <p className="mt-2 text-xs text-gray-500 dark:text-gray-400 " style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }} dir={isRTL ? 'rtl' : 'ltr'}>
                   {isRTL 
                     ? '💡 نصيحة: كلما زادت التفاصيل، كلما استطعنا تقديم عرض أفضل'
                     : '💡 Tip: The more details you provide, the better we can tailor our solution'}
@@ -586,7 +586,7 @@ function RequestQuoteForm() {
               <label
                 htmlFor="budget"
                 className="block text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2"
-                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : undefined }}
+                style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : undefined }}
               >
                 {t.clientInquiryPage.budget}
               </label>
@@ -596,7 +596,7 @@ function RequestQuoteForm() {
                 value={formData.budget}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
-                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : undefined }}
+                style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : undefined }}
               >
                 <option value="">
                   {isRTL ? 'اختر الميزانية' : 'Select Budget Range'}
@@ -623,7 +623,7 @@ function RequestQuoteForm() {
               className="w-full bg-gradient-to-r from-primary to-[#9a2d45] text-white py-4 px-8 rounded-lg font-heading uppercase tracking-wider shadow-lg hover:shadow-xl hover:from-[#9a2d45] hover:to-primary transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
               whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
               dir={isRTL ? 'rtl' : 'ltr'}
             >
               {isSubmitting

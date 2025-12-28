@@ -79,18 +79,21 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
   const { t, toggleLanguage, isArabic } = useAdminLanguage();
 
   useEffect(() => {
-    // Force light theme when admin layout mounts
-    forceLightTheme();
-    checkAuth();
-    
-    // Create observer to prevent dark theme from being applied
-    const observer = createThemeObserver();
-    
-    return () => {
-      if (observer) {
-        observer.disconnect();
-      }
-    };
+    // Force light theme when admin layout mounts (only on client)
+    if (typeof window !== 'undefined') {
+      forceLightTheme();
+      
+      // Create observer to prevent dark theme from being applied
+      const observer = createThemeObserver();
+      
+      checkAuth();
+      
+      return () => {
+        if (observer) {
+          observer.disconnect();
+        }
+      };
+    }
   }, []);
 
   const checkAuth = async () => {
@@ -242,7 +245,7 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
               {sidebarOpen && (
                 <button
                   onClick={() => toggleSection(section.title)}
-                  className="w-full flex items-center justify-between px-3 py-2 text-xs font-somar font-bold text-secondary/70 hover:text-secondary uppercase tracking-wider transition-colors"
+                  className="w-full flex items-center justify-between px-3 py-2 text-xs font-ibm-plex-arabic font-bold text-secondary/70 hover:text-secondary uppercase tracking-wider transition-colors"
                 >
                   <span>{section.titleAr}</span>
                   <span className={`transition-transform duration-200 ${expandedSection === section.title ? 'rotate-90' : ''}`}>
@@ -264,7 +267,7 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
                   >
                     <span className="text-xl">{item.icon}</span>
                     {sidebarOpen && (
-                      <span className="font-somar font-medium">{item.nameAr}</span>
+                      <span className="font-ibm-plex-arabic font-medium">{item.nameAr}</span>
                     )}
                     {isActive(item.href) && sidebarOpen && (
                       <span className="mr-auto w-2 h-2 bg-primary rounded-full"></span>
@@ -282,7 +285,7 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
             <Link 
               href="/" 
               target="_blank"
-              className="block text-center bg-secondary hover:bg-secondary/90 text-primary font-somar font-bold py-3 px-4 rounded-lg transition-all hover:shadow-lg"
+              className="block text-center bg-secondary hover:bg-secondary/90 text-primary font-ibm-plex-arabic font-bold py-3 px-4 rounded-lg transition-all hover:shadow-lg"
             >
               🌐 عرض الموقع
             </Link>
@@ -307,7 +310,7 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
               {/* Logout Button */}
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-1 lg:gap-2 px-3 lg:px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 transition-colors text-white font-somar font-semibold text-sm"
+                className="flex items-center gap-1 lg:gap-2 px-3 lg:px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 transition-colors text-white font-ibm-plex-arabic font-semibold text-sm"
                 title="تسجيل خروج"
               >
                 <span className="text-base lg:text-lg">🚪</span>
@@ -321,14 +324,14 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
                 </div>
                 <div className="text-left">
                   <p className="text-xs text-gray-600">مرحباً</p>
-                  <p className="font-somar font-bold text-sm text-gray-900">{user.name}</p>
+                  <p className="font-ibm-plex-arabic font-bold text-sm text-gray-900">{user.name}</p>
                 </div>
               </div>
 
               {/* Language Switcher */}
               <button
                 onClick={toggleLanguage}
-                className="flex items-center gap-1 lg:gap-2 px-3 lg:px-4 py-2 rounded-lg bg-secondary hover:bg-secondary/90 transition-colors text-primary font-somar font-semibold text-sm"
+                className="flex items-center gap-1 lg:gap-2 px-3 lg:px-4 py-2 rounded-lg bg-secondary hover:bg-secondary/90 transition-colors text-primary font-ibm-plex-arabic font-semibold text-sm"
               >
                 <span className="text-base lg:text-lg">🌐</span>
                 <span className="text-xs lg:text-sm">{isArabic ? 'EN' : 'AR'}</span>
@@ -339,7 +342,7 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
               <h2 className="text-xl lg:text-3xl font-heading font-bold text-primary uppercase tracking-wide truncate">
                 لوحة تحكم ORBIT
               </h2>
-              <p className="text-xs lg:text-sm text-gray-500 mt-1 font-somar">نظام إدارة المحتوى</p>
+              <p className="text-xs lg:text-sm text-gray-500 mt-1 font-ibm-plex-arabic">نظام إدارة المحتوى</p>
             </div>
           </div>
         </header>

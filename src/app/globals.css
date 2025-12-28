@@ -1,35 +1,4 @@
-/* ORBIT Brand Fonts - Gotham (English) */
-/* Temporarily using system font fallback to avoid Turbopack path issues with nested folders */
-/* TODO: Move font files to /public/fonts/gotham/ (flat structure) for proper loading */
-/* For now, Gotham will fallback to system sans-serif fonts */
-
-/* ORBIT Brand Fonts - Somar (Arabic) */
-/* Note: Font files need to be added to /public/fonts/somar/ */
-@font-face {
-  font-family: 'Somar';
-  src: url('/fonts/somar/Somar-ExtraLight.otf') format('opentype');
-  font-weight: 200;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Somar';
-  src: url('/fonts/somar/Somar-Medium.otf') format('opentype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Somar';
-  src: url('/fonts/somar/Somar-ExtraBold.otf') format('opentype');
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* IBM Plex Sans - Professional Enterprise Font */
+/* ORBIT Brand Fonts - IBM Plex Sans (English & Arabic) */
 /* Loaded via Google Fonts in layout.tsx */
 
 @tailwind base;
@@ -45,10 +14,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  /* ORBIT Brand Fonts */
-  --font-gotham: 'Gotham', sans-serif;
-  --font-somar: 'Somar', sans-serif;
-  --font-ibm-plex: 'IBM Plex Sans', 'Gotham', sans-serif;
+  /* ORBIT Brand Fonts - IBM Plex Sans for both English and Arabic */
+  --font-ibm-plex: 'IBM Plex Sans', sans-serif;
+  --font-ibm-plex-arabic: 'IBM Plex Sans Arabic', sans-serif;
   /* ORBIT Brand Colors (Verified from PDF) */
   --color-primary: #7A1E2E; /* Burgundy */
   --color-secondary: #E8DCCB; /* Beige */
@@ -70,14 +38,14 @@ html {
 }
 
 html[dir="rtl"] body {
-  font-family: var(--font-somar), 'Arial', sans-serif !important;
+  font-family: var(--font-ibm-plex-arabic), var(--font-ibm-plex), sans-serif !important;
   direction: rtl;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-gotham);
+  font-family: var(--font-ibm-plex), sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -103,21 +71,17 @@ body {
 }
 
 /* Custom Typography Classes - ORBIT Brand */
-.font-gotham {
-  font-family: var(--font-gotham);
-}
-
-.font-somar {
-  font-family: var(--font-somar);
-}
-
 .font-ibm-plex {
-  font-family: var(--font-ibm-plex);
+  font-family: var(--font-ibm-plex), sans-serif;
 }
 
-/* Heading Styles - ORBIT Brand (Gotham) */
+.font-ibm-plex-arabic {
+  font-family: var(--font-ibm-plex-arabic), var(--font-ibm-plex), sans-serif;
+}
+
+/* Heading Styles - ORBIT Brand (IBM Plex Sans) */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-gotham);
+  font-family: var(--font-ibm-plex), sans-serif;
   font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 1.2;

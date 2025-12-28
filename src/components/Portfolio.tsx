@@ -103,13 +103,13 @@ export default function Portfolio() {
           <motion.div variants={itemVariants} className="text-center mb-16">
             <h2 
               className="text-5xl sm:text-6xl lg:text-7xl font-heading text-gray-900 mb-6 uppercase tracking-tighter"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
             >
               {t.portfolio.title}
             </h2>
             <p 
-              className="text-xl text-gray-600 max-w-3xl mx-auto font-gotham mb-6"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              className="text-xl text-gray-600 max-w-3xl mx-auto  mb-6"
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
             >
               {t.portfolio.description}
             </p>
@@ -117,7 +117,7 @@ export default function Portfolio() {
             <motion.a
               href="/portfolio"
               className="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-[#9a2d45] text-white px-8 py-4 rounded-lg font-heading uppercase tracking-wider shadow-xl hover:shadow-2xl transition-all duration-300"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
               whileHover={{ scale: 1.05, y: -3 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -137,7 +137,7 @@ export default function Portfolio() {
                   ? 'bg-primary text-white shadow-lg scale-105'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
             >
               {t.portfolio.all}
             </button>
@@ -227,22 +227,22 @@ export default function Portfolio() {
           <div className="bg-gradient-to-br from-primary/10 to-purple-500/10 dark:from-primary/20 dark:to-purple-500/20 rounded-3xl p-12 border-2 border-primary/30 dark:border-primary/40">
             <motion.h3
               className="text-4xl sm:text-5xl font-heading text-gray-900 dark:text-white mb-4 uppercase tracking-tighter"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
             >
               {t.portfolio.joinTeam}
             </motion.h3>
             <p
-              className="text-xl text-gray-600 dark:text-gray-300 mb-8 font-gotham"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              className="text-xl text-gray-600 dark:text-gray-300 mb-8 "
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
             >
               {t.portfolio.joinTeamDesc}
             </p>
             <motion.a
               href="/join-team"
               className="inline-block bg-primary text-white px-12 py-5 rounded-lg font-heading uppercase tracking-wider shadow-xl hover:shadow-2xl transition-all duration-300"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
               whileHover={{ scale: 1.05, y: -3 }}
               whileTap={{ scale: 0.98 }}
             >

@@ -231,9 +231,9 @@ export default function About() {
               }}
             >
               <motion.p
-                className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-relaxed font-medium ${isRTL ? 'font-somar' : 'font-gotham'}`}
+                className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-relaxed font-medium ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
                 style={{
-                  fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif',
+                  fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif',
                   color: '#161616',
                 }}
                 dir={isRTL ? 'rtl' : 'ltr'}
@@ -377,7 +377,7 @@ export default function About() {
               <div className="relative z-10">
                 <motion.h3
                   className="text-3xl sm:text-4xl font-heading text-primary dark:text-primary mb-6 uppercase tracking-tight"
-                  style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                  style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                   dir={isRTL ? 'rtl' : 'ltr'}
                   initial={{ opacity: 0, x: isRTL ? 30 : -30 }}
                   animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -394,8 +394,8 @@ export default function About() {
                 />
 
                 <motion.p
-                  className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 leading-relaxed font-gotham"
-                  style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                  className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 leading-relaxed "
+                  style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                   dir={isRTL ? 'rtl' : 'ltr'}
                   initial={{ opacity: 0, y: 20 }}
                   animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -425,7 +425,7 @@ export default function About() {
               <div className="relative z-10">
                 <motion.h3
                   className="text-3xl sm:text-4xl font-heading text-secondary dark:text-secondary mb-6 uppercase tracking-tight"
-                  style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                  style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                   dir={isRTL ? 'rtl' : 'ltr'}
                   initial={{ opacity: 0, x: isRTL ? -30 : 30 }}
                   animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -442,8 +442,8 @@ export default function About() {
                 />
 
                 <motion.p
-                  className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 leading-relaxed font-gotham"
-                  style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                  className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 leading-relaxed "
+                  style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                   dir={isRTL ? 'rtl' : 'ltr'}
                   initial={{ opacity: 0, y: 20 }}
                   animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -468,7 +468,7 @@ export default function About() {
           >
             <motion.h3
               className="text-4xl sm:text-5xl lg:text-7xl font-heading text-gray-900 dark:text-white mb-20 uppercase tracking-tighter text-center"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
               dir={isRTL ? 'rtl' : 'ltr'}
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -526,9 +526,9 @@ export default function About() {
 
                     <div className="relative z-10">
                       <motion.h4
-                        className={`font-heading text-gray-900 dark:text-white uppercase tracking-tight group-hover:text-primary dark:group-hover:text-primary transition-colors duration-300 ${getFontSize(index)} ${isRTL ? 'font-somar' : 'font-heading'} leading-tight`}
+                        className={`font-heading text-gray-900 dark:text-white uppercase tracking-tight group-hover:text-primary dark:group-hover:text-primary transition-colors duration-300 ${getFontSize(index)} ${isRTL ? 'font-ibm-plex-arabic' : 'font-heading'} leading-tight`}
                         style={{ 
-                          fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif',
+                          fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif',
                         }}
                         dir={isRTL ? 'rtl' : 'ltr'}
                         initial={{ opacity: 0 }}

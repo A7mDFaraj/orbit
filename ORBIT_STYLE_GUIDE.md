@@ -36,122 +36,123 @@ Clean, modern, stylish, distinctive, and legible. The brand expresses profession
 
 ### Font Families
 
-#### English Font: Gotham (Sans-Serif)
+#### English Font: IBM Plex Sans (Sans-Serif)
 - **Usage**: All English text - headings (h1-h6), body text, UI elements, buttons, navigation, paragraphs
 - **Style**: Sans-serif, clean, modern, professional
 - **Available Weights**: 
   - Light (300)
-  - Book (400)
+  - Regular (400)
   - Medium (500)
+  - SemiBold (600)
   - Bold (700)
-  - Black (900)
-  - All weights have Italic versions
-- **Location**: `/public/fonts/gotham/` (font files need to be added)
+- **Location**: Loaded via Google Fonts (next/font/google)
 
-#### Arabic Font: Somar (Sans-Serif)
+#### Arabic Font: IBM Plex Sans Arabic (Sans-Serif)
 - **Usage**: All Arabic/RTL text content
 - **Style**: Modern Arabic sans-serif
 - **Available Weights**:
-  - ExtraLight (200)
+  - Light (300)
+  - Regular (400)
   - Medium (500)
-  - ExtraBold (800)
-- **Location**: `/public/fonts/somar/` (font files need to be added)
+  - SemiBold (600)
+  - Bold (700)
+- **Location**: Loaded via Google Fonts (next/font/google)
 
 ### Typography Scale
 
-#### Display Sizes (Gotham)
+#### Display Sizes (IBM Plex Sans)
 ```css
 /* Display XL - Hero titles, major announcements */
 font-size: 5.5rem; /* 88px */
 line-height: 1.1;
 letter-spacing: -0.03em;
-font-family: 'Gotham', sans-serif;
+font-family: 'IBM Plex Sans', sans-serif;
 
 /* Display Large - Section headers */
 font-size: 4.5rem; /* 72px */
 line-height: 1.1;
 letter-spacing: -0.02em;
-font-family: 'Gotham', sans-serif;
+font-family: 'IBM Plex Sans', sans-serif;
 
 /* Display Medium - Subsection headers */
 font-size: 3.5rem; /* 56px */
 line-height: 1.15;
 letter-spacing: -0.02em;
-font-family: 'Gotham', sans-serif;
+font-family: 'IBM Plex Sans', sans-serif;
 
 /* Display Small - Card titles */
 font-size: 2.5rem; /* 40px */
 line-height: 1.2;
 letter-spacing: -0.01em;
-font-family: 'Gotham', sans-serif;
+font-family: 'IBM Plex Sans', sans-serif;
 ```
 
-#### Heading Sizes (Gotham)
+#### Heading Sizes (IBM Plex Sans)
 ```css
 /* H1 - Page titles */
 font-size: 2.25rem; /* 36px */
 line-height: 1.2;
 letter-spacing: -0.02em;
 font-weight: 400;
-font-family: 'Gotham', sans-serif;
+font-family: 'IBM Plex Sans', sans-serif;
 
 /* H2 - Section titles */
 font-size: 1.875rem; /* 30px */
 line-height: 1.25;
 letter-spacing: -0.02em;
 font-weight: 400;
-font-family: 'Gotham', sans-serif;
+font-family: 'IBM Plex Sans', sans-serif;
 
 /* H3 - Subsection titles */
 font-size: 1.5rem; /* 24px */
 line-height: 1.3;
 letter-spacing: -0.01em;
 font-weight: 400;
-font-family: 'Gotham', sans-serif;
+font-family: 'IBM Plex Sans', sans-serif;
 
 /* H4 - Card headers */
 font-size: 1.25rem; /* 20px */
 line-height: 1.4;
 letter-spacing: -0.01em;
 font-weight: 400;
-font-family: 'Gotham', sans-serif;
+font-family: 'IBM Plex Sans', sans-serif;
 
 /* H5, H6 - Small headers */
 font-size: 1.125rem; /* 18px */
 line-height: 1.4;
 letter-spacing: 0;
 font-weight: 400;
-font-family: 'Gotham', sans-serif;
+font-family: 'IBM Plex Sans', sans-serif;
 ```
 
-#### Body Text (Gotham)
+#### Body Text (IBM Plex Sans)
 ```css
 /* Body Large - Important paragraphs */
 font-size: 1.125rem; /* 18px */
 line-height: 1.6;
 letter-spacing: -0.01em;
 font-weight: 400;
-font-family: 'Gotham', sans-serif;
+font-family: 'IBM Plex Sans', sans-serif;
 
 /* Body - Standard paragraphs */
 font-size: 1rem; /* 16px */
 line-height: 1.6;
 letter-spacing: -0.01em;
 font-weight: 400;
-font-family: 'Gotham', sans-serif;
+font-family: 'IBM Plex Sans', sans-serif;
 
 /* Body Small - Captions, metadata */
 font-size: 0.875rem; /* 14px */
 line-height: 1.5;
 letter-spacing: 0;
 font-weight: 400;
-font-family: 'Gotham', sans-serif;
+font-family: 'IBM Plex Sans', sans-serif;
 ```
 
 ### Tailwind CSS Typography Classes
 
 ```jsx
-// Headings - Always use Gotham
+// Headings - Always use IBM Plex Sans
 <h1 className="font-heading text-4xl">Page Title</h1>
 <h2 className="font-heading text-3xl">Section Title</h2>
 <h3 className="font-heading text-2xl">Subsection</h3>
@@ -160,14 +161,14 @@ font-family: 'Gotham', sans-serif;
 <h1 className="font-heading text-display-xl">Hero Title</h1>
 <h2 className="font-heading text-display-lg">Large Display</h2>
 
-// Body text - Always use Gotham (default sans)
+// Body text - Always use IBM Plex Sans (default sans)
 <p className="text-lg">Important paragraph</p>
 <p>Standard paragraph</p>
 <p className="text-sm">Small text</p>
 
 // Font family utilities
-<div className="font-gotham">Gotham text</div>
-<div className="font-somar">Somar text (Arabic)</div>
+<div className="font-ibm-plex">IBM Plex Sans text</div>
+<div className="font-ibm-plex-arabic">IBM Plex Sans Arabic text (Arabic)</div>
 ```
 
 ---
@@ -281,14 +282,14 @@ Use Tailwind's default spacing scale (4px base unit):
 
 #### Primary Button (Burgundy)
 ```jsx
-<button className="bg-primary text-white px-6 py-3 rounded-lg font-gotham font-medium hover:bg-primary/90 transition-colors">
+<button className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors">
   Primary Action
 </button>
 ```
 
 #### Secondary Button (Beige)
 ```jsx
-<button className="bg-secondary text-primary px-6 py-3 rounded-lg font-gotham font-medium hover:bg-secondary/90 transition-colors">
+<button className="bg-secondary text-primary px-6 py-3 rounded-lg font-medium hover:bg-secondary/90 transition-colors">
   Secondary Action
 </button>
 ```
@@ -297,15 +298,15 @@ Use Tailwind's default spacing scale (4px base unit):
 ```jsx
 <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-neutral/20 shadow-sm">
   <h3 className="font-heading text-xl mb-4">Card Title</h3>
-  <p className="font-gotham text-gray-700 dark:text-gray-300">
-    Card content using Gotham for body text.
+  <p className="text-gray-700 dark:text-gray-300">
+    Card content using IBM Plex Sans for body text.
   </p>
 </div>
 ```
 
 ### Headings
 ```jsx
-// Always use Gotham for headings
+// Always use IBM Plex Sans for headings
 <h1 className="font-heading text-4xl text-primary mb-6">
   Main Heading
 </h1>
@@ -316,17 +317,17 @@ Use Tailwind's default spacing scale (4px base unit):
 
 ### Body Text
 ```jsx
-// Always use Gotham (default sans)
+// Always use IBM Plex Sans (default sans)
 <p className="text-lg text-gray-700 dark:text-gray-300 mb-4">
-  Body text should always use Gotham font family.
+  Body text should always use IBM Plex Sans font family.
 </p>
 ```
 
 ### Arabic Text
 ```jsx
-// Always use Somar for Arabic/RTL content
-<p className="font-somar text-lg" dir="rtl">
-  النص العربي يجب أن يستخدم خط Somar دائماً.
+// Always use IBM Plex Sans Arabic for Arabic/RTL content
+<p className="font-ibm-plex-arabic text-lg" dir="rtl">
+  النص العربي يجب أن يستخدم خط IBM Plex Sans Arabic دائماً.
 </p>
 ```
 
@@ -339,18 +340,18 @@ Use Tailwind's default spacing scale (4px base unit):
 export function FeatureCard({ title, description }) {
   return (
     <div className="bg-white dark:bg-gray-800 p-8 rounded-lg border border-neutral/20">
-      {/* Heading - Gotham */}
+      {/* Heading - IBM Plex Sans */}
       <h3 className="font-heading text-2xl text-primary mb-4">
         {title}
       </h3>
       
-      {/* Body - Gotham */}
-      <p className="font-gotham text-gray-700 dark:text-gray-300 mb-6">
+      {/* Body - IBM Plex Sans */}
+      <p className="text-gray-700 dark:text-gray-300 mb-6">
         {description}
       </p>
       
-      {/* Button - Gotham */}
-      <button className="bg-primary text-white px-6 py-3 rounded-lg font-gotham font-medium hover:bg-primary/90 transition-colors">
+      {/* Button - IBM Plex Sans */}
+      <button className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors">
         Learn More
       </button>
     </div>
@@ -362,18 +363,18 @@ export function FeatureCard({ title, description }) {
 ```jsx
 <section className="py-24 bg-gradient-to-b from-secondary to-white">
   <div className="container mx-auto px-4">
-    {/* Display heading - Gotham */}
+    {/* Display heading - IBM Plex Sans */}
     <h1 className="font-heading text-display-xl text-primary mb-6">
       Welcome to ORBIT
     </h1>
     
-    {/* Body text - Gotham */}
-    <p className="text-xl font-gotham text-gray-700 mb-8 max-w-2xl">
+    {/* Body text - IBM Plex Sans */}
+    <p className="text-xl text-gray-700 mb-8 max-w-2xl">
       Professional, modern, and distinctive brand identity.
     </p>
     
-    {/* CTA - Gotham */}
-    <button className="bg-primary text-white px-8 py-4 rounded-lg font-gotham font-semibold text-lg hover:bg-primary/90 transition-colors">
+    {/* CTA - IBM Plex Sans */}
+    <button className="bg-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary/90 transition-colors">
       Get Started
     </button>
   </div>
@@ -386,8 +387,8 @@ export function FeatureCard({ title, description }) {
 
 ### ✅ DO's
 
-1. **Always use Gotham for all English text** (headings, body, UI elements)
-2. **Always use Somar for all Arabic/RTL text** content
+1. **Always use IBM Plex Sans for all English text** (headings, body, UI elements)
+2. **Always use IBM Plex Sans Arabic for all Arabic/RTL text** content
 3. **Use Burgundy as the primary brand color** for key elements
 4. **Balance Burgundy and Beige** in your designs
 5. **Use Cool Gray for neutral elements** and balance
@@ -400,23 +401,22 @@ export function FeatureCard({ title, description }) {
 ### ❌ DON'Ts
 
 1. **Don't use non-brand colors** without explicit approval
-2. **Don't use custom fonts** outside Gotham (English) and Somar (Arabic)
-3. **Don't use Botera or Montserrat** - they were examples, not the actual brand fonts
+2. **Don't use custom fonts** outside IBM Plex Sans (English) and IBM Plex Sans Arabic (Arabic)
 4. **Don't introduce alternative colors** to the palette
 5. **Don't skip the style guide** when making design decisions
 6. **Don't use negative logo** unless background matches logo color
 7. **Don't create custom color variations** - stick to the palette
-8. **Don't mix font families incorrectly** - English = Gotham, Arabic = Somar
+8. **Don't mix font families incorrectly** - English = IBM Plex Sans, Arabic = IBM Plex Sans Arabic
 9. **Don't ignore spacing guidelines** - maintain consistency
-10. **Don't use Tajawal for Arabic** - use Somar instead
+10. **Don't use other fonts for Arabic** - use IBM Plex Sans Arabic instead
 
 ---
 
 ## Quick Reference
 
 ### Font Families
-- **English (All text)**: `font-heading` or `font-gotham` or default `sans` (Gotham)
-- **Arabic/RTL**: `font-somar` (Somar)
+- **English (All text)**: `font-heading` or `font-ibm-plex` or default `sans` (IBM Plex Sans)
+- **Arabic/RTL**: `font-ibm-plex-arabic` (IBM Plex Sans Arabic)
 
 ### Colors
 - **Primary**: `bg-primary`, `text-primary` (Burgundy)
@@ -427,30 +427,17 @@ export function FeatureCard({ title, description }) {
 - **Display XL**: `text-display-xl font-heading`
 - **H1**: `text-4xl font-heading`
 - **H2**: `text-3xl font-heading`
-- **Body**: `text-base font-montserrat` (or default)
+- **Body**: `text-base` (default IBM Plex Sans)
 
 ---
 
 ## Migration Notes
 
-### Legacy Font Classes
-The codebase currently uses legacy `font-rb` and `font-rb-bold` classes. These are being phased out in favor of:
-- `font-heading`, `font-gotham`, or default `sans` for all English text (Gotham)
-- `font-somar` for Arabic/RTL text
-
-**Migration Path:**
-- Replace `font-rb-bold` with `font-heading` or `font-gotham` (Gotham)
-- Replace `font-rb` with `font-heading` or `font-gotham` (Gotham)
-- Replace any `font-botera` or `font-montserrat` with `font-gotham` (they were examples only)
-- Ensure all English text uses Gotham, all Arabic text uses Somar
-
-### Font Files Setup Required
-**IMPORTANT**: The font files need to be added to the project:
-1. Create `/public/fonts/gotham/` folder
-2. Add Gotham font files (Light, Book, Medium, Bold, Black with Italics)
-3. Create `/public/fonts/somar/` folder
-4. Add Somar font files (ExtraLight, Medium, ExtraBold)
-5. Update font paths in `globals.css` if file names differ from expected names
+### Font Loading
+**IMPORTANT**: IBM Plex Sans fonts are loaded via Google Fonts using Next.js font optimization:
+- IBM Plex Sans (English) - loaded in `layout.tsx` with Latin subset
+- IBM Plex Sans Arabic (Arabic) - loaded in `layout.tsx` with Arabic subset
+- Fonts are automatically optimized and self-hosted by Next.js
 
 ## Notes
 
@@ -460,10 +447,9 @@ The codebase currently uses legacy `font-rb` and `font-rb-bold` classes. These a
   - Cool Gray: `#A7A9AC`
   - Black: `#161616`
 - **Font Files**: 
-  - Gotham font files need to be added to `/public/fonts/gotham/`
-  - Somar font files need to be added to `/public/fonts/somar/`
-  - Required Gotham weights: Light, Book, Medium, Bold, Black (with Italics)
-  - Required Somar weights: ExtraLight, Medium, ExtraBold
+  - IBM Plex Sans (English) - loaded via Google Fonts
+  - IBM Plex Sans Arabic (Arabic) - loaded via Google Fonts
+  - Available weights: Light (300), Regular (400), Medium (500), SemiBold (600), Bold (700)
 - **Brand Name**: Always refer to the brand as "ORBIT" (not MarkLine or other names)
 
 ---

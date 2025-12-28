@@ -229,7 +229,7 @@ export default function MainPageAdmin() {
           <h1 className="text-4xl font-heading font-bold text-primary mb-3 uppercase">
             محتوى <span className="text-gray-900">الصفحة الرئيسية</span>
           </h1>
-          <p className="text-lg text-gray-600 font-somar">
+          <p className="text-lg text-gray-600 font-ibm-plex-arabic">
             تحرير أقسام Hero و About و Why ORBIT من مكان واحد
           </p>
         </div>
@@ -238,7 +238,7 @@ export default function MainPageAdmin() {
         <div className="bg-white rounded-xl shadow-lg mb-6 p-2 flex gap-2">
           <button
             onClick={() => setActiveTab('hero')}
-            className={`flex-1 py-4 px-6 rounded-lg font-somar font-bold transition-all ${
+            className={`flex-1 py-4 px-6 rounded-lg font-ibm-plex-arabic font-bold transition-all ${
               activeTab === 'hero'
                 ? 'bg-primary text-white shadow-lg'
                 : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
@@ -248,7 +248,7 @@ export default function MainPageAdmin() {
           </button>
           <button
             onClick={() => setActiveTab('about')}
-            className={`flex-1 py-4 px-6 rounded-lg font-somar font-bold transition-all ${
+            className={`flex-1 py-4 px-6 rounded-lg font-ibm-plex-arabic font-bold transition-all ${
               activeTab === 'about'
                 ? 'bg-primary text-white shadow-lg'
                 : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
@@ -258,7 +258,7 @@ export default function MainPageAdmin() {
           </button>
           <button
             onClick={() => setActiveTab('whyOrbit')}
-            className={`flex-1 py-4 px-6 rounded-lg font-somar font-bold transition-all ${
+            className={`flex-1 py-4 px-6 rounded-lg font-ibm-plex-arabic font-bold transition-all ${
               activeTab === 'whyOrbit'
                 ? 'bg-primary text-white shadow-lg'
                 : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
@@ -273,11 +273,11 @@ export default function MainPageAdmin() {
           {/* Hero Tab */}
           {activeTab === 'hero' && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-somar font-bold text-gray-900 mb-6 text-right">عنوان قسم Hero</h2>
+              <h2 className="text-2xl font-ibm-plex-arabic font-bold text-gray-900 mb-6 text-right">عنوان قسم Hero</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-somar font-semibold text-gray-700 mb-2 text-right">
+                  <label className="block text-sm font-ibm-plex-arabic font-semibold text-gray-700 mb-2 text-right">
                     العنوان (عربي)
                   </label>
                   <input
@@ -287,14 +287,14 @@ export default function MainPageAdmin() {
                       ...settings,
                       hero: { ...settings.hero, titleAr: e.target.value }
                     })}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-somar text-right"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-ibm-plex-arabic text-right"
                     placeholder="أوربيت نجاحك"
                     dir="rtl"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-somar font-semibold text-gray-700 mb-2 text-right">
+                  <label className="block text-sm font-ibm-plex-arabic font-semibold text-gray-700 mb-2 text-right">
                     العنوان (إنجليزي)
                   </label>
                   <input
@@ -304,14 +304,14 @@ export default function MainPageAdmin() {
                       ...settings,
                       hero: { ...settings.hero, titleEn: e.target.value }
                     })}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-gotham"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary "
                     placeholder="ORBIT Your Success"
                   />
                 </div>
               </div>
 
               <div className="bg-blue-50 border-r-4 border-blue-500 p-4 mt-6 text-right">
-                <p className="text-sm text-blue-700 font-somar">
+                <p className="text-sm text-blue-700 font-ibm-plex-arabic">
                   <strong>ملاحظة:</strong> شريط الحلول أسفل العنوان يتم إدارته بشكل منفصل في قسم إدارة الحلول.
                 </p>
               </div>
@@ -336,7 +336,7 @@ export default function MainPageAdmin() {
                         ...settings,
                         about: { ...settings.about, visionTitleEn: e.target.value }
                       })}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-gotham"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary "
                     />
                   </div>
                   <div>
@@ -350,7 +350,7 @@ export default function MainPageAdmin() {
                         ...settings,
                         about: { ...settings.about, visionTitleAr: e.target.value }
                       })}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-gotham text-right"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary  text-right"
                       dir="rtl"
                     />
                   </div>
@@ -367,7 +367,7 @@ export default function MainPageAdmin() {
                         about: { ...settings.about, visionTextEn: e.target.value }
                       })}
                       rows={3}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-gotham"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary "
                     />
                   </div>
                   <div>
@@ -381,7 +381,7 @@ export default function MainPageAdmin() {
                         about: { ...settings.about, visionTextAr: e.target.value }
                       })}
                       rows={3}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-gotham text-right"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary  text-right"
                       dir="rtl"
                     />
                   </div>
@@ -403,7 +403,7 @@ export default function MainPageAdmin() {
                         ...settings,
                         about: { ...settings.about, missionTitleEn: e.target.value }
                       })}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-gotham"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary "
                     />
                   </div>
                   <div>
@@ -417,7 +417,7 @@ export default function MainPageAdmin() {
                         ...settings,
                         about: { ...settings.about, missionTitleAr: e.target.value }
                       })}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-gotham text-right"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary  text-right"
                       dir="rtl"
                     />
                   </div>
@@ -434,7 +434,7 @@ export default function MainPageAdmin() {
                         about: { ...settings.about, missionTextEn: e.target.value }
                       })}
                       rows={3}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-gotham"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary "
                     />
                   </div>
                   <div>
@@ -448,7 +448,7 @@ export default function MainPageAdmin() {
                         about: { ...settings.about, missionTextAr: e.target.value }
                       })}
                       rows={3}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-gotham text-right"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary  text-right"
                       dir="rtl"
                     />
                   </div>
@@ -479,7 +479,7 @@ export default function MainPageAdmin() {
                         ...settings,
                         about: { ...settings.about, promisesTitleEn: e.target.value }
                       })}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-gotham"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary "
                     />
                   </div>
                   <div>
@@ -493,7 +493,7 @@ export default function MainPageAdmin() {
                         ...settings,
                         about: { ...settings.about, promisesTitleAr: e.target.value }
                       })}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-gotham text-right"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary  text-right"
                       dir="rtl"
                     />
                   </div>
@@ -519,14 +519,14 @@ export default function MainPageAdmin() {
                           placeholder="English"
                           value={promise.textEn}
                           onChange={(e) => updatePromise(index, 'textEn', e.target.value)}
-                          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary font-gotham"
+                          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary "
                         />
                         <input
                           type="text"
                           placeholder="Arabic"
                           value={promise.textAr}
                           onChange={(e) => updatePromise(index, 'textAr', e.target.value)}
-                          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary font-gotham text-right"
+                          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary  text-right"
                           dir="rtl"
                         />
                       </div>
@@ -572,21 +572,21 @@ export default function MainPageAdmin() {
                           placeholder="Number (e.g., 20+)"
                           value={stat.number}
                           onChange={(e) => updateStat(index, 'number', e.target.value)}
-                          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary font-gotham"
+                          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary "
                         />
                         <input
                           type="text"
                           placeholder="Label (English)"
                           value={stat.labelEn}
                           onChange={(e) => updateStat(index, 'labelEn', e.target.value)}
-                          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary font-gotham"
+                          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary "
                         />
                         <input
                           type="text"
                           placeholder="Label (Arabic)"
                           value={stat.labelAr}
                           onChange={(e) => updateStat(index, 'labelAr', e.target.value)}
-                          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary font-gotham text-right"
+                          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary  text-right"
                           dir="rtl"
                         />
                       </div>
@@ -628,14 +628,14 @@ export default function MainPageAdmin() {
                             placeholder="Title (English)"
                             value={feature.textEn}
                             onChange={(e) => updateFeature(index, 'textEn', e.target.value)}
-                            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary font-gotham"
+                            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary "
                           />
                           <input
                             type="text"
                             placeholder="Title (Arabic)"
                             value={feature.textAr}
                             onChange={(e) => updateFeature(index, 'textAr', e.target.value)}
-                            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary font-gotham text-right"
+                            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary  text-right"
                             dir="rtl"
                           />
                         </div>
@@ -645,14 +645,14 @@ export default function MainPageAdmin() {
                             value={feature.descriptionEn}
                             onChange={(e) => updateFeature(index, 'descriptionEn', e.target.value)}
                             rows={2}
-                            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary font-gotham"
+                            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary "
                           />
                           <textarea
                             placeholder="Description (Arabic)"
                             value={feature.descriptionAr}
                             onChange={(e) => updateFeature(index, 'descriptionAr', e.target.value)}
                             rows={2}
-                            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary font-gotham text-right"
+                            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary  text-right"
                             dir="rtl"
                           />
                         </div>
@@ -670,13 +670,13 @@ export default function MainPageAdmin() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="px-8 py-4 bg-primary text-white font-somar font-bold rounded-lg hover:bg-primary/90 hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-8 py-4 bg-primary text-white font-ibm-plex-arabic font-bold rounded-lg hover:bg-primary/90 hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saving ? 'جارِ الحفظ...' : 'حفظ جميع التغييرات'}
           </button>
           <button
             onClick={fetchSettings}
-            className="px-8 py-4 border-2 border-gray-300 text-gray-700 font-somar font-bold rounded-lg hover:bg-gray-100 transition-all"
+            className="px-8 py-4 border-2 border-gray-300 text-gray-700 font-ibm-plex-arabic font-bold rounded-lg hover:bg-gray-100 transition-all"
           >
             إعادة تعيين
           </button>

@@ -115,13 +115,13 @@ export default function ProductsShowcase() {
           >
             <motion.h2
               className="text-4xl sm:text-5xl lg:text-6xl font-heading mb-6 text-gray-900 dark:text-white"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
             >
               {isRTL ? 'استكشف حلولنا بالتفصيل' : 'Explore Our Solutions in Detail'}
             </motion.h2>
             <motion.p
-              className="text-xl sm:text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto font-gotham"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              className="text-xl sm:text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto "
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
             >
               {isRTL
                 ? 'اكتشف كيف يمكن لحلولنا أن تحول عملك وتدفع به نحو النجاح'
@@ -193,7 +193,7 @@ export default function ProductsShowcase() {
                         </div>
                         <motion.div
                           className={`ml-4 px-3 py-1 rounded-full text-xs font-heading font-bold ${index % 3 === 0 ? 'bg-primary/20 text-primary' : index % 3 === 1 ? 'bg-secondary/40 text-primary' : 'bg-neutral/30 text-gray-700 dark:text-gray-300'}`}
-                          style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                          style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                           whileHover={{ scale: 1.1 }}
                         >
                           {String(index + 1).padStart(2, '0')}
@@ -202,14 +202,14 @@ export default function ProductsShowcase() {
 
                       <h3
                         className="text-2xl font-heading mb-4 text-gray-900 dark:text-white relative z-10"
-                        style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                        style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                       >
                         {title}
                       </h3>
 
                       <p
-                        className="text-gray-600 dark:text-gray-400 mb-6 font-gotham leading-relaxed relative z-10"
-                        style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                        className="text-gray-600 dark:text-gray-400 mb-6  leading-relaxed relative z-10"
+                        style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                       >
                         {isRTL ? solution.descriptionAr : solution.descriptionEn}
                       </p>
@@ -220,8 +220,8 @@ export default function ProductsShowcase() {
                           {(isRTL ? solution.featuresAr : solution.features).map((feature, featureIndex) => (
                             <motion.li
                               key={featureIndex}
-                              className="flex items-start gap-2 text-sm sm:text-base text-gray-600 dark:text-gray-400 font-gotham"
-                              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                              className="flex items-start gap-2 text-sm sm:text-base text-gray-600 dark:text-gray-400 "
+                              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                               initial={{ opacity: 0, x: -10 }}
                               animate={inView ? { opacity: 1, x: 0 } : {}}
                               transition={{ delay: index * 0.1 + featureIndex * 0.05 }}
@@ -245,7 +245,7 @@ export default function ProductsShowcase() {
 
                       <motion.div
                         className="flex items-center gap-2 text-primary font-heading uppercase tracking-wider text-sm relative z-10"
-                        style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                        style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                         whileHover={{ x: isRTL ? -5 : 5 }}
                       >
                         {isRTL ? 'معرفة المزيد' : 'Learn More'}

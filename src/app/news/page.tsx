@@ -77,7 +77,7 @@ export default function NewsPage() {
             >
               <motion.h1
                 className="text-4xl sm:text-5xl lg:text-7xl font-heading text-gray-900 dark:text-white mb-6 uppercase tracking-tighter"
-                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                 dir={isRTL ? 'rtl' : 'ltr'}
               >
                 {isRTL ? 'الاخبار' : 'News'}
@@ -99,8 +99,8 @@ export default function NewsPage() {
               className="text-center"
             >
               <p
-                className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 font-gotham max-w-3xl mx-auto"
-                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                className="text-lg sm:text-xl text-gray-600 dark:text-gray-400  max-w-3xl mx-auto"
+                style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                 dir={isRTL ? 'rtl' : 'ltr'}
               >
                 {isRTL 
@@ -140,14 +140,14 @@ export default function NewsPage() {
                     <div className="h-48 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-xl mb-6" />
                     <h3
                       className="text-xl font-heading text-gray-900 dark:text-white mb-3 uppercase"
-                      style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                      style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                       dir={isRTL ? 'rtl' : 'ltr'}
                     >
                       {isRTL ? 'عنوان الخبر' : 'News Title'}
                     </h3>
                     <p
-                      className="text-gray-600 dark:text-gray-400 font-gotham line-clamp-3"
-                      style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                      className="text-gray-600 dark:text-gray-400  line-clamp-3"
+                      style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                       dir={isRTL ? 'rtl' : 'ltr'}
                     >
                       {isRTL 
@@ -167,6 +167,7 @@ export default function NewsPage() {
     </div>
   );
 }
+
 
 
 

@@ -153,7 +153,7 @@ export default function OffersPage() {
                 visible: { opacity: 1, y: 0 },
               }}
               className="text-5xl sm:text-6xl lg:text-8xl font-heading text-gray-900 dark:text-white mb-6 uppercase tracking-tighter"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
               dir={isRTL ? 'rtl' : 'ltr'}
             >
               {isRTL ? 'عروضنا الخاصة' : 'SPECIAL OFFERS'}
@@ -174,8 +174,8 @@ export default function OffersPage() {
                 visible: { opacity: 1, y: 0 },
               }}
               transition={{ delay: 0.4 }}
-              className="text-xl sm:text-2xl text-gray-600 dark:text-gray-400 font-gotham max-w-3xl mx-auto leading-relaxed"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              className="text-xl sm:text-2xl text-gray-600 dark:text-gray-400  max-w-3xl mx-auto leading-relaxed"
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
               dir={isRTL ? 'rtl' : 'ltr'}
             >
               {isRTL 
@@ -278,7 +278,7 @@ export default function OffersPage() {
                         {/* Title */}
                         <h3
                           className={`text-3xl font-heading font-bold mb-4 uppercase tracking-tight ${isBlackFriday ? 'text-white' : 'text-gray-900 dark:text-white'}`}
-                          style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                          style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                           dir={isRTL ? 'rtl' : 'ltr'}
                         >
                           {isRTL ? offer.titleAr || offer.title : offer.title}
@@ -287,7 +287,7 @@ export default function OffersPage() {
                         {/* Description */}
                         <p
                           className={`text-lg mb-6 leading-relaxed ${isBlackFriday ? 'text-gray-300' : 'text-gray-600 dark:text-gray-400'}`}
-                          style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                          style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                           dir={isRTL ? 'rtl' : 'ltr'}
                         >
                           {isRTL ? offer.descriptionAr || offer.description : offer.description}
@@ -418,14 +418,14 @@ export default function OffersPage() {
                   <div className="text-8xl mb-6">📞</div>
                   <h3
                     className="text-4xl sm:text-5xl font-heading text-gray-900 dark:text-white mb-6 uppercase tracking-tight"
-                    style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                    style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                     dir={isRTL ? 'rtl' : 'ltr'}
                   >
                     {isRTL ? 'تواصل مع فريق المبيعات' : 'Contact Our Sales Team'}
                   </h3>
                   <p
-                    className="text-xl text-gray-600 dark:text-gray-300 mb-10 font-gotham max-w-2xl mx-auto leading-relaxed"
-                    style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                    className="text-xl text-gray-600 dark:text-gray-300 mb-10  max-w-2xl mx-auto leading-relaxed"
+                    style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                     dir={isRTL ? 'rtl' : 'ltr'}
                   >
                     {isRTL 
@@ -437,7 +437,7 @@ export default function OffersPage() {
                     <Link href="/contact">
                       <motion.button
                         className="px-10 py-5 bg-primary text-white rounded-xl font-heading uppercase tracking-wider shadow-2xl hover:shadow-primary/30 text-lg transition-all relative overflow-hidden group"
-                        style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                        style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                         whileHover={{ scale: 1.05, y: -3 }}
                         whileTap={{ scale: 0.98 }}
                       >
@@ -455,7 +455,7 @@ export default function OffersPage() {
                     <Link href="/packages">
                       <motion.button
                         className="px-10 py-5 bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-2 border-gray-300 dark:border-gray-600 hover:border-primary dark:hover:border-primary rounded-xl font-heading uppercase tracking-wider shadow-lg hover:shadow-xl text-lg transition-all"
-                        style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                        style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                         whileHover={{ scale: 1.05, y: -3 }}
                         whileTap={{ scale: 0.98 }}
                       >

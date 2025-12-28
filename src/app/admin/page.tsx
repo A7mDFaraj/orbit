@@ -50,6 +50,9 @@ export default function AdminLogin() {
 
   // Force light theme and check if already logged in
   useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+    
     // Force light theme when admin page mounts
     forceLightTheme();
     
@@ -153,7 +156,7 @@ export default function AdminLogin() {
           <h1 className="text-3xl font-heading font-bold text-gray-900 mb-2 uppercase tracking-wide">
             Admin <span className="text-primary">Portal</span>
           </h1>
-          <p className="text-gray-600 font-gotham">Sign in to manage your website</p>
+          <p className="text-gray-600 ">Sign in to manage your website</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
@@ -169,7 +172,7 @@ export default function AdminLogin() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 border-2 border-neutral/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all font-gotham"
+              className="w-full px-4 py-3 border-2 border-neutral/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all "
               placeholder="admin@orbit.com.sa"
               required
             />
@@ -188,7 +191,7 @@ export default function AdminLogin() {
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 pr-12 border-2 border-neutral/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all font-gotham"
+                className="w-full px-4 py-3 pr-12 border-2 border-neutral/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all "
                 placeholder="••••••••"
                 required
               />
@@ -221,7 +224,7 @@ export default function AdminLogin() {
         </form>
 
         <div className="mt-6 pt-6 border-t border-neutral/20">
-          <p className="text-xs text-gray-500 text-center mb-3 font-gotham">
+          <p className="text-xs text-gray-500 text-center mb-3 ">
             Don't have an admin account?
           </p>
           <a
@@ -230,7 +233,7 @@ export default function AdminLogin() {
           >
             Create Admin Account
           </a>
-          <p className="text-xs text-gray-400 text-center font-gotham">
+          <p className="text-xs text-gray-400 text-center ">
             Or use API: POST /api/auth/create-admin
           </p>
         </div>

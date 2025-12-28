@@ -50,14 +50,14 @@ export default function PackagesPage() {
           <div className="text-center">
             <h1 
               className="text-5xl sm:text-6xl font-heading font-bold mb-6 uppercase"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
               dir={isRTL ? 'rtl' : 'ltr'}
             >
               {isRTL ? 'الباقات' : 'Packages'}
             </h1>
             <p 
-              className="text-xl sm:text-2xl mb-8 max-w-3xl mx-auto font-gotham text-white/90"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              className="text-xl sm:text-2xl mb-8 max-w-3xl mx-auto  text-white/90"
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
               dir={isRTL ? 'rtl' : 'ltr'}
             >
               {isRTL 
@@ -75,7 +75,7 @@ export default function PackagesPage() {
           <div className="text-center mb-16">
             <h2 
               className="text-4xl font-heading font-bold text-gray-900 dark:text-white mb-4"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
               dir={isRTL ? 'rtl' : 'ltr'}
             >
               {isRTL ? 'اختر الحل المناسب' : 'Choose Your Solution'}
@@ -96,14 +96,14 @@ export default function PackagesPage() {
                   </div>
                   <h3 
                     className="text-2xl font-heading font-bold text-gray-900 dark:text-white mb-4"
-                    style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                    style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                     dir={isRTL ? 'rtl' : 'ltr'}
                   >
                     {isRTL ? solution.titleAr : solution.title}
                   </h3>
                   <p 
-                    className="text-gray-600 dark:text-gray-400 font-gotham mb-6"
-                    style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                    className="text-gray-600 dark:text-gray-400  mb-6"
+                    style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                     dir={isRTL ? 'rtl' : 'ltr'}
                   >
                     {solution.description}
@@ -120,8 +120,8 @@ export default function PackagesPage() {
           <div className="mt-16 text-center">
             <div className="inline-block bg-blue-50 dark:bg-blue-900/30 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-8">
               <p 
-                className="text-lg text-blue-900 dark:text-blue-100 font-gotham mb-4"
-                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                className="text-lg text-blue-900 dark:text-blue-100  mb-4"
+                style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                 dir={isRTL ? 'rtl' : 'ltr'}
               >
                 {isRTL 
@@ -131,7 +131,7 @@ export default function PackagesPage() {
               <Link
                 href="/request-quote"
                 className="inline-block px-8 py-3 bg-primary text-white rounded-xl font-heading font-bold hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl"
-                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
               >
                 {isRTL ? 'اطلب عرض سعر مخصص' : 'Request Custom Quote'}
               </Link>

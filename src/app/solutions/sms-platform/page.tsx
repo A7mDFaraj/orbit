@@ -170,7 +170,7 @@ export default function SMSPlatformPage() {
           >
             <motion.h1
               className="text-4xl sm:text-5xl lg:text-6xl font-heading mb-6 uppercase tracking-tight"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
               variants={{
                 hidden: { opacity: 0, y: 30 },
                 visible: { opacity: 1, y: 0 },
@@ -181,8 +181,8 @@ export default function SMSPlatformPage() {
             </motion.h1>
 
             <motion.p
-              className="text-xl sm:text-2xl mb-8 max-w-3xl font-gotham text-white/90"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              className="text-xl sm:text-2xl mb-8 max-w-3xl  text-white/90"
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
               variants={{
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0 },
@@ -201,7 +201,7 @@ export default function SMSPlatformPage() {
               <Link
                 href="/packages"
                 className="inline-block px-8 py-4 bg-white text-primary rounded-xl font-heading uppercase tracking-wider shadow-xl hover:shadow-2xl hover:bg-gray-100 transition-all duration-300"
-                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
               >
                 {isRTL ? 'عرض الباقات' : 'View Packages'}
               </Link>
@@ -228,7 +228,7 @@ export default function SMSPlatformPage() {
           >
             <motion.h2
               className="text-3xl sm:text-4xl font-heading mb-12 text-gray-900 dark:text-white text-center"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
               variants={{
                 hidden: { opacity: 0, y: 30 },
                 visible: { opacity: 1, y: 0 },
@@ -251,7 +251,7 @@ export default function SMSPlatformPage() {
                   <div className="text-5xl mb-4">{feature.icon}</div>
                   <h3
                     className="text-xl font-heading mb-4 text-gray-900 dark:text-white"
-                    style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                    style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                     dir={isRTL ? 'rtl' : 'ltr'}
                   >
                     {isRTL ? feature.ar : feature.en}
@@ -281,7 +281,7 @@ export default function SMSPlatformPage() {
           >
             <motion.h2
               className="text-3xl sm:text-4xl font-heading mb-12 text-gray-900 dark:text-white text-center"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
               variants={{
                 hidden: { opacity: 0, y: 30 },
                 visible: { opacity: 1, y: 0 },
@@ -305,8 +305,8 @@ export default function SMSPlatformPage() {
                     <span className="text-2xl">✓</span>
                   </div>
                   <p
-                    className="text-lg font-gotham text-gray-900 dark:text-white"
-                    style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                    className="text-lg  text-gray-900 dark:text-white"
+                    style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                     dir={isRTL ? 'rtl' : 'ltr'}
                   >
                     {isRTL ? benefit.ar : benefit.en}
@@ -343,15 +343,15 @@ export default function SMSPlatformPage() {
             >
               <h2
                 className="text-3xl sm:text-5xl font-heading mb-4 text-gray-900 dark:text-white uppercase tracking-tight"
-                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                 dir={isRTL ? 'rtl' : 'ltr'}
               >
                 {isRTL ? 'باقات الرسائل النصية' : 'SMS Packages'}
               </h2>
               <div className="h-1 w-24 bg-primary mx-auto rounded-full mb-4" />
               <p
-                className="text-lg text-gray-600 dark:text-gray-400 font-gotham max-w-2xl mx-auto"
-                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                className="text-lg text-gray-600 dark:text-gray-400  max-w-2xl mx-auto"
+                style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                 dir={isRTL ? 'rtl' : 'ltr'}
               >
                 {isRTL ? 'اختر الباقة المناسبة لاحتياجاتك' : 'Choose the package that fits your needs'}
@@ -391,8 +391,8 @@ export default function SMSPlatformPage() {
                       </div>
                     </div>
                     <div
-                      className="text-base text-gray-600 dark:text-gray-400 font-gotham font-semibold uppercase tracking-wider"
-                      style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                      className="text-base text-gray-600 dark:text-gray-400  font-semibold uppercase tracking-wider"
+                      style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                       dir={isRTL ? 'rtl' : 'ltr'}
                     >
                       {isRTL ? 'رسالة' : 'Messages'}
@@ -411,12 +411,12 @@ export default function SMSPlatformPage() {
                           alt="SAR" 
                           className="w-8 h-8 opacity-70"
                         />
-                        <span className="text-xs text-gray-500 dark:text-gray-400 font-gotham font-semibold">
+                        <span className="text-xs text-gray-500 dark:text-gray-400  font-semibold">
                           {isRTL ? 'ر.س' : 'SAR'}
                         </span>
                       </div>
                     </div>
-                    <div className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full text-xs font-gotham font-semibold">
+                    <div className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full text-xs  font-semibold">
                       <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
@@ -427,11 +427,11 @@ export default function SMSPlatformPage() {
                   {/* Features List */}
                   <ul className="space-y-3 mb-8">
                     {pkg.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-3 text-sm font-gotham text-gray-700 dark:text-gray-300 group/item">
+                      <li key={idx} className="flex items-start gap-3 text-sm  text-gray-700 dark:text-gray-300 group/item">
                         <span className="flex-shrink-0 w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center text-primary text-xs font-bold group-hover/item:bg-primary group-hover/item:text-white transition-all">
                           ✓
                         </span>
-                        <span style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }} dir={isRTL ? 'rtl' : 'ltr'} className="flex-1">
+                        <span style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }} dir={isRTL ? 'rtl' : 'ltr'} className="flex-1">
                           {feature}
                         </span>
                       </li>
@@ -442,7 +442,7 @@ export default function SMSPlatformPage() {
                   <Link
                     href={`/request-quote?package=sms-${pkg.messages}&price=${pkg.price}&name=${encodeURIComponent(isRTL ? `باقة ${pkg.messages} رسالة` : `${pkg.messages} Messages Package`)}`}
                     className="block w-full text-center px-6 py-4 bg-gradient-to-r from-primary to-primary/90 text-white rounded-xl font-heading font-bold uppercase tracking-wider hover:from-primary/90 hover:to-primary transition-all text-sm shadow-lg hover:shadow-2xl transform hover:scale-105"
-                    style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                    style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                   >
                     {isRTL ? 'اطلب الآن 🚀' : 'Order Now 🚀'}
                   </Link>
@@ -451,8 +451,8 @@ export default function SMSPlatformPage() {
             </div>
 
             <motion.p
-              className="text-center mt-12 text-gray-600 dark:text-gray-400 font-gotham text-lg"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              className="text-center mt-12 text-gray-600 dark:text-gray-400  text-lg"
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
               variants={{
                 hidden: { opacity: 0 },
                 visible: { opacity: 1 },
@@ -473,7 +473,7 @@ export default function SMSPlatformPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <motion.h2
             className="text-3xl sm:text-4xl font-heading mb-6 uppercase tracking-tight"
-            style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+            style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -482,8 +482,8 @@ export default function SMSPlatformPage() {
             {isRTL ? 'ابدأ الآن' : 'Get Started Now'}
           </motion.h2>
           <motion.p
-            className="text-xl mb-8 text-white/90 font-gotham"
-            style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+            className="text-xl mb-8 text-white/90 "
+            style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -500,14 +500,14 @@ export default function SMSPlatformPage() {
             <Link
               href="/request-quote"
               className="inline-block px-10 py-4 bg-white text-primary rounded-xl font-heading uppercase tracking-wider shadow-xl hover:shadow-2xl hover:bg-gray-100 transition-all duration-300"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
             >
               {isRTL ? 'اطلب عرض سعر' : 'Request a Quote'}
             </Link>
             <Link
               href="/contact"
               className="inline-block px-10 py-4 bg-transparent border-2 border-white text-white rounded-xl font-heading uppercase tracking-wider hover:bg-white hover:text-primary transition-all duration-300"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
             >
               {isRTL ? 'تواصل معنا' : 'Contact Us'}
             </Link>

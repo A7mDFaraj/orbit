@@ -180,7 +180,7 @@ export default function TechnicalPackages() {
           >
             <h2
               className="text-3xl sm:text-4xl font-heading mb-4 text-gray-900 dark:text-white uppercase tracking-tight"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
               dir={isRTL ? 'rtl' : 'ltr'}
             >
               {isRTL ? 'باقات الرسائل النصية وسعرها' : 'SMS Packages and Pricing'}
@@ -207,8 +207,8 @@ export default function TechnicalPackages() {
                     {pkg.messages}
                   </div>
                   <div
-                    className="text-sm text-gray-600 dark:text-gray-400 font-gotham"
-                    style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                    className="text-sm text-gray-600 dark:text-gray-400 "
+                    style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                     dir={isRTL ? 'rtl' : 'ltr'}
                   >
                     {isRTL ? 'رسالة' : 'Messages'}
@@ -223,9 +223,9 @@ export default function TechnicalPackages() {
 
                 <ul className="space-y-2 mb-6">
                   {pkg.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center gap-2 text-sm font-gotham text-gray-700 dark:text-gray-300">
+                    <li key={idx} className="flex items-center gap-2 text-sm  text-gray-700 dark:text-gray-300">
                       <span className="text-primary">✓</span>
-                      <span style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }} dir={isRTL ? 'rtl' : 'ltr'}>
+                      <span style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }} dir={isRTL ? 'rtl' : 'ltr'}>
                         {feature}
                       </span>
                     </li>
@@ -235,7 +235,7 @@ export default function TechnicalPackages() {
                 <Link
                   href={`/request-quote?package=sms-${pkg.messages}&price=${pkg.price}&name=${encodeURIComponent(isRTL ? `باقة ${pkg.messages} رسالة` : `${pkg.messages} Messages Package`)}`}
                   className="block w-full text-center px-6 py-3 bg-primary text-white rounded-lg font-heading uppercase tracking-wider hover:bg-primary/90 transition-all text-sm"
-                  style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                  style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                 >
                   {isRTL ? 'اطلب الباقة' : 'Request Package'}
                 </Link>
@@ -244,8 +244,8 @@ export default function TechnicalPackages() {
           </div>
 
           <motion.p
-            className="text-center mt-8 text-gray-600 dark:text-gray-400 font-gotham"
-            style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+            className="text-center mt-8 text-gray-600 dark:text-gray-400 "
+            style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
             variants={{
               hidden: { opacity: 0 },
               visible: { opacity: 1 },
@@ -284,7 +284,7 @@ export default function TechnicalPackages() {
           >
             <h2
               className="text-3xl sm:text-4xl font-heading mb-4 text-gray-900 dark:text-white uppercase tracking-tight"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
               dir={isRTL ? 'rtl' : 'ltr'}
             >
               {isRTL ? 'باقات اشتراك OTime' : 'OTime Subscription Packages'}
@@ -314,7 +314,7 @@ export default function TechnicalPackages() {
 
                 <h3
                   className="text-2xl font-heading mb-4 text-gray-900 dark:text-white"
-                  style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                  style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                   dir={isRTL ? 'rtl' : 'ltr'}
                 >
                   {isRTL ? pkg.nameAr : pkg.name}
@@ -326,8 +326,8 @@ export default function TechnicalPackages() {
                       {pkg.price} {isRTL ? 'ريال' : 'SAR'}
                     </div>
                     <div
-                      className="text-sm text-gray-600 dark:text-gray-400 font-gotham"
-                      style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                      className="text-sm text-gray-600 dark:text-gray-400 "
+                      style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                       dir={isRTL ? 'rtl' : 'ltr'}
                     >
                       {isRTL ? pkg.periodAr : pkg.period}
@@ -337,31 +337,31 @@ export default function TechnicalPackages() {
 
                 <div className="space-y-3 mb-6">
                   <div className="flex justify-between items-center">
-                    <span className="font-gotham text-gray-700 dark:text-gray-300" style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }} dir={isRTL ? 'rtl' : 'ltr'}>
+                    <span className=" text-gray-700 dark:text-gray-300" style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }} dir={isRTL ? 'rtl' : 'ltr'}>
                       {isRTL ? 'المستخدمون' : 'Users'}
                     </span>
                     <span className="font-heading text-gray-900 dark:text-white">{pkg.users}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="font-gotham text-gray-700 dark:text-gray-300" style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }} dir={isRTL ? 'rtl' : 'ltr'}>
+                    <span className=" text-gray-700 dark:text-gray-300" style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }} dir={isRTL ? 'rtl' : 'ltr'}>
                       {isRTL ? 'الموظفون' : 'Employees'}
                     </span>
                     <span className="font-heading text-gray-900 dark:text-white">{pkg.employees}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="font-gotham text-gray-700 dark:text-gray-300" style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }} dir={isRTL ? 'rtl' : 'ltr'}>
+                    <span className=" text-gray-700 dark:text-gray-300" style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }} dir={isRTL ? 'rtl' : 'ltr'}>
                       {isRTL ? 'المورّدون' : 'Suppliers'}
                     </span>
                     <span className="font-heading text-gray-900 dark:text-white">{pkg.suppliers}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="font-gotham text-gray-700 dark:text-gray-300" style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }} dir={isRTL ? 'rtl' : 'ltr'}>
+                    <span className=" text-gray-700 dark:text-gray-300" style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }} dir={isRTL ? 'rtl' : 'ltr'}>
                       {isRTL ? 'التخزين' : 'Storage'}
                     </span>
                     <span className="font-heading text-gray-900 dark:text-white">{pkg.storage}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="font-gotham text-gray-700 dark:text-gray-300" style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }} dir={isRTL ? 'rtl' : 'ltr'}>
+                    <span className=" text-gray-700 dark:text-gray-300" style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }} dir={isRTL ? 'rtl' : 'ltr'}>
                       {isRTL ? 'ذكاء اصطناعي' : 'AI'}
                     </span>
                     <span className="font-heading text-gray-900 dark:text-white">{pkg.ai}</span>
@@ -370,9 +370,9 @@ export default function TechnicalPackages() {
 
                 <ul className="space-y-2 mb-6">
                   {pkg.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-sm font-gotham text-gray-700 dark:text-gray-300">
+                    <li key={idx} className="flex items-start gap-2 text-sm  text-gray-700 dark:text-gray-300">
                       <span className="text-primary mt-1">✓</span>
-                      <span style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }} dir={isRTL ? 'rtl' : 'ltr'}>
+                      <span style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }} dir={isRTL ? 'rtl' : 'ltr'}>
                         {feature}
                       </span>
                     </li>
@@ -382,7 +382,7 @@ export default function TechnicalPackages() {
                 <Link
                   href={`/request-quote?package=otime-${index + 1}&name=${encodeURIComponent(isRTL ? pkg.nameAr : pkg.name)}${pkg.price ? `&price=${pkg.price}` : ''}`}
                   className="block w-full text-center px-6 py-3 bg-primary text-white rounded-lg font-heading uppercase tracking-wider hover:bg-primary/90 transition-all"
-                  style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                  style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                 >
                   {isRTL ? 'اطلب الباقة' : 'Request Package'}
                 </Link>

@@ -136,7 +136,7 @@ export default function PortfolioPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading text-white mb-4 sm:mb-6 uppercase tracking-tight"
             style={{ 
-              fontFamily: isRTL ? 'Somar, sans-serif' : undefined,
+              fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : undefined,
               direction: isRTL ? 'rtl' : 'ltr',
             }}
           >
@@ -149,7 +149,7 @@ export default function PortfolioPage() {
             transition={{ delay: 0.2 }}
             className="text-white/60 mb-4 sm:mb-6 text-sm sm:text-base lg:text-lg hidden sm:block"
             style={{ 
-              fontFamily: isRTL ? 'Somar, sans-serif' : undefined,
+              fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : undefined,
               direction: isRTL ? 'rtl' : 'ltr',
             }}
           >
@@ -167,7 +167,7 @@ export default function PortfolioPage() {
               <span 
                 className="text-white font-heading uppercase tracking-wider text-xs sm:text-sm"
                 style={{ 
-                  fontFamily: isRTL ? 'Somar, sans-serif' : undefined,
+                  fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : undefined,
                   direction: isRTL ? 'rtl' : 'ltr',
                 }}
               >
@@ -288,7 +288,7 @@ export default function PortfolioPage() {
             <h3 
               className="text-2xl sm:text-3xl font-heading text-white mb-3 sm:mb-4 uppercase"
               style={{ 
-                fontFamily: isRTL ? 'Somar, sans-serif' : undefined,
+                fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : undefined,
                 direction: isRTL ? 'rtl' : 'ltr',
               }}
             >
@@ -297,7 +297,7 @@ export default function PortfolioPage() {
             <p 
               className="text-white/70 mb-4 sm:mb-6 text-sm sm:text-base"
               style={{ 
-                fontFamily: isRTL ? 'Somar, sans-serif' : undefined,
+                fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : undefined,
                 direction: isRTL ? 'rtl' : 'ltr',
               }}
             >
@@ -309,7 +309,7 @@ export default function PortfolioPage() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 style={{ 
-                  fontFamily: isRTL ? 'Somar, sans-serif' : undefined,
+                  fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : undefined,
                   direction: isRTL ? 'rtl' : 'ltr',
                 }}
               >

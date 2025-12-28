@@ -260,8 +260,8 @@ export default function SolutionsAdmin() {
 
       {solutions.length === 0 ? (
         <div className="text-center py-12 bg-white rounded-xl shadow-lg">
-          <p className="text-gray-500 font-gotham text-lg mb-4">No solutions found</p>
-          <p className="text-gray-400 font-gotham text-sm mb-6">Import existing solutions from your pages</p>
+          <p className="text-gray-500  text-lg mb-4">No solutions found</p>
+          <p className="text-gray-400  text-sm mb-6">Import existing solutions from your pages</p>
           <button
             onClick={async () => {
               try {
@@ -298,7 +298,7 @@ export default function SolutionsAdmin() {
                   <h3 className="text-lg font-heading font-bold text-gray-900 mb-1">
                     {solution.title.en}
                   </h3>
-                  <p className="text-xs text-gray-500 font-gotham uppercase tracking-wide mb-2">
+                  <p className="text-xs text-gray-500  uppercase tracking-wide mb-2">
                     {solution.slug}
                   </p>
                   <div className="flex items-center gap-2 flex-wrap">
@@ -311,17 +311,17 @@ export default function SolutionsAdmin() {
                     >
                       {solution.isActive ? '✓ Active' : '✗ Inactive'}
                     </span>
-                    <span className="text-xs text-gray-400 font-gotham">
+                    <span className="text-xs text-gray-400 ">
                       Order: {solution.order}
                     </span>
                   </div>
                 </div>
               </div>
-              <p className="text-sm text-gray-600 mb-4 font-gotham line-clamp-2">
+              <p className="text-sm text-gray-600 mb-4  line-clamp-2">
                 {solution.description.en}
               </p>
               {solution.features && solution.features.length > 0 && (
-                <p className="text-xs text-gray-500 font-gotham mb-4">
+                <p className="text-xs text-gray-500  mb-4">
                   {solution.features.length} feature{solution.features.length !== 1 ? 's' : ''}
                 </p>
               )}
@@ -380,7 +380,7 @@ export default function SolutionsAdmin() {
                   <select
                     value={formData.slug}
                     onChange={(e) => setFormData({ ...formData, slug: e.target.value as Solution['slug'] })}
-                    className="w-full px-4 py-3 border-2 border-neutral/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-gotham"
+                    className="w-full px-4 py-3 border-2 border-neutral/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary "
                     required
                     disabled={!!editingSolution}
                   >
@@ -399,7 +399,7 @@ export default function SolutionsAdmin() {
                     type="number"
                     value={formData.order}
                     onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) || 0 })}
-                    className="w-full px-4 py-3 border-2 border-neutral/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-gotham"
+                    className="w-full px-4 py-3 border-2 border-neutral/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary "
                   />
                 </div>
               </div>
@@ -413,7 +413,7 @@ export default function SolutionsAdmin() {
                     type="text"
                     value={formData.title.en}
                     onChange={(e) => setFormData({ ...formData, title: { ...formData.title, en: e.target.value } })}
-                    className="w-full px-4 py-3 border-2 border-neutral/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-gotham"
+                    className="w-full px-4 py-3 border-2 border-neutral/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary "
                     required
                   />
                 </div>
@@ -425,7 +425,7 @@ export default function SolutionsAdmin() {
                     type="text"
                     value={formData.title.ar}
                     onChange={(e) => setFormData({ ...formData, title: { ...formData.title, ar: e.target.value } })}
-                    className="w-full px-4 py-3 border-2 border-neutral/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-gotham"
+                    className="w-full px-4 py-3 border-2 border-neutral/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary "
                     required
                   />
                 </div>
@@ -440,7 +440,7 @@ export default function SolutionsAdmin() {
                     value={formData.description.en}
                     onChange={(e) => setFormData({ ...formData, description: { ...formData.description, en: e.target.value } })}
                     rows={4}
-                    className="w-full px-4 py-3 border-2 border-neutral/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-gotham"
+                    className="w-full px-4 py-3 border-2 border-neutral/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary "
                     required
                   />
                 </div>
@@ -452,7 +452,7 @@ export default function SolutionsAdmin() {
                     value={formData.description.ar}
                     onChange={(e) => setFormData({ ...formData, description: { ...formData.description, ar: e.target.value } })}
                     rows={4}
-                    className="w-full px-4 py-3 border-2 border-neutral/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-gotham"
+                    className="w-full px-4 py-3 border-2 border-neutral/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary "
                     required
                   />
                 </div>
@@ -466,7 +466,7 @@ export default function SolutionsAdmin() {
                   type="url"
                   value={formData.heroImage || ''}
                   onChange={(e) => setFormData({ ...formData, heroImage: e.target.value })}
-                  className="w-full px-4 py-3 border-2 border-neutral/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-gotham"
+                  className="w-full px-4 py-3 border-2 border-neutral/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary "
                   placeholder="https://example.com/image.jpg"
                 />
               </div>
@@ -505,21 +505,21 @@ export default function SolutionsAdmin() {
                           placeholder="English"
                           value={feature.en}
                           onChange={(e) => updateFeature(index, 'en', e.target.value)}
-                          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary font-gotham"
+                          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary "
                         />
                         <input
                           type="text"
                           placeholder="Arabic"
                           value={feature.ar}
                           onChange={(e) => updateFeature(index, 'ar', e.target.value)}
-                          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary font-gotham"
+                          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary "
                         />
                         <input
                           type="text"
                           placeholder="Icon (emoji)"
                           value={feature.icon}
                           onChange={(e) => updateFeature(index, 'icon', e.target.value)}
-                          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary font-gotham"
+                          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary "
                         />
                       </div>
                     </div>

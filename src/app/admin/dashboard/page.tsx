@@ -79,7 +79,7 @@ export default function Dashboard() {
         <h1 className="text-4xl font-heading font-bold text-primary mb-3 uppercase text-right">
           لوحة تحكم <span className="text-gray-900">ORBIT</span>
         </h1>
-        <p className="text-lg text-gray-600 font-somar text-right">
+        <p className="text-lg text-gray-600 font-ibm-plex-arabic text-right">
           إدارة محتوى موقعك بكفاءة من مكان واحد
         </p>
       </div>
@@ -101,7 +101,7 @@ export default function Dashboard() {
                   )}
                 </div>
                 <h3 className="text-2xl font-heading font-bold mb-2">{card.title}</h3>
-                <p className="text-sm text-white/80 font-gotham">{card.description}</p>
+                <p className="text-sm text-white/80 ">{card.description}</p>
               </div>
             </div>
           </Link>
@@ -112,7 +112,7 @@ export default function Dashboard() {
         <div className="bg-white p-8 rounded-2xl shadow-lg border-t-4 border-primary" dir="rtl">
           <h3 className="text-2xl font-heading font-bold text-gray-900 mb-6 flex items-center gap-2">
             <span className="text-3xl">⚡</span>
-            <span className="font-somar">إجراءات سريعة</span>
+            <span className="font-ibm-plex-arabic">إجراءات سريعة</span>
           </h3>
           <div className="space-y-3">
               <Link
@@ -123,8 +123,8 @@ export default function Dashboard() {
               <div className="flex items-center gap-3">
                 <span className="text-2xl">🏠</span>
                 <div>
-                  <span className="font-somar font-semibold text-gray-900 block">تحرير الصفحة الرئيسية</span>
-                  <span className="text-xs text-gray-500 font-somar">Hero, About, Why ORBIT</span>
+                  <span className="font-ibm-plex-arabic font-semibold text-gray-900 block">تحرير الصفحة الرئيسية</span>
+                  <span className="text-xs text-gray-500 font-ibm-plex-arabic">Hero, About, Why ORBIT</span>
                 </div>
               </div>
             </Link>
@@ -136,8 +136,8 @@ export default function Dashboard() {
               <div className="flex items-center gap-3">
                 <span className="text-2xl">💡</span>
                 <div>
-                  <span className="font-somar font-semibold text-gray-900 block">إدارة الحلول</span>
-                  <span className="text-xs text-gray-500 font-somar">إضافة أو تعديل الحلول</span>
+                  <span className="font-ibm-plex-arabic font-semibold text-gray-900 block">إدارة الحلول</span>
+                  <span className="text-xs text-gray-500 font-ibm-plex-arabic">إضافة أو تعديل الحلول</span>
                 </div>
               </div>
             </Link>
@@ -149,8 +149,8 @@ export default function Dashboard() {
               <div className="flex items-center gap-3">
                 <span className="text-2xl">📰</span>
                 <div>
-                  <span className="font-somar font-semibold text-gray-900 block">إضافة خبر</span>
-                  <span className="text-xs text-gray-500 font-somar">إنشاء مقال جديد</span>
+                  <span className="font-ibm-plex-arabic font-semibold text-gray-900 block">إضافة خبر</span>
+                  <span className="text-xs text-gray-500 font-ibm-plex-arabic">إنشاء مقال جديد</span>
                 </div>
               </div>
             </Link>
@@ -162,8 +162,8 @@ export default function Dashboard() {
               <div className="flex items-center gap-3">
                 <span className="text-2xl">🎁</span>
                 <div>
-                  <span className="font-somar font-semibold text-gray-900 block">إضافة عرض</span>
-                  <span className="text-xs text-gray-500 font-somar">إنشاء عرض خاص جديد</span>
+                  <span className="font-ibm-plex-arabic font-semibold text-gray-900 block">إضافة عرض</span>
+                  <span className="text-xs text-gray-500 font-ibm-plex-arabic">إنشاء عرض خاص جديد</span>
                 </div>
               </div>
             </Link>
@@ -175,8 +175,8 @@ export default function Dashboard() {
               <div className="flex items-center gap-3">
                 <span className="text-2xl">🤝</span>
                 <div>
-                  <span className="font-somar font-semibold text-gray-900 block">إضافة شريك</span>
-                  <span className="text-xs text-gray-500 font-somar">إضافة شريك نجاح</span>
+                  <span className="font-ibm-plex-arabic font-semibold text-gray-900 block">إضافة شريك</span>
+                  <span className="text-xs text-gray-500 font-ibm-plex-arabic">إضافة شريك نجاح</span>
                 </div>
               </div>
             </Link>
@@ -186,30 +186,30 @@ export default function Dashboard() {
         <div className="bg-gradient-to-br from-primary to-primary/80 text-white p-8 rounded-2xl shadow-lg" dir="rtl">
           <h3 className="text-2xl font-heading font-bold mb-6 flex items-center gap-2">
             <span className="text-3xl">📊</span>
-            <span className="font-somar">نظرة عامة على النظام</span>
+            <span className="font-ibm-plex-arabic">نظرة عامة على النظام</span>
           </h3>
           <div className="space-y-4">
             <div className="flex justify-between items-center bg-white/10 rounded-lg p-4 backdrop-blur-sm">
-              <span className="font-somar">حالة قاعدة البيانات</span>
-              <span className="px-3 py-1 bg-green-500 text-white rounded-full text-sm font-somar font-semibold">
+              <span className="font-ibm-plex-arabic">حالة قاعدة البيانات</span>
+              <span className="px-3 py-1 bg-green-500 text-white rounded-full text-sm font-ibm-plex-arabic font-semibold">
                 ✓ متصل
               </span>
             </div>
             <div className="flex justify-between items-center bg-white/10 rounded-lg p-4 backdrop-blur-sm">
-              <span className="font-somar">شركاء النجاح</span>
+              <span className="font-ibm-plex-arabic">شركاء النجاح</span>
               <span className="font-heading font-bold text-2xl">
                 {stats.clients || 0}
               </span>
             </div>
             <div className="flex justify-between items-center bg-white/10 rounded-lg p-4 backdrop-blur-sm">
-              <span className="font-somar">الاستفسارات الجديدة</span>
+              <span className="font-ibm-plex-arabic">الاستفسارات الجديدة</span>
               <span className="font-heading font-bold text-2xl">
                 {stats.clientInquiries || 0}
               </span>
             </div>
             <div className="flex justify-between items-center bg-white/10 rounded-lg p-4 backdrop-blur-sm">
-              <span className="font-somar">آخر تحديث</span>
-              <span className="font-somar">
+              <span className="font-ibm-plex-arabic">آخر تحديث</span>
+              <span className="font-ibm-plex-arabic">
                 {new Date().toLocaleDateString('ar-SA')}
               </span>
             </div>
@@ -218,7 +218,7 @@ export default function Dashboard() {
                 href="/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block text-center bg-white text-primary py-4 rounded-lg font-somar font-bold hover:bg-secondary hover:shadow-xl transition-all"
+                className="block text-center bg-white text-primary py-4 rounded-lg font-ibm-plex-arabic font-bold hover:bg-secondary hover:shadow-xl transition-all"
               >
                 🌐 عرض الموقع المباشر ←
               </a>

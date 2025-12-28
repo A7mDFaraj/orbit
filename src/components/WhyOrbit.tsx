@@ -184,7 +184,7 @@ export default function WhyOrbit() {
           >
             <motion.h2
               className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-heading mb-6 uppercase tracking-tight leading-tight"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+              style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
             >
               {t.about.stats?.title || (isRTL ? 'لماذا المدار التقني؟' : 'Why ORBIT Technical?')}
             </motion.h2>
@@ -263,7 +263,7 @@ export default function WhyOrbit() {
                       }}
                       whileHover={{ scale: 1.1, rotate: 5 }}
                     >
-                      <span className="text-white font-heading font-bold text-lg" style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}>
+                      <span className="text-white font-heading font-bold text-lg" style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}>
                         {index + 1}
                       </span>
                     </motion.div>
@@ -272,7 +272,7 @@ export default function WhyOrbit() {
                     <div className="relative z-10">
                       <motion.h4
                         className="text-xl lg:text-2xl font-heading text-white mb-3 uppercase tracking-wide leading-tight"
-                        style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                        style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                         dir={isRTL ? 'rtl' : 'ltr'}
                         animate={{
                           color: hoveredIndex === index ? '#FFFFFF' : 'rgba(255, 255, 255, 0.95)',
@@ -283,8 +283,8 @@ export default function WhyOrbit() {
                       </motion.h4>
 
                       <motion.p
-                        className="text-white/70 text-sm lg:text-base font-gotham leading-relaxed"
-                        style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                        className="text-white/70 text-sm lg:text-base  leading-relaxed"
+                        style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                         dir={isRTL ? 'rtl' : 'ltr'}
                         initial={{ opacity: 0, height: 0 }}
                         animate={{
@@ -337,7 +337,16 @@ export default function WhyOrbit() {
                 className="group relative"
               >
                 <motion.div
-                  className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 lg:p-8 text-center hover:bg-white/10 transition-all duration-300"
+                  className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 sm:p-6 lg:p-8 text-center hover:bg-white/10 transition-all duration-300"
+                  style={{
+                    minWidth: 0,
+                    width: '100%',
+                    boxSizing: 'border-box',
+                    overflow: 'visible',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
                   whileHover={{
                     scale: 1.05,
                     y: -5,
@@ -351,8 +360,20 @@ export default function WhyOrbit() {
 
                   {/* Stat Number */}
                   <motion.div
-                    className="relative z-10 text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-heading text-white mb-4"
-                    style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                    className="relative z-10 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading text-white mb-4"
+                    style={{ 
+                      fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif',
+                      lineHeight: '1.1',
+                      padding: '0 8px',
+                      boxSizing: 'border-box',
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      minHeight: '3.5rem',
+                      overflow: 'visible',
+                      wordBreak: 'normal',
+                    }}
                     initial={{ opacity: 0, scale: 0.3 }}
                     animate={inView ? { opacity: 1, scale: 1 } : {}}
                     transition={{
@@ -362,13 +383,15 @@ export default function WhyOrbit() {
                       stiffness: 200,
                     }}
                   >
-                    {stat.number}
+                    <span className="inline-block text-center whitespace-nowrap">
+                      {stat.number}
+                    </span>
                   </motion.div>
 
                   {/* Stat Label */}
                   <motion.p
                     className="relative z-10 text-sm lg:text-base font-heading text-white/90 uppercase tracking-wider leading-tight"
-                    style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
+                    style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                     initial={{ opacity: 0 }}
                     animate={inView ? { opacity: 1 } : {}}
                     transition={{ duration: 0.6, delay: 1.8 + index * 0.12 }}

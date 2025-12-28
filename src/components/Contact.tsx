@@ -81,10 +81,10 @@ export default function Contact() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className={`text-4xl sm:text-5xl lg:text-6xl font-heading font-bold mb-6 text-gray-900 dark:text-white ${isRTL ? 'font-somar' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
+            <h2 className={`text-4xl sm:text-5xl lg:text-6xl font-heading font-bold mb-6 text-gray-900 dark:text-white ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
               {isRTL ? 'تواصل معنا' : 'Contact Us'}
             </h2>
-            <p className={`text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+            <p className={`text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
               {isRTL 
                 ? 'نحن هنا للإجابة على استفساراتك ومساعدتك في العثور على الحل المناسب لاحتياجاتك'
                 : 'We\'re here to answer your inquiries and help you find the right solution for your needs'
@@ -102,7 +102,7 @@ export default function Contact() {
               className="space-y-8"
             >
               <div>
-                <h3 className={`text-2xl font-heading font-semibold mb-6 text-gray-900 dark:text-white ${isRTL ? 'font-somar' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                <h3 className={`text-2xl font-heading font-semibold mb-6 text-gray-900 dark:text-white ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
                   {isRTL ? 'معلومات الاتصال' : 'Contact Information'}
                 </h3>
                 <div className="space-y-6">
@@ -114,10 +114,10 @@ export default function Contact() {
                       </svg>
                     </div>
                     <div>
-                      <p className={`text-sm text-gray-500 dark:text-gray-400 mb-1 ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                      <p className={`text-sm text-gray-500 dark:text-gray-400 mb-1 ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
                         {isRTL ? 'هاتف' : 'Phone'}
                       </p>
-                      <a href="tel:920006900" className={`text-lg font-semibold text-gray-900 dark:text-white hover:text-primary transition-colors ${isRTL ? 'font-somar' : 'font-gotham'}`} dir="ltr">
+                      <a href="tel:920006900" className={`text-lg font-semibold text-gray-900 dark:text-white hover:text-primary transition-colors ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir="ltr">
                         920006900
                       </a>
                     </div>
@@ -131,10 +131,10 @@ export default function Contact() {
                       </svg>
                     </div>
                     <div>
-                      <p className={`text-sm text-gray-500 dark:text-gray-400 mb-1 ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                      <p className={`text-sm text-gray-500 dark:text-gray-400 mb-1 ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
                         {isRTL ? 'البريد الإلكتروني' : 'Email'}
                       </p>
-                      <a href="mailto:info@ot.com.sa" className={`text-lg font-semibold text-gray-900 dark:text-white hover:text-primary transition-colors ${isRTL ? 'font-somar' : 'font-gotham'}`} dir="ltr">
+                      <a href="mailto:info@ot.com.sa" className={`text-lg font-semibold text-gray-900 dark:text-white hover:text-primary transition-colors ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir="ltr">
                         info@ot.com.sa
                       </a>
                     </div>
@@ -165,7 +165,7 @@ export default function Contact() {
                     animate={{ opacity: 1, y: 0 }}
                     className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg"
                   >
-                    <p className={`text-green-800 dark:text-green-300 ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                    <p className={`text-green-800 dark:text-green-300 ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
                       {isRTL 
                         ? 'تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.'
                         : 'Your message has been sent successfully! We\'ll get back to you soon.'
@@ -181,7 +181,7 @@ export default function Contact() {
                     animate={{ opacity: 1, y: 0 }}
                     className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg"
                   >
-                    <p className={`text-red-800 dark:text-red-300 ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                    <p className={`text-red-800 dark:text-red-300 ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
                       {isRTL 
                         ? 'فشل إرسال الرسالة. يرجى المحاولة مرة أخرى.'
                         : 'Failed to send message. Please try again.'
@@ -192,7 +192,7 @@ export default function Contact() {
 
                 {/* Name */}
                 <div>
-                  <label htmlFor="name" className={`block text-sm font-semibold mb-2 text-gray-900 dark:text-white ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                  <label htmlFor="name" className={`block text-sm font-semibold mb-2 text-gray-900 dark:text-white ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
                     {isRTL ? 'الاسم الكامل' : 'Full Name'} <span className="text-primary">*</span>
                   </label>
                   <input
@@ -202,7 +202,7 @@ export default function Contact() {
                     required
                     value={formData.name}
                     onChange={handleChange}
-                    className={`w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors ${isRTL ? 'font-somar' : 'font-gotham'}`}
+                    className={`w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
                     dir={isRTL ? 'rtl' : 'ltr'}
                     placeholder={isRTL ? 'أدخل اسمك الكامل' : 'Enter your full name'}
                   />
@@ -210,7 +210,7 @@ export default function Contact() {
 
                 {/* Email */}
                 <div>
-                  <label htmlFor="email" className={`block text-sm font-semibold mb-2 text-gray-900 dark:text-white ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                  <label htmlFor="email" className={`block text-sm font-semibold mb-2 text-gray-900 dark:text-white ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
                     {isRTL ? 'البريد الإلكتروني' : 'Email'} <span className="text-primary">*</span>
                   </label>
                   <input
@@ -220,7 +220,7 @@ export default function Contact() {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className={`w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors ${isRTL ? 'font-somar' : 'font-gotham'}`}
+                    className={`w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
                     dir="ltr"
                     placeholder="example@email.com"
                   />
@@ -228,7 +228,7 @@ export default function Contact() {
 
                 {/* Phone */}
                 <div>
-                  <label htmlFor="phone" className={`block text-sm font-semibold mb-2 text-gray-900 dark:text-white ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                  <label htmlFor="phone" className={`block text-sm font-semibold mb-2 text-gray-900 dark:text-white ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
                     {isRTL ? 'رقم الهاتف' : 'Phone Number'} <span className="text-primary">*</span>
                   </label>
                   <input
@@ -238,7 +238,7 @@ export default function Contact() {
                     required
                     value={formData.phone}
                     onChange={handleChange}
-                    className={`w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors ${isRTL ? 'font-somar' : 'font-gotham'}`}
+                    className={`w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
                     dir="ltr"
                     placeholder={isRTL ? '05xxxxxxxx' : '05xxxxxxxx'}
                   />
@@ -246,7 +246,7 @@ export default function Contact() {
 
                 {/* Subject */}
                 <div>
-                  <label htmlFor="subject" className={`block text-sm font-semibold mb-2 text-gray-900 dark:text-white ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                  <label htmlFor="subject" className={`block text-sm font-semibold mb-2 text-gray-900 dark:text-white ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
                     {isRTL ? 'الموضوع' : 'Subject'}
                   </label>
                   <input
@@ -255,7 +255,7 @@ export default function Contact() {
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
-                    className={`w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors ${isRTL ? 'font-somar' : 'font-gotham'}`}
+                    className={`w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
                     dir={isRTL ? 'rtl' : 'ltr'}
                     placeholder={isRTL ? 'موضوع الاستفسار' : 'Inquiry subject'}
                   />
@@ -263,7 +263,7 @@ export default function Contact() {
 
                 {/* Message */}
                 <div>
-                  <label htmlFor="message" className={`block text-sm font-semibold mb-2 text-gray-900 dark:text-white ${isRTL ? 'font-somar' : 'font-gotham'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                  <label htmlFor="message" className={`block text-sm font-semibold mb-2 text-gray-900 dark:text-white ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
                     {isRTL ? 'الرسالة' : 'Message'} <span className="text-primary">*</span>
                   </label>
                   <textarea
@@ -273,7 +273,7 @@ export default function Contact() {
                     rows={5}
                     value={formData.message}
                     onChange={handleChange}
-                    className={`w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors resize-none ${isRTL ? 'font-somar' : 'font-gotham'}`}
+                    className={`w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors resize-none ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
                     dir={isRTL ? 'rtl' : 'ltr'}
                     placeholder={isRTL ? 'اكتب رسالتك هنا...' : 'Write your message here...'}
                   />
@@ -283,7 +283,7 @@ export default function Contact() {
                 <motion.button
                   type="submit"
                   disabled={isSubmitting}
-                  className={`w-full px-8 py-4 bg-gradient-to-r from-primary to-[#9a2d45] text-white rounded-xl font-heading uppercase tracking-wider shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${isRTL ? 'font-somar' : ''}`}
+                  className={`w-full px-8 py-4 bg-gradient-to-r from-primary to-[#9a2d45] text-white rounded-xl font-heading uppercase tracking-wider shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
                   dir={isRTL ? 'rtl' : 'ltr'}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -301,6 +301,8 @@ export default function Contact() {
     </section>
   );
 }
+
+
 
 
 

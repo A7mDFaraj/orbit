@@ -18,12 +18,11 @@ module.exports = {
         white: '#FFFFFF',
       },
       fontFamily: {
-        // ORBIT Brand Fonts
-        sans: ['Gotham', 'sans-serif'], // Default - English text (body, headings, UI)
-        heading: ['Gotham', 'sans-serif'], // Headings (h1-h6) - English
-        gotham: ['Gotham', 'sans-serif'], // Gotham font utility - English
-        somar: ['Somar', 'sans-serif'], // Somar font utility - Arabic/RTL
-        'ibm-plex': ['IBM Plex Sans', 'Gotham', 'sans-serif'], // IBM Plex for enterprise/professional pages
+        // ORBIT Brand Fonts - IBM Plex Sans for both English and Arabic
+        sans: ['var(--font-ibm-plex)', 'IBM Plex Sans', 'sans-serif'], // Default - English text (body, headings, UI)
+        heading: ['var(--font-ibm-plex)', 'IBM Plex Sans', 'sans-serif'], // Headings (h1-h6) - English
+        'ibm-plex': ['var(--font-ibm-plex)', 'IBM Plex Sans', 'sans-serif'], // IBM Plex utility - English
+        'ibm-plex-arabic': ['var(--font-ibm-plex-arabic)', 'IBM Plex Sans Arabic', 'var(--font-ibm-plex)', 'sans-serif'], // IBM Plex utility - Arabic/RTL
       },
       letterSpacing: {
         tighter: '-0.02em',

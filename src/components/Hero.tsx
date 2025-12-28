@@ -119,6 +119,35 @@ export default function Hero() {
     setTimeout(() => setIsAutoPlaying(true), 10000);
   };
 
+  // Swipe gesture support for mobile
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      goToSolution((currentSolutionIndex + 1) % solutions.length);
+    }
+    if (isRightSwipe) {
+      goToSolution((currentSolutionIndex - 1 + solutions.length) % solutions.length);
+    }
+  };
+
   // Use ORBIT translations directly - no API fetch
   const heroContent = {
     title: isRTL ? 'أوربيت نجاحك' : 'ORBIT Your Success',
@@ -141,9 +170,9 @@ export default function Hero() {
       {/* Animated Background Orbs */}
       {mounted && (
         <>
-          {/* Primary Orb */}
+          {/* Primary Orb - Hidden on very small screens for performance */}
           <div
-            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+            className="hidden sm:block absolute inset-0 flex items-center justify-center pointer-events-none"
             style={{
               width: '100%',
               height: '100%',
@@ -310,11 +339,14 @@ export default function Hero() {
             }}
             onMouseEnter={() => setIsAutoPlaying(false)}
             onMouseLeave={() => setIsAutoPlaying(true)}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
           >
-            {/* Navigation Arrows - Outside content */}
-            <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between pointer-events-none z-20">
+            {/* Navigation Arrows - Inside content on mobile, outside on desktop */}
+            <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between pointer-events-none z-20 px-2 sm:px-0">
               <motion.button
-                className="pointer-events-auto w-12 h-12 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-neutral/20 flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition-all shadow-lg -translate-x-4 sm:-translate-x-6"
+                className="pointer-events-auto w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border border-neutral/20 flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary active:bg-primary active:text-white transition-all shadow-lg sm:-translate-x-4 lg:-translate-x-6"
                 onClick={() =>
                   goToSolution(
                     (currentSolutionIndex - 1 + solutions.length) % solutions.length
@@ -322,9 +354,10 @@ export default function Hero() {
                 }
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
+                aria-label={isRTL ? 'السابق' : 'Previous'}
               >
                 <svg
-                  className="w-6 h-6"
+                  className="w-5 h-5 sm:w-6 sm:h-6"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -338,13 +371,14 @@ export default function Hero() {
                 </svg>
               </motion.button>
               <motion.button
-                className="pointer-events-auto w-12 h-12 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-neutral/20 flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition-all shadow-lg translate-x-4 sm:translate-x-6"
+                className="pointer-events-auto w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border border-neutral/20 flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary active:bg-primary active:text-white transition-all shadow-lg sm:translate-x-4 lg:translate-x-6"
                 onClick={() => goToSolution((currentSolutionIndex + 1) % solutions.length)}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
+                aria-label={isRTL ? 'التالي' : 'Next'}
               >
                 <svg
-                  className="w-6 h-6"
+                  className="w-5 h-5 sm:w-6 sm:h-6"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -359,7 +393,7 @@ export default function Hero() {
               </motion.button>
             </div>
 
-            <div className="relative bg-white/10 dark:bg-black/20 backdrop-blur-xl rounded-2xl p-6 sm:p-8 lg:p-10 border border-white/20 dark:border-white/10 overflow-hidden">
+            <div className="relative bg-white/10 dark:bg-black/20 backdrop-blur-xl rounded-2xl p-4 sm:p-6 md:p-8 lg:p-10 border border-white/20 dark:border-white/10 overflow-hidden">
               <div className="relative z-10">
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -371,9 +405,9 @@ export default function Hero() {
                     className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center"
                   >
                     {/* Icon/Image Side */}
-                    <div className="relative flex items-center justify-center">
+                    <div className="relative flex items-center justify-center order-2 md:order-1">
                       <motion.div
-                        className="relative w-full h-48 sm:h-64 md:h-80 lg:h-96 rounded-xl overflow-hidden bg-gradient-to-br from-primary/20 via-secondary/20 to-transparent flex items-center justify-center"
+                        className="relative w-full h-40 sm:h-56 md:h-72 lg:h-96 rounded-xl overflow-hidden bg-gradient-to-br from-primary/20 via-secondary/20 to-transparent flex items-center justify-center"
                         whileHover={{ scale: 1.02 }}
                         transition={{ duration: 0.3 }}
                       >
@@ -386,9 +420,9 @@ export default function Hero() {
                             loading="lazy"
                           />
                         ) : (
-                          // Icon fallback
+                          // Icon fallback - Optimized for mobile
                           <motion.div
-                            className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl"
+                            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl"
                             animate={{
                               rotate: [0, 5, -5, 0],
                               scale: [1, 1.1, 1],
@@ -406,9 +440,9 @@ export default function Hero() {
                     </div>
 
                     {/* Content Side */}
-                    <div className="space-y-4 sm:space-y-6 flex flex-col justify-center">
+                    <div className="space-y-3 sm:space-y-4 md:space-y-6 flex flex-col justify-center order-1 md:order-2">
                       <motion.h3
-                        className={`font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold ${isRTL ? 'font-somar' : ''}`}
+                        className={`font-heading text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
                         style={{
                           color: isDark ? '#E8DCCB' : '#161616',
                           textShadow: isDark
@@ -422,7 +456,7 @@ export default function Hero() {
                           : solutions[currentSolutionIndex].titleEn}
                       </motion.h3>
                       <motion.p
-                        className={`text-base sm:text-lg md:text-xl lg:text-2xl text-gray-700 dark:text-gray-300 leading-relaxed ${isRTL ? 'font-somar' : 'font-gotham'}`}
+                        className={`text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-gray-700 dark:text-gray-300 leading-relaxed ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
                         style={{
                           color: isDark ? '#E8DCCB' : '#161616',
                         }}
@@ -435,13 +469,13 @@ export default function Hero() {
                       <Link href={`/solutions/${solutions[currentSolutionIndex].slug}`}>
                         <motion.div
                           whileHover={{ x: isRTL ? -5 : 5 }}
-                          className="flex items-center gap-2 text-primary font-heading font-medium cursor-pointer text-base sm:text-lg md:text-xl"
+                          className="flex items-center gap-2 text-primary font-heading font-medium cursor-pointer text-sm sm:text-base md:text-lg lg:text-xl mt-2 sm:mt-4"
                         >
-                          <span className={isRTL ? 'font-somar' : ''}>
+                          <span className={isRTL ? 'font-ibm-plex-arabic' : ''}>
                             {isRTL ? 'اكتشف المزيد' : 'Discover More'}
                           </span>
                           <motion.svg
-                            className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7"
+                            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-7 lg:h-7"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -461,19 +495,20 @@ export default function Hero() {
                   </motion.div>
                 </AnimatePresence>
 
-                {/* Navigation Dots */}
-                <div className="flex items-center justify-center gap-3 mt-6 sm:mt-8">
+                {/* Navigation Dots - Larger on mobile for better touch targets */}
+                <div className="flex items-center justify-center gap-2.5 sm:gap-3 mt-4 sm:mt-6 md:mt-8">
                   {solutions.map((_, index) => (
                     <motion.button
                       key={index}
-                      className={`relative w-3 h-3 rounded-full transition-all ${
+                      className={`relative w-3.5 h-3.5 sm:w-3 sm:h-3 rounded-full transition-all touch-manipulation ${
                         index === currentSolutionIndex
                           ? 'bg-primary'
-                          : 'bg-white/40 dark:bg-white/20 hover:bg-white/60'
+                          : 'bg-white/40 dark:bg-white/20 active:bg-white/60'
                       }`}
                       onClick={() => goToSolution(index)}
                       whileHover={{ scale: 1.2 }}
                       whileTap={{ scale: 0.9 }}
+                      aria-label={`Go to solution ${index + 1}`}
                     >
                       {index === currentSolutionIndex && (
                         <motion.div
@@ -522,7 +557,7 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 2.8 }}
         >
           <motion.p
-            className={`font-heading text-sm sm:text-base md:text-lg font-medium tracking-wider ${isRTL ? 'font-somar' : ''}`}
+            className={`font-heading text-sm sm:text-base md:text-lg font-medium tracking-wider ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
             style={{
               color: isDark ? '#E8DCCB' : '#161616',
               textShadow: isDark
@@ -595,9 +630,9 @@ export default function Hero() {
                       <img
                         src={logo}
                         alt={`Trusted partner ${index + 1}`}
-                        className="h-16 sm:h-20 lg:h-24 xl:h-28 w-auto object-contain gpu-accelerated"
+                        className="h-12 sm:h-16 md:h-20 lg:h-24 xl:h-28 w-auto object-contain gpu-accelerated"
                         style={{
-                          maxWidth: '220px',
+                          maxWidth: '180px',
                         }}
                         loading="lazy"
                       />
