@@ -14,6 +14,13 @@ interface Category {
   isActive: boolean;
 }
 
+interface Package {
+  _id: string;
+  id: string;
+  name: string;
+  nameAr: string;
+}
+
 interface Offer {
   _id?: string;
   title: string;
@@ -31,6 +38,11 @@ interface Offer {
   startDate?: Date;
   endDate?: Date;
   order: number;
+  packageId?: string;
+  discountPercentage?: number;
+  originalPrice?: number;
+  discountedPrice?: number;
+  theme?: 'national-day' | 'founding-day' | 'black-friday' | 'custom';
 }
 
 const emptyOffer: Offer = {
@@ -47,11 +59,17 @@ const emptyOffer: Offer = {
   isActive: true,
   featured: false,
   order: 0,
+  packageId: '',
+  discountPercentage: 0,
+  originalPrice: 0,
+  discountedPrice: 0,
+  theme: 'custom',
 };
 
 export default function OffersAdmin() {
   const [offers, setOffers] = useState<Offer[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [packages, setPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
@@ -70,6 +88,7 @@ export default function OffersAdmin() {
   useEffect(() => {
     fetchOffers();
     fetchCategories();
+    fetchPackages();
   }, []);
 
   const fetchOffers = async () => {
@@ -92,6 +111,16 @@ export default function OffersAdmin() {
       setCategories(data.categories || []);
     } catch (error) {
       console.error('Error fetching categories:', error);
+    }
+  };
+
+  const fetchPackages = async () => {
+    try {
+      const res = await fetch('/api/packages');
+      const data = await res.json();
+      setPackages(data.packages || []);
+    } catch (error) {
+      console.error('Error fetching packages:', error);
     }
   };
 
@@ -230,6 +259,36 @@ export default function OffersAdmin() {
 
   return (
     <AdminLayout>
+      {/* Quick Guide */}
+      <div className="mb-8 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-2xl p-6">
+        <h2 className="text-xl font-heading font-bold text-gray-900 mb-4 flex items-center gap-2">
+          💡 How to Create Package Offers
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="bg-white rounded-xl p-4 border-2 border-blue-100">
+            <div className="text-3xl mb-2">1️⃣</div>
+            <h3 className="font-heading font-bold text-gray-900 mb-2">Select Package</h3>
+            <p className="text-sm text-gray-600">Choose from existing packages (SMS, WhatsApp, etc.)</p>
+          </div>
+          <div className="bg-white rounded-xl p-4 border-2 border-green-100">
+            <div className="text-3xl mb-2">2️⃣</div>
+            <h3 className="font-heading font-bold text-gray-900 mb-2">Set Discount</h3>
+            <p className="text-sm text-gray-600">Enter original price & discount % - final price calculates automatically</p>
+          </div>
+          <div className="bg-white rounded-xl p-4 border-2 border-purple-100">
+            <div className="text-3xl mb-2">3️⃣</div>
+            <h3 className="font-heading font-bold text-gray-900 mb-2">Choose Theme</h3>
+            <p className="text-sm text-gray-600">Pick a design: National Day 🇸🇦, Founding Day 🏛️, or Black Friday 🔥</p>
+          </div>
+        </div>
+        <div className="mt-4 p-4 bg-green-100 border-2 border-green-300 rounded-xl">
+          <p className="text-sm text-gray-700">
+            <strong>📝 Example:</strong> SMS Package (5000 SAR) + 20% Discount = <strong>4000 SAR</strong> 
+            + National Day Theme 🇸🇦 = <strong>Beautiful themed offer card!</strong>
+          </p>
+        </div>
+      </div>
+
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-heading font-bold text-gray-900 uppercase tracking-wide">
           Offers Management
@@ -446,6 +505,7 @@ export default function OffersAdmin() {
             formData={formData}
             setFormData={setFormData}
             categories={categories}
+            packages={packages}
             onSubmit={handleSubmit}
             onClose={() => {
               setIsModalOpen(false);
@@ -484,6 +544,7 @@ function OfferModal({
   formData,
   setFormData,
   categories,
+  packages,
   onSubmit,
   onClose,
   isEditing,
@@ -491,10 +552,36 @@ function OfferModal({
   formData: Offer;
   setFormData: (data: Offer) => void;
   categories: Category[];
+  packages: Package[];
   onSubmit: (e: React.FormEvent) => void;
   onClose: () => void;
   isEditing: boolean;
 }) {
+  const calculateDiscountedPrice = (original: number, discount: number) => {
+    return Math.round(original - (original * discount / 100));
+  };
+
+  const handleDiscountChange = (discount: number) => {
+    const discounted = formData.originalPrice 
+      ? calculateDiscountedPrice(formData.originalPrice, discount)
+      : 0;
+    setFormData({ 
+      ...formData, 
+      discountPercentage: discount,
+      discountedPrice: discounted
+    });
+  };
+
+  const handleOriginalPriceChange = (price: number) => {
+    const discounted = formData.discountPercentage
+      ? calculateDiscountedPrice(price, formData.discountPercentage)
+      : price;
+    setFormData({ 
+      ...formData, 
+      originalPrice: price,
+      discountedPrice: discounted
+    });
+  };
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -635,6 +722,120 @@ function OfferModal({
                   <img src={formData.image} alt="Preview" className="w-full h-48 object-cover rounded-lg" />
                 </div>
               )}
+            </div>
+
+            {/* Package Selection & Theme */}
+            <div className="border-2 border-blue-200 rounded-xl p-6 bg-blue-50">
+              <h3 className="text-lg font-heading font-bold text-gray-900 mb-3 uppercase flex items-center gap-2">
+                📦 Package & Theme Selection
+              </h3>
+              <p className="text-sm text-gray-600 mb-4">
+                💡 <strong>How it works:</strong> Select an existing package (SMS, WhatsApp, etc.) to link this offer to. 
+                The offer will display the package details with your discount. Choose a theme for special occasions!
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-heading font-bold uppercase tracking-wider text-gray-700 mb-2">
+                    📦 Select Package
+                  </label>
+                  <select
+                    value={formData.packageId || ''}
+                    onChange={(e) => setFormData({ ...formData, packageId: e.target.value })}
+                    className="w-full px-4 py-3 border-2 border-blue-300 rounded-lg focus:border-primary focus:outline-none bg-white"
+                  >
+                    <option value="">No Package (Custom Offer)</option>
+                    {packages.map((pkg) => (
+                      <option key={pkg._id} value={pkg.id}>
+                        📦 {pkg.name} / {pkg.nameAr}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="text-xs text-gray-500 mt-2">
+                    {formData.packageId ? '✅ Package linked - features will show automatically' : '⚠️ No package linked - manual description needed'}
+                  </p>
+                </div>
+                <div>
+                  <label className="block text-sm font-heading font-bold uppercase tracking-wider text-gray-700 mb-2">
+                    🎨 Theme Design
+                  </label>
+                  <select
+                    value={formData.theme || 'custom'}
+                    onChange={(e) => setFormData({ ...formData, theme: e.target.value as any })}
+                    className="w-full px-4 py-3 border-2 border-blue-300 rounded-lg focus:border-primary focus:outline-none bg-white"
+                  >
+                    <option value="custom">🎁 Custom (Default ORBIT Colors)</option>
+                    <option value="national-day">🇸🇦 National Day - اليوم الوطني (Green/White)</option>
+                    <option value="founding-day">🏛️ Founding Day - يوم التأسيس (Brown/Beige)</option>
+                    <option value="black-friday">🔥 Black Friday - الجمعة البيضاء (Black/Gray)</option>
+                  </select>
+                  <p className="text-xs text-gray-500 mt-2">
+                    Themed cards have special colors and icons
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Pricing Section */}
+            <div className="border-2 border-green-200 rounded-xl p-6 bg-green-50">
+              <h3 className="text-lg font-heading font-bold text-gray-900 mb-3 uppercase flex items-center gap-2">
+                💰 Discount & Pricing Calculator
+              </h3>
+              <p className="text-sm text-gray-600 mb-4">
+                💡 <strong>Example:</strong> SMS package costs <strong>5000 SAR</strong>, add <strong>20% discount</strong> → 
+                Final price: <strong>4000 SAR</strong> (Customer saves 1000 SAR!)
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <label className="block text-sm font-heading font-bold uppercase tracking-wider text-gray-700 mb-2">
+                    💵 Original Price (SAR)
+                  </label>
+                  <input
+                    type="number"
+                    value={formData.originalPrice || ''}
+                    onChange={(e) => handleOriginalPriceChange(Number(e.target.value))}
+                    className="w-full px-4 py-3 border-2 border-green-300 rounded-lg focus:border-primary focus:outline-none"
+                    placeholder="e.g., 5000"
+                    min="0"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Package original price</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-heading font-bold uppercase tracking-wider text-gray-700 mb-2">
+                    🏷️ Discount %
+                  </label>
+                  <input
+                    type="number"
+                    value={formData.discountPercentage || ''}
+                    onChange={(e) => handleDiscountChange(Number(e.target.value))}
+                    className="w-full px-4 py-3 border-2 border-green-300 rounded-lg focus:border-primary focus:outline-none"
+                    placeholder="e.g., 20"
+                    min="0"
+                    max="100"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Discount percentage</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-heading font-bold uppercase tracking-wider text-green-700 mb-2">
+                    ✅ Final Price (SAR)
+                  </label>
+                  <input
+                    type="number"
+                    value={formData.discountedPrice || ''}
+                    onChange={(e) => setFormData({ ...formData, discountedPrice: Number(e.target.value) })}
+                    className="w-full px-4 py-3 border-2 border-green-500 rounded-lg bg-green-100 focus:border-primary focus:outline-none font-bold text-green-700 text-xl"
+                    placeholder="Auto-calculated"
+                    min="0"
+                  />
+                  <p className="text-xs text-green-600 mt-1 font-bold">Customer pays this amount</p>
+                </div>
+              </div>
+              {formData.originalPrice && formData.discountPercentage ? (
+                <div className="mt-4 p-4 bg-green-50 border-2 border-green-200 rounded-lg">
+                  <p className="text-green-700 font-heading text-center">
+                    💰 Customer saves: <strong>{formData.originalPrice - (formData.discountedPrice || 0)} SAR</strong> ({formData.discountPercentage}% discount)
+                  </p>
+                </div>
+              ) : null}
             </div>
 
             {/* Date Range */}

@@ -17,6 +17,12 @@ export interface IOffer {
   startDate?: Date;
   endDate?: Date;
   order: number;
+  // Package discount fields
+  packageId?: string;
+  discountPercentage?: number;
+  originalPrice?: number;
+  discountedPrice?: number;
+  theme?: 'national-day' | 'founding-day' | 'black-friday' | 'custom';
   createdAt: Date;
   updatedAt: Date;
 }
@@ -76,6 +82,25 @@ const offerSchema = new Schema<IOffer>(
     order: {
       type: Number,
       default: 0,
+    },
+    packageId: {
+      type: String,
+    },
+    discountPercentage: {
+      type: Number,
+      min: 0,
+      max: 100,
+    },
+    originalPrice: {
+      type: Number,
+    },
+    discountedPrice: {
+      type: Number,
+    },
+    theme: {
+      type: String,
+      enum: ['national-day', 'founding-day', 'black-friday', 'custom'],
+      default: 'custom',
     },
   },
   { timestamps: true }
