@@ -83,4 +83,3 @@ const offerSchema = new Schema<IOffer>(
 
 export const Offer = (mongoose.models.Offer as Model<IOffer>) || 
   mongoose.model<IOffer>('Offer', offerSchema);
-

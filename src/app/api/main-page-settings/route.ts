@@ -1,28 +1,16 @@
 import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
-import { User } from '@/models/User';
-import { Client } from '@/models/Client';
 import MainPageSettings from '@/models/MainPageSettings';
 
-export async function POST() {
+export async function GET() {
   try {
     await connectDB();
-
-    // Create default admin user
-    const adminExists = await User.findOne({ email: 'admin@orbit.com.sa' });
-    if (!adminExists) {
-      await User.create({
-        email: 'admin@orbit.com.sa',
-        password: 'Abd123#Abd',
-        name: 'ORBIT Admin',
-        role: 'admin',
-      });
-    }
-
-    // Initialize Main Page Settings with default ORBIT content
-    const mainPageSettings = await MainPageSettings.findOne();
-    if (!mainPageSettings) {
-      await MainPageSettings.create({
+    
+    let settings = await MainPageSettings.findOne();
+    
+    // If no settings exist, create default
+    if (!settings) {
+      settings = await MainPageSettings.create({
         hero: {
           titleEn: 'ORBIT Your Success',
           titleAr: 'أوربيت نجاحك'
@@ -93,32 +81,39 @@ export async function POST() {
         }
       });
     }
-
-    // Seed some sample success partners (clients)
-    const clientCount = await Client.countDocuments();
-    if (clientCount === 0) {
-      const clientsData = [
-        { name: 'National Water Company', nameAr: 'شركة المياه الوطنية', category: 'Government', order: 1, logo: '/trustedby/National_Water_Company_Logo_2021.png' },
-        { name: 'STC', nameAr: 'stc', category: 'Communication', order: 2, logo: '/trustedby/salogos.org-logo-1.svg' },
-        { name: 'Ministry of Health', nameAr: 'وزارة الصحة', category: 'Government', order: 3 },
-        { name: 'Saudi Post', nameAr: 'البريد السعودي', category: 'Government', order: 4 },
-      ];
-
-      await Client.insertMany(clientsData);
-    }
-
-    return NextResponse.json({
-      message: 'ORBIT database seeded successfully',
-      admin: {
-        email: 'admin@orbit.com.sa',
-        password: 'Abd123#Abd',
-      },
-    });
-  } catch (error) {
-    console.error('Seed error:', error);
+    
+    return NextResponse.json({ success: true, settings });
+  } catch (error: any) {
     return NextResponse.json(
-      { error: 'Failed to seed database', details: error instanceof Error ? error.message : 'Unknown error' },
+      { success: false, error: error.message },
       { status: 500 }
     );
   }
 }
+
+export async function PUT(request: Request) {
+  try {
+    await connectDB();
+    const body = await request.json();
+    
+    let settings = await MainPageSettings.findOne();
+    
+    if (!settings) {
+      settings = await MainPageSettings.create(body);
+    } else {
+      settings = await MainPageSettings.findOneAndUpdate(
+        {},
+        body,
+        { new: true, runValidators: true }
+      );
+    }
+    
+    return NextResponse.json({ success: true, settings });
+  } catch (error: any) {
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    );
+  }
+}
+

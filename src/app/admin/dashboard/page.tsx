@@ -6,27 +6,21 @@ import Link from 'next/link';
 
 export default function Dashboard() {
   const [stats, setStats] = useState({
+    services: 0,
     clients: 0,
-    testimonials: 0,
-    faqs: 0,
-    packages: 0,
     clientInquiries: 0,
   });
 
   useEffect(() => {
-    // Fetch stats for ORBIT content
+    // Fetch stats
     Promise.all([
-      fetch('/api/clients').then((r) => r.json()).catch(() => ({ clients: [] })),
-      fetch('/api/testimonials').then((r) => r.json()).catch(() => ({ testimonials: [] })),
-      fetch('/api/faqs').then((r) => r.json()).catch(() => ({ faqs: [] })),
-      fetch('/api/packages').then((r) => r.json()).catch(() => ({ packages: [] })),
-      fetch('/api/client-inquiries').then((r) => r.json()).catch(() => ({ inquiries: [] })),
-    ]).then(([clients, testimonials, faqs, packages, inquiries]) => {
+      fetch('/api/services').then((r) => r.json()),
+      fetch('/api/clients').then((r) => r.json()),
+      fetch('/api/client-inquiries').then((r) => r.json()),
+    ]).then(([services, clients, inquiries]) => {
       setStats({
+        services: services.services?.length || 0,
         clients: clients.clients?.length || 0,
-        testimonials: testimonials.testimonials?.length || 0,
-        faqs: faqs.faqs?.length || 0,
-        packages: packages.packages?.length || 0,
         clientInquiries: inquiries.inquiries?.length || 0,
       });
     });
@@ -34,233 +28,199 @@ export default function Dashboard() {
 
   const cards = [
     {
-      title: 'Packages',
-      count: stats.packages,
-      href: '/admin/packages',
+      title: 'الصفحة الرئيسية',
+      icon: '🏠',
+      href: '/admin/main-page',
       color: 'from-primary to-primary/80',
-      icon: (
-        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-        </svg>
-      ),
+      description: 'Hero, About, Why ORBIT',
     },
     {
-      title: 'Testimonials',
-      count: stats.testimonials,
-      href: '/admin/testimonials',
-      color: 'from-secondary/80 to-secondary/60',
-      icon: (
-        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-        </svg>
-      ),
+      title: 'الحلول',
+      icon: '💡',
+      href: '/admin/solutions',
+      color: 'from-blue-500 to-blue-600',
+      description: 'جميع الحلول والباقات',
     },
     {
-      title: 'FAQs',
-      count: stats.faqs,
-      href: '/admin/faqs',
-      color: 'from-primary/80 to-primary/60',
-      icon: (
-        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      ),
+      title: 'شركاء النجاح',
+      count: stats.clients,
+      icon: '🤝',
+      href: '/admin/clients',
+      color: 'from-green-500 to-green-600',
+      description: 'الشركاء الموثوقون',
     },
     {
-      title: 'Inquiries',
+      title: 'الأخبار والعروض',
+      icon: '📰',
+      href: '/admin/news',
+      color: 'from-purple-500 to-purple-600',
+      description: 'آخر التحديثات',
+    },
+    {
+      title: 'الاستفسارات',
       count: stats.clientInquiries,
+      icon: '📧',
       href: '/admin/inquiries',
-      color: 'from-neutral/60 to-neutral/40',
-      icon: (
-        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-        </svg>
-      ),
+      color: 'from-orange-500 to-orange-600',
+      description: 'رسائل التواصل',
+    },
+    {
+      title: 'الباقات',
+      icon: '📦',
+      href: '/admin/packages',
+      color: 'from-pink-500 to-pink-600',
+      description: 'إدارة الباقات',
     },
   ];
 
   return (
     <AdminLayout>
-      <div className="mb-8">
-        <h1 className="text-4xl font-heading font-bold text-gray-900 mb-2 uppercase tracking-tight">
-          ORBIT Control Center
+      <div className="mb-12" dir="rtl">
+        <h1 className="text-4xl font-heading font-bold text-primary mb-3 uppercase text-right">
+          لوحة تحكم <span className="text-gray-900">ORBIT</span>
         </h1>
-        <p className="text-gray-600 font-gotham text-lg">
-          Manage your ORBIT website content and operations
+        <p className="text-lg text-gray-600 font-somar text-right">
+          إدارة محتوى موقعك بكفاءة من مكان واحد
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
         {cards.map((card) => (
           <Link key={card.title} href={card.href}>
             <div
-              className={`bg-gradient-to-br ${card.color} text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all hover:scale-105 cursor-pointer`}
+              className={`bg-gradient-to-br ${card.color} text-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all hover:scale-105 hover:-translate-y-1 cursor-pointer relative overflow-hidden group`}
             >
-              <div className="flex items-center justify-between mb-4">
-                <div className="text-white">{card.icon}</div>
-                <span className="text-3xl font-heading font-bold">{card.count}</span>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
+              <div className="relative z-10">
+                <div className="flex items-start justify-between mb-4">
+                  <span className="text-6xl drop-shadow-lg">{card.icon}</span>
+                  {card.count !== undefined && (
+                    <span className="text-4xl font-heading font-bold bg-white/20 px-4 py-2 rounded-lg backdrop-blur-sm">
+                      {card.count}
+                    </span>
+                  )}
+                </div>
+                <h3 className="text-2xl font-heading font-bold mb-2">{card.title}</h3>
+                <p className="text-sm text-white/80 font-gotham">{card.description}</p>
               </div>
-              <h3 className="text-xl font-heading font-semibold">{card.title}</h3>
             </div>
           </Link>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-2xl shadow-lg border border-neutral/10">
-          <h3 className="text-xl font-heading font-bold text-gray-900 mb-4">
-            Quick Actions
+        <div className="bg-white p-8 rounded-2xl shadow-lg border-t-4 border-primary" dir="rtl">
+          <h3 className="text-2xl font-heading font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <span className="text-3xl">⚡</span>
+            <span className="font-somar">إجراءات سريعة</span>
           </h3>
           <div className="space-y-3">
-            <Link
-              href="/admin/hero"
-              className="block p-4 bg-primary/5 rounded-lg hover:bg-primary/10 border border-primary/20 transition-colors"
+              <Link
+              href="/admin/main-page"
+              className="block p-4 bg-gradient-to-l from-primary/10 to-primary/5 rounded-lg hover:from-primary/20 hover:to-primary/10 transition-all border-r-4 border-primary"
+              dir="rtl"
             >
               <div className="flex items-center gap-3">
-                <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-                <span className="font-heading font-medium text-gray-900">
-                  Edit Hero Section
-                </span>
+                <span className="text-2xl">🏠</span>
+                <div>
+                  <span className="font-somar font-semibold text-gray-900 block">تحرير الصفحة الرئيسية</span>
+                  <span className="text-xs text-gray-500 font-somar">Hero, About, Why ORBIT</span>
+                </div>
               </div>
             </Link>
             <Link
-              href="/admin/about"
-              className="block p-4 bg-primary/5 rounded-lg hover:bg-primary/10 border border-primary/20 transition-colors"
+              href="/admin/solutions"
+              className="block p-4 bg-gradient-to-l from-blue-50 to-blue-25 rounded-lg hover:from-blue-100 hover:to-blue-50 transition-all border-r-4 border-blue-500"
+              dir="rtl"
             >
               <div className="flex items-center gap-3">
-                <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-                <span className="font-heading font-medium text-gray-900">
-                  Edit About Section
-                </span>
+                <span className="text-2xl">💡</span>
+                <div>
+                  <span className="font-somar font-semibold text-gray-900 block">إدارة الحلول</span>
+                  <span className="text-xs text-gray-500 font-somar">إضافة أو تعديل الحلول</span>
+                </div>
               </div>
             </Link>
             <Link
-              href="/admin/unique-features"
-              className="block p-4 bg-secondary/30 rounded-lg hover:bg-secondary/40 border border-secondary/40 transition-colors"
+              href="/admin/news"
+              className="block p-4 bg-gradient-to-l from-purple-50 to-purple-25 rounded-lg hover:from-purple-100 hover:to-purple-50 transition-all border-r-4 border-purple-500"
+              dir="rtl"
             >
               <div className="flex items-center gap-3">
-                <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-                <span className="font-heading font-medium text-gray-900">
-                  Edit Unique Features
-                </span>
+                <span className="text-2xl">📰</span>
+                <div>
+                  <span className="font-somar font-semibold text-gray-900 block">إضافة خبر</span>
+                  <span className="text-xs text-gray-500 font-somar">إنشاء مقال جديد</span>
+                </div>
               </div>
             </Link>
             <Link
-              href="/admin/packages"
-              className="block p-4 bg-primary/5 rounded-lg hover:bg-primary/10 border border-primary/20 transition-colors"
+              href="/admin/offers"
+              className="block p-4 bg-gradient-to-l from-orange-50 to-orange-25 rounded-lg hover:from-orange-100 hover:to-orange-50 transition-all border-r-4 border-orange-500"
+              dir="rtl"
             >
               <div className="flex items-center gap-3">
-                <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                <span className="font-heading font-medium text-gray-900">
-                  Add New Package
-                </span>
+                <span className="text-2xl">🎁</span>
+                <div>
+                  <span className="font-somar font-semibold text-gray-900 block">إضافة عرض</span>
+                  <span className="text-xs text-gray-500 font-somar">إنشاء عرض خاص جديد</span>
+                </div>
               </div>
             </Link>
             <Link
-              href="/admin/testimonials"
-              className="block p-4 bg-secondary/30 rounded-lg hover:bg-secondary/40 border border-secondary/40 transition-colors"
+              href="/admin/clients"
+              className="block p-4 bg-gradient-to-l from-green-50 to-green-25 rounded-lg hover:from-green-100 hover:to-green-50 transition-all border-r-4 border-green-500"
+              dir="rtl"
             >
               <div className="flex items-center gap-3">
-                <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                <span className="font-heading font-medium text-gray-900">
-                  Add New Testimonial
-                </span>
-              </div>
-            </Link>
-            <Link
-              href="/admin/faqs"
-              className="block p-4 bg-primary/5 rounded-lg hover:bg-primary/10 border border-primary/20 transition-colors"
-            >
-              <div className="flex items-center gap-3">
-                <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                <span className="font-heading font-medium text-gray-900">Add New FAQ</span>
-              </div>
-            </Link>
-            <Link
-              href="/admin/inquiries"
-              className="block p-4 bg-neutral/10 rounded-lg hover:bg-neutral/20 border border-neutral/30 transition-colors"
-            >
-              <div className="flex items-center gap-3">
-                <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                <span className="font-heading font-medium text-gray-900">
-                  View Client Inquiries ({stats.clientInquiries})
-                </span>
+                <span className="text-2xl">🤝</span>
+                <div>
+                  <span className="font-somar font-semibold text-gray-900 block">إضافة شريك</span>
+                  <span className="text-xs text-gray-500 font-somar">إضافة شريك نجاح</span>
+                </div>
               </div>
             </Link>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl shadow-lg border border-neutral/10">
-          <h3 className="text-xl font-heading font-bold text-gray-900 mb-4">
-            System Information
+        <div className="bg-gradient-to-br from-primary to-primary/80 text-white p-8 rounded-2xl shadow-lg" dir="rtl">
+          <h3 className="text-2xl font-heading font-bold mb-6 flex items-center gap-2">
+            <span className="text-3xl">📊</span>
+            <span className="font-somar">نظرة عامة على النظام</span>
           </h3>
           <div className="space-y-4">
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600 font-gotham">Database Status</span>
-              <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-heading font-semibold">
-                Connected
+            <div className="flex justify-between items-center bg-white/10 rounded-lg p-4 backdrop-blur-sm">
+              <span className="font-somar">حالة قاعدة البيانات</span>
+              <span className="px-3 py-1 bg-green-500 text-white rounded-full text-sm font-somar font-semibold">
+                ✓ متصل
               </span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600 font-gotham">Total Content Items</span>
-              <span className="font-heading font-bold text-gray-900">
-                {stats.clients +
-                  stats.testimonials +
-                  stats.faqs +
-                  stats.packages}
+            <div className="flex justify-between items-center bg-white/10 rounded-lg p-4 backdrop-blur-sm">
+              <span className="font-somar">شركاء النجاح</span>
+              <span className="font-heading font-bold text-2xl">
+                {stats.clients || 0}
               </span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600 font-gotham">Packages</span>
-              <span className="font-heading font-bold text-gray-900">
-                {stats.packages}
+            <div className="flex justify-between items-center bg-white/10 rounded-lg p-4 backdrop-blur-sm">
+              <span className="font-somar">الاستفسارات الجديدة</span>
+              <span className="font-heading font-bold text-2xl">
+                {stats.clientInquiries || 0}
               </span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600 font-gotham">Testimonials</span>
-              <span className="font-heading font-bold text-gray-900">
-                {stats.testimonials}
+            <div className="flex justify-between items-center bg-white/10 rounded-lg p-4 backdrop-blur-sm">
+              <span className="font-somar">آخر تحديث</span>
+              <span className="font-somar">
+                {new Date().toLocaleDateString('ar-SA')}
               </span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600 font-gotham">FAQs</span>
-              <span className="font-heading font-bold text-gray-900">
-                {stats.faqs}
-              </span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600 font-gotham">New Inquiries</span>
-              <span className="font-heading font-bold text-gray-900">
-                {stats.clientInquiries}
-              </span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600 font-gotham">Last Updated</span>
-              <span className="text-gray-900 font-gotham">
-                {new Date().toLocaleDateString()}
-              </span>
-            </div>
-            <div className="pt-4 border-t border-neutral/20">
+            <div className="pt-4 border-t border-white/20">
               <a
                 href="/"
                 target="_blank"
-                className="block text-center bg-primary text-white py-3 rounded-lg font-heading font-semibold hover:bg-primary/90 transition-colors"
+                rel="noopener noreferrer"
+                className="block text-center bg-white text-primary py-4 rounded-lg font-somar font-bold hover:bg-secondary hover:shadow-xl transition-all"
               >
-                View Live Website →
+                🌐 عرض الموقع المباشر ←
               </a>
             </div>
           </div>

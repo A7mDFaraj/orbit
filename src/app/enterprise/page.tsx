@@ -6,6 +6,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import OrbitAnimatedBackground from '@/components/OrbitAnimatedBackground';
 import OrbitSectionBackground from '@/components/OrbitSectionBackground';
 
 export default function EnterprisePage() {
@@ -87,12 +88,12 @@ export default function EnterprisePage() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 font-ibm-plex">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
       <Navbar />
       
       {/* Hero Section */}
       <section className="relative py-32 lg:py-40 bg-gradient-to-br from-primary via-[#8a2a3d] to-primary text-white overflow-hidden">
-        <OrbitSectionBackground alignment="both" density="medium" />
+        <OrbitAnimatedBackground opacity={0.25} speed={0.6} size="large" color="rgba(255, 255, 255, 0.25)" />
         
         <div className="absolute inset-0 pointer-events-none">
           {[...Array(2)].map((_, i) => (
@@ -138,8 +139,8 @@ export default function EnterprisePage() {
             }}
           >
             <motion.h1
-              className="text-4xl sm:text-5xl lg:text-6xl font-ibm-plex font-semibold mb-6 uppercase tracking-tight"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'var(--font-ibm-plex), sans-serif' }}
+              className="text-4xl sm:text-5xl lg:text-6xl font-heading mb-6 uppercase tracking-tight"
+              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
               variants={{
                 hidden: { opacity: 0, y: 30 },
                 visible: { opacity: 1, y: 0 },
@@ -150,8 +151,8 @@ export default function EnterprisePage() {
             </motion.h1>
 
             <motion.p
-              className="text-xl sm:text-2xl mb-8 max-w-3xl font-ibm-plex font-light text-white/90 leading-relaxed"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'var(--font-ibm-plex), sans-serif' }}
+              className="text-xl sm:text-2xl mb-8 max-w-3xl font-gotham text-white/90 leading-relaxed"
+              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
               variants={{
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0 },
@@ -170,8 +171,8 @@ export default function EnterprisePage() {
             >
               <Link
                 href="/request-quote?source=enterprise&serviceType=sms-platform"
-                className="group relative inline-flex items-center gap-3 px-8 py-4 bg-white text-primary rounded-xl font-ibm-plex font-semibold uppercase tracking-wider shadow-xl hover:shadow-2xl hover:bg-gray-50 transition-all duration-300 overflow-hidden"
-                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'var(--font-ibm-plex), sans-serif' }}
+                className="group relative inline-flex items-center gap-3 px-8 py-4 bg-white text-primary rounded-xl font-heading uppercase tracking-wider shadow-xl hover:shadow-2xl hover:bg-gray-50 transition-all duration-300 overflow-hidden"
+                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
               >
                 <span className="relative z-10 flex items-center gap-3">
                   <svg
@@ -196,8 +197,8 @@ export default function EnterprisePage() {
               </Link>
               <Link
                 href="/request-quote?source=enterprise&serviceType=whatsapp-business-api"
-                className="group inline-flex items-center gap-3 px-8 py-4 bg-transparent border-2 border-white text-white rounded-xl font-ibm-plex font-semibold uppercase tracking-wider hover:bg-white/10 hover:border-white transition-all duration-300 backdrop-blur-sm"
-                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'var(--font-ibm-plex), sans-serif' }}
+                className="group inline-flex items-center gap-3 px-8 py-4 bg-transparent border-2 border-white text-white rounded-xl font-heading uppercase tracking-wider hover:bg-white/10 hover:border-white transition-all duration-300 backdrop-blur-sm"
+                style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
               >
                 <span className="flex items-center gap-3">
                   {isRTL ? 'تواصل مع المبيعات' : 'Contact Sales'}
@@ -234,8 +235,8 @@ export default function EnterprisePage() {
             }}
           >
             <motion.h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-ibm-plex font-semibold mb-16 text-gray-900 dark:text-white text-center uppercase tracking-tight"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'var(--font-ibm-plex), sans-serif' }}
+              className="text-3xl sm:text-4xl lg:text-5xl font-heading mb-16 text-gray-900 dark:text-white text-center uppercase tracking-tight"
+              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
               variants={{
                 hidden: { opacity: 0, y: 30 },
                 visible: { opacity: 1, y: 0 },
@@ -267,8 +268,8 @@ export default function EnterprisePage() {
                     </div>
                     
                     <h3
-                      className="text-xl sm:text-2xl font-ibm-plex font-medium mb-4 text-gray-900 dark:text-white"
-                      style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'var(--font-ibm-plex), sans-serif' }}
+                      className="text-xl sm:text-2xl font-heading mb-4 text-gray-900 dark:text-white"
+                      style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
                       dir={isRTL ? 'rtl' : 'ltr'}
                     >
                       {isRTL ? challenge.ar : challenge.en}
@@ -309,8 +310,8 @@ export default function EnterprisePage() {
             }}
           >
             <motion.h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-ibm-plex font-semibold mb-16 text-gray-900 dark:text-white text-center uppercase tracking-tight"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'var(--font-ibm-plex), sans-serif' }}
+              className="text-3xl sm:text-4xl lg:text-5xl font-heading mb-16 text-gray-900 dark:text-white text-center uppercase tracking-tight"
+              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
               variants={{
                 hidden: { opacity: 0, y: 30 },
                 visible: { opacity: 1, y: 0 },
@@ -342,8 +343,8 @@ export default function EnterprisePage() {
                     </div>
                     
                     <h3
-                      className="text-xl sm:text-2xl font-ibm-plex font-medium mb-4 text-gray-900 dark:text-white"
-                      style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'var(--font-ibm-plex), sans-serif' }}
+                      className="text-xl sm:text-2xl font-heading mb-4 text-gray-900 dark:text-white"
+                      style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
                       dir={isRTL ? 'rtl' : 'ltr'}
                     >
                       {isRTL ? solution.ar : solution.en}
@@ -384,8 +385,8 @@ export default function EnterprisePage() {
             }}
           >
             <motion.h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-ibm-plex font-semibold mb-16 text-gray-900 dark:text-white text-center uppercase tracking-tight"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'var(--font-ibm-plex), sans-serif' }}
+              className="text-3xl sm:text-4xl lg:text-5xl font-heading mb-16 text-gray-900 dark:text-white text-center uppercase tracking-tight"
+              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
               variants={{
                 hidden: { opacity: 0, y: 30 },
                 visible: { opacity: 1, y: 0 },
@@ -428,8 +429,8 @@ export default function EnterprisePage() {
                     </div>
                     
                     <p
-                      className="text-lg sm:text-xl font-ibm-plex font-normal text-gray-900 dark:text-white leading-relaxed"
-                      style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'var(--font-ibm-plex), sans-serif' }}
+                      className="text-lg sm:text-xl font-gotham text-gray-900 dark:text-white leading-relaxed"
+                      style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
                       dir={isRTL ? 'rtl' : 'ltr'}
                     >
                       {isRTL ? benefit.ar : benefit.en}
@@ -484,8 +485,8 @@ export default function EnterprisePage() {
         
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.h2
-            className="text-3xl sm:text-4xl lg:text-5xl font-ibm-plex font-semibold mb-8 uppercase tracking-tight"
-            style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'var(--font-ibm-plex), sans-serif' }}
+            className="text-3xl sm:text-4xl lg:text-5xl font-heading mb-8 uppercase tracking-tight"
+            style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -501,8 +502,8 @@ export default function EnterprisePage() {
           >
             <Link
               href="/request-quote?source=enterprise&serviceType=sms-platform"
-              className="group relative inline-flex items-center gap-3 px-10 py-4 bg-white text-primary rounded-xl font-ibm-plex font-semibold uppercase tracking-wider shadow-xl hover:shadow-2xl hover:bg-gray-50 transition-all duration-300 overflow-hidden"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'var(--font-ibm-plex), sans-serif' }}
+              className="group relative inline-flex items-center gap-3 px-10 py-4 bg-white text-primary rounded-xl font-heading uppercase tracking-wider shadow-xl hover:shadow-2xl hover:bg-gray-50 transition-all duration-300 overflow-hidden"
+              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
             >
               <span className="relative z-10 flex items-center gap-3">
                 <svg
@@ -527,8 +528,8 @@ export default function EnterprisePage() {
             </Link>
             <Link
               href="/request-quote?source=enterprise&serviceType=whatsapp-business-api"
-              className="group inline-flex items-center gap-3 px-10 py-4 bg-transparent border-2 border-white text-white rounded-xl font-ibm-plex font-semibold uppercase tracking-wider hover:bg-white/10 hover:border-white transition-all duration-300 backdrop-blur-sm"
-              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'var(--font-ibm-plex), sans-serif' }}
+              className="group inline-flex items-center gap-3 px-10 py-4 bg-transparent border-2 border-white text-white rounded-xl font-heading uppercase tracking-wider hover:bg-white/10 hover:border-white transition-all duration-300 backdrop-blur-sm"
+              style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}
             >
               <span className="flex items-center gap-3">
                 {isRTL ? 'تواصل مع المبيعات' : 'Contact Sales'}

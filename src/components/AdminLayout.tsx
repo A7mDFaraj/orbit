@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import toast, { Toaster } from 'react-hot-toast';
 import { AdminLanguageProvider, useAdminLanguage } from '@/contexts/AdminLanguageContext';
@@ -47,6 +47,19 @@ interface AdminLayoutProps {
   children: React.ReactNode;
 }
 
+interface MenuSection {
+  title: string;
+  titleAr: string;
+  items: MenuItem[];
+}
+
+interface MenuItem {
+  name: string;
+  nameAr: string;
+  href: string;
+  icon: string;
+}
+
 export default function AdminLayout({ children }: AdminLayoutProps) {
   return (
     <AdminLanguageProvider>
@@ -59,7 +72,10 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [expandedSection, setExpandedSection] = useState<string>('main');
   const router = useRouter();
+  const pathname = usePathname();
   const { t, toggleLanguage, isArabic } = useAdminLanguage();
 
   useEffect(() => {
@@ -80,29 +96,13 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
   const checkAuth = async () => {
     try {
       const res = await fetch('/api/auth/me');
-      
-      // Check if response is JSON
-      const contentType = res.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
-        console.error('Non-JSON response from /api/auth/me');
-        router.push('/admin');
-        setLoading(false);
-        return;
-      }
-
       if (res.ok) {
-        try {
-          const data = await res.json();
-          setUser(data.user);
-        } catch (jsonError) {
-          console.error('JSON parse error:', jsonError);
-          router.push('/admin');
-        }
+        const data = await res.json();
+        setUser(data.user);
       } else {
         router.push('/admin');
       }
     } catch (error) {
-      console.error('Auth check error:', error);
       router.push('/admin');
     } finally {
       setLoading(false);
@@ -121,8 +121,11 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-xl text-gray-600 font-heading">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-secondary/10">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="text-xl font-heading text-gray-700">Loading Admin Panel...</div>
+        </div>
       </div>
     );
   }
@@ -131,218 +134,218 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
     return null;
   }
 
-  const menuItems = [
-    { 
-      name: t.dashboard, 
-      href: '/admin/dashboard', 
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-        </svg>
-      )
+  const menuSections: MenuSection[] = [
+    {
+      title: 'Dashboard',
+      titleAr: 'لوحة التحكم',
+      items: [
+        { name: 'Overview', nameAr: 'نظرة عامة', href: '/admin/dashboard', icon: '📊' },
+      ]
     },
-    { 
-      name: t.heroSection, 
-      href: '/admin/hero', 
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-        </svg>
-      )
+    {
+      title: 'Main Page',
+      titleAr: 'الصفحة الرئيسية',
+      items: [
+        { name: 'Main Content', nameAr: 'المحتوى الرئيسي', href: '/admin/main-page', icon: '🏠' },
+        { name: 'Success Partners', nameAr: 'شركاء النجاح', href: '/admin/clients', icon: '🤝' },
+      ]
     },
-    { 
-      name: t.aboutUs, 
-      href: '/admin/about', 
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      )
+    {
+      title: 'Solutions',
+      titleAr: 'الحلول',
+      items: [
+        { name: 'All Solutions', nameAr: 'جميع الحلول', href: '/admin/solutions', icon: '💡' },
+      ]
     },
-    { 
-      name: t.uniqueFeatures, 
-      href: '/admin/unique-features', 
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-        </svg>
-      )
+    {
+      title: 'Pages',
+      titleAr: 'الصفحات',
+      items: [
+        { name: 'News', nameAr: 'الأخبار', href: '/admin/news', icon: '📰' },
+        { name: 'Offers', nameAr: 'العروض', href: '/admin/offers', icon: '🎁' },
+        { name: 'Packages', nameAr: 'الباقات', href: '/admin/packages', icon: '📦' },
+      ]
     },
-    { 
-      name: t.packages, 
-      href: '/admin/packages', 
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-        </svg>
-      )
+    {
+      title: 'Contact',
+      titleAr: 'التواصل',
+      items: [
+        { name: 'Inquiries', nameAr: 'الاستفسارات', href: '/admin/inquiries', icon: '📧' },
+      ]
     },
-    { 
-      name: 'Testimonials', 
-      href: '/admin/testimonials', 
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-        </svg>
-      )
-    },
-    { 
-      name: 'FAQs', 
-      href: '/admin/faqs', 
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      )
-    },
-    { 
-      name: 'Solutions', 
-      href: '/admin/solutions', 
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-        </svg>
-      )
-    },
-    { 
-      name: 'Page Content', 
-      href: '/admin/page-content', 
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-        </svg>
-      )
-    },
-    { 
-      name: 'News', 
-      href: '/admin/news', 
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-        </svg>
-      )
-    },
-    { 
-      name: 'Offers', 
-      href: '/admin/offers', 
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      )
-    },
-    { 
-      name: 'Inquiries', 
-      href: '/admin/inquiries', 
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-        </svg>
-      )
-    },
+    {
+      title: 'Settings',
+      titleAr: 'الإعدادات',
+      items: [
+        { name: 'Setup', nameAr: 'الإعداد', href: '/admin/setup', icon: '⚙️' },
+      ]
+    }
   ];
 
-  return (
-    <div className="min-h-screen bg-gray-50 flex">
-      <Toaster position="top-right" />
+  const toggleSection = (section: string) => {
+    setExpandedSection(expandedSection === section ? '' : section);
+  };
 
-      {/* Sidebar */}
-      <aside
-        className={`relative bg-gradient-to-b from-primary via-primary/95 to-primary/90 text-white transition-all duration-300 ${
-          sidebarOpen ? 'w-64' : 'w-20'
-        } shadow-2xl overflow-hidden`}
+  const isActive = (href: string) => {
+    return pathname === href;
+  };
+
+  return (
+    <div className="min-h-screen flex flex-row bg-gradient-to-br from-secondary/20 to-white" dir="rtl">
+      <Toaster position="top-left" />
+
+      {/* Mobile Menu Toggle */}
+      <button
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        className="lg:hidden fixed top-4 right-4 z-50 bg-primary text-white p-3 rounded-lg shadow-lg"
       >
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-8">
+        {mobileMenuOpen ? '✕' : '☰'}
+      </button>
+
+      {/* Sidebar - RIGHT SIDE (first in RTL) */}
+      <aside
+        className={`fixed lg:relative inset-y-0 right-0 z-40 bg-gradient-to-b from-primary via-[#8a2a3d] to-primary text-white transition-all duration-300 h-screen ${
+          sidebarOpen ? 'w-72 lg:w-80' : 'w-20'
+        } ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'} shadow-2xl overflow-y-auto flex-shrink-0`}
+      >
+        {/* Logo Header */}
+        <div className="sticky top-0 bg-primary/95 backdrop-blur-sm z-10 border-b border-white/10">
+          <div className="p-4 flex items-center justify-between">
             {sidebarOpen ? (
-              <Link href="/" className="group">
-                <div className="relative flex items-center justify-center">
-                  <div className="text-2xl font-heading font-bold tracking-tight group-hover:scale-105 transition-transform">
-                    ORBIT
-                  </div>
+              <Link href="/" className="group flex-1">
+                <div className="relative bg-white rounded-lg overflow-hidden shadow-lg group-hover:shadow-secondary/50 transition-all duration-300 p-2" style={{ width: '180px', height: '50px' }}>
+                  <img 
+                    src="/client/logo.jpg" 
+                    alt="ORBIT" 
+                    className="h-full w-full object-contain object-center"
+                  />
                 </div>
               </Link>
             ) : (
-              <Link href="/" className="text-white text-2xl font-heading font-bold">
+              <Link href="/" className="text-secondary text-2xl font-heading font-bold">
                 O
               </Link>
             )}
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 hover:bg-primary/80 rounded-lg transition-colors ml-2"
+              className="hidden lg:block p-2 hover:bg-white/10 rounded-lg transition-colors"
             >
-              {sidebarOpen ? '←' : '→'}
+              {sidebarOpen ? '◀' : '▶'}
             </button>
           </div>
-
-          <nav className="space-y-2">
-            {menuItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/20 hover:shadow-lg transition-all duration-300 group"
-              >
-                <span className="group-hover:scale-110 transition-transform flex-shrink-0">{item.icon}</span>
-                {sidebarOpen && (
-                  <span className="font-heading font-semibold tracking-wide">{item.name}</span>
-                )}
-              </Link>
-            ))}
-          </nav>
         </div>
 
+        {/* Navigation Menu */}
+        <nav className="p-4 space-y-2">
+          {menuSections.map((section, idx) => (
+            <div key={idx} className="mb-2">
+              {sidebarOpen && (
+                <button
+                  onClick={() => toggleSection(section.title)}
+                  className="w-full flex items-center justify-between px-3 py-2 text-xs font-somar font-bold text-secondary/70 hover:text-secondary uppercase tracking-wider transition-colors"
+                >
+                  <span>{section.titleAr}</span>
+                  <span className={`transition-transform duration-200 ${expandedSection === section.title ? 'rotate-90' : ''}`}>
+                    ◀
+                  </span>
+                </button>
+              )}
+              <div className={`space-y-1 ${sidebarOpen && expandedSection !== section.title ? 'hidden' : ''}`}>
+                {section.items.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${
+                      isActive(item.href)
+                        ? 'bg-secondary text-primary shadow-lg shadow-secondary/30'
+                        : 'hover:bg-white/10 hover:-translate-x-1'
+                    }`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <span className="text-xl">{item.icon}</span>
+                    {sidebarOpen && (
+                      <span className="font-somar font-medium">{item.nameAr}</span>
+                    )}
+                    {isActive(item.href) && sidebarOpen && (
+                      <span className="mr-auto w-2 h-2 bg-primary rounded-full"></span>
+                    )}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ))}
+        </nav>
+
+        {/* Footer */}
+        {sidebarOpen && (
+          <div className="sticky bottom-0 bg-primary/95 backdrop-blur-sm border-t border-white/10 p-4">
+            <Link 
+              href="/" 
+              target="_blank"
+              className="block text-center bg-secondary hover:bg-secondary/90 text-primary font-somar font-bold py-3 px-4 rounded-lg transition-all hover:shadow-lg"
+            >
+              🌐 عرض الموقع
+            </Link>
+          </div>
+        )}
       </aside>
 
+      {/* Mobile Overlay */}
+      {mobileMenuOpen && (
+        <div
+          className="lg:hidden fixed inset-0 bg-black/50 z-30"
+          onClick={() => setMobileMenuOpen(false)}
+        ></div>
+      )}
+
       {/* Main Content */}
-      <main className="flex-1 overflow-auto bg-gray-50">
+      <main className="flex-1 min-h-screen overflow-x-hidden">
         {/* Header */}
-        <header className="bg-white shadow-md border-b-4 border-primary">
-          <div className="px-8 py-6 flex items-center justify-between">
-            <div>
-              <h2 className="text-3xl font-heading font-bold text-gray-900 uppercase tracking-wide" dir={isArabic ? 'rtl' : 'ltr'}>
-                {t.adminDashboard}
-              </h2>
-              <p className="text-sm text-gray-500 mt-1 font-gotham" dir={isArabic ? 'rtl' : 'ltr'}>{t.controlPanel}</p>
-            </div>
-            <div className="flex items-center gap-3">
-              {/* Language Switcher */}
-              <button
-                onClick={toggleLanguage}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary hover:bg-primary/90 transition-colors text-white font-heading font-semibold"
-                title={isArabic ? t.english : t.arabic}
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
-                </svg>
-                <span className="text-sm">{isArabic ? 'EN' : 'AR'}</span>
-              </button>
-
-              {/* User Info */}
-              <div className="text-right" dir={isArabic ? 'rtl' : 'ltr'}>
-                <p className="text-sm text-gray-600 font-gotham">{t.welcome}</p>
-                <p className="font-heading font-bold text-gray-900">{user.name}</p>
-              </div>
-              <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center text-white font-heading font-bold text-xl shadow-lg">
-                {user.name.charAt(0)}
-              </div>
-
+        <header className="sticky top-0 z-20 bg-white/95 backdrop-blur-sm shadow-md border-b-4 border-primary">
+          <div className="px-4 lg:px-8 py-4 lg:py-6 flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-2 lg:gap-3 flex-wrap mr-12 lg:mr-0">
               {/* Logout Button */}
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 transition-colors text-white font-heading font-semibold"
-                title={t.logout}
+                className="flex items-center gap-1 lg:gap-2 px-3 lg:px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 transition-colors text-white font-somar font-semibold text-sm"
+                title="تسجيل خروج"
               >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                </svg>
-                <span className="text-sm">{t.logout}</span>
+                <span className="text-base lg:text-lg">🚪</span>
+                <span className="hidden lg:inline text-xs lg:text-sm">خروج</span>
               </button>
+
+              {/* User Info - Hidden on small screens */}
+              <div className="hidden md:flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white font-heading font-bold text-lg shadow-lg">
+                  {user.name.charAt(0)}
+                </div>
+                <div className="text-left">
+                  <p className="text-xs text-gray-600">مرحباً</p>
+                  <p className="font-somar font-bold text-sm text-gray-900">{user.name}</p>
+                </div>
+              </div>
+
+              {/* Language Switcher */}
+              <button
+                onClick={toggleLanguage}
+                className="flex items-center gap-1 lg:gap-2 px-3 lg:px-4 py-2 rounded-lg bg-secondary hover:bg-secondary/90 transition-colors text-primary font-somar font-semibold text-sm"
+              >
+                <span className="text-base lg:text-lg">🌐</span>
+                <span className="text-xs lg:text-sm">{isArabic ? 'EN' : 'AR'}</span>
+              </button>
+            </div>
+            
+            <div className="flex-1 min-w-0 text-right">
+              <h2 className="text-xl lg:text-3xl font-heading font-bold text-primary uppercase tracking-wide truncate">
+                لوحة تحكم ORBIT
+              </h2>
+              <p className="text-xs lg:text-sm text-gray-500 mt-1 font-somar">نظام إدارة المحتوى</p>
             </div>
           </div>
         </header>
 
         {/* Page Content */}
-        <div className="p-8">{children}</div>
+        <div className="p-4 lg:p-8">{children}</div>
       </main>
     </div>
   );

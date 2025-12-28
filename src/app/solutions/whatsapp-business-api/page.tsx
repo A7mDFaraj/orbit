@@ -6,6 +6,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import OrbitSectionBackground from '@/components/OrbitSectionBackground';
 
 export default function WhatsAppBusinessAPIPage() {
   const { isRTL } = useLanguage();
@@ -66,7 +67,8 @@ export default function WhatsAppBusinessAPIPage() {
       
       {/* Hero Section */}
       <section className="relative py-24 sm:py-32 bg-gradient-to-br from-primary via-[#8a2a3d] to-primary text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
+        <OrbitSectionBackground alignment="both" density="medium" />
+        <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{
             backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.15) 1px, transparent 0)',
             backgroundSize: '40px 40px'
@@ -129,8 +131,9 @@ export default function WhatsAppBusinessAPIPage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-24 bg-white dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-24 bg-white dark:bg-gray-900 relative overflow-hidden">
+        <OrbitSectionBackground alignment="left" density="low" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -181,8 +184,9 @@ export default function WhatsAppBusinessAPIPage() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-24 bg-gray-50 dark:bg-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-24 bg-gray-50 dark:bg-gray-800 relative overflow-hidden">
+        <OrbitSectionBackground alignment="right" density="low" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -235,8 +239,9 @@ export default function WhatsAppBusinessAPIPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-br from-primary via-[#8a2a3d] to-primary text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="py-24 bg-gradient-to-br from-primary via-[#8a2a3d] to-primary text-white relative overflow-hidden">
+        <OrbitSectionBackground alignment="both" density="medium" />
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <motion.h2
             className="text-3xl sm:text-4xl font-heading mb-6 uppercase tracking-tight"
             style={{ fontFamily: isRTL ? 'Somar, sans-serif' : 'Gotham, sans-serif' }}

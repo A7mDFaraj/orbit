@@ -72,7 +72,7 @@ const translations: { en: AdminTranslations; ar: AdminTranslations } = {
     logout: 'تسجيل الخروج',
     welcome: 'مرحبًا بعودتك،',
     adminDashboard: 'لوحة إدارة',
-    controlPanel: 'لوحة تحكم أوربيت',
+    controlPanel: 'لوحة تحكم مارك لاين',
     backToDashboard: 'العودة للوحة التحكم',
     saveChanges: 'حفظ التغييرات',
     saving: 'جاري الحفظ...',
