@@ -15,7 +15,7 @@ export default function Home() {
   const { isDark } = useTheme();
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" style={{ minHeight: '100dvh' }}>
       <Navbar />
       <Hero key={`hero-${isRTL ? 'rtl' : 'ltr'}-${isDark ? 'dark' : 'light'}`} />
 

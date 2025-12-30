@@ -23,10 +23,6 @@ interface Feature {
 }
 
 interface MainPageSettings {
-  hero: {
-    titleEn: string;
-    titleAr: string;
-  };
   about: {
     visionTitleEn: string;
     visionTitleAr: string;
@@ -47,14 +43,10 @@ interface MainPageSettings {
 }
 
 export default function MainPageAdmin() {
-  const [activeTab, setActiveTab] = useState<'hero' | 'about' | 'whyOrbit'>('hero');
+  const [activeTab, setActiveTab] = useState<'about' | 'whyOrbit'>('about');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [settings, setSettings] = useState<MainPageSettings>({
-    hero: {
-      titleEn: '',
-      titleAr: ''
-    },
     about: {
       visionTitleEn: '',
       visionTitleAr: '',
@@ -237,16 +229,6 @@ export default function MainPageAdmin() {
         {/* Tabs */}
         <div className="bg-white rounded-xl shadow-lg mb-6 p-2 flex gap-2">
           <button
-            onClick={() => setActiveTab('hero')}
-            className={`flex-1 py-4 px-6 rounded-lg font-ibm-plex-arabic font-bold transition-all ${
-              activeTab === 'hero'
-                ? 'bg-primary text-white shadow-lg'
-                : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
-            }`}
-          >
-            🌟 قسم Hero
-          </button>
-          <button
             onClick={() => setActiveTab('about')}
             className={`flex-1 py-4 px-6 rounded-lg font-ibm-plex-arabic font-bold transition-all ${
               activeTab === 'about'
@@ -254,7 +236,7 @@ export default function MainPageAdmin() {
                 : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
             }`}
           >
-            👋 من نحن
+            👋 من نحن (About)
           </button>
           <button
             onClick={() => setActiveTab('whyOrbit')}
@@ -264,60 +246,27 @@ export default function MainPageAdmin() {
                 : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
             }`}
           >
-            ✨ لماذا ORBIT
+            ✨ لماذا ORBIT (Why ORBIT)
           </button>
+        </div>
+        
+        {/* Hero Section Note */}
+        <div className="bg-blue-50 border-r-4 border-blue-500 p-4 mb-6 text-right">
+          <p className="text-sm text-blue-700 font-ibm-plex-arabic">
+            <strong>📌 ملاحظة:</strong> قسم Hero (الحلول والشركاء) يتم إدارته في صفحات منفصلة:
+          </p>
+          <div className="mt-2 flex gap-3 justify-end">
+            <a href="/admin/solutions" className="text-xs bg-primary text-white px-3 py-1 rounded hover:bg-primary/90">
+              إدارة الحلول
+            </a>
+            <a href="/admin/partners" className="text-xs bg-secondary text-primary px-3 py-1 rounded hover:bg-secondary/90">
+              إدارة الشركاء
+            </a>
+          </div>
         </div>
 
         {/* Content */}
         <div className="bg-white rounded-xl shadow-lg p-8">
-          {/* Hero Tab */}
-          {activeTab === 'hero' && (
-            <div className="space-y-6">
-              <h2 className="text-2xl font-ibm-plex-arabic font-bold text-gray-900 mb-6 text-right">عنوان قسم Hero</h2>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-ibm-plex-arabic font-semibold text-gray-700 mb-2 text-right">
-                    العنوان (عربي)
-                  </label>
-                  <input
-                    type="text"
-                    value={settings.hero.titleAr}
-                    onChange={(e) => setSettings({
-                      ...settings,
-                      hero: { ...settings.hero, titleAr: e.target.value }
-                    })}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary font-ibm-plex-arabic text-right"
-                    placeholder="أوربيت نجاحك"
-                    dir="rtl"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-ibm-plex-arabic font-semibold text-gray-700 mb-2 text-right">
-                    العنوان (إنجليزي)
-                  </label>
-                  <input
-                    type="text"
-                    value={settings.hero.titleEn}
-                    onChange={(e) => setSettings({
-                      ...settings,
-                      hero: { ...settings.hero, titleEn: e.target.value }
-                    })}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary "
-                    placeholder="ORBIT Your Success"
-                  />
-                </div>
-              </div>
-
-              <div className="bg-blue-50 border-r-4 border-blue-500 p-4 mt-6 text-right">
-                <p className="text-sm text-blue-700 font-ibm-plex-arabic">
-                  <strong>ملاحظة:</strong> شريط الحلول أسفل العنوان يتم إدارته بشكل منفصل في قسم إدارة الحلول.
-                </p>
-              </div>
-            </div>
-          )}
-
           {/* About Tab */}
           {activeTab === 'about' && (
             <div className="space-y-8">

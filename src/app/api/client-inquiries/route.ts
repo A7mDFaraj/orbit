@@ -21,6 +21,11 @@ export async function POST(request: NextRequest) {
     await connectDB();
     const data = await request.json();
 
+    // Add type if not provided
+    if (!data.type) {
+      data.type = 'quote'; // Default to quote for request-quote forms
+    }
+
     const inquiry = await ClientInquiry.create(data);
 
     return NextResponse.json(

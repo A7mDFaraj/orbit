@@ -5,30 +5,34 @@ import { Solution } from '@/models/Solution';
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
+// GET solution by slug (public, only returns active solutions)
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = await params;
     await connectDB();
-    const solution = await Solution.findOne({ slug, isActive: true });
     
+    const { slug } = await params;
+    
+    const solution = await Solution.findOne({ 
+      slug: slug,
+      isActive: true 
+    });
+
     if (!solution) {
       return NextResponse.json(
-        { error: 'Solution not found' },
+        { success: false, error: 'Solution not found' },
         { status: 404 }
       );
     }
-    
-    return NextResponse.json({ solution });
+
+    return NextResponse.json({ success: true, solution });
   } catch (error) {
-    console.error('Error fetching solution by slug:', error);
+    console.error('Error fetching solution:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { success: false, error: 'Internal server error' },
       { status: 500 }
     );
   }
 }
-
-

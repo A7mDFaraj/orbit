@@ -35,6 +35,8 @@ html {
   overflow-x: hidden;
   width: 100%;
   max-width: 100vw;
+  /* iOS Safari smooth scrolling fix */
+  -webkit-overflow-scrolling: touch;
 }
 
 html[dir="rtl"] body {
@@ -54,6 +56,10 @@ body {
   overflow-x: hidden;
   width: 100%;
   max-width: 100vw;
+  /* iOS Safari smooth scrolling */
+  -webkit-overflow-scrolling: touch;
+  /* Prevent zoom on double-tap on iOS */
+  touch-action: manipulation;
 }
 
 /* 3D Flip Card Styles */
@@ -146,4 +152,18 @@ h1, h2, h3, h4, h5, h6 {
   backface-visibility: hidden;
   -webkit-perspective: 1000;
   perspective: 1000;
+}
+
+/* iOS viewport height fix - Use dynamic viewport height */
+@supports (-webkit-touch-callout: none) {
+  .min-h-screen {
+    min-height: -webkit-fill-available;
+  }
+}
+
+/* iOS-specific optimizations - tap highlight only */
+@supports (-webkit-touch-callout: none) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
 }

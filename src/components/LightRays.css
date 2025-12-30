@@ -34,3 +34,23 @@
   filter: blur(4px) brightness(1.1);
 }
 
+/* iOS/Safari optimization - Disable heavy filters and blend modes */
+@supports (-webkit-touch-callout: none) {
+  .light-rays-container {
+    mix-blend-mode: normal;
+    opacity: 0.1;
+    filter: none;
+    display: none; /* Hide completely on iOS for better performance */
+  }
+  
+  :not(.dark) .light-rays-container {
+    mix-blend-mode: normal;
+    filter: none;
+  }
+  
+  .dark .light-rays-container {
+    mix-blend-mode: normal;
+    filter: none;
+  }
+}
+

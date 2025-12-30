@@ -5,18 +5,23 @@ import AdminLayout from '@/components/AdminLayout';
 
 interface ClientInquiry {
   _id: string;
+  type: 'quote' | 'contact' | 'general';
   name: string;
   email: string;
   phone: string;
   company?: string;
-  serviceType: string;
+  subject?: string;
+  serviceType?: string;
   message: string;
   budget?: string;
   selectedPackage?: string;
   packageName?: string;
   packageType?: string;
   packagePrice?: string;
+  source?: string;
   status: 'new' | 'contacted' | 'quoted' | 'converted' | 'closed';
+  priority?: 'low' | 'medium' | 'high' | 'urgent';
+  assignedTo?: string;
   notes?: string;
   createdAt: string;
 }
@@ -32,8 +37,9 @@ export default function InquiriesPage() {
   // CMS Features
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
-  const [filterPackageType, setFilterPackageType] = useState<string>('all');
-  const [sortBy, setSortBy] = useState<'date' | 'name' | 'status'>('date');
+  const [filterType, setFilterType] = useState<string>('all');
+  const [filterPriority, setFilterPriority] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<'date' | 'name' | 'status' | 'priority'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   useEffect(() => {
@@ -70,6 +76,19 @@ export default function InquiriesPage() {
     }
   };
 
+  const handleUpdatePriority = async (id: string, priority: string) => {
+    try {
+      await fetch(`/api/client-inquiries/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ priority }),
+      });
+      fetchInquiries();
+    } catch (error) {
+      console.error('Error updating priority:', error);
+    }
+  };
+
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this inquiry?')) return;
 
@@ -98,6 +117,34 @@ export default function InquiriesPage() {
     }
   };
 
+  const getTypeBadgeColor = (type: string) => {
+    switch (type) {
+      case 'quote':
+        return 'bg-purple-100 text-purple-800';
+      case 'contact':
+        return 'bg-blue-100 text-blue-800';
+      case 'general':
+        return 'bg-gray-100 text-gray-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getPriorityBadgeColor = (priority?: string) => {
+    switch (priority) {
+      case 'urgent':
+        return 'bg-red-100 text-red-800';
+      case 'high':
+        return 'bg-orange-100 text-orange-800';
+      case 'medium':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'low':
+        return 'bg-green-100 text-green-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
   // Filter, Search, and Sort
   const filteredInquiries = inquiries
     .filter((inquiry) => {
@@ -108,20 +155,19 @@ export default function InquiriesPage() {
         inquiry.email.toLowerCase().includes(searchLower) ||
         inquiry.phone.includes(searchLower) ||
         (inquiry.company?.toLowerCase().includes(searchLower) || false) ||
+        (inquiry.subject?.toLowerCase().includes(searchLower) || false) ||
         (inquiry.packageName?.toLowerCase().includes(searchLower) || false);
 
       // Status filter
       const matchesStatus = filterStatus === 'all' || inquiry.status === filterStatus;
 
-      // Package type filter
-      const matchesPackageType =
-        filterPackageType === 'all' ||
-        (filterPackageType === 'charity' && inquiry.packageType === 'charity') ||
-        (filterPackageType === 'regular' && inquiry.packageType === 'regular') ||
-        (filterPackageType === 'custom' && inquiry.packageType === 'custom') ||
-        (filterPackageType === 'none' && !inquiry.selectedPackage);
+      // Type filter
+      const matchesType = filterType === 'all' || inquiry.type === filterType;
 
-      return matchesSearch && matchesStatus && matchesPackageType;
+      // Priority filter
+      const matchesPriority = filterPriority === 'all' || inquiry.priority === filterPriority;
+
+      return matchesSearch && matchesStatus && matchesType && matchesPriority;
     })
     .sort((a, b) => {
       let comparison = 0;
@@ -132,6 +178,10 @@ export default function InquiriesPage() {
         comparison = a.name.localeCompare(b.name);
       } else if (sortBy === 'status') {
         comparison = a.status.localeCompare(b.status);
+      } else if (sortBy === 'priority') {
+        const priorityOrder = { urgent: 4, high: 3, medium: 2, low: 1 };
+        comparison = (priorityOrder[a.priority as keyof typeof priorityOrder] || 0) - 
+                     (priorityOrder[b.priority as keyof typeof priorityOrder] || 0);
       }
       
       return sortOrder === 'asc' ? comparison : -comparison;
@@ -171,8 +221,9 @@ export default function InquiriesPage() {
   const stats = {
     total: inquiries.length,
     new: inquiries.filter(i => i.status === 'new').length,
-    withPackage: inquiries.filter(i => i.selectedPackage).length,
-    charity: inquiries.filter(i => i.packageType === 'charity').length,
+    quotes: inquiries.filter(i => i.type === 'quote').length,
+    contacts: inquiries.filter(i => i.type === 'contact').length,
+    urgent: inquiries.filter(i => i.priority === 'urgent').length,
   };
 
   return (
@@ -198,28 +249,32 @@ export default function InquiriesPage() {
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
             <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-4 text-white shadow-lg">
               <p className="text-sm opacity-90 mb-1">Total Inquiries</p>
               <p className="text-3xl font-heading font-bold">{stats.total}</p>
             </div>
             <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg p-4 text-white shadow-lg">
-              <p className="text-sm opacity-90 mb-1">New Inquiries</p>
+              <p className="text-sm opacity-90 mb-1">New</p>
               <p className="text-3xl font-heading font-bold">{stats.new}</p>
             </div>
             <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg p-4 text-white shadow-lg">
-              <p className="text-sm opacity-90 mb-1">With Package</p>
-              <p className="text-3xl font-heading font-bold">{stats.withPackage}</p>
+              <p className="text-sm opacity-90 mb-1">Quote Requests</p>
+              <p className="text-3xl font-heading font-bold">{stats.quotes}</p>
             </div>
-            <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-lg p-4 text-white shadow-lg">
-              <p className="text-sm opacity-90 mb-1">Charity Packages</p>
-              <p className="text-3xl font-heading font-bold">{stats.charity}</p>
+            <div className="bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-lg p-4 text-white shadow-lg">
+              <p className="text-sm opacity-90 mb-1">Contact Forms</p>
+              <p className="text-3xl font-heading font-bold">{stats.contacts}</p>
+            </div>
+            <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-lg p-4 text-white shadow-lg">
+              <p className="text-sm opacity-90 mb-1">Urgent</p>
+              <p className="text-3xl font-heading font-bold">{stats.urgent}</p>
             </div>
           </div>
 
           {/* Filters and Search */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
               {/* Search */}
               <div className="lg:col-span-2">
                 <label className="block text-sm font-heading font-bold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wider">
@@ -227,11 +282,28 @@ export default function InquiriesPage() {
                 </label>
                 <input
                   type="text"
-                  placeholder="Search by name, email, phone..."
+                  placeholder="Search by name, email, phone, subject..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 />
+              </div>
+
+              {/* Type Filter */}
+              <div>
+                <label className="block text-sm font-heading font-bold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wider">
+                  Type
+                </label>
+                <select
+                  value={filterType}
+                  onChange={(e) => setFilterType(e.target.value)}
+                  className="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                >
+                  <option value="all">All Types</option>
+                  <option value="quote">Quote Requests</option>
+                  <option value="contact">Contact Forms</option>
+                  <option value="general">General</option>
+                </select>
               </div>
 
               {/* Status Filter */}
@@ -253,21 +325,21 @@ export default function InquiriesPage() {
                 </select>
               </div>
 
-              {/* Package Type Filter */}
+              {/* Priority Filter */}
               <div>
                 <label className="block text-sm font-heading font-bold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wider">
-                  Package Type
+                  Priority
                 </label>
                 <select
-                  value={filterPackageType}
-                  onChange={(e) => setFilterPackageType(e.target.value)}
+                  value={filterPriority}
+                  onChange={(e) => setFilterPriority(e.target.value)}
                   className="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 >
-                  <option value="all">All Types</option>
-                  <option value="regular">Business</option>
-                  <option value="charity">Charity</option>
-                  <option value="custom">Custom</option>
-                  <option value="none">No Package</option>
+                  <option value="all">All Priorities</option>
+                  <option value="urgent">🔴 Urgent</option>
+                  <option value="high">🟠 High</option>
+                  <option value="medium">🟡 Medium</option>
+                  <option value="low">🟢 Low</option>
                 </select>
               </div>
 
@@ -285,6 +357,7 @@ export default function InquiriesPage() {
                     <option value="date">Date</option>
                     <option value="name">Name</option>
                     <option value="status">Status</option>
+                    <option value="priority">Priority</option>
                   </select>
                   <button
                     onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
@@ -315,16 +388,19 @@ export default function InquiriesPage() {
                 <thead className="bg-gray-50 dark:bg-gray-900">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-heading font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Type
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-heading font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Name
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-heading font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Contact
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-heading font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                      Package
+                      Subject/Package
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-heading font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                      Service
+                      Priority
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-heading font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Status
@@ -343,6 +419,15 @@ export default function InquiriesPage() {
                       key={inquiry._id}
                       className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                     >
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span
+                          className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getTypeBadgeColor(
+                            inquiry.type || 'general'
+                          )}`}
+                        >
+                          {inquiry.type === 'quote' ? '💰 Quote' : inquiry.type === 'contact' ? '📧 Contact' : '📝 General'}
+                        </span>
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900 dark:text-white">
                           {inquiry.name}
@@ -378,12 +463,27 @@ export default function InquiriesPage() {
                               </div>
                             )}
                           </div>
+                        ) : inquiry.subject ? (
+                          <div className="text-sm text-gray-700 dark:text-gray-300 truncate max-w-[150px]">
+                            {inquiry.subject}
+                          </div>
                         ) : (
-                          <span className="text-xs text-gray-400">No package</span>
+                          <span className="text-xs text-gray-400">-</span>
                         )}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                        {inquiry.serviceType || '-'}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <select
+                          value={inquiry.priority || 'medium'}
+                          onChange={(e) => handleUpdatePriority(inquiry._id, e.target.value)}
+                          className={`px-2 py-1 text-xs font-semibold rounded-full border-0 cursor-pointer ${getPriorityBadgeColor(
+                            inquiry.priority
+                          )}`}
+                        >
+                          <option value="low">🟢 Low</option>
+                          <option value="medium">🟡 Medium</option>
+                          <option value="high">🟠 High</option>
+                          <option value="urgent">🔴 Urgent</option>
+                        </select>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
@@ -423,7 +523,7 @@ export default function InquiriesPage() {
             {filteredInquiries.length === 0 && (
               <div className="text-center py-12">
                 <p className="text-gray-500 dark:text-gray-400">
-                  {searchTerm || filterStatus !== 'all' || filterPackageType !== 'all'
+                  {searchTerm || filterStatus !== 'all' || filterType !== 'all' || filterPriority !== 'all'
                     ? 'No inquiries match your filters'
                     : 'No inquiries yet'}
                 </p>
@@ -441,6 +541,24 @@ export default function InquiriesPage() {
               </h2>
 
               <div className="space-y-4 mb-6">
+                {/* Type Badge */}
+                <div className="flex items-center justify-between mb-4">
+                  <span
+                    className={`px-3 py-1 inline-flex text-sm font-semibold rounded-full ${getTypeBadgeColor(
+                      selectedInquiry.type || 'general'
+                    )}`}
+                  >
+                    {selectedInquiry.type === 'quote' ? '💰 Quote Request' : selectedInquiry.type === 'contact' ? '📧 Contact Form' : '📝 General Inquiry'}
+                  </span>
+                  <span
+                    className={`px-3 py-1 inline-flex text-sm font-semibold rounded-full ${getPriorityBadgeColor(
+                      selectedInquiry.priority
+                    )}`}
+                  >
+                    {selectedInquiry.priority?.toUpperCase() || 'MEDIUM'}
+                  </span>
+                </div>
+
                 {/* Package Info - Highlighted */}
                 {selectedInquiry.selectedPackage && (
                   <div className="bg-gradient-to-r from-primary/10 to-blue-500/10 dark:from-primary/20 dark:to-blue-500/20 rounded-xl p-4 border-2 border-primary/30">
@@ -472,6 +590,25 @@ export default function InquiriesPage() {
                         )}
                       </div>
                     </div>
+                  </div>
+                )}
+
+                {/* Subject (for contact forms) */}
+                {selectedInquiry.subject && (
+                  <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
+                    <p className="text-sm font-heading font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                      Subject
+                    </p>
+                    <p className="text-gray-900 dark:text-white">
+                      {selectedInquiry.subject}
+                    </p>
+                  </div>
+                )}
+
+                {/* Source */}
+                {selectedInquiry.source && (
+                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                    Source: <span className="font-semibold">{selectedInquiry.source}</span>
                   </div>
                 )}
 
@@ -540,28 +677,54 @@ export default function InquiriesPage() {
                     {selectedInquiry.message}
                   </p>
                 </div>
-                <div>
-                  <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2">
-                    Update Status
-                  </p>
-                  <div className="flex gap-2 flex-wrap">
-                    {['new', 'contacted', 'quoted', 'converted', 'closed'].map(
-                      (status) => (
-                        <button
-                          key={status}
-                          onClick={() =>
-                            handleUpdateStatus(selectedInquiry._id, status)
-                          }
-                          className={`px-4 py-2 rounded-lg font-semibold text-sm ${
-                            selectedInquiry.status === status
-                              ? 'bg-primary text-white'
-                              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
-                          }`}
-                        >
-                          {status}
-                        </button>
-                      )
-                    )}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2">
+                      Update Status
+                    </p>
+                    <div className="flex gap-2 flex-wrap">
+                      {['new', 'contacted', 'quoted', 'converted', 'closed'].map(
+                        (status) => (
+                          <button
+                            key={status}
+                            onClick={() =>
+                              handleUpdateStatus(selectedInquiry._id, status)
+                            }
+                            className={`px-3 py-1.5 rounded-lg font-semibold text-xs ${
+                              selectedInquiry.status === status
+                                ? 'bg-primary text-white'
+                                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                            }`}
+                          >
+                            {status}
+                          </button>
+                        )
+                      )}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2">
+                      Update Priority
+                    </p>
+                    <div className="flex gap-2 flex-wrap">
+                      {['low', 'medium', 'high', 'urgent'].map(
+                        (priority) => (
+                          <button
+                            key={priority}
+                            onClick={() =>
+                              handleUpdatePriority(selectedInquiry._id, priority)
+                            }
+                            className={`px-3 py-1.5 rounded-lg font-semibold text-xs ${
+                              selectedInquiry.priority === priority
+                                ? getPriorityBadgeColor(priority)
+                                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                            }`}
+                          >
+                            {priority}
+                          </button>
+                        )
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>

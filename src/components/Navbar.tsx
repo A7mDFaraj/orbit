@@ -128,49 +128,26 @@ export default function Navbar() {
     <header
       className={`fixed top-0 inset-x-0 z-50 ${navbarBgOpacity} backdrop-blur-xl border-b ${navbarBorder} transition-all duration-300 ${navbarShadow} gpu-accelerated`}
       dir="ltr"
-      style={{ willChange: 'transform' }}
+      style={{ 
+        willChange: 'transform',
+      }}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="h-20 flex items-center justify-between gap-4 relative">
-          {/* Left: Logo */}
-          <div className="flex items-center gap-4 flex-shrink-0">
-            <Link href="/" className="flex items-center group">
-              <motion.div
-                className="relative flex items-center justify-center"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ duration: 0.2, type: 'spring', stiffness: 300 }}
-              >
-                {/* Hidden previous logo */}
-                <img
-                  src="/logo/orbit-logo-navbar.svg"
-                  alt=""
-                  className="hidden"
-                  aria-hidden="true"
-                />
-                {/* Main logo - larger, clearer sizing with width focus */}
-                <img
-                  src="/logo/شعار المدار-02.svg"
-                  alt="ORBIT Logo"
-                  className="w-auto object-contain max-w-none"
-                  style={{
-                    height: 'clamp(72px, 8vw, 140px)',
-                    minHeight: '72px',
-                    minWidth: '220px',
-                    filter: navbarIsDark
-                      ? 'brightness(1.2) contrast(1.2) saturate(1.1) drop-shadow(0 2px 8px rgba(122, 30, 46, 0.4))'
-                      : 'brightness(1) contrast(1.35) saturate(1.1) drop-shadow(0 3px 12px rgba(0, 0, 0, 0.25)) drop-shadow(0 2px 8px rgba(122, 30, 46, 0.3)) drop-shadow(0 1px 4px rgba(122, 30, 46, 0.2))',
-                    imageRendering: 'auto',
-                    transform: 'translateZ(0)',
-                    willChange: 'transform',
-                  } as React.CSSProperties}
-                />
-              </motion.div>
+          {/* Logo - Positioned on left (LTR) or right (RTL) */}
+          <div className={`flex items-center flex-shrink-0 ${isRTL ? 'order-3' : 'order-1'}`}>
+            <Link href="/" className="flex items-center">
+              <img
+                src={navbarIsDark ? "/logo/شعار المدار1-0٥.png" : "/logo/شعار المدار1-0٢.png"}
+                alt="ORBIT Logo"
+                className="h-48 w-auto object-contain -my-10"
+                style={{ minWidth: '360px' }}
+              />
             </Link>
           </div>
 
           {/* Center: Navigation Menu */}
-          <nav className="hidden lg:flex items-center gap-2 flex-1 justify-center px-4" dir={isRTL ? 'rtl' : 'ltr'}>
+          <nav className={`hidden lg:flex items-center gap-2 flex-1 justify-center px-4 ${isRTL ? 'order-2' : 'order-2'}`} dir={isRTL ? 'rtl' : 'ltr'}>
             {/* Home - الرئيسية */}
             <NavLink item={{ name: isRTL ? 'الرئيسية' : 'HOME', href: '/' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} />
 
@@ -225,7 +202,7 @@ export default function Navbar() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
-                    className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 ${navbarIsDark ? 'bg-[#161616]/95' : 'bg-white'} rounded-xl shadow-2xl border ${navbarIsDark ? 'border-white/10' : 'border-gray-200'} overflow-hidden`}
+                    className={`absolute top-full ${isRTL ? 'right-1/2 translate-x-1/2' : 'left-1/2 -translate-x-1/2'} mt-2 w-64 ${navbarIsDark ? 'bg-[#161616]/95' : 'bg-white'} rounded-xl shadow-2xl border ${navbarIsDark ? 'border-white/10' : 'border-gray-200'} overflow-hidden`}
                     onMouseEnter={() => setSolutionsOpen(true)}
                     onMouseLeave={() => setSolutionsOpen(false)}
                   >
@@ -260,8 +237,8 @@ export default function Navbar() {
             <NavLink item={{ name: t.nav.offers, href: '/offers' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={4} />
           </nav>
 
-          {/* Right: Language Switcher, Theme Toggle, and Contact Button */}
-          <div className="hidden md:flex items-center gap-3 flex-shrink-0 justify-end min-w-0">
+          {/* Controls: Language Switcher, Theme Toggle, and Contact Button - Positioned on right (LTR) or left (RTL) */}
+          <div className={`hidden md:flex items-center gap-3 flex-shrink-0 min-w-0 ${isRTL ? 'order-1' : 'order-3'}`}>
             {/* Language & Theme Controls */}
             <div className={`flex items-center rounded-full ${navbarIsDark ? 'bg-white/5 border border-white/10' : 'bg-secondary/40 border border-secondary/50'} p-1.5 backdrop-blur-md gap-1 shadow-sm flex-shrink-0`}>
               <ThemeToggle />
@@ -308,9 +285,9 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Mobile menu button */}
+          {/* Mobile menu button - Positioned on right (LTR) or left (RTL) */}
           <motion.button
-            className={`lg:hidden p-2 rounded-lg relative z-50 ${navbarIsDark ? 'text-gray-100 hover:bg-white/10' : 'text-gray-800 hover:bg-gray-100'}`}
+            className={`lg:hidden p-2 rounded-lg relative z-50 ${navbarIsDark ? 'text-gray-100 hover:bg-white/10' : 'text-gray-800 hover:bg-gray-100'} ${isRTL ? 'order-1' : 'order-3'}`}
             onClick={toggleMenu}
             aria-label="Toggle navigation"
             whileHover={{ scale: 1.05 }}
@@ -480,7 +457,11 @@ function MobileMenu({ isOpen, setIsOpen, navbarIsDark, isRTL, solutionsList, tex
 
       {/* Menu Panel */}
       <motion.div
-        className={`fixed top-20 ${isRTL ? 'right-0' : 'left-0'} w-full max-w-md h-[calc(100vh-5rem)] overflow-y-auto z-40 lg:hidden ${navbarIsDark ? 'bg-[#161616]/95' : 'bg-white/95'} backdrop-blur-xl border-t ${navbarIsDark ? 'border-white/10' : 'border-gray-200'} shadow-2xl`}
+        className={`fixed top-20 ${isRTL ? 'right-0' : 'left-0'} w-full max-w-md overflow-y-auto z-40 lg:hidden ${navbarIsDark ? 'bg-[#161616]/95' : 'bg-white/95'} backdrop-blur-xl border-t ${navbarIsDark ? 'border-white/10' : 'border-gray-200'} shadow-2xl`}
+        style={{
+          height: 'calc(100dvh - 5rem)', // Use dvh for better iOS support
+          maxHeight: 'calc(100vh - 5rem)', // Fallback for older browsers
+        }}
         initial={{ x: isRTL ? '100%' : '-100%' }}
         animate={{ x: 0 }}
         exit={{ x: isRTL ? '100%' : '-100%' }}

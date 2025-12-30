@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { useLanguage } from '@/contexts/LanguageContext';
 import OrbitSectionBackground from './OrbitSectionBackground';
+import { useState, useEffect } from 'react';
 
 export default function About() {
   const { isRTL } = useLanguage();
@@ -12,46 +13,98 @@ export default function About() {
     threshold: 0.1,
   });
 
+  // State for fetched data with full fallback content
+  const [loading, setLoading] = useState(true);
+  const [aboutData, setAboutData] = useState({
+    vision: {
+      title: { en: 'Vision', ar: 'الرؤية' },
+      text: { en: 'To be the first and most trusted technical partner in the Kingdom and beyond', ar: 'أن نكون الشريك التقني الأول والأكثر ثقة في المملكة وخارجها' }
+    },
+    mission: {
+      title: { en: 'Mission', ar: 'الرسالة' },
+      text: { en: 'Providing innovative technical solutions with quality and professionalism that meet our clients\' changing needs', ar: 'تقديم حلول تقنية مبتكرة بجودة واحترافية تلبي احتياجات عملائنا المتغيرة' }
+    },
+    promises: {
+      title: { en: 'We Promise You', ar: 'نعدكم' },
+      items: [
+        { textEn: '24/7 Technical Support', textAr: 'دعم فني على مدار الساعة' },
+        { textEn: 'Fast Access', textAr: 'سرعة وصول' },
+        { textEn: 'Continuous Development', textAr: 'التطوير المستمر' },
+        { textEn: 'Best Prices', textAr: 'أفضل الأسعار' }
+      ]
+    }
+  });
+
+  useEffect(() => {
+    const fetchAboutData = async () => {
+      try {
+        const res = await fetch('/api/main-page-settings');
+        const data = await res.json();
+        
+        if (data.success && data.settings?.about) {
+          const about = data.settings.about;
+          // Only update if we have valid data with content
+          if (about.promises && about.promises.length > 0) {
+            setAboutData({
+              vision: {
+                title: { en: about.visionTitleEn || 'Vision', ar: about.visionTitleAr || 'الرؤية' },
+                text: { en: about.visionTextEn || '', ar: about.visionTextAr || '' }
+              },
+              mission: {
+                title: { en: about.missionTitleEn || 'Mission', ar: about.missionTitleAr || 'الرسالة' },
+                text: { en: about.missionTextEn || '', ar: about.missionTextAr || '' }
+              },
+              promises: {
+                title: { en: about.promisesTitleEn || 'We Promise You', ar: about.promisesTitleAr || 'نعدكم' },
+                items: about.promises
+              }
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch about data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAboutData();
+  }, []);
+
   const vision = {
-    title: isRTL ? 'الرؤية' : 'Vision',
-    titleAr: 'الرؤية',
-    text: isRTL 
-      ? 'أن نكون الشريك التقني الأول والأكثر ثقة في المملكة وخارجها'
-      : 'To be the first and most trusted technical partner in the Kingdom and beyond',
-    textAr: 'أن نكون الشريك التقني الأول والأكثر ثقة في المملكة وخارجها',
+    title: isRTL ? aboutData.vision.title.ar : aboutData.vision.title.en,
+    titleAr: aboutData.vision.title.ar,
+    text: isRTL ? aboutData.vision.text.ar : aboutData.vision.text.en,
+    textAr: aboutData.vision.text.ar,
   };
 
   const mission = {
-    title: isRTL ? 'الرسالة' : 'Mission',
-    titleAr: 'الرسالة',
-    text: isRTL
-      ? 'تقديم حلول تقنية مبتكرة بجودة واحترافية تلبي احتياجات عملائنا المتغيرة'
-      : 'Providing innovative technical solutions with quality and professionalism that meet our clients\' changing needs',
-    textAr: 'تقديم حلول تقنية مبتكرة بجودة واحترافية تلبي احتياجات عملائنا المتغيرة',
+    title: isRTL ? aboutData.mission.title.ar : aboutData.mission.title.en,
+    titleAr: aboutData.mission.title.ar,
+    text: isRTL ? aboutData.mission.text.ar : aboutData.mission.text.en,
+    textAr: aboutData.mission.text.ar,
   };
 
   const promises = {
-    title: isRTL ? 'نعدكم' : 'We Promise You',
-    titleAr: 'نعدكم',
-    items: [
-      {
-        text: isRTL ? 'دعم فني على مدار الساعة' : '24/7 Technical Support',
-        textAr: 'دعم فني على مدار الساعة',
-      },
-      {
-        text: isRTL ? 'سرعة وصول' : 'Fast Access',
-        textAr: 'سرعة وصول',
-      },
-      {
-        text: isRTL ? 'التطوير المستمر' : 'Continuous Development',
-        textAr: 'التطوير المستمر',
-      },
-      {
-        text: isRTL ? 'أفضل الأسعار' : 'Best Prices',
-        textAr: 'أفضل الأسعار',
-      },
-    ],
+    title: isRTL ? aboutData.promises.title.ar : aboutData.promises.title.en,
+    titleAr: aboutData.promises.title.ar,
+    items: aboutData.promises.items.map((item: any) => ({
+      text: isRTL ? item.textAr : item.textEn,
+      textAr: item.textAr,
+    })),
   };
+
+  if (loading) {
+    return (
+      <section className="py-32 bg-white dark:bg-gray-900">
+        <div className="text-center">
+          <div className="text-xl font-heading text-gray-600 dark:text-gray-400">
+            {isRTL ? 'جاري التحميل...' : 'Loading...'}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   // Font sizes - hierarchy: 0 (largest), 2 (medium-large), 1 (medium), 3 (smallest)
   const getFontSize = (index: number) => {

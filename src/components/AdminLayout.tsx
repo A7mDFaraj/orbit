@@ -5,6 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import toast, { Toaster } from 'react-hot-toast';
 import { AdminLanguageProvider, useAdminLanguage } from '@/contexts/AdminLanguageContext';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Force light theme and LTR for admin pages
 const forceLightTheme = () => {
@@ -77,6 +78,7 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
   const router = useRouter();
   const pathname = usePathname();
   const { t, toggleLanguage, isArabic } = useAdminLanguage();
+  const { isDark } = useTheme();
 
   useEffect(() => {
     // Force light theme when admin layout mounts (only on client)
@@ -150,7 +152,7 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
       titleAr: 'الصفحة الرئيسية',
       items: [
         { name: 'Main Content', nameAr: 'المحتوى الرئيسي', href: '/admin/main-page', icon: '🏠' },
-        { name: 'Success Partners', nameAr: 'شركاء النجاح', href: '/admin/clients', icon: '🤝' },
+        { name: 'Trusted Partners', nameAr: 'شركاء النجاح', href: '/admin/partners', icon: '🤝' },
       ]
     },
     {
@@ -218,7 +220,7 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
               <Link href="/" className="group flex-1">
                 <div className="relative bg-white rounded-lg overflow-hidden shadow-lg group-hover:shadow-secondary/50 transition-all duration-300 p-2" style={{ width: '180px', height: '50px' }}>
                   <img 
-                    src="/client/logo.jpg" 
+                    src={isDark ? "/logo/شعار المدار1-0٥.png" : "/logo/شعار المدار1-0٢.png"}
                     alt="ORBIT" 
                     className="h-full w-full object-contain object-center"
                   />

@@ -1,17 +1,5 @@
 import mongoose from 'mongoose';
 
-// Hero Section Settings
-const heroSectionSchema = new mongoose.Schema({
-  titleEn: {
-    type: String,
-    default: 'ORBIT Your Success'
-  },
-  titleAr: {
-    type: String,
-    default: 'أوربيت نجاحك'
-  },
-});
-
 // About Section Settings (Vision, Mission, Promises)
 const aboutSectionSchema = new mongoose.Schema({
   visionTitleEn: { type: String, default: 'Vision' },
@@ -49,7 +37,6 @@ const whyOrbitSectionSchema = new mongoose.Schema({
 
 // Main schema combining all sections
 const mainPageSettingsSchema = new mongoose.Schema({
-  hero: { type: heroSectionSchema, default: () => ({}) },
   about: { type: aboutSectionSchema, default: () => ({}) },
   whyOrbit: { type: whyOrbitSectionSchema, default: () => ({}) },
 }, {

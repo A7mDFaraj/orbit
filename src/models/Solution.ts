@@ -45,7 +45,7 @@ const solutionSchema = new Schema<ISolution>(
       type: String,
       required: true,
       unique: true,
-      enum: ['sms-platform', 'whatsapp-business-api', 'otime', 'gov-gate'],
+      enum: ['sms-platform', 'whatsapp-business-api', 'otime', 'gov-gate', 'healthcare'],
     },
     title: {
       en: { type: String, required: true },
@@ -81,6 +81,7 @@ const solutionSchema = new Schema<ISolution>(
 
 export const Solution = (mongoose.models.Solution as Model<ISolution>) || 
   mongoose.model<ISolution>('Solution', solutionSchema);
+
 
 
 

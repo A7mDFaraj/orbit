@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { shouldReduceAnimations, isIOS } from '@/utils/deviceDetection';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
@@ -50,10 +51,17 @@ export default function PortfolioPage() {
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+  const [reduceAnimations, setReduceAnimations] = useState(false);
+  const [isIOSDevice, setIsIOSDevice] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   
   const mouseX = useMotionValue(0.5);
   const mouseY = useMotionValue(0.5);
+
+  useEffect(() => {
+    setReduceAnimations(shouldReduceAnimations());
+    setIsIOSDevice(isIOS());
+  }, []);
 
   useEffect(() => {
     fetch('/api/clients')
@@ -86,7 +94,9 @@ export default function PortfolioPage() {
   }, []);
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!containerRef.current) return;
+    // Skip mouse tracking on iOS for performance
+    if (isIOSDevice || reduceAnimations || !containerRef.current) return;
+    
     const rect = containerRef.current.getBoundingClientRect();
     mouseX.set((e.clientX - rect.left) / rect.width);
     mouseY.set((e.clientY - rect.top) / rect.height);
@@ -267,6 +277,7 @@ export default function PortfolioPage() {
               mouseX={mouseX}
               mouseY={mouseY}
               onClientClick={setSelectedClient}
+              reduceAnimations={reduceAnimations}
             />
           ))}
 
@@ -753,6 +764,7 @@ function InfiniteScrollRow({
   mouseX,
   mouseY,
   onClientClick,
+  reduceAnimations = false,
 }: {
   clients: Client[];
   rowIndex: number;
@@ -760,10 +772,12 @@ function InfiniteScrollRow({
   mouseX: any;
   mouseY: any;
   onClientClick: (client: Client) => void;
+  reduceAnimations?: boolean;
 }) {
   const [offset, setOffset] = useState<number>(0);
   const rafRef = useRef<number | undefined>(undefined);
   const containerRef = useRef<HTMLDivElement>(null);
+  const lastFrameTimeRef = useRef<number>(0);
 
   useEffect(() => {
     if (clients.length === 0) return;
@@ -776,55 +790,73 @@ function InfiniteScrollRow({
     const singleCardWidth = cardWidth + cardGap;
     const totalCardsWidth = clients.length * singleCardWidth;
     
-    // Ensure minimum base speed so animation always runs
-    const minBaseSpeed = 20;
+    // Reduce speed and complexity on low-end devices
+    const minBaseSpeed = reduceAnimations ? 15 : 20;
+    const targetFPS = reduceAnimations ? 30 : 60;
+    const frameInterval = 1000 / targetFPS;
 
     const animate = (currentTime: number) => {
+      // Throttle frame rate on mobile
+      if (reduceAnimations && currentTime - lastFrameTimeRef.current < frameInterval) {
+        rafRef.current = requestAnimationFrame(animate);
+        return;
+      }
+      lastFrameTimeRef.current = currentTime;
+
       const deltaTime = (currentTime - lastTime) / 1000;
       lastTime = currentTime;
 
-      // Get mouse values
-      const mx = mouseX.get();
-      const my = mouseY.get();
+      // Simplified speed calculation for reduced animations
+      if (reduceAnimations) {
+        // No mouse interaction, just constant speed
+        const baseSpeed = minBaseSpeed + rowIndex * 5;
+        const direction = rowIndex % 2 === 0 ? 1 : -1;
+        const finalSpeed = baseSpeed * direction;
 
-      // Base speed for each row (different speeds) - ensure minimum speed
-      const baseSpeed = Math.max(minBaseSpeed, 30 + rowIndex * 10);
-      
-      // Direction: alternate rows
-      const direction = rowIndex % 2 === 0 ? 1 : -1;
+        setOffset((prev) => {
+          let newOffset = prev + finalSpeed * deltaTime;
+          
+          const multiplierFactor = 15;
+          const segmentWidth = totalCardsWidth / multiplierFactor;
+          const resetPoint = segmentWidth > 0 ? segmentWidth : totalCardsWidth;
+          
+          if (direction > 0 && newOffset >= resetPoint) {
+            newOffset = newOffset - resetPoint;
+          } else if (direction < 0 && newOffset <= -resetPoint) {
+            newOffset = newOffset + resetPoint;
+          }
+          
+          return newOffset;
+        });
+      } else {
+        // Full animation with mouse interaction
+        const mx = mouseX.get();
+        const my = mouseY.get();
 
-      // Mouse horizontal influence - smoother and more responsive
-      const mouseSpeedInfluence = (mx - 0.5) * 100;
-      
-      // Vertical proximity: rows closer to mouse Y move faster
-      const rowYPosition = rowIndex / totalRows;
-      const distanceFromMouse = Math.abs(my - rowYPosition);
-      const proximityBoost = (1 - Math.min(distanceFromMouse * 2, 1)) * 50;
+        const baseSpeed = Math.max(minBaseSpeed, 30 + rowIndex * 10);
+        const direction = rowIndex % 2 === 0 ? 1 : -1;
+        const mouseSpeedInfluence = (mx - 0.5) * 100;
+        const rowYPosition = rowIndex / totalRows;
+        const distanceFromMouse = Math.abs(my - rowYPosition);
+        const proximityBoost = (1 - Math.min(distanceFromMouse * 2, 1)) * 50;
+        const finalSpeed = Math.max(10, (baseSpeed + mouseSpeedInfluence + proximityBoost)) * direction;
 
-      // Final speed - ensure it's never zero to keep continuous movement
-      const finalSpeed = Math.max(10, (baseSpeed + mouseSpeedInfluence + proximityBoost)) * direction;
-
-      setOffset((prev) => {
-        let newOffset = prev + finalSpeed * deltaTime;
-        
-        // Seamless loop: reset when we've moved the width of one segment
-        // Since multipliedClients has 15 copies, divide by 15 to get original segment width
-        // This creates perfect seamless loop - when we reach the end, we loop back seamlessly
-        const multiplierFactor = 15; // Number of copies in multipliedClients
-        const segmentWidth = totalCardsWidth / multiplierFactor;
-        const resetPoint = segmentWidth > 0 ? segmentWidth : totalCardsWidth;
-        
-        // For right-moving rows (positive direction)
-        if (direction > 0 && newOffset >= resetPoint) {
-          newOffset = newOffset - resetPoint;
-        }
-        // For left-moving rows (negative direction)
-        else if (direction < 0 && newOffset <= -resetPoint) {
-          newOffset = newOffset + resetPoint;
-        }
-        
-        return newOffset;
-      });
+        setOffset((prev) => {
+          let newOffset = prev + finalSpeed * deltaTime;
+          
+          const multiplierFactor = 15;
+          const segmentWidth = totalCardsWidth / multiplierFactor;
+          const resetPoint = segmentWidth > 0 ? segmentWidth : totalCardsWidth;
+          
+          if (direction > 0 && newOffset >= resetPoint) {
+            newOffset = newOffset - resetPoint;
+          } else if (direction < 0 && newOffset <= -resetPoint) {
+            newOffset = newOffset + resetPoint;
+          }
+          
+          return newOffset;
+        });
+      }
 
       rafRef.current = requestAnimationFrame(animate);
     };
@@ -836,7 +868,7 @@ function InfiniteScrollRow({
         cancelAnimationFrame(rafRef.current);
       }
     };
-  }, [rowIndex, totalRows, mouseX, mouseY, clients.length]);
+  }, [rowIndex, totalRows, mouseX, mouseY, clients.length, reduceAnimations]);
 
   // Calculate top position ensuring all 6 rows are fully visible
   // Distribute rows evenly within 70% of container height, leaving 30% room at bottom
@@ -851,7 +883,7 @@ function InfiniteScrollRow({
       style={{
         top: `${topPosition}%`,
         transform: `translateX(${offset}px)`,
-        willChange: 'transform',
+        willChange: reduceAnimations ? 'auto' : 'transform',
         overflow: 'visible',
         contain: 'layout style paint',
         minWidth: 'max-content',

@@ -11,10 +11,6 @@ export async function GET() {
     // If no settings exist, create default
     if (!settings) {
       settings = await MainPageSettings.create({
-        hero: {
-          titleEn: 'ORBIT Your Success',
-          titleAr: 'أوربيت نجاحك'
-        },
         about: {
           visionTitleEn: 'Vision',
           visionTitleAr: 'الرؤية',

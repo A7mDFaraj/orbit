@@ -2,6 +2,12 @@ import mongoose from 'mongoose';
 
 const clientInquirySchema = new mongoose.Schema(
   {
+    type: {
+      type: String,
+      enum: ['quote', 'contact', 'general'],
+      default: 'quote',
+      required: true,
+    },
     name: {
       type: String,
       required: true,
@@ -21,9 +27,12 @@ const clientInquirySchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    subject: {
+      type: String,
+      trim: true,
+    },
     serviceType: {
       type: String,
-      required: true,
     },
     message: {
       type: String,
@@ -44,10 +53,22 @@ const clientInquirySchema = new mongoose.Schema(
     packagePrice: {
       type: String,
     },
+    source: {
+      type: String,
+      trim: true,
+    },
     status: {
       type: String,
       enum: ['new', 'contacted', 'quoted', 'converted', 'closed'],
       default: 'new',
+    },
+    priority: {
+      type: String,
+      enum: ['low', 'medium', 'high', 'urgent'],
+      default: 'medium',
+    },
+    assignedTo: {
+      type: String,
     },
     notes: {
       type: String,

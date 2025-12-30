@@ -13,7 +13,7 @@ interface SolutionFeature {
 
 interface Solution {
   _id?: string;
-  slug: 'sms-platform' | 'whatsapp-business-api' | 'otime' | 'gov-gate';
+  slug: 'sms-platform' | 'whatsapp-business-api' | 'otime' | 'gov-gate' | 'healthcare';
   title: {
     en: string;
     ar: string;
@@ -41,6 +41,7 @@ const SLUG_OPTIONS = [
   { value: 'whatsapp-business-api', label: 'WhatsApp Business API' },
   { value: 'otime', label: 'OTime' },
   { value: 'gov-gate', label: 'Gov Gate' },
+  { value: 'healthcare', label: 'Healthcare' },
 ];
 
 export default function SolutionsAdmin() {

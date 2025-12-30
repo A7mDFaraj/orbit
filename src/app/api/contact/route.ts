@@ -21,10 +21,19 @@ export async function POST(request: NextRequest) {
     await connectDB();
     const data = await request.json();
 
+    // Also save to ClientInquiry for unified management
+    const ClientInquiry = (await import('@/models/ClientInquiry')).default;
+    const inquiry = await ClientInquiry.create({
+      ...data,
+      type: 'contact',
+      serviceType: data.serviceType || 'general-inquiry',
+    });
+
+    // Keep the old Contact model for backwards compatibility (optional)
     const contact = await Contact.create(data);
 
     return NextResponse.json(
-      { message: 'Contact form submitted successfully', contact },
+      { message: 'Contact form submitted successfully', contact, inquiry },
       { status: 201 }
     );
   } catch (error) {
@@ -35,6 +44,8 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+
 
 
 

@@ -3,11 +3,13 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Footer() {
   const { t, isRTL } = useLanguage();
+  const { isDark } = useTheme();
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -42,16 +44,19 @@ export default function Footer() {
           {/* Logo & Company Info */}
           <div className="lg:col-span-1">
             <motion.div
-              className="relative h-16 w-40 mb-6"
+              className="relative h-48 w-full mb-8 -ml-4 pr-4"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={inView ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
               <Image
-                src="/temperoryLOGO.png"
+                src={isDark ? "/logo/شعار المدار0-0٤.png" : "/logo/شعار المدار1-0١.png"}
                 alt="ORBIT Logo"
                 fill
-                className="object-contain"
+                className="object-contain object-left"
+                priority
+                quality={95}
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 450px"
               />
             </motion.div>
             <p 
@@ -79,14 +84,12 @@ export default function Footer() {
             </h4>
             <ul className="space-y-3">
               {footerLinks.map((link, index) => (
-                <motion.li
-                  key={link.href}
-                  initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
-                  animate={inView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-                >
-                  <a
+                <li key={link.href}>
+                  <motion.a
                     href={link.href}
+                    initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
+                    animate={inView ? { opacity: 1, x: 0 } : {}}
+                    transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
                     onClick={(e) => {
                       if (!link.href.startsWith('/')) {
                         e.preventDefault();
@@ -101,8 +104,8 @@ export default function Footer() {
                     dir={isRTL ? 'rtl' : 'ltr'}
                   >
                     {link.name}
-                  </a>
-                </motion.li>
+                  </motion.a>
+                </li>
               ))}
             </ul>
           </div>
@@ -117,20 +120,21 @@ export default function Footer() {
             </h4>
             <ul className="space-y-3">
               {solutions.map((solution, index) => (
-                <motion.li
-                  key={solution.href}
-                  initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
-                  animate={inView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
-                >
-                  <Link
-                    href={solution.href}
-                    className={`text-gray-400 hover:text-primary transition-colors ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
-                    dir={isRTL ? 'rtl' : 'ltr'}
+                <li key={solution.href}>
+                  <motion.div
+                    initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
+                    animate={inView ? { opacity: 1, x: 0 } : {}}
+                    transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
                   >
-                    {solution.name}
-                  </Link>
-                </motion.li>
+                    <Link
+                      href={solution.href}
+                      className={`text-gray-400 hover:text-primary transition-colors ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
+                      dir={isRTL ? 'rtl' : 'ltr'}
+                    >
+                      {solution.name}
+                    </Link>
+                  </motion.div>
+                </li>
               ))}
             </ul>
           </div>
@@ -145,12 +149,13 @@ export default function Footer() {
             </h4>
             <ul className="space-y-4">
               {/* Phone */}
-              <motion.li
-                initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
-                animate={inView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.5, delay: 0.5 }}
-                className="flex items-start gap-3"
-              >
+              <li className="flex items-start gap-3">
+                <motion.div
+                  initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
+                  animate={inView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ duration: 0.5, delay: 0.5 }}
+                  className="flex items-start gap-3 w-full"
+                >
                 <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
                   <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -164,15 +169,17 @@ export default function Footer() {
                     920006900
                   </a>
                 </div>
-              </motion.li>
+                </motion.div>
+              </li>
 
               {/* Mobile */}
-              <motion.li
-                initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
-                animate={inView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.5, delay: 0.6 }}
-                className="flex items-start gap-3"
-              >
+              <li className="flex items-start gap-3">
+                <motion.div
+                  initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
+                  animate={inView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ duration: 0.5, delay: 0.6 }}
+                  className="flex items-start gap-3 w-full"
+                >
                 <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
                   <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
@@ -186,15 +193,17 @@ export default function Footer() {
                     0544752974
                   </a>
                 </div>
-              </motion.li>
+                </motion.div>
+              </li>
 
               {/* Email */}
-              <motion.li
-                initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
-                animate={inView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.5, delay: 0.7 }}
-                className="flex items-start gap-3"
-              >
+              <li className="flex items-start gap-3">
+                <motion.div
+                  initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
+                  animate={inView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ duration: 0.5, delay: 0.7 }}
+                  className="flex items-start gap-3 w-full"
+                >
                 <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
                   <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -208,15 +217,17 @@ export default function Footer() {
                     info@ot.com.sa
                   </a>
                 </div>
-              </motion.li>
+                </motion.div>
+              </li>
 
               {/* Address */}
-              <motion.li
-                initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
-                animate={inView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.5, delay: 0.8 }}
-                className="flex items-start gap-3"
-              >
+              <li className="flex items-start gap-3">
+                <motion.div
+                  initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
+                  animate={inView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ duration: 0.5, delay: 0.8 }}
+                  className="flex items-start gap-3 w-full"
+                >
                 <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
                   <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -231,7 +242,8 @@ export default function Footer() {
                     المدينة المنورة, شارع الأمير عبدالمجيد - الذهبية بلازا
                   </p>
                 </div>
-              </motion.li>
+                </motion.div>
+              </li>
             </ul>
 
             {/* Social Media */}
