@@ -140,10 +140,10 @@ export default function Navbar() {
               <img
                 src={navbarIsDark ? "/logo/شعار المدار1-0٥.png" : "/logo/شعار المدار1-0٢.png"}
                 alt="ORBIT Logo"
-                className="h-12 sm:h-16 md:h-20 lg:h-48 w-auto object-contain lg:-my-10"
+                className="h-16 sm:h-20 md:h-24 lg:h-48 w-auto object-contain lg:-my-10"
                 style={{ 
                   minWidth: 'auto',
-                  maxWidth: '120px'
+                  maxWidth: '160px'
                 }}
               />
             </Link>
@@ -285,14 +285,6 @@ export default function Navbar() {
                   transition={{ duration: 0.5 }}
                 />
               </motion.button>
-            </div>
-          </div>
-
-          {/* Mobile Controls: Language & Theme - Always visible on mobile */}
-          <div className={`lg:hidden flex items-center gap-2 flex-shrink-0 ${isRTL ? 'order-1' : 'order-3'}`}>
-            <div className={`flex items-center rounded-full ${navbarIsDark ? 'bg-white/5 border border-white/10' : 'bg-secondary/40 border border-secondary/50'} p-1 gap-1`}>
-              <ThemeToggle />
-              <LanguageSwitcher />
             </div>
           </div>
 
