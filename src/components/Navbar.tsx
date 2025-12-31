@@ -133,15 +133,18 @@ export default function Navbar() {
       }}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="h-20 flex items-center justify-between gap-4 relative">
-          {/* Logo - Positioned on left (LTR) or right (RTL) */}
-          <div className={`flex items-center flex-shrink-0 ${isRTL ? 'order-3' : 'order-1'}`}>
+        <div className="h-20 flex items-center justify-between gap-2 sm:gap-4 relative">
+          {/* Logo - Always in corner (left for LTR, right for RTL) */}
+          <div className={`flex items-center flex-shrink-0 ${isRTL ? 'order-3 ml-auto' : 'order-1'}`}>
             <Link href="/" className="flex items-center">
               <img
                 src={navbarIsDark ? "/logo/شعار المدار1-0٥.png" : "/logo/شعار المدار1-0٢.png"}
                 alt="ORBIT Logo"
-                className="h-48 w-auto object-contain -my-10"
-                style={{ minWidth: '360px' }}
+                className="h-12 sm:h-16 md:h-20 lg:h-48 w-auto object-contain lg:-my-10"
+                style={{ 
+                  minWidth: 'auto',
+                  maxWidth: '120px'
+                }}
               />
             </Link>
           </div>
@@ -237,7 +240,7 @@ export default function Navbar() {
             <NavLink item={{ name: t.nav.offers, href: '/offers' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={4} />
           </nav>
 
-          {/* Controls: Language Switcher, Theme Toggle, and Contact Button - Positioned on right (LTR) or left (RTL) */}
+          {/* Controls: Language Switcher, Theme Toggle, and Contact Button - Desktop only */}
           <div className={`hidden md:flex items-center gap-3 flex-shrink-0 min-w-0 ${isRTL ? 'order-1' : 'order-3'}`}>
             {/* Language & Theme Controls */}
             <div className={`flex items-center rounded-full ${navbarIsDark ? 'bg-white/5 border border-white/10' : 'bg-secondary/40 border border-secondary/50'} p-1.5 backdrop-blur-md gap-1 shadow-sm flex-shrink-0`}>
@@ -285,13 +288,22 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Mobile menu button - Positioned on right (LTR) or left (RTL) */}
+          {/* Mobile Controls: Language & Theme - Always visible on mobile */}
+          <div className={`lg:hidden flex items-center gap-2 flex-shrink-0 ${isRTL ? 'order-1' : 'order-3'}`}>
+            <div className={`flex items-center rounded-full ${navbarIsDark ? 'bg-white/5 border border-white/10' : 'bg-secondary/40 border border-secondary/50'} p-1 gap-1`}>
+              <ThemeToggle />
+              <LanguageSwitcher />
+            </div>
+          </div>
+
+          {/* Mobile menu button - Always visible, positioned opposite to logo */}
           <motion.button
-            className={`lg:hidden p-2 rounded-lg relative z-50 ${navbarIsDark ? 'text-gray-100 hover:bg-white/10' : 'text-gray-800 hover:bg-gray-100'} ${isRTL ? 'order-1' : 'order-3'}`}
+            className={`lg:hidden p-2 rounded-lg relative z-50 flex-shrink-0 ${navbarIsDark ? 'text-gray-100 hover:bg-white/10' : 'text-gray-800 hover:bg-gray-100'} ${isRTL ? 'order-1 ml-2' : 'order-3'}`}
             onClick={toggleMenu}
-            aria-label="Toggle navigation"
+            aria-label={isRTL ? 'فتح القائمة' : 'Toggle navigation'}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            style={{ minWidth: '40px', minHeight: '40px' }}
           >
             <div className="w-6 h-5 flex flex-col justify-between">
               <motion.span
@@ -513,7 +525,7 @@ function MobileMenu({ isOpen, setIsOpen, navbarIsDark, isRTL, solutionsList, tex
                     transition={{ duration: 0.3 }}
                     className="overflow-hidden"
                   >
-                    <div className="pl-4 space-y-1">
+                    <div className={`${isRTL ? 'pr-4' : 'pl-4'} space-y-1`}>
                       {solutionsList.map((solution: { slug: string; nameEn: string; nameAr: string }) => (
                         <Link
                           key={solution.slug}

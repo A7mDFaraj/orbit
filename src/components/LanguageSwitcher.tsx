@@ -13,12 +13,13 @@ export default function LanguageSwitcher() {
       onClick={() => setLanguage(language === 'en' ? 'ar' : 'en')}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
-      className={`relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 overflow-hidden ${
+      className={`relative w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 overflow-hidden flex-shrink-0 ${
         isDark
           ? 'bg-primary/20 border-2 border-primary/40'
           : 'bg-secondary/50 border-2 border-secondary/60'
       }`}
-      aria-label="Switch language"
+      aria-label={language === 'en' ? 'Switch to Arabic' : 'التبديل إلى الإنجليزية'}
+      dir={language === 'ar' ? 'rtl' : 'ltr'}
     >
       {/* Animated Flag/Text */}
       <div className="relative w-full h-full flex items-center justify-center">
@@ -33,19 +34,15 @@ export default function LanguageSwitcher() {
               transformStyle: 'preserve-3d',
               backfaceVisibility: 'hidden',
             }}
-            className={`text-xs font-heading absolute ${
+            className={`text-[10px] sm:text-xs font-heading absolute font-semibold ${
               isDark ? 'text-primary' : 'text-gray-700'
             }`}
+            style={{
+              direction: language === 'ar' ? 'rtl' : 'ltr',
+              unicodeBidi: 'isolate',
+            }}
           >
-            <span 
-              style={{
-                direction: language === 'ar' ? 'rtl' : 'ltr',
-                unicodeBidi: 'isolate',
-                display: 'inline-block',
-              }}
-            >
-              {language === 'en' ? 'EN' : 'عربي'}
-            </span>
+            {language === 'en' ? 'EN' : 'عربي'}
           </motion.div>
         </AnimatePresence>
       </div>
@@ -59,7 +56,7 @@ export default function LanguageSwitcher() {
         transition={{ duration: 0.8, ease: "easeInOut" }}
       >
         <svg
-          className={`w-6 h-6 ${isDark ? 'text-primary' : 'text-gray-600'}`}
+          className={`w-5 h-5 sm:w-6 sm:h-6 ${isDark ? 'text-primary' : 'text-gray-600'}`}
           fill="none"
           stroke="currentColor"
           strokeWidth="1.5"

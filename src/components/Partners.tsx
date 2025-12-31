@@ -58,6 +58,10 @@ export default function Partners() {
 
   // Start marquee animation after mounted - Smart RTL/LTR support with seamless infinite loop from edge
   useEffect(() => {
+    // Disable marquee animation on mobile for better performance
+    const isMobile = typeof window !== 'undefined' && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (isMobile) return;
+    
     if (mounted && !isMarqueePaused && partners.length > 0) {
       const startAnimation = () => {
         if (marqueeRef.current) {

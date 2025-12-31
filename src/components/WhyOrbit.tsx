@@ -141,7 +141,7 @@ export default function WhyOrbit() {
               left: `${15 + i * 35}%`,
               top: `${25 + i * 25}%`,
             }}
-            animate={{
+            animate={typeof window !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? {} : {
               scale: [1, 1.15, 1],
               opacity: [0.15, 0.3, 0.15],
               x: [0, 20, 0],
@@ -174,7 +174,7 @@ export default function WhyOrbit() {
               left: `${20 + i * 25}%`,
               top: `${15 + i * 20}%`,
             }}
-            animate={{
+            animate={typeof window !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? {} : {
               scale: [1, 1.2, 1],
               opacity: [0.1, 0.2, 0.1],
               x: [0, 30, 0],
@@ -204,9 +204,9 @@ export default function WhyOrbit() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           ref={ref}
-          initial="hidden"
-          animate={inView ? 'visible' : 'hidden'}
-          variants={{
+          initial={typeof window !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? false : { opacity: 0 }}
+          animate={typeof window !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? {} : (inView ? 'visible' : 'hidden')}
+          variants={typeof window !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? {} : {
             hidden: { opacity: 0 },
             visible: {
               opacity: 1,
@@ -219,11 +219,11 @@ export default function WhyOrbit() {
         >
           {/* Title Section */}
           <motion.div
-            variants={{
+            variants={typeof window !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? {} : {
               hidden: { opacity: 0, y: 40 },
               visible: { opacity: 1, y: 0 },
             }}
-            transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+            transition={typeof window !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? {} : { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="text-center mb-16 lg:mb-20"
           >
             <motion.h2
@@ -234,19 +234,19 @@ export default function WhyOrbit() {
             </motion.h2>
             <motion.div
               className="h-1 bg-white/80 mx-auto rounded-full"
-              initial={{ width: 0 }}
-              animate={inView ? { width: 120 } : {}}
-              transition={{ duration: 1.2, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+              initial={typeof window !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? false : { width: 0 }}
+              animate={typeof window !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? {} : (inView ? { width: 120 } : {})}
+              transition={typeof window !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? {} : { duration: 1.2, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
             />
           </motion.div>
 
           {/* Features Grid - Modern Card Design */}
           <motion.div
-            variants={{
+            variants={typeof window !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? {} : {
               hidden: { opacity: 0 },
               visible: { opacity: 1 },
             }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            transition={typeof window !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? {} : { duration: 0.8, delay: 0.4 }}
             className="mb-20 lg:mb-28"
           >
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">

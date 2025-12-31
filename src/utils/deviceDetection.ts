@@ -26,6 +26,16 @@ export const isMobile = (): boolean => {
   );
 };
 
+export const isAndroid = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  return /Android/i.test(navigator.userAgent);
+};
+
+export const isSamsung = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  return /Samsung|SM-/i.test(navigator.userAgent);
+};
+
 export const isLowPowerMode = (): boolean => {
   // iOS doesn't provide a direct API, but we can estimate based on reduced performance
   if (typeof window === 'undefined') return false;
