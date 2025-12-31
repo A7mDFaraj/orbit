@@ -33,14 +33,12 @@ export default function LanguageSwitcher() {
             style={{
               transformStyle: 'preserve-3d',
               backfaceVisibility: 'hidden',
+              direction: language === 'ar' ? 'rtl' : 'ltr',
+              unicodeBidi: 'isolate',
             }}
             className={`text-[10px] sm:text-xs font-heading absolute font-semibold ${
               isDark ? 'text-primary' : 'text-gray-700'
             }`}
-            style={{
-              direction: language === 'ar' ? 'rtl' : 'ltr',
-              unicodeBidi: 'isolate',
-            }}
           >
             {language === 'en' ? 'EN' : 'عربي'}
           </motion.div>
