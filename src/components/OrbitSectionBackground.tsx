@@ -15,9 +15,15 @@ export default function OrbitSectionBackground({
 }: OrbitSectionBackgroundProps) {
     const { isDark } = useTheme();
     const [mounted, setMounted] = useState(false);
+    const [isIOS, setIsIOS] = useState(false);
 
     useEffect(() => {
         setMounted(true);
+        // CRITICAL: Detect iOS and disable all animations
+        if (typeof window !== 'undefined') {
+            setIsIOS(/iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
+        }
     }, []);
 
     // Brand colors
@@ -86,6 +92,15 @@ export default function OrbitSectionBackground({
     const itemCount = density === 'high' ? 12 : density === 'medium' ? 6 : 4;
 
     if (!mounted) return null;
+
+    // CRITICAL: Return simple static gradient on iOS to prevent crashes
+    if (isIOS) {
+        return (
+            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 dark:from-primary/10 dark:to-secondary/10" />
+            </div>
+        );
+    }
 
     return (
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none">

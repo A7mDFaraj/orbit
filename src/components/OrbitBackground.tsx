@@ -7,9 +7,20 @@ import { useEffect, useState } from 'react';
 export default function OrbitBackground() {
     const { isDark } = useTheme();
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+    const [isIOS, setIsIOS] = useState(false);
 
-    // Handle mouse movement for parallax effect
+    // CRITICAL: Detect iOS and disable all animations
     useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setIsIOS(/iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
+        }
+    }, []);
+
+    // Handle mouse movement for parallax effect - skip on iOS
+    useEffect(() => {
+        if (isIOS) return;
+
         const handleMouseMove = (e: MouseEvent) => {
             setMousePosition({
                 x: e.clientX / window.innerWidth,
@@ -19,7 +30,7 @@ export default function OrbitBackground() {
 
         window.addEventListener('mousemove', handleMouseMove);
         return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, []);
+    }, [isIOS]);
 
     const { scrollY } = useScroll();
     const smoothScroll = useSpring(scrollY, { stiffness: 50, damping: 20 });
@@ -44,6 +55,15 @@ export default function OrbitBackground() {
         // Inner detail 2
         "M493.38,257.41l0.26-0.01c-0.07,0.4-4.29,1.7-5,1.95c-14.97,5.28-29.54,13.73-42.26,23.17c-37.24,27.82-61.17,69.93-66.01,116.17c-0.61,6.24-1.11,12.81-0.86,19.07c0.22,5.5,1.61,12.71,0.83,18.02c-1.14,0.73-2.94,0.62-4.28,0.69l-0.96,0.11l-0.42-0.67c-1.58-38.47,3.54-70.66,24.05-104.07c18.19-29.63,44.34-53.53,76.27-67.59C480.91,261.65,487.1,258.91,493.38,257.41z"
     ];
+
+    // CRITICAL: Return simple static gradient on iOS
+    if (isIOS) {
+        return (
+            <div className="fixed inset-0 z-50 overflow-hidden pointer-events-none">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/3 to-secondary/3 dark:from-primary/5 dark:to-secondary/5" />
+            </div>
+        );
+    }
 
     return (
         <div className="fixed inset-0 z-50 overflow-hidden pointer-events-none">

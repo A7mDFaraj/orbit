@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -17,6 +18,15 @@ export default function OrbitAnimatedBackground({
   color
 }: OrbitAnimatedBackgroundProps) {
   const { isDark } = useTheme();
+  const [isIOS, setIsIOS] = useState(false);
+
+  // CRITICAL: Detect iOS and completely disable animations
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsIOS(/iPad|iPhone|iPod/.test(navigator.userAgent) || 
+              (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
+    }
+  }, []);
   
   const sizeMultiplier = size === 'small' ? 0.5 : size === 'medium' ? 0.75 : 1;
   const baseSize = 800 * sizeMultiplier;
@@ -33,6 +43,15 @@ export default function OrbitAnimatedBackground({
   const orbitColor = color || (isDark 
     ? 'rgba(122, 30, 46, 0.15)' // Primary burgundy for dark mode
     : 'rgba(122, 30, 46, 0.08)'); // Lighter burgundy for light mode
+
+  // CRITICAL: Return simple static version on iOS
+  if (isIOS) {
+    return (
+      <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
+        <div className="absolute inset-0 bg-gradient-radial from-primary/5 to-transparent" />
+      </div>
+    );
+  }
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden gpu-accelerated" style={{ zIndex: 0 }}>
