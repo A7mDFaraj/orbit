@@ -26,8 +26,12 @@ export default function Hero() {
 
   // Detect device capabilities for optimization
   useEffect(() => {
-    setReduceAnimations(shouldReduceAnimations());
-    setPerformanceLevel(getPerformanceLevel());
+    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    
+    // CRITICAL: Force reduce animations on iOS to prevent crashes
+    setReduceAnimations(isIOSDevice || shouldReduceAnimations());
+    setPerformanceLevel(isIOSDevice ? 'low' : getPerformanceLevel());
   }, []);
 
   useEffect(() => {

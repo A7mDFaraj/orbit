@@ -59,8 +59,12 @@ export default function PortfolioPage() {
   const mouseY = useMotionValue(0.5);
 
   useEffect(() => {
-    setReduceAnimations(shouldReduceAnimations());
-    setIsIOSDevice(isIOS());
+    const isIOSCheck = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    
+    // CRITICAL: Force optimization on iOS to prevent crashes
+    setReduceAnimations(isIOSCheck || shouldReduceAnimations());
+    setIsIOSDevice(isIOSCheck);
   }, []);
 
   useEffect(() => {
@@ -782,6 +786,11 @@ function InfiniteScrollRow({
   useEffect(() => {
     if (clients.length === 0) return;
     
+    // CRITICAL: Reduce FPS more aggressively on iOS to prevent crashes
+    const isIOSDevice = typeof navigator !== 'undefined' && 
+                        (/iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
+    
     let lastTime = performance.now();
     
     // Calculate card width and gap for seamless looping
@@ -790,9 +799,9 @@ function InfiniteScrollRow({
     const singleCardWidth = cardWidth + cardGap;
     const totalCardsWidth = clients.length * singleCardWidth;
     
-    // Reduce speed and complexity on low-end devices
-    const minBaseSpeed = reduceAnimations ? 15 : 20;
-    const targetFPS = reduceAnimations ? 30 : 60;
+    // Reduce speed and complexity on iOS - even more aggressive
+    const minBaseSpeed = isIOSDevice ? 10 : (reduceAnimations ? 15 : 20);
+    const targetFPS = isIOSDevice ? 20 : (reduceAnimations ? 30 : 60);
     const frameInterval = 1000 / targetFPS;
 
     const animate = (currentTime: number) => {

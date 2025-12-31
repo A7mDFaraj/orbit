@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Renderer, Program, Mesh, Triangle, Vec3 } from 'ogl';
 import './Orb.css';
 
@@ -14,6 +14,15 @@ export default function Orb({
   forceHoverState?: boolean;
 }) {
   const ctnDom = useRef<HTMLDivElement>(null);
+  const [isIOS, setIsIOS] = useState(false);
+
+  // CRITICAL: Detect iOS immediately to prevent crashes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsIOS(/iPad|iPhone|iPod/.test(navigator.userAgent) || 
+              (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
+    }
+  }, []);
 
   const vert = /* glsl */ `
     precision highp float;
@@ -179,6 +188,9 @@ export default function Orb({
   `;
 
   useEffect(() => {
+    // CRITICAL: Completely disable WebGL on iOS - causes Safari crashes
+    if (isIOS) return;
+    
     const container = ctnDom.current;
     if (!container) return;
 
@@ -325,7 +337,19 @@ export default function Orb({
       }
       gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
-  }, [hue, hoverIntensity, rotateOnHover, forceHoverState]);
+  }, [hue, hoverIntensity, rotateOnHover, forceHoverState, isIOS]);
+
+  // CRITICAL: Show simple gradient on iOS to prevent crashes
+  if (isIOS) {
+    return (
+      <div
+        className="orb-container"
+        style={{
+          background: 'radial-gradient(circle, rgba(122, 30, 46, 0.15) 0%, transparent 70%)',
+        }}
+      />
+    );
+  }
 
   return <div ref={ctnDom} className="orb-container" />;
 }

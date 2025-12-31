@@ -161,9 +161,42 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* iOS-specific optimizations - tap highlight only */
+/* iOS-specific optimizations - AGGRESSIVE to prevent crashes */
 @supports (-webkit-touch-callout: none) {
   * {
     -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Disable problematic backdrop filters on iOS Safari */
+  .backdrop-blur-xl,
+  .backdrop-blur-lg,
+  .backdrop-blur-md,
+  .backdrop-blur-sm {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  
+  /* Reduce blur intensity on iOS to prevent crashes */
+  .blur-3xl {
+    filter: blur(20px);
+  }
+  
+  .blur-2xl {
+    filter: blur(12px);
+  }
+  
+  .blur-xl {
+    filter: blur(8px);
+  }
+  
+  /* Prevent memory leaks from animations */
+  * {
+    will-change: auto !important;
+  }
+  
+  /* Optimize transforms for iOS */
+  .gpu-accelerated {
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
   }
 }

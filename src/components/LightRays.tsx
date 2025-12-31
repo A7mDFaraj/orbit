@@ -97,6 +97,11 @@ const LightRays: React.FC<LightRaysProps> = ({
   }, []);
 
   useEffect(() => {
+    // Completely disable LightRays on iOS - causes crashes
+    if (typeof window !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent)) {
+      return;
+    }
+    
     if (!isVisible || !containerRef.current) return;
 
     if (cleanupFunctionRef.current) {
