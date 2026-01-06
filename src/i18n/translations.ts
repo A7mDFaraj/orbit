@@ -14,7 +14,7 @@ export const translations = {
       joinUs: 'Join Us',
       admin: 'Admin',
       creativeMarketing: 'Creative Marketing',
-      madeInSaudi: 'Made in Saudi Arabia',
+      madeInSaudi: 'made with the best rodainah ',
       menu: 'Menu',
       english: 'English',
       values: 'Our Values',
