@@ -14,7 +14,7 @@ export const translations = {
       joinUs: 'Join Us',
       admin: 'Admin',
       creativeMarketing: 'Creative Marketing',
-      madeInSaudi: 'made with the best rodainah ',
+      madeInSaudi: 'Made in Saudi Arabia',
       menu: 'Menu',
       english: 'English',
       values: 'Our Values',
@@ -103,7 +103,7 @@ export const translations = {
       description: 'Join the ORBIT network and let us propel your business to new heights with integrated solutions that deliver measurable impact',
       email: 'Email Us',
       quote: 'Request Consultation',
-      copyright: 'Copyright © 2025 ORBIT. All rights reserved.',
+      copyright: 'Copyright © 2025 ORBIT. All rights reserved. - TEST UPDATE',
       country: 'Kingdom of Saudi Arabia',
     },
     joinTeamPage: {
@@ -239,7 +239,7 @@ export const translations = {
       description: 'شاركنا للحصول على حلول خدمات الأعمال المبتكرة التي تحقق النتائج',
       email: 'راسلنا',
       quote: 'اطلب عرض سعر',
-      copyright: 'جميع الحقوق محفوظة © 2025 أوربيت',
+      copyright: 'جميع الحقوق محفوظة © 2025 أوربيت - تحديث تجريبي',
       country: 'المملكة العربية السعودية',
     },
     joinTeamPage: {
