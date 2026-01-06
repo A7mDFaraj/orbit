@@ -4,6 +4,10 @@ import { User } from '@/models/User';
 import { Client } from '@/models/Client';
 import MainPageSettings from '@/models/MainPageSettings';
 
+// Force dynamic rendering to ensure route is always available
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 export async function POST() {
   try {
     await connectDB();
