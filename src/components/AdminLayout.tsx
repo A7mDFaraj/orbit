@@ -6,6 +6,7 @@ import Link from 'next/link';
 import toast, { Toaster } from 'react-hot-toast';
 import { AdminLanguageProvider, useAdminLanguage } from '@/contexts/AdminLanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import { encodeImagePath } from '@/utils/imagePath';
 
 // Force light theme and LTR for admin pages
 const forceLightTheme = () => {
@@ -220,7 +221,7 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
               <Link href="/" className="group flex-1">
                 <div className="relative bg-white rounded-lg overflow-hidden shadow-lg group-hover:shadow-secondary/50 transition-all duration-300 p-2" style={{ width: '180px', height: '50px' }}>
                   <img 
-                    src={isDark ? "/logo/شعار المدار1-0٥.png" : "/logo/شعار المدار1-0٢.png"}
+                    src={isDark ? encodeImagePath("/logo/شعار المدار1-0٥.png") : encodeImagePath("/logo/شعار المدار1-0٢.png")}
                     alt="ORBIT" 
                     className="h-full w-full object-contain object-center"
                   />

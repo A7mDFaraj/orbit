@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
   // External packages that should not be bundled (moved from experimental in Next.js 16)
   serverExternalPackages: ['mongoose', 'mongodb'],
   
+  // Image optimization configuration
+  images: {
+    qualities: [75, 95],
+  },
+  
   // Webpack configuration for better performance
   webpack: (config, { isServer }) => {
     if (!isServer) {

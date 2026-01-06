@@ -9,6 +9,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import LanguageSwitcher from './LanguageSwitcher';
 import ThemeToggle from './ThemeToggle';
+import { encodeImagePath } from '@/utils/imagePath';
 
 // Solutions from ProductsShowcase - Current solutions on landing page
 const solutionsList = [
@@ -138,7 +139,7 @@ export default function Navbar() {
           <div className={`flex items-center flex-shrink-0 ${isRTL ? 'order-3 ml-auto' : 'order-1'}`}>
             <Link href="/" className="flex items-center">
               <img
-                src={navbarIsDark ? "/logo/شعار المدار1-0٥.png" : "/logo/شعار المدار1-0٢.png"}
+                src={navbarIsDark ? encodeImagePath("/logo/شعار المدار1-0٥.png") : encodeImagePath("/logo/شعار المدار1-0٢.png")}
                 alt="ORBIT Logo"
                 className="h-16 sm:h-20 md:h-24 lg:h-48 w-auto object-contain lg:-my-10"
                 style={{ 

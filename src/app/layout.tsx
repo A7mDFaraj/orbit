@@ -24,8 +24,8 @@ export const metadata: Metadata = {
   description: "Pioneering integrated solutions that elevate brands and transform visions into reality | حلول متكاملة رائدة ترفع العلامات التجارية وتحول الرؤى إلى واقع",
   keywords: "ORBIT, Business Solutions, Marketing, Events, Real Estate, Saudi Arabia, Integrated Services",
   icons: {
-    icon: '/logo/شعار المدار-03.svg',
-    apple: '/logo/شعار المدار-03.svg',
+    icon: '/logo/' + encodeURIComponent('شعار المدار-03.svg'),
+    apple: '/logo/' + encodeURIComponent('شعار المدار-03.svg'),
   },
   openGraph: {
     title: "ORBIT - Launch Your Success",
@@ -50,7 +50,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`scroll-smooth overflow-x-hidden ${ibmPlexSans.variable} ${ibmPlexSansArabic.variable}`}>
-      <body className="antialiased transition-colors duration-300 overflow-x-hidden" style={{ width: '100%', maxWidth: '100vw' }}>
+      <body className="antialiased transition-colors duration-300 overflow-x-hidden" style={{ width: '100%', maxWidth: '100vw' }} suppressHydrationWarning>
         <ThemeProvider>
           <LanguageProvider>
             {children}

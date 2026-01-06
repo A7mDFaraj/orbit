@@ -6,6 +6,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import Image from 'next/image';
 import Link from 'next/link';
+import { encodeImagePath } from '@/utils/imagePath';
 
 export default function Footer() {
   const { t, isRTL } = useLanguage();
@@ -50,7 +51,7 @@ export default function Footer() {
               transition={{ duration: 0.6, delay: 0.1 }}
             >
               <Image
-                src={isDark ? "/logo/شعار المدار0-0٤.png" : "/logo/شعار المدار1-0١.png"}
+                src={isDark ? encodeImagePath("/logo/شعار المدار0-0٤.png") : encodeImagePath("/logo/شعار المدار1-0١.png")}
                 alt="ORBIT Logo"
                 fill
                 className="object-contain object-left"
