@@ -1,0 +1,15 @@
+name: Deploy to Forge
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Forge Deploy
+        run: |
+          curl -X POST "https://forge.laravel.com/servers/955540/sites/2981141/deploy/http?token=PIHGiQAJ7JOUreGGlEljG760DnIsVQ7UMEhMRm1E"
