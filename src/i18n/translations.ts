@@ -14,7 +14,7 @@ export const translations = {
       joinUs: 'Join Us',
       admin: 'Admin',
       creativeMarketing: 'Creative Marketing',
-      madeInSaudi: 'Made in Saudi',
+      madeInSaudi: 'Made in Saudi Arabia',
       menu: 'Menu',
       english: 'English',
       values: 'Our Values',
