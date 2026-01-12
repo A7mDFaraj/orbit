@@ -104,7 +104,7 @@ export default function NewsPage() {
                 dir={isRTL ? 'rtl' : 'ltr'}
               >
                 {isRTL 
-                  ? ' هههههههههههههههههههههههههههههههههههههههههههههههههههههههههههههههههههههههههههههههتابع آخر الأخبار والتحديثات من أوربيت'
+                  ? ' تابع آخر الأخبار والتحديثات من أوربيت'
                   : 'Stay updated with the latest news and updates from ORBIT'
                 }
               </p>

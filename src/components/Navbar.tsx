@@ -91,7 +91,7 @@ export default function Navbar() {
   const navbarIsDark = isInDarkSection ? false : isDark;
   
   // Detect pages where navbar needs better text contrast (light pages with white background)
-  const needsHighContrast = pathname === '/enterprise' || pathname === '/healthcare' || pathname === '/packages' || pathname === '/offers' || pathname === '/news' || pathname === '/request-quote';
+  const needsHighContrast = pathname === '/enterprise' || pathname === '/healthcare' || pathname === '/packages' || pathname === '/offers' || pathname === '/news' || pathname === '/business' || pathname === '/request-quote';
   const isLandingPage = pathname === '/';
   
   // Navbar background opacity based on page
@@ -237,8 +237,11 @@ export default function Navbar() {
             {/* News - الاخبار */}
             <NavLink item={{ name: t.nav.news, href: '/news' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={3} />
 
+            {/* Business - الأعمال */}
+            <NavLink item={{ name: t.nav.business, href: '/business' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={4} />
+
             {/* Offers - العروض */}
-            <NavLink item={{ name: t.nav.offers, href: '/offers' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={4} />
+            <NavLink item={{ name: t.nav.offers, href: '/offers' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={5} />
           </nav>
 
           {/* Controls: Language Switcher, Theme Toggle, and Contact Button - Desktop only */}
@@ -538,6 +541,9 @@ function MobileMenu({ isOpen, setIsOpen, navbarIsDark, isRTL, solutionsList, tex
 
             {/* News - الاخبار */}
             <MobileNavLink item={{ name: t.nav.news, href: '/news' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} setIsOpen={setIsOpen} />
+
+            {/* Business - الأعمال */}
+            <MobileNavLink item={{ name: t.nav.business, href: '/business' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} setIsOpen={setIsOpen} />
 
             {/* Offers - العروض */}
             <MobileNavLink item={{ name: t.nav.offers, href: '/offers' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} setIsOpen={setIsOpen} />
