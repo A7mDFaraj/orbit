@@ -104,7 +104,7 @@ export const translations = {
       description: 'Join the ORBIT network and let us propel your business to new heights with integrated solutions that deliver measurable impact',
       email: 'Email Us',
       quote: 'Request Consultation',
-      copyright: 'Copyright © 2025 ORBIT. All rights reserved. - TEST UPDATE',
+      copyright: 'Copyright © 2025 ORBIT. All rights reserved.',
       country: 'Kingdom of Saudi Arabia',
     },
     joinTeamPage: {
@@ -241,7 +241,7 @@ export const translations = {
       description: 'شاركنا للحصول على حلول خدمات الأعمال المبتكرة التي تحقق النتائج',
       email: 'راسلنا',
       quote: 'اطلب عرض سعر',
-      copyright: 'جميع الحقوق محفوظة © 2025 أوربيت - تحديث تجريبي',
+      copyright: 'جميع الحقوق محفوظة © 2025 أوربيت',
       country: 'المملكة العربية السعودية',
     },
     joinTeamPage: {
