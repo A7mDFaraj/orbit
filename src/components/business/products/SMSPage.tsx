@@ -1,169 +1,260 @@
 'use client';
 
-import React, { useState } from "react";
-import { 
-  Rocket, 
-  Headphones, 
-  ShieldCheck, 
-  CheckCircle2, 
-  Zap, 
-  Code2, 
-  Smartphone,
-  MessageSquare,
-  ArrowLeft,
-  Store,
-  Globe,
-  Calendar,
-  Handshake,
-  Star,
-  ShoppingBag,
-  Building2,
-  Truck,
-  Stethoscope
-} from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/business/ui/button";
-import { Input } from "@/components/business/ui/input";
+import { Card, CardContent } from "@/components/business/ui/card";
+import { 
+  MessageSquare, Check, Zap, Shield, BarChart, Code, 
+  Store, Building2, Truck, Heart, GraduationCap, 
+  TrendingUp, Users, Globe, Lock, Smartphone,
+  ArrowRight, Star, Gift, Award, BadgeCheck,
+  CheckCircle2, Rocket, ShieldCheck, Headphones,
+  Calendar, Handshake, Code2, ArrowLeft
+} from "lucide-react";
+import { TrustedPartners } from "./TrustedPartners";
 
 export const SMSPage = () => {
   const [activeTab, setActiveTab] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const stickyScrollContainerRef = useRef<HTMLDivElement>(null);
+  const heroSectionRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isDraggingSticky, setIsDraggingSticky] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const [showStickyTabs, setShowStickyTabs] = useState(false);
+
+  // Handle mouse down
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!scrollContainerRef.current) return;
+    setIsDragging(true);
+    setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
+    setScrollLeft(scrollContainerRef.current.scrollLeft);
+  };
+
+  // Handle mouse leave
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  // Handle mouse up
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  // Handle mouse move
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !scrollContainerRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollContainerRef.current.offsetLeft;
+    const walk = (x - startX) * 2; // Scroll speed multiplier
+    scrollContainerRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  // Handle sticky tabs mouse down
+  const handleStickyMouseDown = (e: React.MouseEvent) => {
+    if (!stickyScrollContainerRef.current) return;
+    setIsDraggingSticky(true);
+    setStartX(e.pageX - stickyScrollContainerRef.current.offsetLeft);
+    setScrollLeft(stickyScrollContainerRef.current.scrollLeft);
+  };
+
+  // Handle sticky tabs mouse leave
+  const handleStickyMouseLeave = () => {
+    setIsDraggingSticky(false);
+  };
+
+  // Handle sticky tabs mouse up
+  const handleStickyMouseUp = () => {
+    setIsDraggingSticky(false);
+  };
+
+  // Handle sticky tabs mouse move
+  const handleStickyMouseMove = (e: React.MouseEvent) => {
+    if (!isDraggingSticky || !stickyScrollContainerRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - stickyScrollContainerRef.current.offsetLeft;
+    const walk = (x - startX) * 2; // Scroll speed multiplier
+    stickyScrollContainerRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  // Handle scroll detection for sticky tabs (mobile only)
+  useEffect(() => {
+    const handleScroll = () => {
+      // Only work on mobile (screen width < 768px)
+      if (window.innerWidth >= 768) {
+        setShowStickyTabs(false);
+        return;
+      }
+
+      if (!heroSectionRef.current) return;
+
+      const heroBottom = heroSectionRef.current.offsetTop + heroSectionRef.current.offsetHeight;
+      const scrollPosition = window.scrollY + 80; // 80px for navbar height
+
+      setShowStickyTabs(scrollPosition > heroBottom);
+    };
+
+    // Check on mount and window resize
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setShowStickyTabs(false);
+      } else {
+        handleScroll();
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+    handleScroll(); // Check initial state
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const heroTabs = [
     {
       id: "retail",
-      title: "حول السلات المتروكة إلى مبيعات فورية",
-      description: "ارفع مبيعات متجرك بنسبة 20% عبر استهداف العملاء بعروض حصرية وتذكيرات ذكية تصلهم أينما كانوا.",
-      cta: "جرب حملة تسويقية مجاناً",
-      icon: ShoppingBag,
+      title: "حوّل السلات المتروكة إلى مبيعات فورية",
+      description: "حل متكامل لرفع المبيعات في متاجرك الإلكترونية وتعزيز الولاء في فروع التجزئة التقليدية. من استعادة السلات المتروكة آلياً إلى إرسال العروض الحصرية والخصومات لرواد الفروع، نحن شريكك في تحويل الاهتمام إلى عمليات شراء فعلية.",
+      cta: "أبدأ بإحترافية أكثر",
+      icon: Store,
       label: "متاجر إلكترونية",
-      message: "أهلاً محمد 👋، نسيت عطورك في السلة! أكمل طلبك الآن واستخدم كود (Welcome10) لخصم إضافي 🛒.",
-      sender: "Store",
+      messages: [
+        { text: "أهلاً سارة، نسيتِ عطورك المفضلة في السلة! استخدمي كود (SAVE10) للحصول على خصم 10% فوراً.", sender: "Store" },
+        { text: "عزيزي العميل، استفد من عرض الجمعة البيضاء الحصري! خصم 30% على جميع المنتجات في فروعنا. العرض ساري حتى نهاية الأسبوع.", sender: "Retail" }
+      ],
       color: "bg-pink-50",
       imgColor: "bg-pink-100"
     },
     {
       id: "finance",
-      title: "أمان عالي ووصول موثوق في أجزاء من الثانية",
-      description: "مسارات مباشرة (Direct Routes) تضمن وصول رموز التحقق (OTP) والإشعارات الحكومية والبنكية بسرعة فائقة وأمان سيبراني كامل.",
-      cta: "تواصل مع فريق المؤسسات",
+      title: "أمان فائق وسرعة لا تُضاهى للقطاعات الحيوية",
+      description: "نضمن وصول رسائل التحقق (OTP) والإشعارات البنكية والحكومية عبر مسارات مباشرة تلتزم بأعلى معايير الأمن السيبراني والخصوصية، مع توافق كامل مع بوابة الرسائل الحكومية (Gov Gate).",
+      cta: "إبدأ بأمان أعلى",
       icon: Building2,
       label: "مالية وحكومي",
-      message: "عميلنا العزيز، رمز التحقق للدخول هو: 5921. لا تشارك الرمز مع أحد لأمان حسابك البنكي 🔒.",
-      sender: "Bank",
+      messages: [
+        { text: "عميلنا العزيز، رمز التحقق للدخول لمرة واحدة هو: 5821. لا تشارك الرمز مع أي شخص لأمان حسابك.", sender: "Bank" },
+        { text: "نحيطكم علماً بأنه تم تجديد تصريح (....) بنجاح. يمكنك الاطلاع على التفاصيل عبر المنصة الرسمية.", sender: "Gov" }
+      ],
       color: "bg-blue-50",
       imgColor: "bg-blue-100"
     },
     {
+      id: "education",
+      title: "جسور تواصل تفاعلية بين الصرح التعليمي والأسرة",
+      description: "ابقِ أولياء الأمور والطلاب على اطلاع دائم بكل ما يخص المسيرة التعليمية. من إشعارات الغياب والحضور إلى نتائج الاختبارات والفعاليات، نحن نوفر لك الربط الأسرع مع أنظمتك الأكاديمية.",
+      cta: "أبدأ التواصل بفاعلية",
+      icon: GraduationCap,
+      label: "تعليم وتدريب",
+      messages: [
+        { text: "ولي الأمر العزيز، نفيدكم بغياب الطالب/ خالد عن الحصص الدراسية اليوم. يرجى التواصل مع الإدارة.", sender: "School" },
+        { text: "مرحباً بك في دورة (التسويق الرقمي). تبدأ المحاضرة الأولى غداً الساعة 5:00 م. رابط القاعة: [رابط]", sender: "Academy" }
+      ],
+      color: "bg-purple-50",
+      imgColor: "bg-purple-100"
+    },
+    {
       id: "logistics",
-      title: "عملاؤك ينتظرون شحناتهم؟ طمئنهم برسالة",
-      description: "قلل ضغط الاتصالات على خدمة العملاء من خلال إشعارات آلية بحالة الشحنة وموقع المندوب خطوة بخطوة.",
-      cta: "ابدأ الربط البرمجي (API)",
+      title: "عزز تجربة عملائك بمتابعة لحظية لشحناتهم",
+      description: "سواء كنت تدير أسطولاً للنقل الجماعي أو شركة شحن بريد سريع، حلولنا تضمن بقاء عميلك في قلب الحدث. أتمتة كاملة لإشعارات حجز التذاكر، تتبع الشحنات لحظياً، وتنبيهات وصول الحافلات أو المناديب لرفع كفاءة العمليات الميدانية.",
+      cta: "أربط أنظمتك بAPI",
       icon: Truck,
       label: "نقل ولوجستيك",
-      message: "مرحباً سارة، مندوبنا (خالد) في طريقه إليك لتسليم شحنتك رقم #9920. تتبعي الموقع من هنا: bit.ly/track 🚚",
-      sender: "Delivery",
+      messages: [
+        { text: "طلبك رقم #1234 أصبح الآن \"قيد التوصيل\". المندوب في طريقه إليك، للتواصل: 050XXXXXXX", sender: "Delivery" },
+        { text: "عزيزي العميل، لاستلام شحنتك من المندوب، يرجى تزويده برمز التأكيد: 9920", sender: "Delivery" }
+      ],
       color: "bg-orange-50",
       imgColor: "bg-orange-100"
     },
     {
       id: "health",
-      title: "ذكّر مرضاك بمواعيدهم وقلل نسبة الغياب",
-      description: "نظام جدولة آلي يرسل تذكيرات المواعيد ونتائج التحاليل للمراجعين، لضمان سير عمل العيادة بكفاءة.",
-      cta: "جرب نظام التذكير الآلي",
-      icon: Stethoscope,
+      title: "رعاية صحية أدق.. وتواصل أذكى مع المراجعين",
+      description: "وحّد تواصلك مع المراجعين والعملاء. نوفر حلولاً مخصصة للمستشفيات لإدارة المواعيد، ولشركات الخدمات (القانونية، الاستشارية، الصيانة، والجمال) لجدولة المواعيد وإرسال التنبيهات، مما يقلل الهدر التشغيلي ويرفع مستوى الرضا.",
+      cta: "أتمت تواصلك بفاعلية",
+      icon: Heart,
       label: "صحة وخدمات",
-      message: "عزيزي المراجع، نذكرك بموعدك غداً في (عيادات النخبة) الساعة 4:00 عصراً. لتأكيد الحضور أجب بـ (نعم) 📅.",
-      sender: "Clinic",
+      messages: [
+        { text: "عزيزي المراجع، نذكرك بموعدك في عيادة الأسنان غداً الساعة 5:00 م.", sender: "Clinic" },
+        { text: "فني الصيانة في طريقه إليك الآن لإصلاح (....). كود الزيارة: 552.", sender: "Service" }
+      ],
       color: "bg-green-50",
       imgColor: "bg-green-100"
     }
   ];
 
   const packages = [
-    { messages: 1000, price: 100, perMsg: 10.0, feature: "مساعدة في التفعيل", description: "للمتاجر الناشئة" },
-    { messages: 3000, price: 310, perMsg: 10.3, feature: "مساعدة في التفعيل", description: "للبداية القوية" },
-    { messages: 5000, price: 489, perMsg: 9.8, feature: "مساعدة في التفعيل", description: "للمتاجر المتوسطة" },
-    { messages: 10000, price: 893, perMsg: 8.9, feature: "دعم كامل واعتماد الاسم", description: "الأكثر طلباً ⭐", featured: true },
-    { messages: 20000, price: 1610, perMsg: 8.0, feature: "✨ اسم مرسل مجاني", description: "للمحترفين" },
-    { messages: 50000, price: 3738, perMsg: 7.5, feature: "✨ اسم مرسل مجاني", description: "للشركات الكبرى" },
-    { messages: 100000, price: 6900, perMsg: 6.9, feature: "🔥 اسمين مجاناً", description: "للمؤسسات الضخمة" },
+    { messages: 1000, price: 110, feature: "دعم فني 24/7", description: "للمتاجر الناشئة" },
+    { messages: 3000, price: 311, feature: "دعم فني 24/7", description: "للبداية القوية" },
+    { messages: 5000, price: 489, feature: "دعم فني 24/7", description: "للمتاجر المتوسطة" },
+    { messages: 10000, price: 863, feature: "دعم فني 24/7", description: "الأكثر طلباً ⭐", featured: true },
+    { messages: 20000, price: 1610, feature: "دعم فني 24/7", description: "للمحترفين" },
+    { messages: 50000, price: 3738, feature: "اسم مرسل مجاني", description: "للشركات الكبرى" },
+    { messages: 100000, price: 6900, feature: "اسم مرسل مجاني", description: "للمؤسسات الضخمة" },
+    { messages: null, price: null, feature: "حلول مخصصة", description: "للباقات الأكبر", isCustom: true },
   ];
 
   return (
     <div className="font-sans" dir="rtl">
       
-      {/* 1. Tabbed Hero Section */}
-      <section className={`pt-32 pb-8 md:pt-40 md:pb-20 overflow-hidden transition-colors duration-500 ${heroTabs[activeTab].color} min-h-[90vh] md:min-h-0 flex flex-col justify-center`}>
-        <div className="container mx-auto px-4 md:px-6 flex flex-col h-full">
-          <div className="grid lg:grid-cols-2 gap-6 md:gap-12 items-center flex-1">
-            {/* Right Content */}
-            <div className="space-y-4 md:space-y-8 max-w-2xl animate-in slide-in-from-right-8 duration-500 fade-in key={activeTab} text-center lg:text-right">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-full text-xs md:text-sm font-medium text-slate-600 mx-auto lg:mx-0">
-                {React.createElement(heroTabs[activeTab].icon, { className: "w-3 h-3 md:w-4 md:h-4 text-[#7A1E2E]" })}
-                <span>حلول {heroTabs[activeTab].label}</span>
-              </div>
-              <h1 className="text-3xl md:text-6xl font-extrabold text-[#7A1E2E] leading-tight">
-                {heroTabs[activeTab].title}
-              </h1>
-              <p className="text-sm md:text-xl text-slate-600 leading-relaxed max-w-lg mx-auto lg:mx-0">
-                {heroTabs[activeTab].description}
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-2 md:pt-4 justify-center lg:justify-start">
-                <Button className="bg-[#7A1E2E] hover:bg-[#601824] text-white h-12 md:h-14 px-6 md:px-8 text-base md:text-lg font-bold rounded-xl shadow-lg shadow-[#7A1E2E]/20 w-full sm:w-auto">
-                  {heroTabs[activeTab].cta}
-                </Button>
-                <div className="hidden sm:flex items-center gap-3 px-4 py-2">
-                   <div className="flex -space-x-3 space-x-reverse">
-                     {[1,2,3].map(i => (
-                       <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-slate-200"></div>
-                     ))}
-                   </div>
-                   <div className="text-sm">
-                     <p className="font-bold text-slate-900">+5000</p>
-                     <p className="text-slate-500 text-xs">عميل يثق بنا</p>
-                   </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Left Content (Visual & Message Bubble) */}
-            <div className="relative flex justify-center lg:justify-end animate-in slide-in-from-left-8 duration-700 fade-in key={activeTab + '-img'} z-10 mt-4 md:mt-0">
-               {/* Abstract Background Blob */}
-               <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[500px] h-[300px] md:h-[500px] rounded-full blur-3xl opacity-50 ${heroTabs[activeTab].imgColor}`}></div>
-
-               <div className="relative w-full max-w-[280px] md:max-w-md">
-                 {/* Main Image Placeholder - Representative of the sector */}
-                 <div className="aspect-[4/5] md:aspect-[4/5] rounded-2xl md:rounded-[2rem] bg-slate-900/5 backdrop-blur-sm border border-white/20 shadow-xl md:shadow-2xl overflow-hidden relative group">
-                    <div className={`absolute inset-0 opacity-20 ${heroTabs[activeTab].imgColor}`}></div>
-                    
-                    {/* Floating SMS Bubble */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] md:w-[90%] transform transition-transform duration-500 hover:scale-105">
-                      <div className="bg-white/95 backdrop-blur-md rounded-xl md:rounded-2xl p-4 md:p-6 shadow-xl border border-white/50">
-                        <div className="flex items-center justify-between mb-3 md:mb-4 pb-3 md:pb-4 border-b border-slate-100">
-                          <div className="flex items-center gap-2 md:gap-3">
-                            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#7A1E2E] flex items-center justify-center text-white text-[10px] md:text-xs font-bold shadow-md">
-                              {heroTabs[activeTab].sender.charAt(0)}
-                            </div>
-                            <div className="text-right">
-                              <p className="font-bold text-slate-900 text-sm md:text-base">{heroTabs[activeTab].sender}</p>
-                              <p className="text-[10px] md:text-xs text-slate-400">الآن</p>
-                            </div>
-                          </div>
-                          <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-blue-500 animate-pulse"></div>
-                        </div>
-                        <p className="text-slate-800 font-medium leading-relaxed text-sm md:text-lg text-right">
-                          {heroTabs[activeTab].message}
-                        </p>
-                      </div>
-                    </div>
-                 </div>
-               </div>
+      {/* Sticky Tab Navigation (Mobile Only) - Shows when scrolled past hero */}
+      {showStickyTabs && (
+        <div className="md:hidden fixed top-20 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-md py-3 transition-all duration-300">
+          <div className="container mx-auto px-3">
+            <div 
+              ref={stickyScrollContainerRef}
+              onMouseDown={handleStickyMouseDown}
+              onMouseLeave={handleStickyMouseLeave}
+              onMouseUp={handleStickyMouseUp}
+              onMouseMove={handleStickyMouseMove}
+              className={`flex overflow-x-auto gap-2 justify-start px-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${isDraggingSticky ? 'cursor-grabbing' : 'cursor-grab'} select-none`}
+            >
+              {heroTabs.map((tab, index) => {
+                const Icon = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => {
+                      setActiveTab(index);
+                      // Scroll back to hero section
+                      heroSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className={`
+                      flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 font-bold text-xs whitespace-nowrap shrink-0
+                      ${activeTab === index 
+                        ? "bg-[#7A1E2E] text-white shadow-md shadow-[#7A1E2E]/20 scale-100" 
+                        : "bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900 border border-slate-200"
+                      }
+                    `}
+                  >
+                    <Icon className={`w-4 h-4 ${activeTab === index ? "text-white" : "text-slate-400"}`} />
+                    <span>{tab.label}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
-
-          {/* Tab Navigation */}
-          <div className="mt-8 md:mt-20">
-            <div className="flex md:flex-wrap overflow-x-auto md:overflow-visible pb-2 md:pb-0 gap-2 md:gap-4 justify-start md:justify-center px-2 md:px-0 scrollbar-hide">
+        </div>
+      )}
+      
+      {/* 1. Tabbed Hero Section */}
+      <section ref={heroSectionRef} className={`pt-22 pb-8 md:pt-24 md:pb-16 overflow-hidden transition-colors duration-500 ${heroTabs[activeTab].color} min-h-[80vh] md:min-h-0 flex flex-col justify-center`}>
+        <div className="container mx-auto px-3 md:px-6 flex flex-col h-full">
+          
+          {/* Tab Navigation - At bottom for mobile and desktop */}
+          <div className="order-2 md:order-3 mt-4 md:mt-20 mb-0">
+            <div 
+              ref={scrollContainerRef}
+              onMouseDown={handleMouseDown}
+              onMouseLeave={handleMouseLeave}
+              onMouseUp={handleMouseUp}
+              onMouseMove={handleMouseMove}
+              className={`flex md:flex-wrap overflow-x-auto md:overflow-visible gap-2 md:gap-4 justify-start md:justify-center px-2 md:px-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} select-none`}
+            >
               {heroTabs.map((tab, index) => {
                 const Icon = tab.icon;
                 return (
@@ -185,57 +276,145 @@ export const SMSPage = () => {
               })}
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* 2. Trust Bar */}
-      <section className="py-10 bg-[#F9FAFB] border-y border-slate-100">
-        <div className="container mx-auto px-4">
-          <p className="text-center text-sm font-medium text-slate-500 mb-8">تقنية معتمدة وموثوقة من قبل قادة الصناعة</p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-            <span className="text-xl font-bold text-slate-800 flex items-center gap-2"><Globe className="w-5 h-5" /> هيئة الاتصالات</span>
-            <span className="text-xl font-bold text-slate-800 flex items-center gap-2"><Store className="w-5 h-5" /> سلة</span>
-            <span className="text-xl font-bold text-slate-800 flex items-center gap-2"><Store className="w-5 h-5" /> زد</span>
-            <span className="text-xl font-bold text-slate-800 flex items-center gap-2"><ShieldCheck className="w-5 h-5" /> الأمن السيبراني</span>
-            <span className="text-xl font-bold text-slate-800 italic">VISA</span>
+          <div className="grid lg:grid-cols-2 gap-3 md:gap-8 items-center flex-1 order-1">
+            {/* Right Content */}
+            <div className="space-y-2 md:space-y-6 max-w-2xl animate-in slide-in-from-right-8 duration-500 fade-in key={activeTab} text-center lg:text-right">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-full text-xs md:text-sm font-medium text-slate-600 mx-auto lg:mx-0">
+                {React.createElement(heroTabs[activeTab].icon, { className: "w-3 h-3 md:w-4 md:h-4 text-[#7A1E2E]" })}
+                <span>حلول {heroTabs[activeTab].label}</span>
+              </div>
+              <h1 className="text-2xl md:text-6xl font-extrabold text-[#7A1E2E] leading-tight">
+                {heroTabs[activeTab].title}
+              </h1>
+              <p className="text-xs md:text-xl text-slate-600 leading-relaxed max-w-lg mx-auto lg:mx-0">
+                {heroTabs[activeTab].description}
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-2 md:gap-4 pt-1 md:pt-4 justify-center lg:justify-start">
+                <Button 
+                  onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="bg-[#7A1E2E] hover:bg-[#601824] text-white h-10 md:h-14 px-5 md:px-8 text-sm md:text-lg font-bold rounded-xl shadow-lg shadow-[#7A1E2E]/20 w-full sm:w-auto"
+                >
+                  {heroTabs[activeTab].cta}
+                </Button>
+                <div className="hidden sm:flex items-center gap-3 px-4 py-2">
+                   <div className="flex -space-x-3 space-x-reverse">
+                     {[1,2,3].map(i => (
+                       <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-slate-200"></div>
+                     ))}
+                   </div>
+                   <div className="text-sm">
+                     <p className="font-bold text-slate-900">+20,000</p>
+                     <p className="text-slate-500 text-xs">عميل يثق بنا</p>
+                   </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Left Content (Visual & Message Bubble) */}
+            <div className="relative flex justify-center lg:justify-end animate-in slide-in-from-left-8 duration-700 fade-in key={activeTab + '-img'} z-10 mt-2 md:mt-0">
+               {/* Abstract Background Blob */}
+               <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[500px] h-[300px] md:h-[500px] rounded-full blur-3xl opacity-50 ${heroTabs[activeTab].imgColor}`}></div>
+
+               <div className="relative w-full max-w-[280px] md:max-w-md">
+                 {/* Main Image Placeholder - Representative of the sector */}
+                 <div className="aspect-[4/5] md:aspect-[4/5] rounded-2xl md:rounded-[2rem] bg-slate-900/5 backdrop-blur-sm border border-white/20 shadow-xl md:shadow-2xl overflow-hidden relative group">
+                    <div className={`absolute inset-0 opacity-20 ${heroTabs[activeTab].imgColor}`}></div>
+                    
+                    {/* Floating SMS Bubbles - Two Messages */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] md:w-[90%] space-y-2 md:space-y-4">
+                      {/* First Message */}
+                      <div className="transform transition-transform duration-500 hover:scale-105">
+                        <div className="bg-white/95 backdrop-blur-md rounded-xl md:rounded-2xl p-2 md:p-4 shadow-xl border border-white/50">
+                          <div className="flex items-center justify-between mb-1.5 md:mb-3 pb-1.5 md:pb-3 border-b border-slate-100">
+                            <div className="flex items-center gap-2">
+                              <div className="w-7 h-7 md:w-9 md:h-9 rounded-full bg-[#7A1E2E] flex items-center justify-center text-white text-[9px] md:text-xs font-bold shadow-md">
+                                {heroTabs[activeTab].messages[0].sender.charAt(0)}
+                              </div>
+                              <div className="text-right">
+                                <p className="font-bold text-slate-900 text-xs md:text-sm">{heroTabs[activeTab].messages[0].sender}</p>
+                                <p className="text-[9px] md:text-[10px] text-slate-400">الآن</p>
+                              </div>
+                            </div>
+                            <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-blue-500 animate-pulse"></div>
+                          </div>
+                          <p className="text-slate-800 font-medium leading-relaxed text-xs md:text-base text-right">
+                            {heroTabs[activeTab].messages[0].text}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Second Message */}
+                      <div className="transform transition-transform duration-500 hover:scale-105">
+                        <div className="bg-white/95 backdrop-blur-md rounded-xl md:rounded-2xl p-2 md:p-4 shadow-xl border border-white/50">
+                          <div className="flex items-center justify-between mb-1.5 md:mb-3 pb-1.5 md:pb-3 border-b border-slate-100">
+                            <div className="flex items-center gap-2">
+                              <div className="w-7 h-7 md:w-9 md:h-9 rounded-full bg-[#7A1E2E] flex items-center justify-center text-white text-[9px] md:text-xs font-bold shadow-md">
+                                {heroTabs[activeTab].messages[1].sender.charAt(0)}
+                              </div>
+                              <div className="text-right">
+                                <p className="font-bold text-slate-900 text-xs md:text-sm">{heroTabs[activeTab].messages[1].sender}</p>
+                                <p className="text-[9px] md:text-[10px] text-slate-400">منذ دقيقة</p>
+                              </div>
+                            </div>
+                            <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-green-500"></div>
+                          </div>
+                          <p className="text-slate-800 font-medium leading-relaxed text-xs md:text-base text-right">
+                            {heroTabs[activeTab].messages[1].text}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                 </div>
+               </div>
+            </div>
           </div>
         </div>
       </section>
+
+      {/* 2. Trusted Partners Section */}
+      <TrustedPartners />
 
       {/* 3. Value Proposition */}
       <section className="py-24 bg-white">
         <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#7A1E2E] mb-4">لماذا يختارنا أصحاب المتاجر الذكية؟</h2>
-            <p className="text-slate-500">حلول مصممة خصيصاً للتجارة الإلكترونية والشركات الناشئة</p>
+          <div className="text-center max-w-3xl mx-auto mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#7A1E2E] mb-4">لماذا تختارنا؟</h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white p-8 rounded-2xl border border-slate-100 shadow-lg shadow-slate-100/50 hover:-translate-y-1 transition-transform duration-300">
-              <div className="w-14 h-14 bg-[#7A1E2E]/10 rounded-2xl flex items-center justify-center mb-6">
-                <Rocket className="w-7 h-7 text-[#7A1E2E]" />
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-[#7A1E2E]/10 rounded-xl flex items-center justify-center shrink-0">
+                  <Rocket className="w-6 h-6 text-[#7A1E2E]" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900">وصول فوري (Zero Latency)</h3>
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">وصول فوري (Zero Latency)</h3>
               <p className="text-slate-600 leading-relaxed">
                 مساراتنا المحلية المباشرة تضمن وصول رموز التحقق (OTP) في أقل من 3 ثوانٍ. لا تجعل عميلك ينتظر.
               </p>
             </div>
 
             <div className="bg-white p-8 rounded-2xl border border-slate-100 shadow-lg shadow-slate-100/50 hover:-translate-y-1 transition-transform duration-300">
-              <div className="w-14 h-14 bg-[#7A1E2E]/10 rounded-2xl flex items-center justify-center mb-6">
-                <ShieldCheck className="w-7 h-7 text-[#7A1E2E]" />
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-[#7A1E2E]/10 rounded-xl flex items-center justify-center shrink-0">
+                  <ShieldCheck className="w-6 h-6 text-[#7A1E2E]" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900">اسم مرسل خاص بك</h3>
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">اسم مرسل خاص بك</h3>
               <p className="text-slate-600 leading-relaxed">
                 تخلص من الأرقام العشوائية. نساعدك في اعتماد اسم متجرك (Sender ID) لدى هيئة الاتصالات مجاناً.
               </p>
             </div>
 
             <div className="bg-white p-8 rounded-2xl border border-slate-100 shadow-lg shadow-slate-100/50 hover:-translate-y-1 transition-transform duration-300">
-              <div className="w-14 h-14 bg-[#7A1E2E]/10 rounded-2xl flex items-center justify-center mb-6">
-                <Headphones className="w-7 h-7 text-[#7A1E2E]" />
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-[#7A1E2E]/10 rounded-xl flex items-center justify-center shrink-0">
+                  <Headphones className="w-6 h-6 text-[#7A1E2E]" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900">دعم فني سريع</h3>
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">دعم فني سريع</h3>
               <p className="text-slate-600 leading-relaxed">
                 لا تضيع وقتك في الانتظار. فريقنا التقني جاهز لمساعدتك في الربط وحل المشاكل على مدار الساعة.
               </p>
@@ -251,16 +430,20 @@ export const SMSPage = () => {
         
         <div className="container mx-auto px-4 relative z-10 text-center">
           <div className="inline-block bg-white/10 backdrop-blur-sm px-4 py-1 rounded-full text-sm font-medium mb-6 border border-white/20">
-            ✨ عرض المؤسسين (لفترة محدودة)
+            🛡️ عزز موثوقية رسائلك
           </div>
           <h2 className="text-3xl md:text-5xl font-bold mb-6">
-            اشحن أي باقة اليوم واحصل على <span className="text-[#E8DCCB] underline decoration-wavy decoration-2 underline-offset-8">20% رصيد إضافي</span> مجاناً
+            وثّق علامتك التجارية.. ابدأ اليوم واحصل على<br />
+            <span className="text-[#F8A36B] mt-4 block">اسم مرسل مجاني</span>
           </h2>
           <div className="mt-10 flex flex-col items-center gap-4">
-            <Button className="bg-white text-[#7A1E2E] hover:bg-[#E8DCCB] h-14 px-10 text-lg font-bold rounded-xl shadow-2xl shadow-black/20 transform hover:scale-105 transition-all">
-              اشحن رصيدك وضاعف الرسائل
+            <Button 
+              onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
+              className="bg-white text-[#7A1E2E] hover:bg-[#E8DCCB] h-14 px-10 text-lg font-bold rounded-xl shadow-2xl shadow-black/20 transform hover:scale-105 transition-all"
+            >
+              ابدأ الآن ووفّر رسوم التأسيس
             </Button>
-            <p className="text-white/60 text-sm">العرض ساري لأول 50 مشترك فقط 🔥</p>
+            <p className="text-white/60 text-sm">*العرض متاح عند الاشتراك في باقات مختارة فقط</p>
           </div>
         </div>
       </section>
@@ -286,9 +469,9 @@ export const SMSPage = () => {
                     <CheckCircle2 className="w-6 h-6 text-[#7A1E2E]" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-slate-900 mb-2">إشعارات حالة الطلب</h3>
+                    <h3 className="text-xl font-bold text-slate-900 mb-2">أتمتة الإشعارات والربط البرمجي (API)</h3>
                     <p className="text-slate-600">
-                      "تم استلام طلبك"، "تم الشحن"، "وصل المندوب". اربطها تلقائياً مع متجرك في سلة أو زد.
+                      اربط أنظمتك التقنية (ERP, CRM) عبر API متطور، لترسل إشعارات المواعيد، حالة الشحن، والتنبيهات الإدارية آلياً دون تدخل بشري.
                     </p>
                   </div>
                 </div>
@@ -297,7 +480,7 @@ export const SMSPage = () => {
                     <CheckCircle2 className="w-6 h-6 text-[#7A1E2E]" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-slate-900 mb-2">الحملات التسويقية</h3>
+                    <h3 className="text-xl font-bold text-slate-900 mb-2">الحملات التسويقي</h3>
                     <p className="text-slate-600">
                       استهدف قاعدة عملائك بعروض خاصة بمعدل فتح رسائل يتجاوز 98% مقارنة بالبريد الإلكتروني.
                     </p>
@@ -379,12 +562,12 @@ export const SMSPage = () => {
           </div>
 
           {/* Pricing Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-7xl mx-auto">
             {packages.map((pkg, index) => (
               <div 
                 key={index} 
                 className={`
-                  relative flex flex-col p-6 rounded-2xl transition-all duration-300
+                  relative flex flex-col p-4 md:p-6 rounded-2xl transition-all duration-300
                   ${pkg.featured 
                     ? "border-2 border-[#7A1E2E] bg-white shadow-xl scale-105 z-10" 
                     : "border border-slate-200 bg-white hover:border-[#7A1E2E]/30 hover:shadow-lg"
@@ -397,20 +580,23 @@ export const SMSPage = () => {
                   </div>
                 )}
                 
-                <div className="mb-4">
-                  <h3 className="text-xl font-bold text-slate-900">{pkg.messages.toLocaleString()} رسالة</h3>
+                <div className="mb-4 text-center">
+                  <h3 className="text-xl font-bold text-slate-900">{pkg.messages ? `${pkg.messages.toLocaleString()} رسالة` : "مخصص" }</h3>
                   <p className="text-sm text-slate-500 mt-1">{pkg.description}</p>
                 </div>
 
-                <div className="mb-6">
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-3xl font-extrabold text-[#7A1E2E]">{pkg.price.toLocaleString()}</span>
-                    <span className="text-slate-500 text-sm">ريال</span>
+                {!pkg.isCustom && pkg.price !== null ? (
+                  <div className="mb-6 text-center">
+                    <div className="flex items-baseline gap-1 justify-center">
+                      <span className="text-3xl font-extrabold text-[#7A1E2E]">{pkg.price.toLocaleString()}</span>
+                      <span className="text-slate-500 text-sm">ريال</span>
+                    </div>
                   </div>
-                  <p className={`text-sm font-medium mt-1 ${pkg.featured ? "text-green-600" : "text-slate-500"}`}>
-                    {pkg.perMsg} هللة / رسالة
-                  </p>
-                </div>
+                ) : (
+                  <div className="mb-6 text-center">
+                    <p className="text-lg text-slate-600 font-semibold">حلول مخصصة حسب احتياجك</p>
+                  </div>
+                )}
 
                 <div className={`
                   mt-auto bg-slate-50 rounded-xl p-3 mb-6 text-center border
@@ -421,8 +607,15 @@ export const SMSPage = () => {
 
                 <Button 
                   className={`w-full font-bold ${pkg.featured ? "bg-[#7A1E2E] hover:bg-[#601824] text-white" : "bg-transparent border border-[#7A1E2E] text-[#7A1E2E] hover:bg-[#7A1E2E]/5"}`}
+                  asChild={!pkg.isCustom}
                 >
-                  {pkg.featured ? "اشحن الآن" : "اختر الباقة"}
+                  {pkg.isCustom ? (
+                    "تواصل معنا"
+                  ) : (
+                    <a href="https://app.mobile.net.sa/reg" target="_blank" rel="noopener noreferrer">
+                      {pkg.featured ? "اشحن الآن" : "اختر الباقة"}
+                    </a>
+                  )}
                 </Button>
               </div>
             ))}
@@ -444,12 +637,13 @@ export const SMSPage = () => {
                 سواء كنت تستخدم منصة جاهزة أو برمجة خاصة، لدينا (Plugins) و (API) جاهز بتوثيق كامل يدعم جميع لغات البرمجة.
               </p>
               
-              <div className="flex items-center gap-4 mb-8">
+              <div className="flex flex-wrap items-center gap-3 mb-8">
                 {/* Platform Badges */}
-                <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">Salla</span>
-                <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">Zid</span>
-                <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">WooCommerce</span>
-                <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">Magento</span>
+                <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">دفترة</span>
+                <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">سلة</span>
+                <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">زد</span>
+                <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">نظام نور</span>
+                <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">إتقان</span>
               </div>
 
               <a href="#" className="flex items-center gap-2 text-[#7A1E2E] font-bold hover:underline">
@@ -480,8 +674,14 @@ export const SMSPage = () => {
         <div className="container mx-auto px-4 max-w-2xl">
           <MessageSquare className="w-16 h-16 text-[#7A1E2E] mx-auto mb-6 opacity-20" />
           <h2 className="text-3xl font-bold text-[#7A1E2E] mb-6">لا تترك عميلك ينتظر الكود..</h2>
-          <Button size="lg" className="bg-[#7A1E2E] hover:bg-[#601824] text-white text-lg px-10 h-16 rounded-xl shadow-xl shadow-[#7A1E2E]/20">
-            أنشئ حسابك وابدأ بـ 50 رسالة مجانية
+          <Button 
+            size="lg" 
+            className="bg-[#7A1E2E] hover:bg-[#601824] text-white text-lg px-10 h-16 rounded-xl shadow-xl shadow-[#7A1E2E]/20"
+            asChild
+          >
+            <a href="https://app.mobile.net.sa/reg" target="_blank" rel="noopener noreferrer">
+              أنشئ حسابك وابدأ بـ 50 رسالة مجانية
+            </a>
           </Button>
           <p className="mt-4 text-slate-400 text-sm">بدون بطاقة ائتمان - تفعيل فوري للحساب</p>
         </div>

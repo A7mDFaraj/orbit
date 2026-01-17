@@ -6,7 +6,6 @@ import { TrustSection } from "./TrustSection";
 import { Solutions } from "./Solutions";
 import { PersonaTabs } from "./PersonaTabs";
 import { Integrations } from "./Integrations";
-import { PricingCalculator } from "./PricingCalculator";
 import { WhyUs } from "./WhyUs";
 
 export const LandingPage = () => {
@@ -17,7 +16,6 @@ export const LandingPage = () => {
       <Solutions />
       <PersonaTabs />
       <Integrations />
-      <PricingCalculator />
       <WhyUs />
     </>
   );

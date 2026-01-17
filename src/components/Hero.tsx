@@ -234,7 +234,7 @@ export default function Hero() {
 
   return (
     <section
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pb-32 md:pb-40"
       style={{
         background: isDark
           ? 'radial-gradient(ellipse at center, #0a0a0f 0%, #000000 100%)'
@@ -393,7 +393,7 @@ export default function Hero() {
 
       {/* Main Content - Carousel Only */}
       <motion.div
-        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 gpu-accelerated"
+        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 gpu-accelerated mb-16 md:mb-20"
       >
         <motion.div
           initial={{ opacity: 0 }}

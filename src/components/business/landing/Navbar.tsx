@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Menu, ChevronDown } from "lucide-react";
 import { Button } from "@/components/business/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/business/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/business/ui/sheet";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
@@ -29,6 +29,15 @@ export const Navbar = () => {
 
   const scrollToSection = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
+    
+    // If clicking on "pricing" and we're on the SMS page, scroll there
+    if (id === "pricing" && pathname === "/business/products/sms") {
+      const element = document.getElementById(id);
+      element?.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+    
+    // If we're not on the business page, navigate to business first
     if (pathname !== "/business") {
       window.location.href = `/business#${id}`;
     } else {
@@ -58,14 +67,13 @@ export const Navbar = () => {
     >
       <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
         {/* Right: Logo */}
-        <Link href="/" className="flex items-center gap-2 -my-2">
-          {/* Logo - maximized size using negative margins to extend beyond navbar padding */}
+        <Link href="/business" className="flex items-center gap-2">
           <Image 
             src={encodeImagePath("/logo/شعار المدار1-0٢.png")} 
             alt="Orbit Logo" 
             width={300} 
             height={300} 
-            className="h-20 md:h-28 lg:h-36 w-auto object-contain" 
+            className="h-16 md:h-20 w-auto object-contain" 
           />
         </Link>
 
@@ -108,8 +116,13 @@ export const Navbar = () => {
           <Button variant="ghost" className="font-medium text-[#7A1E2E] hover:text-[#7A1E2E] hover:bg-[#7A1E2E]/10">
             تسجيل الدخول
           </Button>
-          <Button className="bg-[#7A1E2E] hover:bg-[#601824] text-white font-bold shadow-lg shadow-[#7A1E2E]/20">
-            ابدأ بـ 50 رسالة مجانية
+          <Button 
+            className="bg-[#7A1E2E] hover:bg-[#601824] text-white font-bold shadow-lg shadow-[#7A1E2E]/20"
+            asChild
+          >
+            <a href="https://app.mobile.net.sa/reg" target="_blank" rel="noopener noreferrer">
+              أنشئ حسابك وابدأ بـ 50 رسالة مجانية
+            </a>
           </Button>
         </div>
 
@@ -121,40 +134,62 @@ export const Navbar = () => {
                 <Menu className="h-6 w-6 text-[#7A1E2E]" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] bg-[#E8DCCB] border-l border-[#7A1E2E]/20">
-              <div className="flex flex-col gap-6 mt-8">
-                <div className="space-y-4">
-                  <h4 className="font-bold text-[#7A1E2E] border-b border-[#7A1E2E]/20 pb-2">المنتجات</h4>
-                  {productLinks.map((product) => (
-                    <Link
-                      key={product.name}
-                      href={product.href}
-                      className="block text-base font-medium text-slate-800 hover:text-[#7A1E2E]"
+            <SheetContent side="right" className="w-[300px] bg-[#E8DCCB] border-l border-[#7A1E2E]/20 overflow-y-auto">
+              <SheetTitle className="sr-only">القائمة</SheetTitle>
+              <SheetDescription className="sr-only">
+                قائمة التنقل الرئيسية للموقع
+              </SheetDescription>
+              
+              <div className="flex flex-col gap-4 mt-6">
+                {/* المنتجات */}
+                <div className="space-y-3">
+                  <h4 className="font-bold text-[#7A1E2E] text-sm uppercase tracking-wider border-b border-[#7A1E2E]/30 pb-2 text-center">
+                    المنتجات
+                  </h4>
+                  <div className="space-y-2">
+                    {productLinks.map((product) => (
+                      <Link
+                        key={product.name}
+                        href={product.href}
+                        className="block px-3 py-2.5 text-sm font-medium text-slate-700 hover:text-[#7A1E2E] hover:bg-white/50 rounded-lg transition-colors text-center"
+                      >
+                        {product.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* الروابط الأخرى */}
+                <div className="space-y-2">
+                  {navLinks.map((link) => (
+                    <a
+                      key={link.name}
+                      href={`#${link.id}`}
+                      onClick={(e) => scrollToSection(e, link.id)}
+                      className="block px-3 py-2.5 text-sm font-medium text-slate-700 hover:text-[#7A1E2E] hover:bg-white/50 rounded-lg transition-colors text-center"
                     >
-                      {product.name}
-                    </Link>
+                      {link.name}
+                    </a>
                   ))}
                 </div>
                 
-                <div className="h-px bg-[#7A1E2E]/20 my-2" />
-                
-                {navLinks.map((link) => (
-                  <a
-                    key={link.name}
-                    href={`#${link.id}`}
-                    onClick={(e) => scrollToSection(e, link.id)}
-                    className="text-lg font-medium text-slate-800 hover:text-[#7A1E2E]"
+                {/* الأزرار */}
+                <div className="space-y-3 pt-4 border-t border-[#7A1E2E]/20 mt-auto px-4">
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-center border-[#7A1E2E] text-[#7A1E2E] hover:bg-[#7A1E2E]/10 bg-transparent font-medium"
                   >
-                    {link.name}
-                  </a>
-                ))}
-                
-                <div className="h-px bg-[#7A1E2E]/20 my-2" />
-                
-                <Button variant="outline" className="w-full justify-start border-[#7A1E2E] text-[#7A1E2E] hover:bg-[#7A1E2E]/10 bg-transparent">
-                  تسجيل الدخول
-                </Button>
-                <Button className="w-full bg-[#7A1E2E] text-white hover:bg-[#601824]">ابدأ بـ 50 رسالة مجانية</Button>
+                    تسجيل الدخول
+                  </Button>
+                  <Button 
+                    className="w-full bg-[#7A1E2E] text-white hover:bg-[#601824] font-bold shadow-lg shadow-[#7A1E2E]/30"
+                    asChild
+                  >
+                    <a href="https://app.mobile.net.sa/reg" target="_blank" rel="noopener noreferrer">
+                      أنشئ حسابك وابدأ بـ 50 رسالة مجانية
+                    </a>
+                  </Button>
+                </div>
               </div>
             </SheetContent>
           </Sheet>

@@ -40,9 +40,15 @@ export const Hero = () => {
             </p>
             
             <div className="flex flex-wrap gap-4 pt-4">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 text-white font-bold h-12 px-8 text-lg shadow-lg shadow-primary/25">
-                ابدأ بـ 50 رسالة مجانية
-                <ArrowLeft className="mr-2 h-5 w-5" />
+              <Button 
+                size="lg" 
+                className="bg-primary hover:bg-primary/90 text-white font-bold h-12 px-8 text-lg shadow-lg shadow-primary/25"
+                asChild
+              >
+                <a href="https://app.mobile.net.sa/reg" target="_blank" rel="noopener noreferrer">
+                  أنشئ حسابك وابدأ بـ 50 رسالة مجانية
+                  <ArrowLeft className="mr-2 h-5 w-5" />
+                </a>
               </Button>
               <Button size="lg" variant="outline" className="h-12 px-8 text-lg border-slate-300 hover:bg-slate-50 text-slate-700">
                 <MessageCircle className="ml-2 h-5 w-5" />
@@ -56,7 +62,7 @@ export const Hero = () => {
                   <div key={i} className="inline-block h-8 w-8 rounded-full ring-2 ring-white bg-slate-200" />
                 ))}
               </div>
-              <p>يثق بنا أكثر من 500+ شركة سعودية</p>
+              <p>يثق بنا أكثر من 20,000+ شركة سعودية</p>
             </div>
           </motion.div>
 

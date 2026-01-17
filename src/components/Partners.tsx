@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { motion, useAnimationControls } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -8,52 +8,96 @@ import { useTheme } from '@/contexts/ThemeContext';
 export default function Partners() {
   const { isRTL } = useLanguage();
   const { isDark } = useTheme();
-  const [partners, setPartners] = useState<any[]>([]);
   const [mounted, setMounted] = useState(false);
   const [isMarqueePaused, setIsMarqueePaused] = useState(false);
   const marqueeControls = useAnimationControls();
   const marqueeRef = useRef<HTMLDivElement>(null);
 
-  // Fetch partners from database
-  useEffect(() => {
-    const fetchPartners = async () => {
-      try {
-        const partnersRes = await fetch('/api/partners');
-        const partnersData = await partnersRes.json();
-        if (partnersData.success && partnersData.partners && partnersData.partners.length > 0) {
-          const mappedPartners = partnersData.partners
-            .filter((p: any) => p.isActive)
-            .sort((a: any, b: any) => (a.order || 0) - (b.order || 0))
-            .map((p: any) => ({
-              name: p.name,
-              logo: p.logo,
-              website: p.website,
-            }));
-          setPartners(mappedPartners);
-        } else {
-          // Fallback to default partners
-          setPartners([
-            { name: 'Partner 1', logo: '/partners/partner1.png', website: '#' },
-            { name: 'Partner 2', logo: '/partners/partner2.png', website: '#' },
-            { name: 'Partner 3', logo: '/partners/partner3.png', website: '#' },
-            { name: 'Partner 4', logo: '/partners/partner4.png', website: '#' },
-          ]);
-        }
-      } catch (error) {
-        console.error('Failed to fetch partners:', error);
-        // Fallback to default partners
-        setPartners([
-          { name: 'Partner 1', logo: '/partners/partner1.png', website: '#' },
-          { name: 'Partner 2', logo: '/partners/partner2.png', website: '#' },
-          { name: 'Partner 3', logo: '/partners/partner3.png', website: '#' },
-          { name: 'Partner 4', logo: '/partners/partner4.png', website: '#' },
-        ]);
-      } finally {
-        setMounted(true);
-      }
-    };
+  // All logos from TrustedLogos folder - shuffled to avoid similar ones together
+  const logoFiles = useMemo(() => {
+    const logos = [
+      'images-removebg-preview.png',
+      'images.png',
+      'magrabi-health.png',
+      'logo_004-removebg-preview.png',
+      'logo_006-removebg-preview.png',
+      'logo_007-removebg-preview.png',
+      'logo_008-removebg-preview.png',
+      'logo_009-removebg-preview.png',
+      'logo_010-removebg-preview.png',
+      'logo_011-removebg-preview.png',
+      'logo_012-removebg-preview.png',
+      'logo_014-removebg-preview.png',
+      'logo_015-removebg-preview.png',
+      'logo_016-removebg-preview.png',
+      'logo_017-removebg-preview.png',
+      'logo_018-removebg-preview.png',
+      'logo_020-removebg-preview.png',
+      'logo_021-removebg-preview.png',
+      'logo_022-removebg-preview.png',
+      'logo_023-removebg-preview.png',
+      'logo_024-removebg-preview.png',
+      'logo_025-removebg-preview.png',
+      'logo_026-removebg-preview.png',
+      'logo_027-removebg-preview.png',
+      'logo_028-removebg-preview.png',
+      'logo_029-removebg-preview.png',
+      'logo_030-removebg-preview.png',
+      'logo_031-removebg-preview.png',
+      'logo_032-removebg-preview.png',
+      'logo_033-removebg-preview.png',
+      'logo_034-removebg-preview.png',
+      'logo_035-removebg-preview.png',
+      'logo_036-removebg-preview.png',
+      'logo_037-removebg-preview.png',
+      'logo_038-removebg-preview.png',
+      'logo_039-removebg-preview.png',
+      'logo_040-removebg-preview.png',
+      'logo_041-removebg-preview.png',
+      'logo_042-removebg-preview.png',
+      'logo_043-removebg-preview.png',
+      'logo_044-removebg-preview.png',
+      'logo_045-removebg-preview.png',
+      'logo_046-removebg-preview.png',
+      'logo_047-removebg-preview.png',
+      'logo_048-removebg-preview.png',
+      'logo_049-removebg-preview.png',
+      'logo_050-removebg-preview.png',
+      'logo_051-removebg-preview.png',
+      'logo_052-removebg-preview.png',
+      'logo_053-removebg-preview.png',
+      'logo_054-removebg-preview.png',
+      'logo_055-removebg-preview.png',
+      'logo_056-removebg-preview.png',
+      'logo_057-removebg-preview.png',
+      'حرس الحدود.png',
+      'إمارة منطقة الرياض.png',
+      'مستشفى الملك فهد بجدة.png',
+      'جامعة الملك سعود.png',
+      'وزارة التعليم.png',
+      'الموارد البشرية.png',
+      'شعار-هدف.png',
+    ];
+    
+    // Shuffle to avoid similar logos being together
+    const shuffled = [...logos];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }, []);
 
-    fetchPartners();
+  const partners = useMemo(() => {
+    return logoFiles.map((logoFile, index) => ({
+      name: `Partner ${index + 1}`,
+      logo: `/TrustedLogos/${logoFile}`,
+      website: '#',
+    }));
+  }, [logoFiles]);
+
+  useEffect(() => {
+    setMounted(true);
   }, []);
 
   // Start marquee animation after mounted - Smart RTL/LTR support with seamless infinite loop from edge
@@ -122,10 +166,10 @@ export default function Partners() {
         className="absolute inset-0 -z-10"
         style={{
           background: isDark
-            ? 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 50%, transparent 100%)'
-            : 'linear-gradient(to top, rgba(248,249,250,0.95) 0%, rgba(248,249,250,0.7) 50%, transparent 100%)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
+            ? 'linear-gradient(to top, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 50%, transparent 100%)'
+            : 'linear-gradient(to top, rgba(248,249,250,0.5) 0%, rgba(248,249,250,0.3) 50%, transparent 100%)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
         }}
       />
 
