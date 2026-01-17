@@ -1,15 +1,16 @@
 'use client';
 
 import React from "react";
+import Image from "next/image";
 
 export const Integrations = () => {
     const integrations = [
-        { name: "سلة", icon: "Salla" },
-        { name: "زد", icon: "Zid" },
-        { name: "WooCommerce", icon: "Woo" },
-        { name: "Excel", icon: "XLS" },
-        { name: "Sheets", icon: "Google" },
-        { name: "Zapier", icon: "Zapier" },
+        { name: "سلة", icon: "/1/salla.svg" },
+        { name: "زد", icon: "/1/zid.svg" },
+        { name: "WooCommerce", icon: "/1/WooCommerce.svg" },
+        { name: "Excel", icon: "/1/Excel.svg" },
+        { name: "Sheets", icon: "/1/sheet.svg" },
+        { name: "Zapier", icon: "/1/Zapier_logo.svg" },
     ];
 
   return (
@@ -21,9 +22,14 @@ export const Integrations = () => {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
             {integrations.map((item) => (
                 <div key={item.name} className="flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-sm border border-slate-100 hover:shadow-md hover:border-primary/20 transition-all cursor-pointer group">
-                    <div className="h-12 w-12 bg-slate-100 rounded-lg flex items-center justify-center mb-3 text-slate-600 font-bold group-hover:bg-primary/10 group-hover:text-primary transition-colors">
-                        {/* Placeholder for actual logos */}
-                        {item.icon.substring(0, 2)}
+                    <div className="h-12 w-12 mb-3 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Image
+                            src={item.icon}
+                            alt={item.name}
+                            width={48}
+                            height={48}
+                            className="max-w-full max-h-full object-contain"
+                        />
                     </div>
                     <span className="font-medium text-slate-700">{item.name}</span>
                 </div>
