@@ -1,6 +1,6 @@
 'use client';
 
-import React from "react";
+import React, { useMemo } from "react";
 import Image from "next/image";
 import { encodeImagePath } from "@/utils/imagePath";
 
@@ -70,16 +70,28 @@ export const TrustedPartners = () => {
     'شعار-هدف.png',
   ];
 
-  // Create partners array from logo files - each logo appears ONCE only
-  const partners = logoFiles.map((logoFile, index) => ({
+  // Shuffle logos to avoid similar ones being together
+  const shuffledLogos = useMemo(() => {
+    const shuffled = [...logoFiles];
+    // Fisher-Yates shuffle algorithm
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }, []);
+
+  // Create partners array from shuffled logo files - each logo appears ONCE only
+  const partners = shuffledLogos.map((logoFile, index) => ({
     id: `partner-${index}`,
     name: `شريك ${index + 1}`,
     logo: `/TrustedLogos/${logoFile}`,
   }));
 
-  // For seamless infinite scroll: duplicate the array so animation can loop smoothly
-  // The animation shows 50% so duplicates won't be visible at the same time
-  const allPartnersForScroll = [...partners, ...partners];
+  // Split into two rows - distribute logos evenly
+  const midPoint = Math.ceil(partners.length / 2);
+  const row1 = partners.slice(0, midPoint);
+  const row2 = partners.slice(midPoint);
 
   return (
     <section className="py-16 bg-gradient-to-b from-white to-[#E8DCCB]/30 overflow-hidden">
@@ -93,10 +105,10 @@ export const TrustedPartners = () => {
           </p>
         </div>
 
-        {/* Scrolling Row 1 */}
-        <div className="mb-8 overflow-hidden">
-          <div className="flex animate-scroll gap-6">
-            {allPartnersForScroll.map((partner, index) => (
+        {/* Row 1 - Scrolling left to right */}
+        <div className="mb-6 overflow-hidden">
+          <div className="flex animate-scroll-row1 gap-6">
+            {[...row1, ...row1].map((partner, index) => (
               <div
                 key={`row1-${partner.id}-${index}`}
                 className="flex-shrink-0 w-32 md:w-40"
@@ -115,10 +127,10 @@ export const TrustedPartners = () => {
           </div>
         </div>
 
-        {/* Scrolling Row 2 - Reverse direction */}
+        {/* Row 2 - Scrolling right to left (reverse) */}
         <div className="overflow-hidden">
-          <div className="flex animate-scroll-reverse gap-6">
-            {allPartnersForScroll.map((partner, index) => (
+          <div className="flex animate-scroll-row2 gap-6">
+            {[...row2, ...row2].map((partner, index) => (
               <div
                 key={`row2-${partner.id}-${index}`}
                 className="flex-shrink-0 w-32 md:w-40"
@@ -139,45 +151,50 @@ export const TrustedPartners = () => {
       </div>
 
       <style jsx>{`
-        @keyframes scroll {
-          from {
+        @keyframes scroll-row1 {
+          0% {
             transform: translateX(0);
           }
-          to {
+          100% {
             transform: translateX(-50%);
           }
         }
 
-        @keyframes scroll-reverse {
-          from {
+        @keyframes scroll-row2 {
+          0% {
             transform: translateX(-50%);
           }
-          to {
+          100% {
             transform: translateX(0);
           }
         }
 
         @media (min-width: 768px) {
-          .animate-scroll {
-            animation: scroll 60s linear infinite;
+          .animate-scroll-row1 {
+            animation: scroll-row1 80s linear infinite;
             will-change: transform;
           }
 
-          .animate-scroll-reverse {
-            animation: scroll-reverse 60s linear infinite;
+          .animate-scroll-row2 {
+            animation: scroll-row2 80s linear infinite;
             will-change: transform;
           }
         }
 
         @media (max-width: 767px) {
-          .animate-scroll,
-          .animate-scroll-reverse {
-            animation: none;
+          .animate-scroll-row1 {
+            animation: scroll-row1 120s linear infinite;
+            will-change: transform;
+          }
+
+          .animate-scroll-row2 {
+            animation: scroll-row2 120s linear infinite;
+            will-change: transform;
           }
         }
 
-        .animate-scroll:hover,
-        .animate-scroll-reverse:hover {
+        .animate-scroll-row1:hover,
+        .animate-scroll-row2:hover {
           animation-play-state: paused;
         }
       `}</style>

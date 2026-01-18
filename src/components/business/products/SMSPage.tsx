@@ -242,11 +242,11 @@ export const SMSPage = () => {
       )}
       
       {/* 1. Tabbed Hero Section */}
-      <section ref={heroSectionRef} className={`pt-22 pb-8 md:pt-24 md:pb-16 overflow-hidden transition-colors duration-500 ${heroTabs[activeTab].color} min-h-[80vh] md:min-h-0 flex flex-col justify-center`}>
+      <section ref={heroSectionRef} className={`pt-24 pb-8 md:pt-24 md:pb-16 overflow-hidden transition-colors duration-500 ${heroTabs[activeTab].color} min-h-[80vh] md:min-h-0 flex flex-col justify-center`}>
         <div className="container mx-auto px-3 md:px-6 flex flex-col h-full">
           
-          {/* Tab Navigation - At bottom for mobile and desktop */}
-          <div className="order-2 md:order-3 mt-4 md:mt-20 mb-0">
+          {/* Tab Navigation - At top for mobile, bottom for desktop */}
+          <div className="order-1 md:order-3 mt-0 mb-4 md:mt-20 md:mb-0">
             <div 
               ref={scrollContainerRef}
               onMouseDown={handleMouseDown}
@@ -277,7 +277,7 @@ export const SMSPage = () => {
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-3 md:gap-8 items-center flex-1 order-1">
+          <div className="grid lg:grid-cols-2 gap-3 md:gap-8 items-center flex-1 order-2 md:order-1">
             {/* Right Content */}
             <div className="space-y-2 md:space-y-6 max-w-2xl animate-in slide-in-from-right-8 duration-500 fade-in key={activeTab} text-center lg:text-right">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-full text-xs md:text-sm font-medium text-slate-600 mx-auto lg:mx-0">

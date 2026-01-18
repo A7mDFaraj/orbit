@@ -182,9 +182,14 @@ export const TrustSection = () => {
         }
 
         @media (max-width: 767px) {
-          .animate-scroll-row1,
+          .animate-scroll-row1 {
+            animation: scroll-row1 120s linear infinite;
+            will-change: transform;
+          }
+
           .animate-scroll-row2 {
-            animation: none;
+            animation: scroll-row2 120s linear infinite;
+            will-change: transform;
           }
         }
 
