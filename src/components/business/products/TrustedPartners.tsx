@@ -183,12 +183,12 @@ export const TrustedPartners = () => {
 
         @media (max-width: 767px) {
           .animate-scroll-row1 {
-            animation: scroll-row1 120s linear infinite;
+            animation: scroll-row1 60s linear infinite;
             will-change: transform;
           }
 
           .animate-scroll-row2 {
-            animation: scroll-row2 120s linear infinite;
+            animation: scroll-row2 60s linear infinite;
             will-change: transform;
           }
         }
