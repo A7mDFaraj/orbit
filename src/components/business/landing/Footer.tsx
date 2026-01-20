@@ -61,18 +61,18 @@ export const Footer = () => {
             <ul className="space-y-4 text-sm text-[#E8DCCB]/80">
               <li className="flex items-center gap-3">
                 <Mail className="h-4 w-4" />
-                <span>support@orbit.sa</span>
+                <span>marketing@corbit.sa</span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="h-4 w-4" />
-                <span>920000000</span>
+                <span>920006900</span>
               </li>
               <li className="flex items-start gap-3">
                 <MapPin className="h-4 w-4 mt-1" />
-                <span>
-                  المملكة العربية السعودية، الرياض<br/>
-                  طريق الملك فهد، مبنى رقم 12
-                </span>
+                <div>
+                  المدينة المنورة، طريق الملك عبدالله<br/>
+                  حي الراية - 8443 طابق 6
+                </div>
               </li>
             </ul>
           </div>
@@ -81,8 +81,8 @@ export const Footer = () => {
         <div className="border-t border-[#E8DCCB]/20 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-[#E8DCCB]/60">
           <p>© 2025 مدار (Orbit). جميع الحقوق محفوظة.</p>
           <div className="flex items-center gap-6">
-            <span>سجل تجاري: 1010101010</span>
-            <span>ترخيص الهيئة: 123-456</span>
+            <span>السجل التجاري: 7012398264</span>
+            <span>التصريح: LGP0921-22</span>
           </div>
         </div>
       </div>

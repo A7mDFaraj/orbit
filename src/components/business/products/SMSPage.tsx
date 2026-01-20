@@ -640,7 +640,6 @@ export const SMSPage = () => {
               <div className="flex flex-wrap items-center gap-3 mb-8">
                 {/* Platform Badges */}
                 <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">دفترة</span>
-                <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">سلة</span>
                 <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">زد</span>
                 <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">نظام نور</span>
                 <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">إتقان</span>

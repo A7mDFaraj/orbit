@@ -71,29 +71,22 @@ export const PersonaTabs = () => {
           </TabsContent>
 
           <TabsContent value="developers" className="animate-in fade-in-50 slide-in-from-bottom-4 duration-500">
-             <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
               <div className="order-2 md:order-1 bg-slate-900 rounded-3xl p-6 shadow-2xl border border-slate-800 font-mono text-sm relative overflow-hidden text-left" dir="ltr">
-                 <div className="flex items-center gap-2 mb-4 border-b border-slate-700 pb-4">
-                    <div className="h-3 w-3 rounded-full bg-red-500" />
-                    <div className="h-3 w-3 rounded-full bg-yellow-500" />
-                    <div className="h-3 w-3 rounded-full bg-green-500" />
-                    <span className="ml-auto text-slate-400 text-xs">send-sms.js</span>
-                 </div>
-                 <code className="text-blue-300">
-                    <span className="text-purple-400">const</span> response = <span className="text-purple-400">await</span> fetch(<span className="text-green-300">'https://api.platform.sa/v1/send'</span>, {'{'}<br/>
-                    &nbsp;&nbsp;method: <span className="text-green-300">'POST'</span>,<br/>
-                    &nbsp;&nbsp;headers: {'{'}<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-300">'Authorization'</span>: <span className="text-green-300">'Bearer YOUR_API_KEY'</span>,<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-300">'Content-Type'</span>: <span className="text-green-300">'application/json'</span><br/>
-                    &nbsp;&nbsp;{'}'},<br/>
-                    &nbsp;&nbsp;body: JSON.stringify({'{'}<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;to: <span className="text-green-300">'+966500000000'</span>,<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;message: <span className="text-green-300">'Hello from API!'</span><br/>
-                    &nbsp;&nbsp;{'}'})<br/>
-                    {'}'});
-                 </code>
+                <div className="flex gap-1.5 mb-4">
+                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                  <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                </div>
+                <p className="text-slate-400 mb-2">// Send SMS Example</p>
+                <p className="mb-1"><span className="text-purple-400">await</span> orbit.send({`{`}</p>
+                <p className="pl-4"><span className="text-blue-400">to</span>: <span className="text-green-400">"96650xxxxxxx"</span>,</p>
+                <p className="pl-4"><span className="text-blue-400">body</span>: <span className="text-green-400">"Your OTP is 1234"</span>,</p>
+                <p className="pl-4"><span className="text-blue-400">sender</span>: <span className="text-green-400">"MyStore"</span></p>
+                <p className="mb-1">{`}`});</p>
+                <p className="mt-2 text-green-500">// Result: Message Sent ✅</p>
               </div>
-              
+
               <div className="space-y-6 order-1 md:order-2">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-sm font-medium">
                   <Terminal className="h-4 w-4" />
@@ -113,7 +106,14 @@ export const PersonaTabs = () => {
                         <p className="text-sm text-slate-500">Latency</p>
                     </div>
                 </div>
-                <Button variant="outline" size="lg" className="mt-4 gap-2">
+                <h4 className="text-xl font-bold text-[#7A1E2E] mb-4">جاهز للربط مع أدواتك المفضلة</h4>
+                <div className="flex flex-wrap items-center gap-3 mb-6">
+                  <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">دفترة</span>
+                  <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">زد</span>
+                  <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">نظام نور</span>
+                  <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">إتقان</span>
+                </div>
+                <Button variant="outline" size="lg" className="gap-2">
                     تصفح ملفات الـ API
                     <ArrowLeft className="h-4 w-4" />
                 </Button>

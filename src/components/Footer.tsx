@@ -149,6 +149,7 @@ export default function Footer() {
               {isRTL ? 'معلومات الاتصال' : 'Contact Information'}
             </h4>
             <ul className="space-y-4">
+
               {/* Phone */}
               <li className="flex items-start gap-3">
                 <motion.div
@@ -159,7 +160,7 @@ export default function Footer() {
                 >
                 <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
                   <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
                   </svg>
                 </div>
                 <div>
@@ -173,36 +174,12 @@ export default function Footer() {
                 </motion.div>
               </li>
 
-              {/* Mobile */}
-              <li className="flex items-start gap-3">
-                <motion.div
-                  initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
-                  animate={inView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.5, delay: 0.6 }}
-                  className="flex items-start gap-3 w-full"
-                >
-                <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <div>
-                  <p className={`text-gray-400 text-sm mb-1 ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
-                    {isRTL ? 'جوال' : 'Mobile'}
-                  </p>
-                  <a href="tel:0544752974" className={`text-white hover:text-primary transition-colors ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir="ltr">
-                    0544752974
-                  </a>
-                </div>
-                </motion.div>
-              </li>
-
               {/* Email */}
               <li className="flex items-start gap-3">
                 <motion.div
                   initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
                   animate={inView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.5, delay: 0.7 }}
+                  transition={{ duration: 0.5, delay: 0.6 }}
                   className="flex items-start gap-3 w-full"
                 >
                 <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
@@ -214,8 +191,8 @@ export default function Footer() {
                   <p className={`text-gray-400 text-sm mb-1 ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
                     {isRTL ? 'ايميل' : 'Email'}
                   </p>
-                  <a href="mailto:info@ot.com.sa" className={`text-white hover:text-primary transition-colors ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir="ltr">
-                    info@ot.com.sa
+                  <a href="mailto:marketing@corbit.sa" className={`text-white hover:text-primary transition-colors ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir="ltr">
+                    marketing@corbit.sa
                   </a>
                 </div>
                 </motion.div>
@@ -226,7 +203,7 @@ export default function Footer() {
                 <motion.div
                   initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
                   animate={inView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.5, delay: 0.8 }}
+                  transition={{ duration: 0.5, delay: 0.7 }}
                   className="flex items-start gap-3 w-full"
                 >
                 <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
@@ -240,7 +217,7 @@ export default function Footer() {
                     {isRTL ? 'العنوان' : 'Address'}
                   </p>
                   <p className={`text-white ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir="rtl">
-                    المدينة المنورة, شارع الأمير عبدالمجيد - الذهبية بلازا
+                    المدينة المنورة، طريق الملك عبدالله - حي الراية - 8443 طابق 6
                   </p>
                 </div>
                 </motion.div>
@@ -293,6 +270,10 @@ export default function Footer() {
         >
           <p>{t.contact.copyright}</p>
           <p className="mt-2">{t.contact.country}</p>
+          <div className="flex items-center justify-center gap-6 mt-4 text-white/40">
+            <span>السجل التجاري : 7012398264</span>
+            <span>التصريح : LGP0921-22</span>
+          </div>
         </motion.div>
       </div>
     </footer>
