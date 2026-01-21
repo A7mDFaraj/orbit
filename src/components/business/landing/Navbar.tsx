@@ -113,8 +113,14 @@ export const Navbar = () => {
 
         {/* Left: Actions */}
         <div className="hidden md:flex items-center gap-3">
-          <Button variant="ghost" className="font-medium text-[#7A1E2E] hover:text-[#7A1E2E] hover:bg-[#7A1E2E]/10">
-            تسجيل الدخول
+          <Button
+            variant="ghost"
+            className="font-medium text-[#7A1E2E] hover:text-[#7A1E2E] hover:bg-[#7A1E2E]/10"
+            asChild
+          >
+            <a href="https://app.mobile.net.sa/login" target="_blank" rel="noopener noreferrer">
+              تسجيل الدخول
+            </a>
           </Button>
           <Button 
             className="bg-[#7A1E2E] hover:bg-[#601824] text-white font-bold shadow-lg shadow-[#7A1E2E]/20"
@@ -175,11 +181,14 @@ export const Navbar = () => {
                 
                 {/* الأزرار */}
                 <div className="space-y-3 pt-4 border-t border-[#7A1E2E]/20 mt-auto px-4">
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     className="w-full justify-center border-[#7A1E2E] text-[#7A1E2E] hover:bg-[#7A1E2E]/10 bg-transparent font-medium"
+                    asChild
                   >
-                    تسجيل الدخول
+                    <a href="https://app.mobile.net.sa/login" target="_blank" rel="noopener noreferrer">
+                      تسجيل الدخول
+                    </a>
                   </Button>
                   <Button 
                     className="w-full bg-[#7A1E2E] text-white hover:bg-[#601824] font-bold shadow-lg shadow-[#7A1E2E]/30"

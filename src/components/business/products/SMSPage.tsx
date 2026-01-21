@@ -80,36 +80,18 @@ export const SMSPage = () => {
 
   // Handle scroll detection for sticky tabs (mobile only)
   useEffect(() => {
-    const handleScroll = () => {
-      // Only work on mobile (screen width < 768px)
-      if (window.innerWidth >= 768) {
-        setShowStickyTabs(false);
-        return;
-      }
-
-      if (!heroSectionRef.current) return;
-
-      const heroBottom = heroSectionRef.current.offsetTop + heroSectionRef.current.offsetHeight;
-      const scrollPosition = window.scrollY + 80; // 80px for navbar height
-
-      setShowStickyTabs(scrollPosition > heroBottom);
-    };
+    // Always keep sticky tabs hidden - they should only show within the hero section
+    setShowStickyTabs(false);
 
     // Check on mount and window resize
     const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setShowStickyTabs(false);
-      } else {
-        handleScroll();
-      }
+      setShowStickyTabs(false);
     };
 
-    window.addEventListener('scroll', handleScroll);
     window.addEventListener('resize', handleResize);
-    handleScroll(); // Check initial state
+    handleResize(); // Check initial state
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
     };
   }, []);
