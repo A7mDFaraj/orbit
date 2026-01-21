@@ -1,16 +1,14 @@
 'use client';
 
 import React from "react";
-import Image from "next/image";
 
 export const Integrations = () => {
     const integrations = [
         { name: "سلة", icon: "/1/salla.svg" },
-        { name: "زد", icon: "/1/zid.svg" },
-        { name: "WooCommerce", icon: "/1/WooCommerce.svg" },
-        { name: "Excel", icon: "/1/Excel.svg" },
-        { name: "Sheets", icon: "/1/sheet.svg" },
-        { name: "Zapier", icon: "/1/Zapier_logo.svg" },
+        { name: "دفترة", icon: "/1/daftra.png" },
+        { name: "نور", icon: "/1/noor.png" },
+        { name: "اتقان", icon: "/1/etqan.jpeg" },
+        { name: "حضوري", icon: "/1/huddari.png" },
     ];
 
   return (
@@ -19,19 +17,20 @@ export const Integrations = () => {
         <h3 className="text-2xl font-bold text-slate-900 mb-2">نعمل مع أدواتك المفضلة</h3>
         <p className="text-slate-500 mb-10">لن تضطر لتغيير نظام عملك الحالي، نحن نندمج معه بسهولة.</p>
         
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+        <div className="flex flex-wrap justify-center gap-6">
             {integrations.map((item) => (
                 <div key={item.name} className="flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-sm border border-slate-100 hover:shadow-md hover:border-primary/20 transition-all cursor-pointer group">
-                    <div className="h-12 w-12 mb-3 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <Image
+                    {item.icon.startsWith('/') ? (
+                        <img
                             src={item.icon}
                             alt={item.name}
-                            width={48}
-                            height={48}
-                            className="max-w-full max-h-full object-contain"
+                            className="h-16 w-16 object-contain group-hover:scale-110 transition-transform"
                         />
-                    </div>
-                    <span className="font-medium text-slate-700">{item.name}</span>
+                    ) : (
+                        <div className="h-16 w-16 bg-slate-100 rounded-lg flex items-center justify-center text-slate-600 font-bold group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+                            {item.icon.substring(0, 2)}
+                        </div>
+                    )}
                 </div>
             ))}
         </div>

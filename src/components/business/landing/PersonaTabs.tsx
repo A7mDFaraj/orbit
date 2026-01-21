@@ -109,7 +109,7 @@ export const PersonaTabs = () => {
                 <h4 className="text-xl font-bold text-[#7A1E2E] mb-4">جاهز للربط مع أدواتك المفضلة</h4>
                 <div className="flex flex-wrap items-center gap-3 mb-6">
                   <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">دفترة</span>
-                  <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">زد</span>
+                  <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">سلة</span>
                   <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">نظام نور</span>
                   <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">إتقان</span>
                 </div>
