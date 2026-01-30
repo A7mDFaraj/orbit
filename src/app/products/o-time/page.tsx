@@ -1,13 +1,13 @@
 'use client';
 
 import { OTimePage } from '@/components/business/products/OTimePage';
-import { Navbar as BusinessNavbar } from '@/components/business/landing/Navbar';
-import { Footer } from '@/components/business/landing/Footer';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
 export default function OTimeProductPage() {
   return (
     <>
-      <BusinessNavbar />
+      <Navbar />
       <OTimePage />
       <Footer />
     </>

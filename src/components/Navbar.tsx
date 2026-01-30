@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import Image from 'next/image';
+// import Image from 'next/image'; // Removing unused import
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import LanguageSwitcher from './LanguageSwitcher';
@@ -13,12 +13,10 @@ import { encodeImagePath } from '@/utils/imagePath';
 
 // Solutions from ProductsShowcase - Current solutions on landing page
 const solutionsList = [
-  { slug: 'sms-platform', nameEn: 'SMS Platform', nameAr: 'الرسائل النصية' },
-  { slug: 'whatsapp-business-api', nameEn: 'WhatsApp Business API', nameAr: 'واتساب اعمال API' },
-  { slug: 'otime', nameEn: 'OTime - Attendance & HR', nameAr: 'اوتايم OTime' },
-  { slug: 'gov-gate', nameEn: 'Gov Gate - Government Portal', nameAr: 'البوابة الحكومية Gov Gate' },
-  { slug: 'enterprise', nameEn: 'Business & Enterprise', nameAr: 'الشركات والمؤسسات' },
-  { slug: 'healthcare', nameEn: 'Healthcare', nameAr: 'القطاع الصحي' },
+  { slug: 'sms-platform', nameEn: 'SMS Messaging', nameAr: 'الرسائل النصية SMS', href: '/products/sms' },
+  { slug: 'whatsapp-business-api', nameEn: 'WhatsApp Business API', nameAr: 'واتساب أعمال API', href: '/products/whatsapp' },
+  { slug: 'otime', nameEn: 'O-Time HR Software', nameAr: 'O-Time برنامج الموارد البشرية', href: '/products/o-time' },
+  { slug: 'gov-gate', nameEn: 'Gov Gate', nameAr: 'Gov Gate', href: '/products/gov-gate' },
 ];
 
 export default function Navbar() {
@@ -27,7 +25,7 @@ export default function Navbar() {
   const [isInDarkSection, setIsInDarkSection] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const { t, isRTL, setLanguage } = useLanguage();
+  const { t, isRTL } = useLanguage();
   const { isDark } = useTheme();
   const solutionsRef = useRef<HTMLDivElement>(null);
 
@@ -89,47 +87,47 @@ export default function Navbar() {
 
   // Navbar should be light when in dark section (WhyOrbit) for better contrast
   const navbarIsDark = isInDarkSection ? false : isDark;
-  
+
   // Detect pages where navbar needs better text contrast (light pages with white background)
-  const needsHighContrast = pathname === '/enterprise' || pathname === '/healthcare' || pathname === '/packages' || pathname === '/offers' || pathname === '/news' || pathname === '/business' || pathname === '/request-quote';
+  const needsHighContrast = pathname === '/enterprise' || pathname === '/healthcare' || pathname === '/packages' || pathname === '/offers' || pathname === '/news' || pathname === '/request-quote';
   const isLandingPage = pathname === '/';
-  
+
   // Navbar background opacity based on page
-  const navbarBgOpacity = navbarIsDark 
-    ? 'bg-[#161616]/95' 
-    : isLandingPage 
+  const navbarBgOpacity = navbarIsDark
+    ? 'bg-[#161616]/95'
+    : isLandingPage
       ? 'bg-white/60' // Very transparent on landing page like before
       : needsHighContrast
         ? 'bg-white/88' // More visible on business pages but still transparent
         : 'bg-white/80'; // Default transparent for other pages
-  
+
   // Border opacity based on page
-  const navbarBorder = navbarIsDark 
-    ? 'border-white/10' 
+  const navbarBorder = navbarIsDark
+    ? 'border-white/10'
     : isLandingPage
       ? 'border-gray-200/20'
       : needsHighContrast
         ? 'border-gray-300/50'
         : 'border-gray-200/35';
-  
+
   // Shadow based on page
-  const navbarShadow = navbarIsDark 
-    ? 'shadow-lg shadow-black/20' 
+  const navbarShadow = navbarIsDark
+    ? 'shadow-lg shadow-black/20'
     : isLandingPage
       ? 'shadow-sm shadow-gray-900/2'
       : needsHighContrast
         ? 'shadow-lg shadow-gray-900/8'
         : 'shadow-md shadow-gray-900/5';
-  
-  const textColorClass = navbarIsDark 
-    ? 'text-gray-100' 
+
+  const textColorClass = navbarIsDark
+    ? 'text-gray-100'
     : 'text-gray-900'; // Always use dark text in light theme for maximum visibility
 
   return (
     <header
       className={`fixed top-0 inset-x-0 z-50 ${navbarBgOpacity} backdrop-blur-xl border-b ${navbarBorder} transition-all duration-300 ${navbarShadow} gpu-accelerated`}
       dir="ltr"
-      style={{ 
+      style={{
         willChange: 'transform',
       }}
     >
@@ -142,7 +140,7 @@ export default function Navbar() {
                 src={navbarIsDark ? encodeImagePath("/logo/شعار المدار1-0٥.png") : encodeImagePath("/logo/شعار المدار1-0٢.png")}
                 alt="ORBIT Logo"
                 className="h-16 sm:h-20 md:h-24 lg:h-48 w-auto object-contain lg:-my-10"
-                style={{ 
+                style={{
                   minWidth: 'auto',
                   maxWidth: '160px'
                 }}
@@ -156,7 +154,7 @@ export default function Navbar() {
             <NavLink item={{ name: isRTL ? 'الرئيسية' : 'HOME', href: '/' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} />
 
             {/* About - من نحن */}
-            <NavLink item={{ name: t.nav.about, href: '/#about' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={1} />
+            <NavLink item={{ name: t.nav.about, href: '/about-us' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={1} />
 
             {/* Solutions Dropdown - حلولنا */}
             <div ref={solutionsRef} className="relative">
@@ -176,8 +174,8 @@ export default function Navbar() {
                   whileHover={{ opacity: 1 }}
                   transition={{ duration: 0.2 }}
                 />
-                
-                <span className="relative z-10 font-semibold">{t.nav.solutions}</span>
+
+                <span className="relative z-10 font-semibold">{isRTL ? 'المنتجات' : 'Products'}</span>
                 <motion.svg
                   className="w-4 h-4 relative z-10"
                   fill="none"
@@ -219,7 +217,7 @@ export default function Navbar() {
                           transition={{ delay: index * 0.05 }}
                         >
                           <Link
-                            href={`/solutions/${solution.slug}`}
+                            href={solution.href}
                             className={`block px-4 py-3 rounded-lg transition-all ${navbarIsDark ? 'hover:bg-white/5 text-gray-200' : needsHighContrast ? 'hover:bg-primary/10 text-gray-900' : 'hover:bg-primary/10 text-gray-700'} ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
                             dir={isRTL ? 'rtl' : 'ltr'}
                             onClick={() => setSolutionsOpen(false)}
@@ -236,9 +234,6 @@ export default function Navbar() {
 
             {/* News - الاخبار */}
             <NavLink item={{ name: t.nav.news, href: '/news' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={3} />
-
-            {/* Business - الأعمال */}
-            <NavLink item={{ name: t.nav.business, href: '/business' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={4} />
 
             {/* Offers - العروض */}
             <NavLink item={{ name: t.nav.offers, href: '/offers' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={5} />
@@ -335,7 +330,6 @@ export default function Navbar() {
       <AnimatePresence>
         {isOpen && (
           <MobileMenu
-            isOpen={isOpen}
             setIsOpen={setIsOpen}
             navbarIsDark={navbarIsDark}
             isRTL={isRTL}
@@ -356,7 +350,7 @@ export default function Navbar() {
 function NavLink({ item, isRTL, navbarIsDark, textColorClass, index = 0 }: { item: { name: string; href: string }, isRTL: boolean, navbarIsDark: boolean, textColorClass: string, index?: number }) {
   const isHashLink = item.href.startsWith('#');
   const isExternalLink = item.href.startsWith('http');
-  
+
   if (isHashLink || isExternalLink) {
     return (
       <motion.a
@@ -445,7 +439,21 @@ function NavLink({ item, isRTL, navbarIsDark, textColorClass, index = 0 }: { ite
 }
 
 // Mobile Menu Component
-function MobileMenu({ isOpen, setIsOpen, navbarIsDark, isRTL, solutionsList, textColorClass, needsHighContrast, t, pathname, router }: any) {
+interface MobileMenuProps {
+  setIsOpen: (value: boolean) => void;
+  navbarIsDark: boolean;
+  isRTL: boolean;
+  solutionsList: Array<{ slug: string; nameEn: string; nameAr: string; href: string }>;
+  textColorClass: string;
+  needsHighContrast: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  t: any;
+  pathname: string | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  router: any;
+}
+
+function MobileMenu({ setIsOpen, navbarIsDark, isRTL, solutionsList, textColorClass, needsHighContrast, t, pathname, router }: MobileMenuProps) {
   const [solutionsOpen, setSolutionsOpen] = useState(false);
 
   return (
@@ -525,7 +533,7 @@ function MobileMenu({ isOpen, setIsOpen, navbarIsDark, isRTL, solutionsList, tex
                       {solutionsList.map((solution: { slug: string; nameEn: string; nameAr: string }) => (
                         <Link
                           key={solution.slug}
-                          href={`/solutions/${solution.slug}`}
+                          href={`/products/${solution.slug === 'sms-platform' ? 'sms' : solution.slug === 'whatsapp-business-api' ? 'whatsapp' : solution.slug}`}
                           className={`block px-4 py-3 rounded-lg transition-all ${navbarIsDark ? 'hover:bg-white/5 text-gray-200' : needsHighContrast ? 'hover:bg-gray-100 text-gray-900' : 'hover:bg-gray-100 text-gray-700'} ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
                           dir={isRTL ? 'rtl' : 'ltr'}
                           onClick={() => setIsOpen(false)}
@@ -541,9 +549,6 @@ function MobileMenu({ isOpen, setIsOpen, navbarIsDark, isRTL, solutionsList, tex
 
             {/* News - الاخبار */}
             <MobileNavLink item={{ name: t.nav.news, href: '/news' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} setIsOpen={setIsOpen} />
-
-            {/* Business - الأعمال */}
-            <MobileNavLink item={{ name: t.nav.business, href: '/business' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} setIsOpen={setIsOpen} />
 
             {/* Offers - العروض */}
             <MobileNavLink item={{ name: t.nav.offers, href: '/offers' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} setIsOpen={setIsOpen} />
@@ -584,9 +589,17 @@ function MobileMenu({ isOpen, setIsOpen, navbarIsDark, isRTL, solutionsList, tex
 }
 
 // Mobile NavLink Component
-function MobileNavLink({ item, isRTL, navbarIsDark, textColorClass, setIsOpen }: any) {
+interface MobileNavLinkProps {
+  item: { name: string; href: string };
+  isRTL: boolean;
+  navbarIsDark: boolean;
+  textColorClass: string;
+  setIsOpen: (value: boolean) => void;
+}
+
+function MobileNavLink({ item, isRTL, navbarIsDark, textColorClass, setIsOpen }: MobileNavLinkProps) {
   const isHashLink = item.href.startsWith('#');
-  
+
   if (isHashLink) {
     return (
       <a

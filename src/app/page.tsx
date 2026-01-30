@@ -1,37 +1,39 @@
 'use client';
 
-import { useLanguage } from '@/contexts/LanguageContext';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useEffect } from 'react';
+import { LandingPage } from '@/components/business/landing/LandingPage';
 import Navbar from '@/components/Navbar';
-import Hero from '@/components/Hero';
-import About from '@/components/About';
-import ProductsShowcase from '@/components/ProductsShowcase';
-import WhyOrbit from '@/components/WhyOrbit';
 import Footer from '@/components/Footer';
-import AnimatedSection from '@/components/AnimatedSection';
+import { WhatsAppButton } from '@/components/business/landing/WhatsAppButton';
 
 export default function Home() {
-  const { isRTL } = useLanguage();
-  const { isDark } = useTheme();
+  // Set RTL on mount and inject Tajawal font (logic from business page)
+  useEffect(() => {
+    // Inject font style for a better Arabic experience
+    const style = document.createElement("style");
+    style.innerHTML = `
+      @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap');
+      body {
+        font-family: 'Tajawal', sans-serif;
+      }
+    `;
+    document.head.appendChild(style);
+
+    return () => {
+      if (document.head.contains(style)) {
+        document.head.removeChild(style);
+      }
+    };
+  }, []);
 
   return (
-    <div className="min-h-screen" style={{ minHeight: '100dvh' }}>
+    <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-[#7A1E2E]/20 overflow-x-hidden">
       <Navbar />
-      <Hero key={`hero-${isRTL ? 'rtl' : 'ltr'}-${isDark ? 'dark' : 'light'}`} />
-
-      <AnimatedSection delay={0.2}>
-        <WhyOrbit />
-      </AnimatedSection>
-
-      <AnimatedSection delay={0.2}>
-        <About />
-      </AnimatedSection>
-
-      <AnimatedSection delay={0.2}>
-        <ProductsShowcase />
-      </AnimatedSection>
-
+      <main>
+        <LandingPage />
+      </main>
       <Footer />
+      <WhatsAppButton />
     </div>
   );
 }

@@ -1,10 +1,13 @@
 'use client';
 
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import Image from "next/image";
 import { encodeImagePath } from "@/utils/imagePath";
 
+import { useLanguage } from '@/contexts/LanguageContext';
+
 export const TrustSection = () => {
+  const { t } = useLanguage();
   // All logos from TrustedLogos folder - each file appears ONCE (excluding duplicate files with "(1)")
   const logoFiles = [
     'images-removebg-preview.png',
@@ -70,21 +73,24 @@ export const TrustSection = () => {
     'شعار-هدف.png',
   ];
 
-  // Shuffle logos to avoid similar ones being together
-  const shuffledLogos = useMemo(() => {
+  // State to hold partners, initialized with static list to match Server Side Rendering
+  const [shuffledLogos, setShuffledLogos] = React.useState(logoFiles);
+
+  useEffect(() => {
+    // Shuffle logos only on the client side after mount to avoid hydration mismatch
     const shuffled = [...logoFiles];
     // Fisher-Yates shuffle algorithm
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
-    return shuffled;
+    setShuffledLogos(shuffled);
   }, []);
 
   // Create partners array from shuffled logo files - each logo appears ONCE only
   const partners = shuffledLogos.map((logoFile, index) => ({
     id: `partner-${index}`,
-    name: `شريك ${index + 1}`,
+    name: `Partner ${index + 1}`,
     logo: `/TrustedLogos/${logoFile}`,
   }));
 
@@ -93,15 +99,17 @@ export const TrustSection = () => {
   const row1 = partners.slice(0, midPoint);
   const row2 = partners.slice(midPoint);
 
+  // ... (lines 73-95 omitted)
+
   return (
     <section className="py-16 bg-gradient-to-b from-white to-[#E8DCCB]/30 overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-[#7A1E2E] mb-3">
-            شركاء النجاح
+            {t.landing.trust.title}
           </h2>
           <p className="text-slate-600 text-lg">
-            يثق بنا أكثر من <span className="font-bold text-[#7A1E2E]">20,000+</span> جهة حكومية وخاصة في المملكة
+            {t.landing.trust.descriptionPart1} <span className="font-bold text-[#7A1E2E]">{t.landing.trust.descriptionPart2}</span> {t.landing.trust.descriptionPart3}
           </p>
         </div>
 

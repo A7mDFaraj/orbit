@@ -1,13 +1,13 @@
 'use client';
 
 import { GovGatePage } from '@/components/business/products/GovGatePage';
-import { Navbar as BusinessNavbar } from '@/components/business/landing/Navbar';
-import { Footer } from '@/components/business/landing/Footer';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
 export default function GovGateProductPage() {
   return (
     <>
-      <BusinessNavbar />
+      <Navbar />
       <GovGatePage />
       <Footer />
     </>

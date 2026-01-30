@@ -1,13 +1,13 @@
 'use client';
 
 import { SMSPage } from '@/components/business/products/SMSPage';
-import { Navbar as BusinessNavbar } from '@/components/business/landing/Navbar';
-import { Footer } from '@/components/business/landing/Footer';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
 export default function SMSProductPage() {
   return (
     <>
-      <BusinessNavbar />
+      <Navbar />
       <SMSPage />
       <Footer />
     </>

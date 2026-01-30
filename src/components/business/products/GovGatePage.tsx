@@ -3,21 +3,23 @@
 import React from "react";
 import { Building2, FileCheck, Lock, Network } from "lucide-react";
 import { Button } from "@/components/business/ui/button";
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export const GovGatePage = () => {
+  const { t } = useLanguage();
   return (
     <div className="pt-32 md:pt-40 pb-16 min-h-screen bg-[#E8DCCB]">
       <div className="container mx-auto px-4 md:px-6">
         <div className="max-w-4xl mx-auto text-center mb-16">
           <h1 className="text-4xl md:text-6xl font-extrabold text-[#7A1E2E] mb-6">
-            Gov Gate
+            {t.products.govgate.title}
           </h1>
           <p className="text-xl text-slate-700 leading-relaxed max-w-2xl mx-auto">
-            بوابتك للربط مع الخدمات الحكومية الرقمية. تكامل سلس، آمن، ومعتمد مع الأنظمة الحكومية المختلفة.
+            {t.products.govgate.description}
           </p>
           <div className="mt-8 flex justify-center gap-4">
             <Button className="bg-[#7A1E2E] hover:bg-[#601824] text-white text-lg px-8 py-6 h-auto">
-              تواصل معنا
+              {t.products.govgate.contactUs}
             </Button>
           </div>
         </div>
@@ -29,9 +31,9 @@ export const GovGatePage = () => {
                 <Building2 className="h-8 w-8 text-[#7A1E2E]" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2">ربط حكومي مباشر</h3>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">{t.products.govgate.directLink.title}</h3>
                 <p className="text-slate-600">
-                  ربط مباشر مع منصات مثل "يقين"، "أبشر"، وغيرها للتحقق من البيانات والهوية.
+                  {t.products.govgate.directLink.description}
                 </p>
               </div>
             </div>
@@ -40,9 +42,9 @@ export const GovGatePage = () => {
                 <FileCheck className="h-8 w-8 text-[#7A1E2E]" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2">توثيق العقود</h3>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">{t.products.govgate.contracts.title}</h3>
                 <p className="text-slate-600">
-                  خدمات توثيق العقود والمعاملات الرقمية بشكل قانوني ومعتمد.
+                  {t.products.govgate.contracts.description}
                 </p>
               </div>
             </div>
@@ -51,14 +53,14 @@ export const GovGatePage = () => {
                 <Lock className="h-8 w-8 text-[#7A1E2E]" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2">أعلى معايير الأمان</h3>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">{t.products.govgate.security.title}</h3>
                 <p className="text-slate-600">
-                  نضمن حماية البيانات وخصوصيتها وفق ضوابط الأمن السيبراني المعتمدة.
+                  {t.products.govgate.security.description}
                 </p>
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white p-8 rounded-3xl shadow-lg border border-[#7A1E2E]/10">
             <div className="bg-slate-50 rounded-xl p-6 mb-6">
               <div className="flex items-center gap-4 mb-4">
@@ -71,8 +73,8 @@ export const GovGatePage = () => {
               </div>
             </div>
             <div className="text-center">
-              <h4 className="font-bold text-[#7A1E2E]">بنية تحتية موثوقة</h4>
-              <p className="text-sm text-slate-500 mt-2">معتمدة من الجهات التنظيمية</p>
+              <h4 className="font-bold text-[#7A1E2E]">{t.products.govgate.infrastructure.title}</h4>
+              <p className="text-sm text-slate-500 mt-2">{t.products.govgate.infrastructure.subtitle}</p>
             </div>
           </div>
         </div>

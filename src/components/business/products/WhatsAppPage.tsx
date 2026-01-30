@@ -8,28 +8,29 @@ import {
   Users,
 } from "lucide-react";
 import { Button } from "@/components/business/ui/button";
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export const WhatsAppPage = () => {
+  const { t } = useLanguage();
   return (
     <div className="pt-32 md:pt-40 pb-16 min-h-screen bg-[#E8DCCB]">
       <div className="container mx-auto px-4 md:px-6">
         <div className="max-w-4xl mx-auto text-center mb-16">
           <h1 className="text-4xl md:text-6xl font-extrabold text-[#7A1E2E] mb-6">
-            واتساب أعمال API
+            {t.products.whatsapp.title}
           </h1>
           <p className="text-xl text-slate-700 leading-relaxed max-w-2xl mx-auto">
-            ارتقِ بتواصلك مع العملاء عبر التطبيق الأكثر
-            استخداماً في العالم. أتمتة، توثيق، ودعم فني متكامل.
+            {t.products.whatsapp.description}
           </p>
           <div className="mt-8 flex justify-center gap-4">
             <Button className="bg-[#7A1E2E] hover:bg-[#601824] text-white text-lg px-8 py-6 h-auto">
-              احصل على الـ API
+              {t.products.whatsapp.getApi}
             </Button>
             <Button
               variant="outline"
               className="border-[#7A1E2E] text-[#7A1E2E] hover:bg-[#7A1E2E]/10 text-lg px-8 py-6 h-auto"
             >
-              تعرف على المزيد
+              {t.products.whatsapp.learnMore}
             </Button>
           </div>
         </div>
@@ -41,11 +42,10 @@ export const WhatsAppPage = () => {
             </div>
             <div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">
-                محادثات تفاعلية
+                {t.products.whatsapp.interactiveConversations.title}
               </h3>
               <p className="text-slate-600">
-                أنشئ تجارب غنية مع الأزرار، القوائم، والوسائط
-                المتعددة لتفاعل أفضل مع عملائك.
+                {t.products.whatsapp.interactiveConversations.description}
               </p>
             </div>
           </div>
@@ -55,11 +55,10 @@ export const WhatsAppPage = () => {
             </div>
             <div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">
-                تقارير وتحليلات
+                {t.products.whatsapp.analytics.title}
               </h3>
               <p className="text-slate-600">
-                تتبع أداء حملاتك ومعدلات القراءة والاستجابة لحظة
-                بلحظة لاتخاذ قرارات أفضل.
+                {t.products.whatsapp.analytics.description}
               </p>
             </div>
           </div>

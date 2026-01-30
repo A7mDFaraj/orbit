@@ -1,13 +1,13 @@
 'use client';
 
 import { WhatsAppPage } from '@/components/business/products/WhatsAppPage';
-import { Navbar as BusinessNavbar } from '@/components/business/landing/Navbar';
-import { Footer } from '@/components/business/landing/Footer';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
 export default function WhatsAppProductPage() {
   return (
     <>
-      <BusinessNavbar />
+      <Navbar />
       <WhatsAppPage />
       <Footer />
     </>
