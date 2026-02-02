@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 import { Button } from "@/components/business/ui/button";
 import { Card, CardContent } from "@/components/business/ui/card";
 import {
@@ -575,10 +576,10 @@ export const SMSPage = () => {
 
                 <Button
                   className={`w-full font-bold ${pkg.featured ? "bg-[#7A1E2E] hover:bg-[#601824] text-white" : "bg-transparent border border-[#7A1E2E] text-[#7A1E2E] hover:bg-[#7A1E2E]/5"}`}
-                  asChild={!pkg.isCustom}
+                  asChild
                 >
                   {pkg.isCustom ? (
-                    t.products.sms.packages.buttons.contact
+                    <Link href="/contact">{t.products.sms.packages.buttons.contact}</Link>
                   ) : (
                     <a href="https://app.mobile.net.sa/reg" target="_blank" rel="noopener noreferrer">
                       {pkg.featured ? "اشحن الآن" : "اختر الباقة"}

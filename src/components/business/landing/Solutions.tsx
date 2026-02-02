@@ -1,6 +1,7 @@
 'use client';
 
 import React from "react";
+import Link from "next/link";
 import { MessageCircle, MessageSquare, ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/business/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/business/ui/card";
@@ -43,9 +44,11 @@ export const Solutions = () => {
               </ul>
             </CardContent>
             <CardFooter className="pt-6 relative">
-              <Button className="w-full bg-slate-900 hover:bg-green-600 text-white transition-colors group-hover:shadow-lg">
-                {t.landing.keySolutions.whatsapp.cta}
-                {isRTL ? <ArrowLeft className="mr-2 h-4 w-4" /> : <ArrowRight className="ml-2 h-4 w-4" />}
+              <Button className="w-full bg-slate-900 hover:bg-green-600 text-white transition-colors group-hover:shadow-lg" asChild>
+                <Link href="/products/whatsapp">
+                  {t.landing.keySolutions.whatsapp.cta}
+                  {isRTL ? <ArrowLeft className="mr-2 h-4 w-4" /> : <ArrowRight className="ml-2 h-4 w-4" />}
+                </Link>
               </Button>
             </CardFooter>
           </Card>
@@ -74,9 +77,11 @@ export const Solutions = () => {
               </ul>
             </CardContent>
             <CardFooter className="pt-6 relative">
-              <Button className="w-full bg-slate-900 hover:bg-primary text-white transition-colors group-hover:shadow-lg">
-                {t.landing.keySolutions.sms.cta}
-                {isRTL ? <ArrowLeft className="mr-2 h-4 w-4" /> : <ArrowRight className="ml-2 h-4 w-4" />}
+              <Button className="w-full bg-slate-900 hover:bg-primary text-white transition-colors group-hover:shadow-lg" asChild>
+                <Link href="/products/sms">
+                  {t.landing.keySolutions.sms.cta}
+                  {isRTL ? <ArrowLeft className="mr-2 h-4 w-4" /> : <ArrowRight className="ml-2 h-4 w-4" />}
+                </Link>
               </Button>
             </CardFooter>
           </Card>

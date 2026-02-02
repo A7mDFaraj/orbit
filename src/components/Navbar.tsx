@@ -11,6 +11,10 @@ import LanguageSwitcher from './LanguageSwitcher';
 import ThemeToggle from './ThemeToggle';
 import { encodeImagePath } from '@/utils/imagePath';
 
+// Nav items visibility - set true to re-enable
+const SHOW_NAV_ABOUT = false;
+const SHOW_NAV_OFFERS = false;
+
 // Solutions from ProductsShowcase - Current solutions on landing page
 const solutionsList = [
   { slug: 'sms-platform', nameEn: 'SMS Messaging', nameAr: 'الرسائل النصية SMS', href: '/products/sms' },
@@ -153,8 +157,9 @@ export default function Navbar() {
             {/* Home - الرئيسية */}
             <NavLink item={{ name: isRTL ? 'الرئيسية' : 'HOME', href: '/' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} />
 
-            {/* About - من نحن */}
-            <NavLink item={{ name: t.nav.about, href: '/about-us' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={1} />
+            {SHOW_NAV_ABOUT && (
+              <NavLink item={{ name: t.nav.about, href: '/about-us' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={1} />
+            )}
 
             {/* Solutions Dropdown - حلولنا */}
             <div ref={solutionsRef} className="relative">
@@ -235,8 +240,9 @@ export default function Navbar() {
             {/* News - الاخبار */}
             <NavLink item={{ name: t.nav.news, href: '/news' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={3} />
 
-            {/* Offers - العروض */}
-            <NavLink item={{ name: t.nav.offers, href: '/offers' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={5} />
+            {SHOW_NAV_OFFERS && (
+              <NavLink item={{ name: t.nav.offers, href: '/offers' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={5} />
+            )}
           </nav>
 
           {/* Controls: Language Switcher, Theme Toggle, and Contact Button - Desktop only */}
@@ -550,8 +556,9 @@ function MobileMenu({ setIsOpen, navbarIsDark, isRTL, solutionsList, textColorCl
             {/* News - الاخبار */}
             <MobileNavLink item={{ name: t.nav.news, href: '/news' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} setIsOpen={setIsOpen} />
 
-            {/* Offers - العروض */}
-            <MobileNavLink item={{ name: t.nav.offers, href: '/offers' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} setIsOpen={setIsOpen} />
+            {SHOW_NAV_OFFERS && (
+              <MobileNavLink item={{ name: t.nav.offers, href: '/offers' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} setIsOpen={setIsOpen} />
+            )}
 
           </nav>
 

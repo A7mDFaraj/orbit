@@ -2,8 +2,10 @@
 
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/business/ui/tabs";
-import { ShoppingBag, Code2, ArrowLeft, Terminal } from "lucide-react";
+import { ShoppingBag, Code2, Terminal, FileText, ExternalLink } from "lucide-react";
 import { Button } from "@/components/business/ui/button";
+
+const API_DOCS_PDF_URL = "https://drive.google.com/file/d/1xhdFti973PHqik0T5rGGDipm_30gq064/view?usp=drive_link";
 
 export const PersonaTabs = () => {
   return (
@@ -113,9 +115,21 @@ export const PersonaTabs = () => {
                   <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">نظام نور</span>
                   <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">إتقان</span>
                 </div>
-                <Button variant="outline" size="lg" className="gap-2">
+                <Button
+                  size="lg"
+                  className="gap-2.5 w-full sm:w-auto bg-primary hover:bg-primary/90 text-white font-semibold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 cursor-pointer border-0"
+                  asChild
+                >
+                  <a
+                    href={API_DOCS_PDF_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2.5"
+                  >
+                    <FileText className="h-5 w-5 shrink-0" aria-hidden />
                     تصفح ملفات الـ API
-                    <ArrowLeft className="h-4 w-4" />
+                    <ExternalLink className="h-4 w-4 shrink-0 opacity-90" aria-hidden />
+                  </a>
                 </Button>
               </div>
             </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import React from "react";
+import Link from "next/link";
 import { Button } from "@/components/business/ui/button";
 import { ArrowLeft, ArrowRight, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
@@ -54,9 +55,11 @@ export const Hero = () => {
                   {isRTL ? <ArrowLeft className="mr-2 h-5 w-5" /> : <ArrowRight className="ml-2 h-5 w-5" />}
                 </a>
               </Button>
-              <Button size="lg" variant="outline" className="h-12 px-8 text-lg border-slate-300 hover:bg-slate-50 text-slate-700">
-                <MessageCircle className={`${isRTL ? 'ml-2' : 'mr-2'} h-5 w-5`} />
-                {t.landing.heroNew.ctaSales}
+              <Button size="lg" variant="outline" className="h-12 px-8 text-lg border-slate-300 hover:bg-slate-50 text-slate-700" asChild>
+                <Link href="/contact">
+                  <MessageCircle className={`${isRTL ? 'ml-2' : 'mr-2'} h-5 w-5`} />
+                  {t.landing.heroNew.ctaSales}
+                </Link>
               </Button>
             </div>
 

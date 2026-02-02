@@ -6,6 +6,8 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { WhatsAppButton } from '@/components/business/landing/WhatsAppButton';
 
+const SHOW_WHATSAPP_BUTTON = false; // set true to re-enable
+
 export default function Home() {
   // Set RTL on mount and inject Tajawal font (logic from business page)
   useEffect(() => {
@@ -33,7 +35,7 @@ export default function Home() {
         <LandingPage />
       </main>
       <Footer />
-      <WhatsAppButton />
+      {SHOW_WHATSAPP_BUTTON && <WhatsAppButton />}
     </div>
   );
 }
