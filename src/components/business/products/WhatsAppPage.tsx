@@ -1,69 +1,1165 @@
-'use client';
-
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { Button } from "../ui/button";
+import { Card, CardContent } from "../ui/card";
+import { Badge } from "../ui/badge";
 import {
-  MessageCircle,
-  BarChart,
-  Smartphone,
-  Users,
+  MessageCircle, Check, Users, Shield, Smartphone, Globe,
+  CheckCircle2, Zap, Bot, Send, BarChart3, Star,
+  Clock, TrendingUp, Award, Target, Headphones, Sparkles,
+  Building2, ShoppingBag, GraduationCap, BadgeCheck, ArrowRight, Rocket, ChevronDown, X, ChevronLeft, ChevronRight
 } from "lucide-react";
-import { Button } from "@/components/business/ui/button";
-import { useLanguage } from '@/contexts/LanguageContext';
+import { ImageWithFallback } from "../../figma/ImageWithFallback";
+
+const cstLogo = "/images/whatsapp/cst-logo.png";
+const metaLogo = "/images/whatsapp/meta-logo.png";
+const solutionTeam = "/images/whatsapp/solution-team.png";
+const solutionWorkflow = "/images/whatsapp/solution-workflow.png";
+const solutionChatbot = "/images/whatsapp/solution-chatbot.png";
+const solutionBroadcast = "/images/whatsapp/solution-broadcast.png";
+const solutionSchedule = "/images/whatsapp/solution-schedule.png";
+const solutionReports = "/images/whatsapp/solution-reports.png";
 
 export const WhatsAppPage = () => {
-  const { t } = useLanguage();
-  return (
-    <div className="pt-32 md:pt-40 pb-16 min-h-screen bg-[#E8DCCB]">
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="max-w-4xl mx-auto text-center mb-16">
-          <h1 className="text-4xl md:text-6xl font-extrabold text-[#7A1E2E] mb-6">
-            {t.products.whatsapp.title}
-          </h1>
-          <p className="text-xl text-slate-700 leading-relaxed max-w-2xl mx-auto">
-            {t.products.whatsapp.description}
-          </p>
-          <div className="mt-8 flex justify-center gap-4">
-            <Button className="bg-[#7A1E2E] hover:bg-[#601824] text-white text-lg px-8 py-6 h-auto">
-              {t.products.whatsapp.getApi}
-            </Button>
-            <Button
-              variant="outline"
-              className="border-[#7A1E2E] text-[#7A1E2E] hover:bg-[#7A1E2E]/10 text-lg px-8 py-6 h-auto"
-            >
-              {t.products.whatsapp.learnMore}
-            </Button>
-          </div>
-        </div>
+  const [selectedPlan, setSelectedPlan] = useState(1);
+  const [activePlanIndex, setActivePlanIndex] = useState(1);
+  const [selectedTiers, setSelectedTiers] = useState<{[key: number]: number}>({
+    0: 0, // الباقة الأساسية - الشريحة 1
+    1: 0, // باقة النمو - الشريحة 1
+    2: 0  // الباقة الاحترافية - الشريحة 1
+  });
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [chatMessages, setChatMessages] = useState<Array<{id: number, type: 'user' | 'bot' | 'sales', text: string, buttons?: boolean, confirmButton?: boolean}>>([
+    {id: 1, type: 'bot', text: 'بالتأكيد! لدينا 3 باقات رئيسية تبدأ من 399 ر.س شهرياً...', buttons: true}
+  ]);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
-        <div className="grid md:grid-cols-2 gap-8 mb-20">
-          <div className="bg-white p-10 rounded-2xl shadow-sm border border-[#7A1E2E]/10 flex gap-6 items-start">
-            <div className="bg-green-100 p-4 rounded-xl">
-              <MessageCircle className="h-10 w-10 text-green-600" />
-            </div>
-            <div>
-              <h3 className="text-xl font-bold text-slate-900 mb-2">
-                {t.products.whatsapp.interactiveConversations.title}
-              </h3>
-              <p className="text-slate-600">
-                {t.products.whatsapp.interactiveConversations.description}
+  // State للحلول slider
+  const [currentSolutionIndex, setCurrentSolutionIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+
+  // Handle touch swipe
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStart - touchEnd > 75) {
+      // Swipe left (next)
+      setCurrentSolutionIndex(prev => (prev === solutions.length - 1 ? 0 : prev + 1));
+    }
+
+    if (touchStart - touchEnd < -75) {
+      // Swipe right (previous)
+      setCurrentSolutionIndex(prev => (prev === 0 ? solutions.length - 1 : prev - 1));
+    }
+  };
+
+  // Auto-scroll للمحادثة عند إضافة رسائل جديدة
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [chatMessages]);
+
+  // تحديث الشريحة المختارة لباقة معينة
+  const handleTierChange = (planId: number, tierIndex: number) => {
+    setSelectedTiers(prev => ({
+      ...prev,
+      [planId]: tierIndex
+    }));
+  };
+
+  // تتبع الباقة المرئية عند السحب
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const containerRect = container.getBoundingClientRect();
+      const containerCenter = containerRect.left + containerRect.width / 2;
+
+      const cards = container.querySelectorAll('[data-plan-card]');
+      let closestIndex = 0;
+      let closestDistance = Infinity;
+
+      cards.forEach((card, index) => {
+        const cardRect = card.getBoundingClientRect();
+        const cardCenter = cardRect.left + cardRect.width / 2;
+        const distance = Math.abs(cardCenter - containerCenter);
+
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      setActivePlanIndex(closestIndex);
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const features = [
+    {
+      icon: Globe,
+      title: "المنصة رقم 1 في المملكة",
+      description: "الأكثر انتشاراً واستخداماً في السعودية",
+      color: "bg-blue-50",
+      iconColor: "text-blue-600"
+    },
+    {
+      icon: CheckCircle2,
+      title: "معدل فتح 98%",
+      description: "يتم فتح وقراءة معظم الرسائل فوراً",
+      color: "bg-green-50",
+      iconColor: "text-[#65BF7B]"
+    },
+    {
+      icon: Shield,
+      title: "آن وموثوق",
+      description: "تشفير كامل من طرف لطرف للبيانات",
+      color: "bg-purple-50",
+      iconColor: "text-purple-600"
+    },
+    {
+      icon: Smartphone,
+      title: "سهل الاستخدام",
+      description: "تطبيق مألوف للجميع بدون تعقيد",
+      color: "bg-orange-50",
+      iconColor: "text-[#F15822]"
+    }
+  ];
+
+  const solutions = [
+    {
+      icon: Users,
+      title: "رقم موحد للفريق",
+      description: "لا مزيد من تشتت المحادثات، رقم واحد يديره فريق كامل بكفاءة عالية",
+      image: solutionTeam
+    },
+    {
+      icon: Target,
+      title: "إدارة الصلاحيات",
+      description: "تحويل المحادثات بين المبيعات والدعم الفني بسلاسة واحترافية",
+      image: solutionWorkflow
+    },
+    {
+      icon: Bot,
+      title: "الردود الآلية (Chatbot)",
+      description: "خدمة عملاء 24/7 دون تدخل بشري، أجب على الأسئلة الشائعة تلقائياً",
+      image: solutionChatbot
+    },
+    {
+      icon: MessageCircle,
+      title: "صندوق وارد مشترك",
+      description: "فلترة الرسائل (مقروءة، غير مقروءة، لم يتم الرد) في واجهة واحدة",
+      image: solutionBroadcast
+    },
+    {
+      icon: Clock,
+      title: "جدولة الرسائل",
+      description: "حدد وقت إرسال رسائلك مسبقاً للوصول في الوقت المثالي",
+      image: solutionSchedule
+    },
+    {
+      icon: BarChart3,
+      title: "تقارير تفصيلية",
+      description: "تتبع أداء الحملات ومعدلات القراءة والاستجابة لحظياً",
+      image: solutionReports
+    }
+  ];
+
+  const campaigns = [
+    {
+      icon: Send,
+      title: "استهداف دقيق",
+      description: "حدد جمهورك بناءً على الموقع، الاهتمامات، والسلوك"
+    },
+    {
+      icon: Clock,
+      title: "جدولة ذكية",
+      description: "أرسل في الوقت الأمثل لزيادة معدلات التفاعل"
+    },
+    {
+      icon: Sparkles,
+      title: "قوالب جاهزة",
+      description: "رسائل احترافية مع أزرار تفاعلية وصور ومقاطع"
+    },
+    {
+      icon: TrendingUp,
+      title: "تحليل الأداء",
+      description: "تقارير شاملة عن معدلات الفتح والنقر والتحويل"
+    }
+  ];
+
+  const pricingPlans = [
+    {
+      id: 0,
+      name: "الباقة الأساسية",
+      period: "شهرياً",
+      popular: false,
+      color: "border-gray-300",
+      bgColor: "bg-white",
+      buttonColor: "bg-gray-700 hover:bg-gray-800",
+      additionalFeatures: [
+        "الويب هوك وواجهة برمجة التطبيقات",
+        "ربط المتجر مع المنصة",
+        "دعم فني فضي"
+      ],
+      tiers: [
+        {
+          name: "الشريحة 1",
+          price: "399",
+          priceWithTax: "459",
+          setupFee: "850",
+          conversations: "1,000",
+          broadcastMessages: "10,000",
+          users: "7"
+        },
+        {
+          name: "الشريحة 2",
+          price: "699",
+          priceWithTax: "804",
+          setupFee: "850",
+          conversations: "2,500",
+          broadcastMessages: "25,000",
+          users: "15"
+        },
+        {
+          name: "الشريحة 3",
+          price: "1,199",
+          priceWithTax: "1,379",
+          setupFee: "850",
+          conversations: "5,000",
+          broadcastMessages: "50,000",
+          users: "25"
+        }
+      ]
+    },
+    {
+      id: 1,
+      name: "باقة النمو",
+      period: "شهرياً",
+      popular: true,
+      color: "border-[#F15822]",
+      bgColor: "bg-gradient-to-br from-orange-50 to-white",
+      buttonColor: "bg-[#F15822] hover:bg-[#d94a1a]",
+      badge: "الأكثر طلباً",
+      additionalFeatures: [
+        "كل مميزات الباقة الأساسية",
+        "ربط أكثر من متجر مع المنصة",
+        "شات بوت ذكي (Smart Chatbot)",
+        "مدير حساب مخصص",
+        "دعم فني ذهبي"
+      ],
+      tiers: [
+        {
+          name: "الشريحة 1",
+          price: "659",
+          priceWithTax: "758",
+          setupFee: "1,919",
+          conversations: "1,000",
+          broadcastMessages: "10,000",
+          users: "7"
+        },
+        {
+          name: "الشريحة 2",
+          price: "999",
+          priceWithTax: "1,149",
+          setupFee: "1,919",
+          conversations: "2,500",
+          broadcastMessages: "25,000",
+          users: "15"
+        },
+        {
+          name: "الشريحة 3",
+          price: "1,619",
+          priceWithTax: "1,862",
+          setupFee: "1,919",
+          conversations: "5,000",
+          broadcastMessages: "50,000",
+          users: "25"
+        }
+      ]
+    },
+    {
+      id: 2,
+      name: "الباقة الاحترافية",
+      period: "شهرياً",
+      popular: false,
+      color: "border-purple-400",
+      bgColor: "bg-gradient-to-br from-purple-50 to-white",
+      buttonColor: "bg-purple-700 hover:bg-purple-800",
+      additionalFeatures: [
+        "كل مميزات باقة النمو",
+        "موظف ذكاء اصطناعي (AI Agent)",
+        "استضافة محلية (حسب الطلب)",
+        "مدير حساب VIP",
+        "دعم فني بلاتيني"
+      ],
+      tiers: [
+        {
+          name: "الشريحة 1",
+          price: "999",
+          priceWithTax: "1,149",
+          setupFee: "2,919",
+          conversations: "1,000",
+          broadcastMessages: "10,000",
+          users: "7"
+        },
+        {
+          name: "الشريحة 2",
+          price: "1,499",
+          priceWithTax: "1,724",
+          setupFee: "2,919",
+          conversations: "2,500",
+          broadcastMessages: "25,000",
+          users: "15"
+        },
+        {
+          name: "الشريحة 3",
+          price: "2,199",
+          priceWithTax: "2,529",
+          setupFee: "2,919",
+          conversations: "5,000",
+          broadcastMessages: "50,000",
+          users: "25"
+        }
+      ]
+    }
+  ];
+
+  const greenTickComparison = [
+    { feature: "ظهور اسم الشركة", basic: true, verified: true, unverified: false },
+    { feature: "الشارة الخضراء الرسمية", basic: false, verified: true, unverified: false },
+    { feature: "ثقة أعلى من العملاء", basic: true, verified: true, unverified: false },
+    { feature: "رسائل غير محدودة", basic: false, verified: true, unverified: false }
+  ];
+
+  const apiPricing = [
+    {
+      type: "محادثات خدمة العملاء",
+      price: "مجانية",
+      duration: "24 ساعة",
+      description: "الرد على استفسارات العملاء خلال 24 ساعة من آخر رسالة",
+      color: "bg-green-50 border-green-200"
+    },
+    {
+      type: "رسائل التحقق (OTP)",
+      price: "0.04 ر.س",
+      duration: "للرسالة",
+      description: "رموز التحقق وتأكيد الهوية للمصادقة الآمنة",
+      color: "bg-purple-50 border-purple-200"
+    },
+    {
+      type: "محادثات التفعيل",
+      price: "0.08 ر.س",
+      duration: "للرسالة",
+      description: "تأكيد الطلبات، إشعارات الشحن، وتحديثات الحساب",
+      color: "bg-blue-50 border-blue-200"
+    },
+    {
+      type: "محادثات التسويق",
+      price: "0.17 ر.س",
+      duration: "للرسالة",
+      description: "رسائل ترويجية وحملات إعلانية للعملاء",
+      color: "bg-orange-50 border-orange-200"
+    }
+  ];
+
+  // التعامل مع الضغط على زر عرض الباقات
+  const handleShowPackages = () => {
+    // إضافة رسالة المستخدم أولاً
+    setChatMessages(prev => [
+      ...prev.map(msg => ({...msg, buttons: false})),
+      {
+        id: prev.length + 1,
+        type: 'user',
+        text: 'عرض الباقات',
+        buttons: false
+      }
+    ]);
+
+    // إضافة رد البوت بعد delay
+    setTimeout(() => {
+      setChatMessages(prev => [
+        ...prev,
+        {
+          id: prev.length + 1,
+          type: 'bot',
+          text: 'لدينا 3 باقات: الأساسية (399 ر.س) تشمل API وربط المتجر، باقة النمو (659 ر.س) 🌟 الأكثر طلباً مع شات بوت ذكي، والاحترافية (999 ر.س) مع AI Agent. كل باقة لها 3 شرائح حسب الاستخدام 📊',
+          buttons: false
+        }
+      ]);
+      
+      // إضافة سؤال المتابعة بعد delay آخر
+      setTimeout(() => {
+        setChatMessages(prev => [
+          ...prev,
+          {
+            id: prev.length + 1,
+            type: 'bot',
+            text: 'هل ترغب بالتحدث مع موظف المبيعات؟',
+            confirmButton: true
+          }
+        ]);
+      }, 1000);
+    }, 800);
+  };
+
+  // التعامل مع الضغط على زر "نعم" للتواصل مع المبيعات
+  const handleConfirmSales = () => {
+    // إضافة رسالة المستخدم "نعم"
+    setChatMessages(prev => [
+      ...prev.map(msg => ({...msg, confirmButton: false})),
+      {
+        id: prev.length + 1,
+        type: 'user',
+        text: 'نعم',
+        buttons: false
+      }
+    ]);
+
+    // إضافة رد موظف المبيعات
+    setTimeout(() => {
+      setChatMessages(prev => [
+        ...prev,
+        {
+          id: prev.length + 1,
+          type: 'sales',
+          text: 'مرحباً! معك محمد من فريق المبيعات - المدار 👋 يسعدني مساعدتك في اختيار الباقة المناسبة لاحتياجاتك. هل لديك أي استفسار محدد؟',
+          buttons: false
+        }
+      ]);
+    }, 1000);
+  };
+
+  return (
+    <div className="min-h-screen bg-white" data-page="whatsapp">
+      {/* Hero Section */}
+      <section className="relative pt-24 md:pt-32 pb-12 md:pb-20 bg-gradient-to-br from-white via-green-50/30 to-orange-50/20 overflow-hidden">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzI1RDM2NiIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-40"></div>
+        
+        <div className="container mx-auto px-4 md:px-6 relative z-10">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+            {/* النص - اليمين */}
+            <div className="text-right space-y-4 md:space-y-6">
+              <Badge className="bg-[#25D366] text-white border-none px-4 py-2 text-sm">
+                <MessageCircle className="w-4 h-4 ml-2 inline" />
+                واتساب أعمال API المعتمد
+              </Badge>
+              
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#161616] leading-tight">
+                تواصل إحترافي مع عملائك
+                <br />
+                <span className="text-[#25D366]">عبر واتساب أعمال API</span><span className="text-[#F15822]">.</span>
+              </h1>
+              
+              <p className="text-lg md:text-xl text-[#606161] leading-relaxed max-w-xl">
+                كن أقرب لعملائك. نوفر لك ربطاً رسمياً ومعتمداً بخدمة واتساب مع أدوات متقدمة لإدارة المحادثات، الشات بوت، والحملات التسويقية.
               </p>
+              
+              <div className="flex gap-4 flex-wrap">
+                <Button 
+                  size="lg" 
+                  className="bg-[#128C7E] hover:bg-[#0d6b5f] text-white font-bold px-8 h-14 text-lg shadow-lg shadow-[#128C7E]/30"
+                  asChild
+                >
+                  <a href="https://wapp.mobile.net.sa/billing-subscription" target="_blank" rel="noopener noreferrer">
+                    اطلب الخدمة الآن
+                    <ArrowRight className="w-5 h-5 mr-2" />
+                  </a>
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="border-2 border-[#606161] text-[#161616] hover:bg-gray-50 font-bold px-8 h-14 text-lg"
+                  onClick={() => {
+                    const pricingSection = document.getElementById('pricing');
+                    if (pricingSection) {
+                      pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                  }}
+                >
+                  استعرض الباقات
+                  <BarChart3 className="w-5 h-5 mr-2" />
+                </Button>
+              </div>
+
+              {/* إحصائيات سريعة */}
+              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-gray-200">
+                <div>
+                  <div className="text-3xl font-extrabold text-[#25D366]">98%</div>
+                  <div className="text-sm text-gray-600">معدل الفتح</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-extrabold text-[#128C7E]">20,000+</div>
+                  <div className="text-sm text-gray-600">عميل نشط</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-extrabold text-[#161616]">24/7</div>
+                  <div className="text-sm text-gray-600">دعم فني</div>
+                </div>
+              </div>
+            </div>
+
+            {/* الصورة - اليسار */}
+            <div className="relative hidden md:block">
+              <div className="relative">
+                {/* واجهة صندوق الوارد الموحد */}
+                <Card className="bg-white shadow-2xl border-0 overflow-hidden">
+                  <CardContent className="p-0">
+                    {/* Header */}
+                    <div className="bg-gradient-to-r from-[#25D366] to-[#128C7E] p-4 text-white">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                            <MessageCircle className="w-6 h-6 text-[#25D366]" />
+                          </div>
+                          <div>
+                            <div className="font-bold">صندوق لوارد الموحد</div>
+                            <div className="text-xs opacity-90">15 محادثة نشطة</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* رسائل تجريبية */}
+                    <div className="p-4 space-y-3 bg-gray-50 h-[300px] max-h-[300px] overflow-y-auto" ref={chatContainerRef} style={{scrollBehavior: 'smooth'}}>
+                      <div className="flex gap-2 items-start animate-fade-in">
+                        <div className="w-8 h-8 bg-blue-500 rounded-full flex-shrink-0"></div>
+                        <div className="bg-white p-3 rounded-lg shadow-sm max-w-[70%]">
+                          <div className="text-xs text-gray-500 mb-1">أحمد - قسم المبيعات</div>
+                          <div className="text-sm">مرحباً! كيف يمكنني مساعدتك اليوم؟</div>
+                          <div className="text-xs text-gray-400 mt-1">10:30 صباحاً</div>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2 items-start justify-end animate-fade-in">
+                        <div className="bg-[#DCF8C6] p-3 rounded-lg shadow-sm max-w-[70%]">
+                          <div className="text-sm">أريد الاستفسار عن باقات واتساب API</div>
+                          <div className="text-xs text-gray-500 mt-1 flex items-center justify-end gap-1">
+                            10:31 صباحاً
+                            <CheckCircle2 className="w-3 h-3 text-blue-500" />
+                          </div>
+                        </div>
+                      </div>
+
+                      {chatMessages.map(msg => (
+                        <div key={msg.id} className="animate-slide-up">
+                          {msg.type === 'user' ? (
+                            <div className="flex gap-2 items-start justify-end">
+                              <div className="bg-[#DCF8C6] p-3 rounded-lg shadow-sm max-w-[70%]">
+                                <div className="text-sm">{msg.text}</div>
+                                <div className="text-xs text-gray-500 mt-1 flex items-center justify-end gap-1">
+                                  {new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' })}
+                                  <CheckCircle2 className="w-3 h-3 text-blue-500" />
+                                </div>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="flex gap-2 items-start">
+                              <div className={`w-8 h-8 ${msg.type === 'bot' ? 'bg-green-500' : 'bg-blue-500'} rounded-full flex-shrink-0`}></div>
+                              <div className="bg-white p-3 rounded-lg shadow-sm max-w-[70%]">
+                                <div className="text-xs text-gray-500 mb-1">{msg.type === 'bot' ? 'بوت آلي 🤖' : 'محمد - قسم المبيعات 👤'}</div>
+                                <div className="text-sm">{msg.text}</div>
+                                {msg.buttons && (
+                                  <div className="flex gap-2 mt-2">
+                                    <Button size="sm" variant="outline" className="text-xs h-7" onClick={handleShowPackages}>عرض الباقات</Button>
+                                  </div>
+                                )}
+                                {msg.confirmButton && (
+                                  <div className="flex gap-2 mt-2">
+                                    <Button size="sm" variant="outline" className="text-xs h-7" onClick={handleConfirmSales}>نعم</Button>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* شارة التوثيق */}
+                <div className="absolute -bottom-4 -right-4 bg-white rounded-full p-3 shadow-xl border-4 border-green-100">
+                  <BadgeCheck className="w-12 h-12 text-[#25D366]" />
+                </div>
+              </div>
             </div>
           </div>
-          <div className="bg-white p-10 rounded-2xl shadow-sm border border-[#7A1E2E]/10 flex gap-6 items-start">
-            <div className="bg-blue-100 p-4 rounded-xl">
-              <BarChart className="h-10 w-10 text-blue-600" />
+        </div>
+      </section>
+
+      {/* لماذا واتساب الأعمال */}
+      <section className="py-12 md:py-20 bg-white">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="text-center mb-10 md:mb-16">
+            <Badge className="bg-green-100 text-[#25D366] border-none px-4 py-2 text-sm mb-3 md:mb-4">
+              المميزات الرئيسية
+            </Badge>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#161616] mb-3 md:mb-4">
+              لماذا واتساب الأعمال؟
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              المنصة الأكثر ثقة وانتشاراً للتواصل مع عملائك في المملكة
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            {features.map((feature, index) => (
+              <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className={`${feature.color} w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0`}>
+                      <feature.icon className={`w-6 h-6 ${feature.iconColor}`} />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-[#161616] mb-1">
+                        {feature.title}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        {feature.description}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* الحلول والمميزات */}
+      <section className="py-12 md:py-20 bg-gradient-to-br from-gray-50 to-white">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="text-center mb-10 md:mb-16">
+            <Badge className="bg-orange-100 text-[#F15822] border-none px-4 py-2 text-sm mb-3 md:mb-4">
+              الحلول المتقدمة
+            </Badge>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#161616] mb-3 md:mb-4">
+              أدوات احترافية لإدارة محادثاتك
+            </h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              كل ما تحتاجه لتحويل واتساب إلى قناة تواصل احترافية مع عملائك
+            </p>
+          </div>
+
+          {/* Slider الحلول */}
+          <div className="relative max-w-6xl mx-auto">
+            {/* السلايد الحالي */}
+            <div 
+              className="px-4"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            >
+              <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+                {/* النص - اليمين */}
+                <div className="text-right space-y-4">
+                  <div className="inline-flex items-center gap-3 bg-gradient-to-br from-green-50 to-green-100 px-4 py-3 rounded-lg">
+                    {(() => {
+                      const CurrentIcon = solutions[currentSolutionIndex].icon;
+                      return <CurrentIcon className="w-8 h-8 text-[#25D366]" />;
+                    })()}
+                    <h3 className="text-2xl md:text-3xl font-extrabold text-[#161616]">
+                      {solutions[currentSolutionIndex].title}
+                    </h3>
+                  </div>
+                  <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
+                    {solutions[currentSolutionIndex].description}
+                  </p>
+                </div>
+
+                {/* الصورة - اليسار */}
+                <div className="relative">
+                  <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                    <ImageWithFallback
+                      src={solutions[currentSolutionIndex].image}
+                      alt={solutions[currentSolutionIndex].title}
+                      className="w-full h-[300px] md:h-[400px] object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                  </div>
+                </div>
+              </div>
             </div>
+
+            {/* أزرار التنقل - ديسكتوب فقط - خارج المحتوى */}
+            <button
+              onClick={() => setCurrentSolutionIndex(prev => (prev === 0 ? solutions.length - 1 : prev - 1))}
+              className="hidden md:block absolute -right-6 lg:-right-12 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-[#25D366] text-[#25D366] hover:text-white rounded-full p-3 shadow-lg transition-all hover:scale-110"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+            <button
+              onClick={() => setCurrentSolutionIndex(prev => (prev === solutions.length - 1 ? 0 : prev + 1))}
+              className="hidden md:block absolute -left-6 lg:-left-12 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-[#25D366] text-[#25D366] hover:text-white rounded-full p-3 shadow-lg transition-all hover:scale-110"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+
+            {/* نقاط التنقل */}
+            <div className="flex justify-center gap-2 mt-8">
+              {solutions.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSolutionIndex(index)}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    index === currentSolutionIndex ? 'bg-[#25D366] w-8' : 'bg-gray-300 w-2'
+                  }`}
+                ></button>
+              ))}
+            </div>
+
+            {/* مؤشر السحب للجوال */}
+            <div className="md:hidden text-center mt-4">
+              <p className="text-xs text-gray-500">← اسحب لرؤية المزيد →</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* الحملات التسويقية */}
+      <section className="py-12 md:py-20 bg-gradient-to-br from-orange-50 to-white">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+            {/* النص */}
             <div>
-              <h3 className="text-xl font-bold text-slate-900 mb-2">
-                {t.products.whatsapp.analytics.title}
-              </h3>
-              <p className="text-slate-600">
-                {t.products.whatsapp.analytics.description}
+              <Badge className="bg-[#F15822] text-white border-none px-4 py-2 text-sm mb-3 md:mb-4">
+                التسويق الذكي
+              </Badge>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#161616] mb-4 md:mb-6">
+                أطلق حملاتك التسويقية بذكاء
+              </h2>
+              <p className="text-lg text-gray-600 mb-6 md:mb-8 leading-relaxed">
+                استهدف عملاءك بدقة، حدد جدولة زمنية للحملات، واستخدم قوالب رسائل جاهزة مع أزرار تفاعلية لزيادة معدلات التحويل.
+              </p>
+
+              <div className="space-y-4">
+                {campaigns.map((campaign, index) => (
+                  <div key={index} className="flex gap-4 items-start bg-white p-4 rounded-lg border border-gray-200 hover:border-[#F15822] transition-all">
+                    <div className="bg-orange-100 w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <campaign.icon className="w-5 h-5 text-[#F15822]" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-[#161616] mb-1">{campaign.title}</h4>
+                      <p className="text-sm text-gray-600">{campaign.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* محاكاة التقرير */}
+            <div>
+              <Card className="shadow-2xl border-0 overflow-hidden">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-xl font-bold text-[#161616]">تقرير الحملة الأخيرة</h3>
+                    <Badge className="bg-green-100 text-green-700">نشطة</Badge>
+                  </div>
+
+                  <div className="space-y-4 mb-6">
+                    <div className="bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-lg">
+                      <div className="text-sm text-gray-600 mb-1">معدل الفتح (Open Rate)</div>
+                      <div className="text-3xl font-extrabold text-[#25D366]">94.2%</div>
+                      <div className="w-full bg-white h-2 rounded-full mt-2 overflow-hidden">
+                        <div className="bg-[#25D366] h-full rounded-full" style={{width: '94.2%'}}></div>
+                      </div>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg">
+                      <div className="text-sm text-gray-600 mb-1">معدل النقر (Click Rate)</div>
+                      <div className="text-3xl font-extrabold text-blue-600">67.8%</div>
+                      <div className="w-full bg-white h-2 rounded-full mt-2 overflow-hidden">
+                        <div className="bg-blue-600 h-full rounded-full" style={{width: '67.8%'}}></div>
+                      </div>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-orange-50 to-orange-100 p-4 rounded-lg">
+                      <div className="text-sm text-gray-600 mb-1">معدل التحويل (Conversion)</div>
+                      <div className="text-3xl font-extrabold text-[#F15822]">23.4%</div>
+                      <div className="w-full bg-white h-2 rounded-full mt-2 overflow-hidden">
+                        <div className="bg-[#F15822] h-full rounded-full" style={{width: '23.4%'}}></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 text-center pt-4 border-t border-gray-200">
+                    <div>
+                      <div className="text-2xl font-bold text-[#161616]">12,547</div>
+                      <div className="text-xs text-gray-500">رسالة مرسلة</div>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-[#161616]">2,936</div>
+                      <div className="text-xs text-gray-500">تحويلات ناجحة</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* التوثيق والشارة الخضراء */}
+      <section className="py-12 md:py-20 bg-gradient-to-br from-green-50 via-white to-green-50">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-8 md:mb-12">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-[#25D366] rounded-full mb-3 md:mb-4">
+                <BadgeCheck className="w-10 h-10 text-white" />
+              </div>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#161616] mb-3 md:mb-4">
+                احصل على الشارة الخضراء (Green Tick)
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                عزز ثقة عملائك وتميز عن المنافسين بحساب موثوق رسمياً من واتساب
+              </p>
+            </div>
+
+            {/* مقارنة */}
+            <Card className="border-2 border-green-200 shadow-xl overflow-hidden">
+              <CardContent className="p-0">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="bg-gradient-to-r from-green-100 to-green-50">
+                        <th className="text-right p-4 font-bold text-[#161616]">المميزات</th>
+                        <th className="text-center p-4 font-bold text-gray-600">
+                          بدون توثيق
+                        </th>
+                        <th className="text-center p-4 font-bold text-blue-600">
+                          حساب تجاري
+                          <BadgeCheck className="w-5 h-5 inline mr-1 text-blue-500" />
+                        </th>
+                        <th className="text-center p-4 font-bold text-[#25D366]">
+                          حساب موثوق
+                          <BadgeCheck className="w-5 h-5 inline mr-1" />
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {greenTickComparison.map((item, index) => (
+                        <tr key={index} className={`border-t border-gray-200 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                          <td className="p-4 text-[#161616]">{item.feature}</td>
+                          <td className="p-4 text-center">
+                            <X className="w-6 h-6 text-red-500 mx-auto" strokeWidth={3} />
+                          </td>
+                          <td className="p-4 text-center">
+                            {item.basic ? (
+                              <BadgeCheck className="w-6 h-6 text-blue-500 mx-auto" />
+                            ) : (
+                              <X className="w-6 h-6 text-red-500 mx-auto" strokeWidth={3} />
+                            )}
+                          </td>
+                          <td className="p-4 text-center">
+                            {item.verified ? (
+                              <CheckCircle2 className="w-6 h-6 text-[#25D366] mx-auto" />
+                            ) : (
+                              <X className="w-6 h-6 text-red-500 mx-auto" strokeWidth={3} />
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="mt-8 text-center bg-green-50 border-2 border-green-200 rounded-xl p-6">
+              <Award className="w-12 h-12 text-[#25D366] mx-auto mb-3" />
+              <p className="text-lg font-bold text-[#161616] mb-2">
+                فريق المدار يساعدك في تجهيز المتطلبات
+              </p>
+              <p className="text-gray-600 mb-4">
+                نوفر لك الدعم الكامل للحصول على التوثيق الرسمي من واتساب
               </p>
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* باقات الأسعار */}
+      <section id="pricing" className="py-20 bg-gradient-to-br from-white via-gray-50 to-white">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="text-center mb-16">
+            <Badge className="bg-purple-100 text-purple-700 border-none px-4 py-2 text-sm mb-4">
+              الباقات والأسعار
+            </Badge>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#161616] mb-4">
+              اختر الباقة المناسبة لنمو أعمالك
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              باقات مرنة تناسب جميع أحجام الأعمال من الشركات الناشئة إلى المؤسسات الكبرى
+            </p>
+          </div>
+
+          {/* الباقات - تبديل أفقي على الجوال */}
+          <div className="relative max-w-6xl mx-auto mb-12">
+            {/* مؤشر السحب على الجوال */}
+            <div className="md:hidden text-center mb-4">
+              <p className="text-sm text-gray-500">← اسحب لرؤية المزيد →</p>
+            </div>
+
+            {/* حاوية الباقات */}
+            <div 
+              ref={scrollContainerRef}
+              className="overflow-x-auto md:overflow-visible pb-8 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide snap-x snap-mandatory"
+            >
+              <div className="flex md:grid md:grid-cols-3 gap-6 lg:gap-8 min-w-max md:min-w-0">
+                {pricingPlans.map((plan, planIndex) => {
+                  const currentTier = plan.tiers[selectedTiers[plan.id]];
+                  
+                  return (
+                    <Card 
+                      key={plan.id}
+                      data-plan-card
+                      className={`relative overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 flex-shrink-0 w-[85vw] md:w-auto snap-center ${
+                        plan.popular ? 'border-4 ' + plan.color + ' shadow-xl md:scale-105' : 'border-2 ' + plan.color
+                      } ${plan.bgColor}`}
+                    >
+                      {plan.popular && (
+                        <div className="absolute top-0 left-0 right-0">
+                          <div className="bg-[#F15822] text-white text-center py-2 text-sm font-bold">
+                            ⭐ {plan.badge}
+                          </div>
+                        </div>
+                      )}
+
+                      <CardContent className={`p-6 ${plan.popular ? 'pt-14' : 'pt-6'}`}>
+                        <div className="text-center mb-6">
+                          <h3 className="text-lg md:text-2xl font-extrabold text-[#161616] mb-3 md:mb-4">
+                            {plan.name}
+                          </h3>
+                          
+                          {/* Tabs لاختيار الشريحة */}
+                          <div className="mb-4 md:mb-6">
+                            <div className="flex gap-1.5 md:gap-2 justify-center mb-3 md:mb-4">
+                              {plan.tiers.map((tier, index) => (
+                                <button
+                                  key={index}
+                                  onClick={() => handleTierChange(plan.id, index)}
+                                  className={`px-2.5 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-bold transition-all ${
+                                    selectedTiers[plan.id] === index
+                                      ? 'bg-[#128C7E] text-white shadow-lg scale-105'
+                                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                  }`}
+                                >
+                                  {tier.name}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* السعة والحدود - خارج الشرائح */}
+                          <div className="mb-4 md:mb-6 bg-blue-50 rounded-lg p-3 md:p-4 border-2 border-blue-200">
+                            <h4 className="text-[10px] md:text-xs font-bold text-blue-900 mb-2 md:mb-3 flex items-center justify-center gap-1.5 md:gap-2">
+                              <BarChart3 className="w-3 md:w-4 h-3 md:h-4" />
+                              السعة والحدود
+                            </h4>
+                            <div className="space-y-1.5 md:space-y-2 text-[10px] md:text-xs">
+                              <div className="flex items-center justify-center gap-1.5 md:gap-2">
+                                <CheckCircle2 className="w-3 md:w-4 h-3 md:h-4 text-blue-500 flex-shrink-0" />
+                                <span className="text-gray-700 font-semibold">{currentTier.conversations} محادثة</span>
+                              </div>
+                              <div className="flex items-center justify-center gap-1.5 md:gap-2">
+                                <CheckCircle2 className="w-3 md:w-4 h-3 md:h-4 text-blue-500 flex-shrink-0" />
+                                <span className="text-gray-700 font-semibold">{currentTier.broadcastMessages} رسالة بث</span>
+                              </div>
+                              <div className="flex items-center justify-center gap-1.5 md:gap-2">
+                                <CheckCircle2 className="w-3 md:w-4 h-3 md:h-4 text-blue-500 flex-shrink-0" />
+                                <span className="text-gray-700 font-semibold">حتى {currentTier.users} مستخدمين</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* الأسعار - داخل الشرائح */}
+                          <div className="flex items-baseline justify-center gap-1.5 md:gap-2 mb-0.5 md:mb-1">
+                            <span className="text-3xl md:text-5xl font-extrabold text-[#161616]">
+                              {currentTier.price}
+                            </span>
+                            <span className="text-base md:text-xl text-gray-600">ر.س</span>
+                          </div>
+                          <p className="text-xs md:text-sm text-gray-500 mb-0.5 md:mb-1">{plan.period}</p>
+                          <p className="text-[10px] md:text-xs text-gray-400">شامل الضريبة: {currentTier.priceWithTax} ر.س</p>
+                          <p className="text-[10px] md:text-xs text-gray-400">رسوم التأسيس: {currentTier.setupFee} ر.س</p>
+                        </div>
+
+                        <Button 
+                          className={`w-full ${plan.buttonColor} text-white font-bold mb-4 md:mb-6 h-10 md:h-12 text-sm md:text-base`}
+                          asChild
+                        >
+                          <a href="https://wapp.mobile.net.sa/billing-subscription" target="_blank" rel="noopener noreferrer">
+                            اشترك الآن
+                          </a>
+                        </Button>
+
+                        {/* المميزات الإضافية - داخل الشرائح */}
+                        <div>
+                          <h4 className="text-xs md:text-sm font-bold text-[#161616] mb-2 md:mb-3 flex items-center gap-1.5 md:gap-2">
+                            <div className="w-5 md:w-6 h-5 md:h-6 bg-green-100 rounded-full flex items-center justify-center">
+                              <Sparkles className="w-2.5 md:w-3 h-2.5 md:h-3 text-[#25D366]" />
+                            </div>
+                            المميزات الإضافية
+                          </h4>
+                          <div className="space-y-2 md:space-y-3">
+                            {plan.additionalFeatures.map((feature, index) => (
+                              <div key={index} className="flex items-start gap-2 md:gap-3">
+                                <CheckCircle2 className="w-4 md:w-5 h-4 md:h-5 text-[#25D366] flex-shrink-0 mt-0.5" />
+                                <span className="text-xs md:text-sm text-gray-700 text-right">{feature}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* مؤشرات النقاط على الجوال */}
+            <div className="md:hidden flex justify-center gap-2 mt-4">
+              {pricingPlans.map((_, index) => (
+                <div 
+                  key={index} 
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    index === activePlanIndex ? 'bg-[#F15822] w-8' : 'bg-gray-300 w-2'
+                  }`}
+                ></div>
+              ))}
+            </div>
+          </div>
+
+          {/* ملاحظة الأسعار */}
+          <div className="text-center bg-blue-50 border-2 border-blue-200 rounded-xl p-6 max-w-4xl mx-auto">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Star className="w-5 h-5 text-blue-600" />
+              <p className="font-bold text-[#161616]">ملاحظة مهمة</p>
+            </div>
+            <p className="text-gray-600">
+              الأسعار الموضحة تشمل 3 شرائح لكل باقة. تتوفر خصومات خاصة للشركات الكبرى والجهات الحكومية.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* تكلفة محادثات واتساب API */}
+      <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <Badge className="bg-blue-100 text-blue-700 border-none px-4 py-2 text-sm mb-4">
+                تكلفة المحادثات
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-extrabold text-[#161616] mb-4">
+                أسعار محادثات واتساب API
+              </h2>
+              <p className="text-lg text-gray-600">
+                الأسعار التالية محددة من واتساب (Meta) للسوق السعودي
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+              {apiPricing.map((pricing, index) => (
+                <Card key={index} className={`border-2 ${pricing.color} hover:shadow-lg transition-all`}>
+                  <CardContent className="p-6">
+                    <div className="text-center mb-4">
+                      <h3 className="text-lg font-bold text-[#161616] mb-2">
+                        {pricing.type}
+                      </h3>
+                      <div className="flex items-baseline justify-center gap-2">
+                        <span className="text-3xl font-extrabold text-[#161616]">
+                          {pricing.price}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">{pricing.duration}</p>
+                    </div>
+                    <p className="text-xs text-gray-600 text-center leading-relaxed">
+                      {pricing.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            <div className="mt-8 bg-green-50 border-2 border-green-200 rounded-xl p-4 md:p-6">
+              <div className="flex items-start gap-3 md:gap-4">
+                <div className="bg-[#25D366] w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Zap className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                </div>
+                <div>
+                  <h4 className="text-sm md:text-base font-bold text-[#161616] mb-1 md:mb-2">💡 نصيحة احترافية</h4>
+                  <p className="text-sm md:text-base text-gray-600">
+                    محادثات خدمة العملاء <span className="font-bold text-[#25D366]">مجانية تماماً</span> خلال 24 ساعة من آخر رسالة! 
+                    استفد من هذه الميزة للرد على استفسارات عملائك دون أي تكلفة إضافية.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer CTA */}
+      <section className="relative py-20 bg-gradient-to-r from-[#128C7E] via-[#0d6b5f] to-[#0a5a50] overflow-hidden">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30"></div>
+        
+        <div className="container mx-auto px-4 md:px-6 relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            <Sparkles className="w-16 h-16 text-[#25D366] mx-auto mb-6" />
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-6">
+              جاهز لنقل خدمة عملائك لمستوى آخر؟
+            </h2>
+            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+              فريقنا جاهز لمساعدتك في الحصول على الشارة الخضراء وربط الـ API بكل سهولة واحترافية
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                size="lg" 
+                className="bg-[#F15822] hover:bg-[#d94a1a] text-white font-bold px-10 h-14 text-lg shadow-2xl shadow-[#F15822]/50"
+                asChild
+              >
+                <a href="https://wapp.mobile.net.sa/billing-subscription" target="_blank" rel="noopener noreferrer">
+                  ابدأ رحلتك مع المدار
+                  <ArrowRight className="w-6 h-6 mr-2" />
+                </a>
+              </Button>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="bg-white/10 border-2 border-white text-white hover:bg-white hover:text-[#128C7E] font-bold px-10 h-14 text-lg backdrop-blur-sm"
+                asChild
+              >
+                <a href="https://wa.me/966920006900?text=%E2%80%8E%20%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%2C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%A7%D9%84%D8%AD%D8%AB%20%D9%84%D9%84%D9%85%D8%A8%D9%8A%D8%B9%D8%A7%D8%AA%20%D9%88%D8%A7%D9%84%D8%A5%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AE%D8%AD%D9%85%D8%A9%20%D9%88%D8%A7%D8%AA%D8%B3%D8%A7%D8%A8%20%D8%A3%D8%B9%D9%85%D8%A7%D9%84%20api" target="_blank" rel="noopener noreferrer">
+                  تحدث مع فريق المبيعات
+                  <Headphones className="w-6 h-6 mr-2" />
+                </a>
+              </Button>
+            </div>
+
+            {/* شارات الثقة */}
+            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mt-8 pt-6 border-t border-white/20">
+              <div className="bg-white rounded-lg shadow-lg p-4">
+                <ImageWithFallback src={cstLogo} alt="هيئة الاتصالات والفضاء والتقنية" className="h-24 md:h-32 w-auto" />
+              </div>
+              <div className="bg-white rounded-lg shadow-lg p-4">
+                <ImageWithFallback src={metaLogo} alt="Meta Business Partner" className="h-24 md:h-32 w-auto" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
