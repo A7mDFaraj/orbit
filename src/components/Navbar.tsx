@@ -95,6 +95,7 @@ export default function Navbar() {
   // Detect pages where navbar needs better text contrast (light pages with white background)
   const needsHighContrast = pathname === '/enterprise' || pathname === '/healthcare' || pathname === '/packages' || pathname === '/offers' || pathname === '/news' || pathname === '/request-quote';
   const isLandingPage = pathname === '/';
+  const isWhatsAppPage = pathname === '/products/whatsapp';
 
   // Navbar background opacity based on page
   const navbarBgOpacity = navbarIsDark
@@ -270,7 +271,10 @@ export default function Navbar() {
 
                   router.push(config.href);
                 }}
-                className={`flex items-center justify-center min-w-[140px] px-5 py-2.5 ${isRTL ? 'text-[13px]' : 'text-[11px]'} rounded-lg text-white font-heading uppercase tracking-wider whitespace-nowrap bg-gradient-to-r from-primary via-primary to-[#9a2d45] hover:from-[#9a2d45] hover:to-primary shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden group ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
+                className={`flex items-center justify-center min-w-[140px] px-5 py-2.5 ${isRTL ? 'text-[13px]' : 'text-[11px]'} rounded-lg text-white font-heading uppercase tracking-wider whitespace-nowrap ${isWhatsAppPage
+                    ? 'bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:from-[#1ea952] hover:to-[#0d6b5f] shadow-lg shadow-[#25D366]/50 hover:shadow-xl hover:shadow-[#25D366]/60'
+                    : 'bg-gradient-to-r from-primary via-primary to-[#9a2d45] hover:from-[#9a2d45] hover:to-primary shadow-lg hover:shadow-xl'
+                  } transition-all duration-300 relative overflow-hidden group ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
                 dir={isRTL ? 'rtl' : 'ltr'}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -580,7 +584,10 @@ function MobileMenu({ setIsOpen, navbarIsDark, isRTL, solutionsList, textColorCl
 
               router.push(config.href);
             }}
-            className={`w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl text-white font-heading text-base tracking-wide bg-gradient-to-r from-primary to-[#9a2d45] hover:from-[#9a2d45] hover:to-primary shadow-lg hover:shadow-2xl transition-all duration-300 ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
+            className={`w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl text-white font-heading text-base tracking-wide ${pathname === '/products/whatsapp'
+                ? 'bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:from-[#1ea952] hover:to-[#0d6b5f] shadow-lg shadow-[#25D366]/50 hover:shadow-2xl hover:shadow-[#25D366]/60'
+                : 'bg-gradient-to-r from-primary to-[#9a2d45] hover:from-[#9a2d45] hover:to-primary shadow-lg hover:shadow-2xl'
+              } transition-all duration-300 ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
             dir={isRTL ? 'rtl' : 'ltr'}
           >
             {(() => {

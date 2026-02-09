@@ -10,26 +10,26 @@ import {
 } from "lucide-react";
 import { ImageWithFallback } from "../../figma/ImageWithFallback";
 
-const cstLogo = "/images/whatsapp/cst-logo.png";
-const metaLogo = "/images/whatsapp/meta-logo.png";
-const solutionTeam = "/images/whatsapp/solution-team.png";
-const solutionWorkflow = "/images/whatsapp/solution-workflow.png";
-const solutionChatbot = "/images/whatsapp/solution-chatbot.png";
-const solutionBroadcast = "/images/whatsapp/solution-broadcast.png";
-const solutionSchedule = "/images/whatsapp/solution-schedule.png";
-const solutionReports = "/images/whatsapp/solution-reports.png";
+const cstLogo = "/WhatsAppPage/cst.png";
+const metaLogo = "/WhatsAppPage/meta.png";
+const solutionTeam = "/WhatsAppPage/الموقع - الفريق يدير رقم موحد.jpg.jpeg";
+const solutionWorkflow = "/WhatsAppPage/الموقع - ادارة الصلاحيات.jpg.jpeg";
+const solutionChatbot = "/WhatsAppPage/الموقع - الردود الالية.jpg.jpeg";
+const solutionBroadcast = "/WhatsAppPage/الموقع - فلترة الرسائل.jpg.jpeg";
+const solutionSchedule = "/WhatsAppPage/الموقع - جدولة الرسائل.jpg.jpeg";
+const solutionReports = "/WhatsAppPage/الموقع - تقارير تفصيلية.jpg.jpeg";
 
 export const WhatsAppPage = () => {
   const [selectedPlan, setSelectedPlan] = useState(1);
   const [activePlanIndex, setActivePlanIndex] = useState(1);
-  const [selectedTiers, setSelectedTiers] = useState<{[key: number]: number}>({
+  const [selectedTiers, setSelectedTiers] = useState<{ [key: number]: number }>({
     0: 0, // الباقة الأساسية - الشريحة 1
     1: 0, // باقة النمو - الشريحة 1
     2: 0  // الباقة الاحترافية - الشريحة 1
   });
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [chatMessages, setChatMessages] = useState<Array<{id: number, type: 'user' | 'bot' | 'sales', text: string, buttons?: boolean, confirmButton?: boolean}>>([
-    {id: 1, type: 'bot', text: 'بالتأكيد! لدينا 3 باقات رئيسية تبدأ من 399 ر.س شهرياً...', buttons: true}
+  const [chatMessages, setChatMessages] = useState<Array<{ id: number, type: 'user' | 'bot' | 'sales', text: string, buttons?: boolean, confirmButton?: boolean }>>([
+    { id: 1, type: 'bot', text: 'بالتأكيد! لدينا 3 باقات رئيسية تبدأ من 399 ر.س شهرياً...', buttons: true }
   ]);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
@@ -377,7 +377,7 @@ export const WhatsAppPage = () => {
   const handleShowPackages = () => {
     // إضافة رسالة المستخدم أولاً
     setChatMessages(prev => [
-      ...prev.map(msg => ({...msg, buttons: false})),
+      ...prev.map(msg => ({ ...msg, buttons: false })),
       {
         id: prev.length + 1,
         type: 'user',
@@ -397,7 +397,7 @@ export const WhatsAppPage = () => {
           buttons: false
         }
       ]);
-      
+
       // إضافة سؤال المتابعة بعد delay آخر
       setTimeout(() => {
         setChatMessages(prev => [
@@ -417,7 +417,7 @@ export const WhatsAppPage = () => {
   const handleConfirmSales = () => {
     // إضافة رسالة المستخدم "نعم"
     setChatMessages(prev => [
-      ...prev.map(msg => ({...msg, confirmButton: false})),
+      ...prev.map(msg => ({ ...msg, confirmButton: false })),
       {
         id: prev.length + 1,
         type: 'user',
@@ -445,7 +445,7 @@ export const WhatsAppPage = () => {
       {/* Hero Section */}
       <section className="relative pt-24 md:pt-32 pb-12 md:pb-20 bg-gradient-to-br from-white via-green-50/30 to-orange-50/20 overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzI1RDM2NiIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-40"></div>
-        
+
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             {/* النص - اليمين */}
@@ -454,20 +454,20 @@ export const WhatsAppPage = () => {
                 <MessageCircle className="w-4 h-4 ml-2 inline" />
                 واتساب أعمال API المعتمد
               </Badge>
-              
+
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#161616] leading-tight">
                 تواصل إحترافي مع عملائك
                 <br />
                 <span className="text-[#25D366]">عبر واتساب أعمال API</span><span className="text-[#F15822]">.</span>
               </h1>
-              
+
               <p className="text-lg md:text-xl text-[#606161] leading-relaxed max-w-xl">
                 كن أقرب لعملائك. نوفر لك ربطاً رسمياً ومعتمداً بخدمة واتساب مع أدوات متقدمة لإدارة المحادثات، الشات بوت، والحملات التسويقية.
               </p>
-              
+
               <div className="flex gap-4 flex-wrap">
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   className="bg-[#128C7E] hover:bg-[#0d6b5f] text-white font-bold px-8 h-14 text-lg shadow-lg shadow-[#128C7E]/30"
                   asChild
                 >
@@ -476,9 +476,9 @@ export const WhatsAppPage = () => {
                     <ArrowRight className="w-5 h-5 mr-2" />
                   </a>
                 </Button>
-                <Button 
-                  size="lg" 
-                  variant="outline" 
+                <Button
+                  size="lg"
+                  variant="outline"
                   className="border-2 border-[#606161] text-[#161616] hover:bg-gray-50 font-bold px-8 h-14 text-lg"
                   onClick={() => {
                     const pricingSection = document.getElementById('pricing');
@@ -531,7 +531,7 @@ export const WhatsAppPage = () => {
                     </div>
 
                     {/* رسائل تجريبية */}
-                    <div className="p-4 space-y-3 bg-gray-50 h-[300px] max-h-[300px] overflow-y-auto" ref={chatContainerRef} style={{scrollBehavior: 'smooth'}}>
+                    <div className="p-4 space-y-3 bg-gray-50 h-[300px] max-h-[300px] overflow-y-auto" ref={chatContainerRef} style={{ scrollBehavior: 'smooth' }}>
                       <div className="flex gap-2 items-start animate-fade-in">
                         <div className="w-8 h-8 bg-blue-500 rounded-full flex-shrink-0"></div>
                         <div className="bg-white p-3 rounded-lg shadow-sm max-w-[70%]">
@@ -655,7 +655,7 @@ export const WhatsAppPage = () => {
           {/* Slider الحلول */}
           <div className="relative max-w-6xl mx-auto">
             {/* السلايد الحالي */}
-            <div 
+            <div
               className="px-4"
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
@@ -712,9 +712,8 @@ export const WhatsAppPage = () => {
                 <button
                   key={index}
                   onClick={() => setCurrentSolutionIndex(index)}
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    index === currentSolutionIndex ? 'bg-[#25D366] w-8' : 'bg-gray-300 w-2'
-                  }`}
+                  className={`h-2 rounded-full transition-all duration-300 ${index === currentSolutionIndex ? 'bg-[#25D366] w-8' : 'bg-gray-300 w-2'
+                    }`}
                 ></button>
               ))}
             </div>
@@ -772,7 +771,7 @@ export const WhatsAppPage = () => {
                       <div className="text-sm text-gray-600 mb-1">معدل الفتح (Open Rate)</div>
                       <div className="text-3xl font-extrabold text-[#25D366]">94.2%</div>
                       <div className="w-full bg-white h-2 rounded-full mt-2 overflow-hidden">
-                        <div className="bg-[#25D366] h-full rounded-full" style={{width: '94.2%'}}></div>
+                        <div className="bg-[#25D366] h-full rounded-full" style={{ width: '94.2%' }}></div>
                       </div>
                     </div>
 
@@ -780,7 +779,7 @@ export const WhatsAppPage = () => {
                       <div className="text-sm text-gray-600 mb-1">معدل النقر (Click Rate)</div>
                       <div className="text-3xl font-extrabold text-blue-600">67.8%</div>
                       <div className="w-full bg-white h-2 rounded-full mt-2 overflow-hidden">
-                        <div className="bg-blue-600 h-full rounded-full" style={{width: '67.8%'}}></div>
+                        <div className="bg-blue-600 h-full rounded-full" style={{ width: '67.8%' }}></div>
                       </div>
                     </div>
 
@@ -788,7 +787,7 @@ export const WhatsAppPage = () => {
                       <div className="text-sm text-gray-600 mb-1">معدل التحويل (Conversion)</div>
                       <div className="text-3xl font-extrabold text-[#F15822]">23.4%</div>
                       <div className="w-full bg-white h-2 rounded-full mt-2 overflow-hidden">
-                        <div className="bg-[#F15822] h-full rounded-full" style={{width: '23.4%'}}></div>
+                        <div className="bg-[#F15822] h-full rounded-full" style={{ width: '23.4%' }}></div>
                       </div>
                     </div>
                   </div>
@@ -912,21 +911,20 @@ export const WhatsAppPage = () => {
             </div>
 
             {/* حاوية الباقات */}
-            <div 
+            <div
               ref={scrollContainerRef}
               className="overflow-x-auto md:overflow-visible pb-8 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide snap-x snap-mandatory"
             >
               <div className="flex md:grid md:grid-cols-3 gap-6 lg:gap-8 min-w-max md:min-w-0">
                 {pricingPlans.map((plan, planIndex) => {
                   const currentTier = plan.tiers[selectedTiers[plan.id]];
-                  
+
                   return (
-                    <Card 
+                    <Card
                       key={plan.id}
                       data-plan-card
-                      className={`relative overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 flex-shrink-0 w-[85vw] md:w-auto snap-center ${
-                        plan.popular ? 'border-4 ' + plan.color + ' shadow-xl md:scale-105' : 'border-2 ' + plan.color
-                      } ${plan.bgColor}`}
+                      className={`relative overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 flex-shrink-0 w-[85vw] md:w-auto snap-center ${plan.popular ? 'border-4 ' + plan.color + ' shadow-xl md:scale-105' : 'border-2 ' + plan.color
+                        } ${plan.bgColor}`}
                     >
                       {plan.popular && (
                         <div className="absolute top-0 left-0 right-0">
@@ -941,7 +939,7 @@ export const WhatsAppPage = () => {
                           <h3 className="text-lg md:text-2xl font-extrabold text-[#161616] mb-3 md:mb-4">
                             {plan.name}
                           </h3>
-                          
+
                           {/* Tabs لاختيار الشريحة */}
                           <div className="mb-4 md:mb-6">
                             <div className="flex gap-1.5 md:gap-2 justify-center mb-3 md:mb-4">
@@ -949,11 +947,10 @@ export const WhatsAppPage = () => {
                                 <button
                                   key={index}
                                   onClick={() => handleTierChange(plan.id, index)}
-                                  className={`px-2.5 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-bold transition-all ${
-                                    selectedTiers[plan.id] === index
-                                      ? 'bg-[#128C7E] text-white shadow-lg scale-105'
-                                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                                  }`}
+                                  className={`px-2.5 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-bold transition-all ${selectedTiers[plan.id] === index
+                                    ? 'bg-[#128C7E] text-white shadow-lg scale-105'
+                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                    }`}
                                 >
                                   {tier.name}
                                 </button>
@@ -995,7 +992,7 @@ export const WhatsAppPage = () => {
                           <p className="text-[10px] md:text-xs text-gray-400">رسوم التأسيس: {currentTier.setupFee} ر.س</p>
                         </div>
 
-                        <Button 
+                        <Button
                           className={`w-full ${plan.buttonColor} text-white font-bold mb-4 md:mb-6 h-10 md:h-12 text-sm md:text-base`}
                           asChild
                         >
@@ -1031,11 +1028,10 @@ export const WhatsAppPage = () => {
             {/* مؤشرات النقاط على الجوال */}
             <div className="md:hidden flex justify-center gap-2 mt-4">
               {pricingPlans.map((_, index) => (
-                <div 
-                  key={index} 
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    index === activePlanIndex ? 'bg-[#F15822] w-8' : 'bg-gray-300 w-2'
-                  }`}
+                <div
+                  key={index}
+                  className={`h-2 rounded-full transition-all duration-300 ${index === activePlanIndex ? 'bg-[#F15822] w-8' : 'bg-gray-300 w-2'
+                    }`}
                 ></div>
               ))}
             </div>
@@ -1101,7 +1097,7 @@ export const WhatsAppPage = () => {
                 <div>
                   <h4 className="text-sm md:text-base font-bold text-[#161616] mb-1 md:mb-2">💡 نصيحة احترافية</h4>
                   <p className="text-sm md:text-base text-gray-600">
-                    محادثات خدمة العملاء <span className="font-bold text-[#25D366]">مجانية تماماً</span> خلال 24 ساعة من آخر رسالة! 
+                    محادثات خدمة العملاء <span className="font-bold text-[#25D366]">مجانية تماماً</span> خلال 24 ساعة من آخر رسالة!
                     استفد من هذه الميزة للرد على استفسارات عملائك دون أي تكلفة إضافية.
                   </p>
                 </div>
@@ -1114,7 +1110,7 @@ export const WhatsAppPage = () => {
       {/* Footer CTA */}
       <section className="relative py-20 bg-gradient-to-r from-[#128C7E] via-[#0d6b5f] to-[#0a5a50] overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30"></div>
-        
+
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <Sparkles className="w-16 h-16 text-[#25D366] mx-auto mb-6" />
@@ -1125,8 +1121,8 @@ export const WhatsAppPage = () => {
               فريقنا جاهز لمساعدتك في الحصول على الشارة الخضراء وربط الـ API بكل سهولة واحترافية
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="bg-[#F15822] hover:bg-[#d94a1a] text-white font-bold px-10 h-14 text-lg shadow-2xl shadow-[#F15822]/50"
                 asChild
               >
@@ -1135,10 +1131,9 @@ export const WhatsAppPage = () => {
                   <ArrowRight className="w-6 h-6 mr-2" />
                 </a>
               </Button>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="bg-white/10 border-2 border-white text-white hover:bg-white hover:text-[#128C7E] font-bold px-10 h-14 text-lg backdrop-blur-sm"
+              <Button
+                size="lg"
+                className="bg-[#25D366] hover:bg-[#1ea952] border-2 border-[#25D366] text-white font-bold px-10 h-14 text-lg shadow-2xl shadow-[#25D366]/50"
                 asChild
               >
                 <a href="https://wa.me/966920006900?text=%E2%80%8E%20%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%2C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%A7%D9%84%D8%AD%D8%AB%20%D9%84%D9%84%D9%85%D8%A8%D9%8A%D8%B9%D8%A7%D8%AA%20%D9%88%D8%A7%D9%84%D8%A5%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AE%D8%AD%D9%85%D8%A9%20%D9%88%D8%A7%D8%AA%D8%B3%D8%A7%D8%A8%20%D8%A3%D8%B9%D9%85%D8%A7%D9%84%20api" target="_blank" rel="noopener noreferrer">

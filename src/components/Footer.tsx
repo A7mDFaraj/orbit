@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { encodeImagePath } from '@/utils/imagePath';
@@ -11,6 +12,8 @@ import { encodeImagePath } from '@/utils/imagePath';
 export default function Footer() {
   const { t, isRTL } = useLanguage();
   const { isDark } = useTheme();
+  const pathname = usePathname();
+  const isWhatsAppPage = pathname === '/products/whatsapp';
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -33,7 +36,10 @@ export default function Footer() {
     <footer
       id="footer"
       ref={ref}
-      className="bg-[#161616] text-white py-16"
+      className={`${isWhatsAppPage
+        ? 'bg-gradient-to-br from-[#128C7E] via-[#0d6b5f] to-[#0a5a50]'
+        : 'bg-[#161616]'
+        } text-white py-16`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -45,13 +51,19 @@ export default function Footer() {
           {/* Logo & Company Info */}
           <div className="lg:col-span-1">
             <motion.div
-              className="relative h-48 w-full mb-8 -ml-4 pr-4"
+              className={`relative ${isWhatsAppPage ? 'h-64' : 'h-48'} w-full mb-8 -ml-4 pr-4`}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={inView ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
               <Image
-                src={isDark ? encodeImagePath("/logo/شعار المدار0-0٤.png") : encodeImagePath("/logo/شعار المدار1-0١.png")}
+                src={
+                  isWhatsAppPage
+                    ? encodeImagePath("/logo/شعار المدار-04.svg")
+                    : isDark
+                      ? encodeImagePath("/logo/شعار المدار0-0٤.png")
+                      : encodeImagePath("/logo/شعار المدار1-0١.png")
+                }
                 alt="ORBIT Logo"
                 fill
                 className="object-contain object-left"
