@@ -1,4 +1,4 @@
-import ClarityAnalytics from '@/components/ClarityAnalytics';
+
 
 export default function BusinessProductsLayout({
   children,
@@ -7,8 +7,7 @@ export default function BusinessProductsLayout({
 }) {
   return (
     <>
-      {/* Microsoft Clarity Analytics for Business Products */}
-      <ClarityAnalytics />
+
       {children}
     </>
   );

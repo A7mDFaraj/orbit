@@ -75,8 +75,8 @@ export default function PrivacyConsent({ onConsentChange }: PrivacyConsentProps)
         <CardContent className="pt-0">
           <div className="text-sm text-gray-600 mb-4">
             <p>
-              نستخدم Microsoft Clarity لتسجيل جلسات المستخدمين بشكل مجهول لأغراض التحسين والتحليل.
-              هذا يساعدنا في فهم كيفية استخدام الموقع وتحسين الخدمات المقدمة.
+              نستخدم Google Tag Manager وأدوات التحليل لتحسين تجربتك وفهم كيفية استخدام الموقع.
+              هذا يساعدنا في تقديم خدمات أفضل مخصصة لك.
             </p>
             <p className="mt-2">
               يمكنك إدارة تفضيلاتك في أي وقت من خلال إعدادات المتصفح.

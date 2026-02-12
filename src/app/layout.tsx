@@ -4,7 +4,7 @@ import "./globals.css";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import ClarityAnalytics from "@/components/ClarityAnalytics";
+import GoogleTagManager from "@/components/GoogleTagManager";
 import PrivacyConsent from "@/components/PrivacyConsent";
 
 const ibmPlexSans = IBM_Plex_Sans({
@@ -55,8 +55,8 @@ export default function RootLayout({
       <body className="antialiased transition-colors duration-300 overflow-x-hidden" style={{ width: '100%', maxWidth: '100vw' }} suppressHydrationWarning>
         <ThemeProvider>
           <LanguageProvider>
-            {/* Microsoft Clarity Analytics for Main Landing Pages */}
-            <ClarityAnalytics respectPrivacy={true} />
+            {/* Google Tag Manager - Marketing & Analytics */}
+            <GoogleTagManager gtmId="GTM-MKGST5S6" />
 
             {/* Privacy Consent Banner for GDPR Compliance */}
             <PrivacyConsent />

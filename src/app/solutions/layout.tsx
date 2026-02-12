@@ -1,4 +1,4 @@
-import ClarityAnalytics from '@/components/ClarityAnalytics';
+
 
 export default function SolutionsLayout({
   children,
@@ -7,8 +7,7 @@ export default function SolutionsLayout({
 }) {
   return (
     <>
-      {/* Microsoft Clarity Analytics for Solutions Pages */}
-      <ClarityAnalytics respectPrivacy={true} />
+
       {children}
     </>
   );
