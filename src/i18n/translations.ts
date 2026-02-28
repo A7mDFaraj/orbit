@@ -356,25 +356,64 @@ export const translations = {
         },
       },
       govgate: {
-        title: 'Gov Gate',
-        description: 'Your gateway to digital government services integration. Seamless, secure, and approved integration with various government systems.',
-        contactUs: 'Contact Us',
-        directLink: {
-          title: 'Direct Government Link',
-          description: 'Direct link with platforms like "Yakeen", "Absher" and others for data and identity verification.',
+        title: 'Gove Gate',
+        subtitle: 'Your secure gateway for trusted communication',
+        heroTitle: 'Gove Gate: SMS Gateway',
+        heroSubtitle: 'Dedicated for Large Enterprises',
+        heroDescription: 'An independent, secure platform specifically designed to meet government and institutional communication needs with complete privacy.',
+        cta: 'Contact Us for Details',
+        aboutTitle: 'Your Fully Private Communication System',
+        aboutDescription: 'Gove Gate differs from traditional messaging platforms by providing an independent Private Portal isolated from the public domain, giving your organization full control, faster transmission, and data confidentiality guaranteed according to the highest cybersecurity standards in the Kingdom.',
+        features: {
+          independence: {
+            title: 'Full Independence',
+            description: 'Private login interface for your organization, carrying your logo and visual identity, completely separated from other clients.'
+          },
+          security: {
+            title: 'Security & Privacy',
+            description: 'Local hosting (within the Kingdom) and high data encryption to ensure no third party can access your sensitive message content.'
+          },
+          reliability: {
+            title: 'High Reliability',
+            description: 'Direct transmission routes (Direct Routes) ensure message delivery and verification codes (OTP) in fractions of a second.'
+          }
         },
-        contracts: {
-          title: 'Contract Documentation',
-          description: 'Legally approved digital contract documentation services.',
+        portal: {
+          title: 'Unified Secure Login Portal',
+          subtitle: 'Independent and secure',
+          description: 'Provide your employees with a centralized entry point for managing communications and messages, while ensuring the highest levels of protection and two-factor authentication.',
+          items: [
+            'Custom interface with organization logo',
+            'Advanced permission management system',
+            'Detailed audit logs'
+          ],
+          login: {
+            title: 'Secure Login',
+            username: 'Username',
+            password: 'Password',
+            button: 'Secure Login'
+          }
         },
-        security: {
-          title: 'Highest Security Standards',
-          description: 'We ensure data protection and privacy according to approved cybersecurity regulations.',
+        whyUs: {
+          title: 'Why Gove Gate?',
+          subtitle: 'We provide advanced technical solutions that meet the expectations of the government and private sectors',
+          compliance: {
+            title: 'Legislation Compliant',
+            description: 'Committed to the requirements of the Communications, Space and Technology Commission (CST) to ensure full compliance.'
+          },
+          support: {
+            title: 'Dedicated Tech Support',
+            description: 'Dedicated account manager and 24/7 technical follow-up to ensure service continuity.'
+          },
+          reporting: {
+            title: 'Instant Reporting',
+            description: 'A dashboard showing sending and receiving status with extreme accuracy with detailed graphical analytical reports.'
+          }
         },
-        infrastructure: {
-          title: 'Reliable Infrastructure',
-          subtitle: 'Approved by regulatory bodies',
-        },
+        finalCta: {
+          title: 'Ready to secure your organization\'s communications?',
+          description: 'Contact us today for a demo and start your journey of secure digital transformation.'
+        }
       },
     },
   },
@@ -734,25 +773,64 @@ export const translations = {
         },
       },
       govgate: {
-        title: 'Gov Gate',
-        description: 'بوابتك للربط مع الخدمات الحكومية الرقمية. تكامل سلس، آمن، ومعتمد مع الأنظمة الحكومية المختلفة.',
-        contactUs: 'تواصل معنا',
-        directLink: {
-          title: 'ربط حكومي مباشر',
-          description: 'ربط مباشر مع منصات مثل "يقين"، "أبشر"، وغيرها للتحقق من البيانات والهوية.',
+        title: 'Gove Gate',
+        subtitle: 'بوابتك الآمنة للتواصل الموثوق',
+        heroTitle: 'Gove Gate: بوابة الرسائل النصية',
+        heroSubtitle: 'المخصصة للمنشآت الكبرى',
+        heroDescription: 'منصة مستقلة، آمنة، ومصممة خصيصاً لتلبية احتياجات التواصل الحكومي والمؤسسي بخصوصية تامة.',
+        cta: 'تواصل معنا للتفاصيل',
+        aboutTitle: 'نظام اتصالات خاص بك بالكامل',
+        aboutDescription: 'تختلف Gove Gate عن منصات الرسائل التقليدية بأنها توفر لك بوابة دخول مستقلة (Private Portal) معزولة عن النطاق العام، مما يمنح مؤسستكم تحكماً كاملاً، سرعة أعلى في الإرسال، وضماناً لسرية البيانات وفق أعلى معايير الأمن السيبراني في المملكة.',
+        features: {
+          independence: {
+            title: 'استقلالية تامة',
+            description: 'واجهة دخول خاصة بمؤسستكم، تحمل شعاركم وهويتكم البصرية، مفصولة تماماً عن بقية العملاء.'
+          },
+          security: {
+            title: 'أمان وخصوصية',
+            description: 'استضافة محلية (داخل المملكة) وتشفير عالي للبيانات لضمان عدم اطلاع أي طرف ثالث على محتوى رسائلكم الحساسة.'
+          },
+          reliability: {
+            title: 'موثوقية عالية',
+            description: 'مسارات إرسال مباشرة (Direct Routes) تضمن وصول الرسائل ورموز التحقق (OTP) في أجزاء من الثانية.'
+          }
         },
-        contracts: {
-          title: 'توثيق العقود',
-          description: 'خدمات توثيق العقود والمعاملات الرقمية بشكل قانوني ومعتمد.',
+        portal: {
+          title: 'بوابة دخول موحدة آمنة ومستقلة',
+          subtitle: 'آمنة ومستقلة',
+          description: 'وفر لموظفيك نقطة دخول مركزية لإدارة الاتصالات والرسائل، مع ضمان أعلى مستويات الحماية والتحقق الثنائي.',
+          items: [
+            'واجهة مخصصة بشعار المؤسسة',
+            'نظام إدارة صلاحيات متقدم',
+            'سجل عمليات مفصل (Audit Logs)'
+          ],
+          login: {
+            title: 'تسجيل الدخول',
+            username: 'اسم المستخدم',
+            password: 'كلمة المرور',
+            button: 'تسجيل الدخول الآمن'
+          }
         },
-        security: {
-          title: 'أعلى معايير الأمان',
-          description: 'نضمن حماية البيانات وخصوصيتها وفق ضوابط الأمن السيبراني المعتمدة.',
+        whyUs: {
+          title: 'لماذا Gove Gate؟',
+          subtitle: 'نقدم حلولاً تقنية متقدمة تلبي تطلعات القطاع الحكومي والخاص',
+          compliance: {
+            title: 'متوافق مع التشريعات',
+            description: 'ملتزمون باشتراطات هيئة الاتصالات والفضاء والتقنية (CST) لضمان الامتثال الكامل.'
+          },
+          support: {
+            title: 'دعم فني مخصص',
+            description: 'مدير حساب خاص ومتابعة تقنية على مدار الساعة لضمان استمرارية الخدمة.'
+          },
+          reporting: {
+            title: 'تقارير فورية',
+            description: 'لوحة تحكم تعرض حالة الإرسال والاستلام بدقة متناهية مع تحليلات بيانية مفصلة.'
+          }
         },
-        infrastructure: {
-          title: 'بنية تحتية موثوقة',
-          subtitle: 'معتمدة من الجهات التنظيمية',
-        },
+        finalCta: {
+          title: 'جاهز لتأمين اتصالات مؤسستك؟',
+          description: 'تواصل معنا اليوم للحصول على عرض توضيحي وبدء رحلة التحول الرقمي الآمن.'
+        }
       },
     },
   },

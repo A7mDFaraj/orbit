@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import Link from "next/link";
 import { Button } from "@/components/business/ui/button";
 import {
@@ -16,13 +16,10 @@ export const SMSPage = () => {
   const { t, isRTL } = useLanguage();
   const [activeTab, setActiveTab] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const stickyScrollContainerRef = useRef<HTMLDivElement>(null);
   const heroSectionRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [isDraggingSticky, setIsDraggingSticky] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
-  const [showStickyTabs, setShowStickyTabs] = useState(false);
 
   // Handle mouse down
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -51,50 +48,7 @@ export const SMSPage = () => {
     scrollContainerRef.current.scrollLeft = scrollLeft - walk;
   };
 
-  // Handle sticky tabs mouse down
-  const handleStickyMouseDown = (e: React.MouseEvent) => {
-    if (!stickyScrollContainerRef.current) return;
-    setIsDraggingSticky(true);
-    setStartX(e.pageX - stickyScrollContainerRef.current.offsetLeft);
-    setScrollLeft(stickyScrollContainerRef.current.scrollLeft);
-  };
 
-  // Handle sticky tabs mouse leave
-  const handleStickyMouseLeave = () => {
-    setIsDraggingSticky(false);
-  };
-
-  // Handle sticky tabs mouse up
-  const handleStickyMouseUp = () => {
-    setIsDraggingSticky(false);
-  };
-
-  // Handle sticky tabs mouse move
-  const handleStickyMouseMove = (e: React.MouseEvent) => {
-    if (!isDraggingSticky || !stickyScrollContainerRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - stickyScrollContainerRef.current.offsetLeft;
-    const walk = (x - startX) * 2; // Scroll speed multiplier
-    stickyScrollContainerRef.current.scrollLeft = scrollLeft - walk;
-  };
-
-  // Handle scroll detection for sticky tabs (mobile only)
-  useEffect(() => {
-    // Always keep sticky tabs hidden - they should only show within the hero section
-    setShowStickyTabs(false);
-
-    // Check on mount and window resize
-    const handleResize = () => {
-      // Intentionally empty to keep sticky tabs hidden
-    };
-
-    window.addEventListener('resize', handleResize);
-    handleResize(); // Check initial state
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
 
   const heroTabs = [
     {
@@ -173,45 +127,6 @@ export const SMSPage = () => {
       dir={isRTL ? 'rtl' : 'ltr'}
     >
 
-      {/* Sticky Tab Navigation (Mobile Only) - Shows when scrolled past hero */}
-      {showStickyTabs && (
-        <div className="md:hidden fixed top-20 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-md py-3 transition-all duration-300">
-          <div className="container mx-auto px-3">
-            <div
-              ref={stickyScrollContainerRef}
-              onMouseDown={handleStickyMouseDown}
-              onMouseLeave={handleStickyMouseLeave}
-              onMouseUp={handleStickyMouseUp}
-              onMouseMove={handleStickyMouseMove}
-              className={`flex overflow-x-auto gap-2 justify-start px-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${isDraggingSticky ? 'cursor-grabbing' : 'cursor-grab'} select-none`}
-            >
-              {heroTabs.map((tab, index) => {
-                const Icon = tab.icon;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => {
-                      setActiveTab(index);
-                      // Scroll back to hero section
-                      heroSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                    className={`
-                      flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 font-bold text-xs whitespace-nowrap shrink-0
-                      ${activeTab === index
-                        ? "bg-[#7A1E2E] text-white shadow-md shadow-[#7A1E2E]/20 scale-100"
-                        : "bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900 border border-slate-200"
-                      }
-                    `}
-                  >
-                    <Icon className={`w-4 h-4 ${activeTab === index ? "text-white" : "text-slate-400"} ${isRTL ? 'ml-1' : 'mr-1'}`} />
-                    <span>{tab.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* 1. Tabbed Hero Section */}
       <section ref={heroSectionRef} className={`pt-24 pb-8 md:pt-24 md:pb-16 overflow-hidden transition-colors duration-500 ${heroTabs[activeTab].color} min-h-[80vh] md:min-h-0 flex flex-col justify-center`}>
