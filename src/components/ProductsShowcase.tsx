@@ -120,7 +120,7 @@ export default function ProductsShowcase() {
               {isRTL ? 'استكشف حلولنا بالتفصيل' : 'Explore Our Solutions in Detail'}
             </motion.h2>
             <motion.p
-              className="text-xl sm:text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto "
+              className="text-xl sm:text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto"
               style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
             >
               {isRTL
@@ -134,7 +134,6 @@ export default function ProductsShowcase() {
             {solutions.map((solution, index) => {
               const title = isRTL ? solution.titleAr : solution.titleEn;
               const description = isRTL ? solution.descriptionAr : solution.descriptionEn;
-              const shortDesc = description.substring(0, 120) + (description.length > 120 ? '...' : '');
 
               return (
                 <motion.div
@@ -208,7 +207,7 @@ export default function ProductsShowcase() {
                       </h3>
 
                       <p
-                        className="text-gray-600 dark:text-gray-400 mb-6  leading-relaxed relative z-10"
+                        className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed relative z-10"
                         style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                       >
                         {isRTL ? solution.descriptionAr : solution.descriptionEn}
@@ -220,7 +219,7 @@ export default function ProductsShowcase() {
                           {(isRTL ? solution.featuresAr : solution.features).map((feature, featureIndex) => (
                             <motion.li
                               key={featureIndex}
-                              className="flex items-start gap-2 text-sm sm:text-base text-gray-600 dark:text-gray-400 "
+                              className="flex items-start gap-2 text-sm sm:text-base text-gray-600 dark:text-gray-400"
                               style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
                               initial={{ opacity: 0, x: -10 }}
                               animate={inView ? { opacity: 1, x: 0 } : {}}

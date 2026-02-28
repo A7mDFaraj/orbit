@@ -12,7 +12,10 @@ export const Hero = () => {
   const { t, isRTL } = useLanguage();
 
   return (
-    <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
+    <section 
+      className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden"
+      style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
+    >
       {/* Background Decor */}
       <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
       <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />

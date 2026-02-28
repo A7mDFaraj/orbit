@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useMemo, useEffect } from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { encodeImagePath } from "@/utils/imagePath";
 
 import { useLanguage } from '@/contexts/LanguageContext';
 
 export const TrustSection = () => {
-  const { t } = useLanguage();
+  const { t, isRTL } = useLanguage();
   // All logos from TrustedLogos folder - each file appears ONCE (excluding duplicate files with "(1)")
   const logoFiles = [
     'images-removebg-preview.png',
@@ -78,13 +78,17 @@ export const TrustSection = () => {
 
   useEffect(() => {
     // Shuffle logos only on the client side after mount to avoid hydration mismatch
-    const shuffled = [...logoFiles];
-    // Fisher-Yates shuffle algorithm
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    setShuffledLogos(shuffled);
+    const timer = setTimeout(() => {
+      const shuffled = [...logoFiles];
+      // Fisher-Yates shuffle algorithm
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      setShuffledLogos(shuffled);
+    }, 0);
+    return () => clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Create partners array from shuffled logo files - each logo appears ONCE only
@@ -102,8 +106,11 @@ export const TrustSection = () => {
   // ... (lines 73-95 omitted)
 
   return (
-    <section className="py-16 bg-gradient-to-b from-white to-[#E8DCCB]/30 overflow-hidden">
-      <div className="container mx-auto px-4">
+    <section 
+      className="py-16 bg-gradient-to-b from-white to-[#E8DCCB]/30 overflow-hidden"
+      style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
+    >
+      <div className="container mx-auto px-4" dir={isRTL ? 'rtl' : 'ltr'}>
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-[#7A1E2E] mb-3">
             {t.landing.trust.title}

@@ -25,6 +25,20 @@ export const translations = {
       news: 'News',
       offers: 'Offers',
       business: 'Business',
+      home: 'Home',
+      products: 'Products',
+    },
+    footer: {
+      quickLinks: 'Quick Links',
+      ourSolutions: 'Our Solutions',
+      contactInfo: 'Contact Information',
+      phone: 'Phone',
+      email: 'Email',
+      address: 'Address',
+      addressDetail: 'Medina, King Abdullah Road - Al-Raya District - 8443, 6th Floor',
+      commercialRegistry: 'Commercial Registry: 7012398264',
+      license: 'License: LGP0921-22',
+      licensedBy: 'Official company licensed by the Saudi Communications and Information Technology Commission',
     },
     common: {
       now: 'Now',
@@ -193,6 +207,7 @@ export const translations = {
     },
     products: {
       sms: {
+        title: 'SMS Messaging',
         heroTabs: {
           retail: {
             title: 'Turn abandoned carts into instant sales',
@@ -387,6 +402,20 @@ export const translations = {
       news: 'الاخبار',
       offers: 'العروض',
       business: 'الأعمال',
+      home: 'الرئيسية',
+      products: 'المنتجات',
+    },
+    footer: {
+      quickLinks: 'روابط سريعة',
+      ourSolutions: 'حلولنا',
+      contactInfo: 'معلومات الاتصال',
+      phone: 'هاتف',
+      email: 'ايميل',
+      address: 'العنوان',
+      addressDetail: 'المدينة المنورة، طريق الملك عبدالله - حي الراية - 8443 طابق 6',
+      commercialRegistry: 'السجل التجاري : 7012398264',
+      license: 'التصريح : LGP0921-22',
+      licensedBy: 'شركة رسمية مرخصة من هيئة الاتصالات وتقنية المعلومات السعودية',
     },
     common: {
       now: 'الآن',
@@ -556,6 +585,7 @@ export const translations = {
     },
     products: {
       sms: {
+        title: 'الرسائل النصية SMS',
         heroTabs: {
           retail: {
             title: 'حوّل السلات المتروكة إلى مبيعات فورية',

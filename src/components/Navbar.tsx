@@ -131,9 +131,10 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 inset-x-0 z-50 ${navbarBgOpacity} backdrop-blur-xl border-b ${navbarBorder} transition-all duration-300 ${navbarShadow} gpu-accelerated`}
-      dir="ltr"
+      dir={isRTL ? 'rtl' : 'ltr'}
       style={{
         willChange: 'transform',
+        fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif'
       }}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -156,7 +157,7 @@ export default function Navbar() {
           {/* Center: Navigation Menu */}
           <nav className={`hidden lg:flex items-center gap-2 flex-1 justify-center px-4 ${isRTL ? 'order-2' : 'order-2'}`} dir={isRTL ? 'rtl' : 'ltr'}>
             {/* Home - الرئيسية */}
-            <NavLink item={{ name: isRTL ? 'الرئيسية' : 'HOME', href: '/' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} />
+            <NavLink item={{ name: t.nav.home, href: '/' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} />
 
             {SHOW_NAV_ABOUT && (
               <NavLink item={{ name: t.nav.about, href: '/about-us' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={1} />
@@ -181,7 +182,7 @@ export default function Navbar() {
                   transition={{ duration: 0.2 }}
                 />
 
-                <span className="relative z-10 font-semibold">{isRTL ? 'المنتجات' : 'Products'}</span>
+                <span className="relative z-10 font-semibold">{t.nav.products}</span>
                 <motion.svg
                   className="w-4 h-4 relative z-10"
                   fill="none"
@@ -301,7 +302,7 @@ export default function Navbar() {
           <motion.button
             className={`lg:hidden p-2 rounded-lg relative z-50 flex-shrink-0 ${navbarIsDark ? 'text-gray-100 hover:bg-white/10' : 'text-gray-800 hover:bg-gray-100'} ${isRTL ? 'order-1 ml-2' : 'order-3'}`}
             onClick={toggleMenu}
-            aria-label={isRTL ? 'فتح القائمة' : 'Toggle navigation'}
+            aria-label={t.nav.menu}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             style={{ minWidth: '40px', minHeight: '40px' }}
@@ -509,7 +510,7 @@ function MobileMenu({ setIsOpen, navbarIsDark, isRTL, solutionsList, textColorCl
           {/* Navigation Links */}
           <nav className="space-y-2">
             {/* Home */}
-            <MobileNavLink item={{ name: isRTL ? 'الرئيسية' : 'HOME', href: '/' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} setIsOpen={setIsOpen} />
+            <MobileNavLink item={{ name: t.nav.home, href: '/' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} setIsOpen={setIsOpen} />
 
             {/* Solutions with Accordion */}
             <div>

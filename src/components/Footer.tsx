@@ -20,16 +20,17 @@ export default function Footer() {
   });
 
   const footerLinks = [
+    { name: t.nav.home, href: '/' },
     { name: t.nav.about, href: '#about' },
     { name: t.nav.solutions, href: '#solutions' },
     { name: t.nav.contact, href: '/contact' },
   ];
 
   const solutions = [
-    { name: isRTL ? 'الرسائل النصية' : 'SMS Platform', href: '/products/sms' },
-    { name: isRTL ? 'واتساب اعمال API' : 'WhatsApp Business API', href: '/products/whatsapp' },
-    { name: isRTL ? 'اوتايم OTime' : 'OTime - Attendance & HR', href: '/products/o-time' },
-    { name: isRTL ? 'البوابة الحكومية Gov Gate' : 'Gov Gate - Government Portal', href: '/products/gov-gate' },
+    { name: t.products.sms.title, href: '/products/sms' },
+    { name: t.products.whatsapp.title, href: '/products/whatsapp' },
+    { name: t.products.otime.title, href: '/products/o-time' },
+    { name: t.products.govgate.title, href: '/products/gov-gate' },
   ];
 
   return (
@@ -40,6 +41,8 @@ export default function Footer() {
         ? 'bg-gradient-to-br from-[#128C7E] via-[#0d6b5f] to-[#0a5a50]'
         : 'bg-[#161616]'
         } text-white py-16`}
+      dir={isRTL ? 'rtl' : 'ltr'}
+      style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -73,15 +76,13 @@ export default function Footer() {
               />
             </motion.div>
             <p
-              className={`text-gray-400 mb-4 ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
+              className="text-gray-400 mb-4"
               dir={isRTL ? 'rtl' : 'ltr'}
             >
-              {isRTL
-                ? 'شركة رسمية مرخصة من هيئة الاتصالات وتقنية المعلومات السعودية'
-                : 'Official company licensed by the Saudi Communications and Information Technology Commission'}
+              {t.footer.licensedBy}
             </p>
             <div className="flex items-center gap-2 text-sm text-gray-400">
-              <span className={`font-heading ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
+              <span dir={isRTL ? 'rtl' : 'ltr'}>
                 {t.nav.madeInSaudi}
               </span>
             </div>
@@ -90,10 +91,10 @@ export default function Footer() {
           {/* Quick Links */}
           <div>
             <h4
-              className={`text-lg font-heading mb-4 text-white ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
+              className="text-lg font-heading mb-4 text-white"
               dir={isRTL ? 'rtl' : 'ltr'}
             >
-              {isRTL ? 'روابط سريعة' : 'Quick Links'}
+              {t.footer.quickLinks}
             </h4>
             <ul className="space-y-3">
               {footerLinks.map((link, index) => (
@@ -113,7 +114,7 @@ export default function Footer() {
                         }
                       }
                     }}
-                    className={`text-gray-400 hover:text-primary transition-colors ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
+                    className="text-gray-400 hover:text-primary transition-colors"
                     dir={isRTL ? 'rtl' : 'ltr'}
                   >
                     {link.name}
@@ -126,10 +127,10 @@ export default function Footer() {
           {/* Solutions */}
           <div>
             <h4
-              className={`text-lg font-heading mb-4 text-white ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
+              className="text-lg font-heading mb-4 text-white"
               dir={isRTL ? 'rtl' : 'ltr'}
             >
-              {isRTL ? 'حلولنا' : 'Our Solutions'}
+              {t.footer.ourSolutions}
             </h4>
             <ul className="space-y-3">
               {solutions.map((solution, index) => (
@@ -141,7 +142,7 @@ export default function Footer() {
                   >
                     <Link
                       href={solution.href}
-                      className={`text-gray-400 hover:text-primary transition-colors ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
+                      className="text-gray-400 hover:text-primary transition-colors"
                       dir={isRTL ? 'rtl' : 'ltr'}
                     >
                       {solution.name}
@@ -155,10 +156,10 @@ export default function Footer() {
           {/* Contact Info */}
           <div>
             <h4
-              className={`text-lg font-heading mb-6 text-white ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
+              className="text-lg font-heading mb-6 text-white"
               dir={isRTL ? 'rtl' : 'ltr'}
             >
-              {isRTL ? 'معلومات الاتصال' : 'Contact Information'}
+              {t.footer.contactInfo}
             </h4>
             <ul className="space-y-4">
 
@@ -176,10 +177,10 @@ export default function Footer() {
                     </svg>
                   </div>
                   <div>
-                    <p className={`text-gray-400 text-sm mb-1 ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
-                      {isRTL ? 'هاتف' : 'Phone'}
+                    <p className="text-gray-400 text-sm mb-1" dir={isRTL ? 'rtl' : 'ltr'}>
+                      {t.footer.phone}
                     </p>
-                    <a href="tel:920006900" className={`text-white hover:text-primary transition-colors ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir="ltr">
+                    <a href="tel:920006900" className="text-white hover:text-primary transition-colors" dir="ltr">
                       920006900
                     </a>
                   </div>
@@ -200,10 +201,10 @@ export default function Footer() {
                     </svg>
                   </div>
                   <div>
-                    <p className={`text-gray-400 text-sm mb-1 ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
-                      {isRTL ? 'ايميل' : 'Email'}
+                    <p className="text-gray-400 text-sm mb-1" dir={isRTL ? 'rtl' : 'ltr'}>
+                      {t.footer.email}
                     </p>
-                    <a href="mailto:marketing@corbit.sa" className={`text-white hover:text-primary transition-colors ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir="ltr">
+                    <a href="mailto:marketing@corbit.sa" className="text-white hover:text-primary transition-colors" dir="ltr">
                       marketing@corbit.sa
                     </a>
                   </div>
@@ -225,11 +226,11 @@ export default function Footer() {
                     </svg>
                   </div>
                   <div>
-                    <p className={`text-gray-400 text-sm mb-1 ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
-                      {isRTL ? 'العنوان' : 'Address'}
+                    <p className="text-gray-400 text-sm mb-1" dir={isRTL ? 'rtl' : 'ltr'}>
+                      {t.footer.address}
                     </p>
-                    <p className={`text-white ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir="rtl">
-                      المدينة المنورة، طريق الملك عبدالله - حي الراية - 8443 طابق 6
+                    <p className="text-white" dir={isRTL ? 'rtl' : 'ltr'}>
+                      {t.footer.addressDetail}
                     </p>
                   </div>
                 </motion.div>
@@ -282,9 +283,9 @@ export default function Footer() {
         >
           <p>{t.contact.copyright}</p>
           <p className="mt-2">{t.contact.country}</p>
-          <div className="flex items-center justify-center gap-6 mt-4 text-white/40">
-            <span>السجل التجاري : 7012398264</span>
-            <span>التصريح : LGP0921-22</span>
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-4 text-white/40">
+            <span>{t.footer.commercialRegistry}</span>
+            <span>{t.footer.license}</span>
           </div>
         </motion.div>
       </div>

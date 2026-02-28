@@ -12,8 +12,12 @@ export const Solutions = () => {
   const { t, isRTL } = useLanguage();
 
   return (
-    <section className="py-20 bg-slate-50" id="products">
-      <div className="container mx-auto px-4 md:px-6">
+    <section 
+      className="py-20 bg-slate-50" 
+      id="products"
+      style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
+    >
+      <div className="container mx-auto px-4 md:px-6" dir={isRTL ? 'rtl' : 'ltr'}>
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl font-bold text-slate-900 mb-4">{t.landing.keySolutions.title}</h2>
           <p className="text-slate-600 text-lg">{t.landing.keySolutions.description}</p>
