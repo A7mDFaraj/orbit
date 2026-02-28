@@ -1,7 +1,7 @@
 'use client';
 
 import React from "react";
-import { Twitter, Linkedin, Instagram, Mail, Phone, MapPin } from "lucide-react";
+import { Twitter, Instagram, Mail, Phone, MapPin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { encodeImagePath } from "@/utils/imagePath";
@@ -27,9 +27,8 @@ export const Footer = () => {
               المنصة السعودية الرائدة في حلول التواصل للشركات. نساعدك في الوصول لعملائك بأسرع الطرق وأكثرها أماناً.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="hover:text-white transition-colors"><Twitter className="h-5 w-5" /></a>
-              <a href="#" className="hover:text-white transition-colors"><Linkedin className="h-5 w-5" /></a>
-              <a href="#" className="hover:text-white transition-colors"><Instagram className="h-5 w-5" /></a>
+              <a href="https://x.com/orbittec_sa" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors"><Twitter className="h-5 w-5" /></a>
+              <a href="https://www.instagram.com/orbittec_sa?igsh=MXFqZmluMWhrbXk0dg==" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors"><Instagram className="h-5 w-5" /></a>
             </div>
           </div>
 

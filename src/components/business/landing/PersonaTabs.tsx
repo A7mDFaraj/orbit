@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/business/ui/tabs";
-import { ShoppingBag, Code2, Terminal, FileText, ExternalLink } from "lucide-react";
+import { ShoppingBag, Code2, Terminal, FileText, ExternalLink, ArrowRight, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/business/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -76,7 +76,17 @@ export const PersonaTabs = () => {
                     <span className="font-medium text-slate-800">{isRTL ? 'تقارير دقيقة للأداء (الفتح، النقر)' : 'Accurate Performance Reports (Opens, Clicks)'}</span>
                   </li>
                 </ul>
-                <Button className="mt-4" size="lg">{isRTL ? 'ابدا حملتك الأولى الآن' : 'Start Your First Campaign Now'}</Button>
+                <Button 
+                  className="mt-4 group gap-2 px-8 py-6 text-lg font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 rounded-2xl bg-primary hover:bg-primary/90 text-white border-0" 
+                  size="lg"
+                >
+                  {isRTL ? 'ابدأ حملتك الأولى الآن' : 'Start Your First Campaign Now'}
+                  {isRTL ? (
+                    <ArrowLeft className="h-5 w-5 group-hover:-translate-x-1 transition-transform" />
+                  ) : (
+                    <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  )}
+                </Button>
               </div>
             </div>
           </TabsContent>

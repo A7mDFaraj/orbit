@@ -97,6 +97,10 @@ export default function Navbar() {
   const isLandingPage = pathname === '/';
   const isWhatsAppPage = pathname === '/products/whatsapp';
 
+  // Routes where the dark theme button should be hidden
+  const hideThemeToggleRoutes = ['/', '/products/sms', '/products/whatsapp', '/products/o-time', '/products/gov-gate'];
+  const showThemeToggle = !hideThemeToggleRoutes.includes(pathname || '');
+
   // Navbar background opacity based on page
   const navbarBgOpacity = navbarIsDark
     ? 'bg-[#161616]/95'
@@ -140,7 +144,7 @@ export default function Navbar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="h-20 flex items-center justify-between gap-2 sm:gap-4 relative">
           {/* Logo - Always in corner (left for LTR, right for RTL) */}
-          <div className={`flex items-center flex-shrink-0 ${isRTL ? 'order-3 ml-auto' : 'order-1'}`}>
+          <div className={`flex items-center flex-shrink-0 order-1`}>
             <Link href="/" className="flex items-center">
               <img
                 src={navbarIsDark ? encodeImagePath("/logo/شعار المدار1-0٥.png") : encodeImagePath("/logo/شعار المدار1-0٢.png")}
@@ -248,11 +252,11 @@ export default function Navbar() {
           </nav>
 
           {/* Controls: Language Switcher, Theme Toggle, and Contact Button - Desktop only */}
-          <div className={`hidden md:flex items-center gap-3 flex-shrink-0 min-w-0 ${isRTL ? 'order-1' : 'order-3'}`}>
+          <div className={`hidden md:flex items-center gap-3 flex-shrink-0 min-w-0 order-3`}>
             {/* Language & Theme Controls */}
             <div className={`flex items-center rounded-full ${navbarIsDark ? 'bg-white/5 border border-white/10' : 'bg-secondary/40 border border-secondary/50'} p-1.5 backdrop-blur-md gap-1 shadow-sm flex-shrink-0`}>
-              <ThemeToggle />
               <LanguageSwitcher />
+              {showThemeToggle && <ThemeToggle />}
             </div>
 
             {/* Contact Button */}
@@ -300,7 +304,7 @@ export default function Navbar() {
 
           {/* Mobile menu button - Always visible, positioned opposite to logo */}
           <motion.button
-            className={`lg:hidden p-2 rounded-lg relative z-50 flex-shrink-0 ${navbarIsDark ? 'text-gray-100 hover:bg-white/10' : 'text-gray-800 hover:bg-gray-100'} ${isRTL ? 'order-1 ml-2' : 'order-3'}`}
+            className={`lg:hidden p-2 rounded-lg relative z-50 flex-shrink-0 ${navbarIsDark ? 'text-gray-100 hover:bg-white/10' : 'text-gray-800 hover:bg-gray-100'} order-3`}
             onClick={toggleMenu}
             aria-label={t.nav.menu}
             whileHover={{ scale: 1.05 }}
@@ -350,6 +354,7 @@ export default function Navbar() {
             t={t}
             pathname={pathname}
             router={router}
+            showThemeToggle={showThemeToggle}
           />
         )}
       </AnimatePresence>
@@ -462,9 +467,10 @@ interface MobileMenuProps {
   pathname: string | null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   router: any;
+  showThemeToggle: boolean;
 }
 
-function MobileMenu({ setIsOpen, navbarIsDark, isRTL, solutionsList, textColorClass, needsHighContrast, t, pathname, router }: MobileMenuProps) {
+function MobileMenu({ setIsOpen, navbarIsDark, isRTL, solutionsList, textColorClass, needsHighContrast, t, pathname, router, showThemeToggle }: MobileMenuProps) {
   const [solutionsOpen, setSolutionsOpen] = useState(false);
 
   return (
@@ -499,11 +505,13 @@ function MobileMenu({ setIsOpen, navbarIsDark, isRTL, solutionsList, textColorCl
           <div className={`flex items-center gap-3 p-4 rounded-2xl ${navbarIsDark ? 'bg-white/5 border border-white/10' : 'bg-secondary/40 border border-secondary/50'} backdrop-blur-md`}>
             <div className="flex items-center gap-2">
               <div className={`p-1.5 rounded-lg ${navbarIsDark ? 'bg-black/50' : 'bg-white'}`}>
-                <ThemeToggle />
-              </div>
-              <div className={`p-1.5 rounded-lg ${navbarIsDark ? 'bg-black/50' : 'bg-white'}`}>
                 <LanguageSwitcher />
               </div>
+              {showThemeToggle && (
+                <div className={`p-1.5 rounded-lg ${navbarIsDark ? 'bg-black/50' : 'bg-white'}`}>
+                  <ThemeToggle />
+                </div>
+              )}
             </div>
           </div>
 
