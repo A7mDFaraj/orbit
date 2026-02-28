@@ -9,6 +9,7 @@ import {
   Building2, ShoppingBag, GraduationCap, BadgeCheck, ArrowRight, Rocket, ChevronDown, X, ChevronLeft, ChevronRight
 } from "lucide-react";
 import { ImageWithFallback } from "../../figma/ImageWithFallback";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const cstLogo = "/WhatsAppPage/cst.png";
 const metaLogo = "/WhatsAppPage/meta.png";
@@ -20,6 +21,7 @@ const solutionSchedule = "/WhatsAppPage/الموقع - جدولة الرسائل
 const solutionReports = "/WhatsAppPage/الموقع - تقارير تفصيلية.jpg.jpeg";
 
 export const WhatsAppPage = () => {
+  const { isRTL } = useLanguage();
   const [selectedPlan, setSelectedPlan] = useState(1);
   const [activePlanIndex, setActivePlanIndex] = useState(1);
   const [selectedTiers, setSelectedTiers] = useState<{ [key: number]: number }>({
@@ -29,7 +31,7 @@ export const WhatsAppPage = () => {
   });
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [chatMessages, setChatMessages] = useState<Array<{ id: number, type: 'user' | 'bot' | 'sales', text: string, buttons?: boolean, confirmButton?: boolean }>>([
-    { id: 1, type: 'bot', text: 'بالتأكيد! لدينا 3 باقات رئيسية تبدأ من 399 ر.س شهرياً...', buttons: true }
+    { id: 1, type: 'bot', text: isRTL ? 'بالتأكيد! لدينا 3 باقات رئيسية تبدأ من 399 ر.س شهرياً...' : 'Absolutely! We have 3 main packages starting from 399 SAR monthly...', buttons: true }
   ]);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
@@ -108,29 +110,29 @@ export const WhatsAppPage = () => {
   const features = [
     {
       icon: Globe,
-      title: "المنصة رقم 1 في المملكة",
-      description: "الأكثر انتشاراً واستخداماً في السعودية",
+      title: isRTL ? "المنصة رقم 1 في المملكة" : "The #1 Platform in the Kingdom",
+      description: isRTL ? "الأكثر انتشاراً واستخداماً في السعودية" : "The most widespread and used in Saudi Arabia",
       color: "bg-blue-50",
       iconColor: "text-blue-600"
     },
     {
       icon: CheckCircle2,
-      title: "معدل فتح 98%",
-      description: "يتم فتح وقراءة معظم الرسائل فوراً",
+      title: isRTL ? "معدل فتح 98%" : "98% Open Rate",
+      description: isRTL ? "يتم فتح وقراءة معظم الرسائل فوراً" : "Most messages are opened and read immediately",
       color: "bg-green-50",
       iconColor: "text-[#65BF7B]"
     },
     {
       icon: Shield,
-      title: "آن وموثوق",
-      description: "تشفير كامل من طرف لطرف للبيانات",
+      title: isRTL ? "آمن وموثوق" : "Secure & Reliable",
+      description: isRTL ? "تشفير كامل من طرف لطرف للبيانات" : "End-to-end encryption for all data",
       color: "bg-purple-50",
       iconColor: "text-purple-600"
     },
     {
       icon: Smartphone,
-      title: "سهل الاستخدام",
-      description: "تطبيق مألوف للجميع بدون تعقيد",
+      title: isRTL ? "سهل الاستخدام" : "Easy to Use",
+      description: isRTL ? "تطبيق مألوف للجميع بدون تعقيد" : "Familiar app for everyone without complexity",
       color: "bg-orange-50",
       iconColor: "text-[#F15822]"
     }
@@ -139,38 +141,38 @@ export const WhatsAppPage = () => {
   const solutions = [
     {
       icon: Users,
-      title: "رقم موحد للفريق",
-      description: "لا مزيد من تشتت المحادثات، رقم واحد يديره فريق كامل بكفاءة عالية",
+      title: isRTL ? "رقم موحد للفريق" : "Unified Team Number",
+      description: isRTL ? "لا مزيد من تشتت المحادثات، رقم واحد يديره فريق كامل بكفاءة عالية" : "No more scattered conversations, one number managed efficiently by the whole team",
       image: solutionTeam
     },
     {
       icon: Target,
-      title: "إدارة الصلاحيات",
-      description: "تحويل المحادثات بين المبيعات والدعم الفني بسلاسة واحترافية",
+      title: isRTL ? "إدارة الصلاحيات" : "Permissions Management",
+      description: isRTL ? "تحويل المحادثات بين المبيعات والدعم الفني بسلاسة واحترافية" : "Seamlessly transfer conversations between sales and technical support",
       image: solutionWorkflow
     },
     {
       icon: Bot,
-      title: "الردود الآلية (Chatbot)",
-      description: "خدمة عملاء 24/7 دون تدخل بشري، أجب على الأسئلة الشائعة تلقائياً",
+      title: isRTL ? "الردود الآلية (Chatbot)" : "Automated Replies (Chatbot)",
+      description: isRTL ? "خدمة عملاء 24/7 دون تدخل بشري، أجب على الأسئلة الشائعة تلقائياً" : "24/7 customer service without human intervention, automatically answer FAQs",
       image: solutionChatbot
     },
     {
       icon: MessageCircle,
-      title: "صندوق وارد مشترك",
-      description: "فلترة الرسائل (مقروءة، غير مقروءة، لم يتم الرد) في واجهة واحدة",
+      title: isRTL ? "صندوق وارد مشترك" : "Shared Inbox",
+      description: isRTL ? "فلترة الرسائل (مقروءة، غير مقروءة، لم يتم الرد) في واجهة واحدة" : "Filter messages (read, unread, unanswered) in a single interface",
       image: solutionBroadcast
     },
     {
       icon: Clock,
-      title: "جدولة الرسائل",
-      description: "حدد وقت إرسال رسائلك مسبقاً للوصول في الوقت المثالي",
+      title: isRTL ? "جدولة الرسائل" : "Message Scheduling",
+      description: isRTL ? "حدد وقت إرسال رسائلك مسبقاً للوصول في الوقت المثالي" : "Pre-schedule your messages to be sent at the optimal time",
       image: solutionSchedule
     },
     {
       icon: BarChart3,
-      title: "تقارير تفصيلية",
-      description: "تتبع أداء الحملات ومعدلات القراءة والاستجابة لحظياً",
+      title: isRTL ? "تقارير تفصيلية" : "Detailed Reports",
+      description: isRTL ? "تتبع أداء الحملات ومعدلات القراءة والاستجابة لحظياً" : "Track campaign performance, read rates, and instant responses",
       image: solutionReports
     }
   ];
@@ -178,43 +180,47 @@ export const WhatsAppPage = () => {
   const campaigns = [
     {
       icon: Send,
-      title: "استهداف دقيق",
-      description: "حدد جمهورك بناءً على الموقع، الاهتمامات، والسلوك"
+      title: isRTL ? "استهداف دقيق" : "Precise Targeting",
+      description: isRTL ? "حدد جمهورك بناءً على الموقع، الاهتمامات، والسلوك" : "Target your audience based on location, interests, and behavior"
     },
     {
       icon: Clock,
-      title: "جدولة ذكية",
-      description: "أرسل في الوقت الأمثل لزيادة معدلات التفاعل"
+      title: isRTL ? "جدولة ذكية" : "Smart Scheduling",
+      description: isRTL ? "أرسل في الوقت الأمثل لزيادة معدلات التفاعل" : "Send at the optimal time to increase interaction rates"
     },
     {
       icon: Sparkles,
-      title: "قوالب جاهزة",
-      description: "رسائل احترافية مع أزرار تفاعلية وصور ومقاطع"
+      title: isRTL ? "قوالب جاهزة" : "Ready Templates",
+      description: isRTL ? "رسائل احترافية مع أزرار تفاعلية وصور ومقاطع" : "Professional messages with interactive buttons, images, and videos"
     },
     {
       icon: TrendingUp,
-      title: "تحليل الأداء",
-      description: "تقارير شاملة عن معدلات الفتح والنقر والتحويل"
+      title: isRTL ? "تحليل الأداء" : "Performance Analysis",
+      description: isRTL ? "تقارير شاملة عن معدلات الفتح والنقر والتحويل" : "Comprehensive reports on open rates, clicks, and conversions"
     }
   ];
 
   const pricingPlans = [
     {
       id: 0,
-      name: "الباقة الأساسية",
-      period: "شهرياً",
+      name: isRTL ? "الباقة الأساسية" : "Basic Package",
+      period: isRTL ? "شهرياً" : "Monthly",
       popular: false,
       color: "border-gray-300",
       bgColor: "bg-white",
       buttonColor: "bg-gray-700 hover:bg-gray-800",
-      additionalFeatures: [
+      additionalFeatures: isRTL ? [
         "الويب هوك وواجهة برمجة التطبيقات",
         "ربط المتجر مع المنصة",
         "دعم فني فضي"
+      ] : [
+        "Webhooks and API",
+        "Store integration with platform",
+        "Silver technical support"
       ],
       tiers: [
         {
-          name: "الشريحة 1",
+          name: isRTL ? "الشريحة 1" : "Tier 1",
           price: "399",
           priceWithTax: "459",
           setupFee: "850",
@@ -223,7 +229,7 @@ export const WhatsAppPage = () => {
           users: "7"
         },
         {
-          name: "الشريحة 2",
+          name: isRTL ? "الشريحة 2" : "Tier 2",
           price: "699",
           priceWithTax: "804",
           setupFee: "850",
@@ -232,7 +238,7 @@ export const WhatsAppPage = () => {
           users: "15"
         },
         {
-          name: "الشريحة 3",
+          name: isRTL ? "الشريحة 3" : "Tier 3",
           price: "1,199",
           priceWithTax: "1,379",
           setupFee: "850",
@@ -244,23 +250,29 @@ export const WhatsAppPage = () => {
     },
     {
       id: 1,
-      name: "باقة النمو",
-      period: "شهرياً",
+      name: isRTL ? "باقة النمو" : "Growth Package",
+      period: isRTL ? "شهرياً" : "Monthly",
       popular: true,
       color: "border-[#F15822]",
       bgColor: "bg-gradient-to-br from-orange-50 to-white",
-      buttonColor: "bg-[#F15822] hover:bg-[#d94a1a]",
-      badge: "الأكثر طلباً",
-      additionalFeatures: [
+      buttonColor: "bg-[#F15822 hover:bg-[#d94a1a]",
+      badge: isRTL ? "الأكثر طلباً" : "Most Popular",
+      additionalFeatures: isRTL ? [
         "كل مميزات الباقة الأساسية",
         "ربط أكثر من متجر مع المنصة",
         "شات بوت ذكي (Smart Chatbot)",
         "مدير حساب مخصص",
         "دعم فني ذهبي"
+      ] : [
+        "All features of the Basic Package",
+        "Multiple store integrations",
+        "Smart Chatbot",
+        "Dedicated Account Manager",
+        "Gold technical support"
       ],
       tiers: [
         {
-          name: "الشريحة 1",
+          name: isRTL ? "الشريحة 1" : "Tier 1",
           price: "659",
           priceWithTax: "758",
           setupFee: "1,919",
@@ -269,7 +281,7 @@ export const WhatsAppPage = () => {
           users: "7"
         },
         {
-          name: "الشريحة 2",
+          name: isRTL ? "الشريحة 2" : "Tier 2",
           price: "999",
           priceWithTax: "1,149",
           setupFee: "1,919",
@@ -278,7 +290,7 @@ export const WhatsAppPage = () => {
           users: "15"
         },
         {
-          name: "الشريحة 3",
+          name: isRTL ? "الشريحة 3" : "Tier 3",
           price: "1,619",
           priceWithTax: "1,862",
           setupFee: "1,919",
@@ -290,22 +302,28 @@ export const WhatsAppPage = () => {
     },
     {
       id: 2,
-      name: "الباقة الاحترافية",
-      period: "شهرياً",
+      name: isRTL ? "الباقة الاحترافية" : "Professional Package",
+      period: isRTL ? "شهرياً" : "Monthly",
       popular: false,
       color: "border-purple-400",
       bgColor: "bg-gradient-to-br from-purple-50 to-white",
       buttonColor: "bg-purple-700 hover:bg-purple-800",
-      additionalFeatures: [
+      additionalFeatures: isRTL ? [
         "كل مميزات باقة النمو",
         "موظف ذكاء اصطناعي (AI Agent)",
         "استضافة محلية (حسب الطلب)",
         "مدير حساب VIP",
         "دعم فني بلاتيني"
+      ] : [
+        "All features of the Growth Package",
+        "AI Agent Employee",
+        "Local Hosting (Upon request)",
+        "VIP Account Manager",
+        "Platinum technical support"
       ],
       tiers: [
         {
-          name: "الشريحة 1",
+          name: isRTL ? "الشريحة 1" : "Tier 1",
           price: "999",
           priceWithTax: "1,149",
           setupFee: "2,919",
@@ -314,7 +332,7 @@ export const WhatsAppPage = () => {
           users: "7"
         },
         {
-          name: "الشريحة 2",
+          name: isRTL ? "الشريحة 2" : "Tier 2",
           price: "1,499",
           priceWithTax: "1,724",
           setupFee: "2,919",
@@ -323,7 +341,7 @@ export const WhatsAppPage = () => {
           users: "15"
         },
         {
-          name: "الشريحة 3",
+          name: isRTL ? "الشريحة 3" : "Tier 3",
           price: "2,199",
           priceWithTax: "2,529",
           setupFee: "2,919",
@@ -336,39 +354,39 @@ export const WhatsAppPage = () => {
   ];
 
   const greenTickComparison = [
-    { feature: "ظهور اسم الشركة", basic: true, verified: true, unverified: false },
-    { feature: "الشارة الخضراء الرسمية", basic: false, verified: true, unverified: false },
-    { feature: "ثقة أعلى من العملاء", basic: true, verified: true, unverified: false },
-    { feature: "رسائل غير محدودة", basic: false, verified: true, unverified: false }
+    { feature: isRTL ? "ظهور اسم الشركة" : "Company Name Visibility", basic: true, verified: true, unverified: false },
+    { feature: isRTL ? "الشارة الخضراء الرسمية" : "Official Green Badge", basic: false, verified: true, unverified: false },
+    { feature: isRTL ? "ثقة أعلى من العملاء" : "Higher Customer Trust", basic: true, verified: true, unverified: false },
+    { feature: isRTL ? "رسائل غير محدودة" : "Unlimited Messages", basic: false, verified: true, unverified: false }
   ];
 
   const apiPricing = [
     {
-      type: "محادثات خدمة العملاء",
-      price: "مجانية",
-      duration: "24 ساعة",
-      description: "الرد على استفسارات العملاء خلال 24 ساعة من آخر رسالة",
+      type: isRTL ? "محادثات خدمة العملاء" : "Customer Service Conversations",
+      price: isRTL ? "مجانية" : "Free",
+      duration: isRTL ? "24 ساعة" : "24 Hours",
+      description: isRTL ? "الرد على استفسارات العملاء خلال 24 ساعة من آخر رسالة" : "Reply to customer inquiries within 24 hours of their last message",
       color: "bg-green-50 border-green-200"
     },
     {
-      type: "رسائل التحقق (OTP)",
-      price: "0.04 ر.س",
-      duration: "للرسالة",
-      description: "رموز التحقق وتأكيد الهوية للمصادقة الآمنة",
+      type: isRTL ? "رسائل التحقق (OTP)" : "Verification Messages (OTP)",
+      price: isRTL ? "0.04 ر.س" : "0.04 SAR",
+      duration: isRTL ? "للرسالة" : "per msg",
+      description: isRTL ? "رموز التحقق وتأكيد الهوية للمصادقة الآمنة" : "Verification codes and identity confirmation for secure authentication",
       color: "bg-purple-50 border-purple-200"
     },
     {
-      type: "محادثات التفعيل",
-      price: "0.08 ر.س",
-      duration: "للرسالة",
-      description: "تأكيد الطلبات، إشعارات الشحن، وتحديثات الحساب",
+      type: isRTL ? "محادثات التفعيل" : "Activation Conversations",
+      price: isRTL ? "0.08 ر.س" : "0.08 SAR",
+      duration: isRTL ? "للرسالة" : "per msg",
+      description: isRTL ? "تأكيد الطلبات، إشعارات الشحن، وتحديثات الحساب" : "Order confirmations, shipping notices, and account updates",
       color: "bg-blue-50 border-blue-200"
     },
     {
-      type: "محادثات التسويق",
-      price: "0.17 ر.س",
-      duration: "للرسالة",
-      description: "رسائل ترويجية وحملات إعلانية للعملاء",
+      type: isRTL ? "محادثات التسويق" : "Marketing Conversations",
+      price: isRTL ? "0.17 ر.س" : "0.17 SAR",
+      duration: isRTL ? "للرسالة" : "per msg",
+      description: isRTL ? "رسائل ترويجية وحملات إعلانية للعملاء" : "Promotional messages and ad campaigns for customers",
       color: "bg-orange-50 border-orange-200"
     }
   ];
@@ -381,7 +399,7 @@ export const WhatsAppPage = () => {
       {
         id: prev.length + 1,
         type: 'user',
-        text: 'عرض الباقات',
+        text: isRTL ? 'عرض الباقات' : 'Show Packages',
         buttons: false
       }
     ]);
@@ -393,7 +411,9 @@ export const WhatsAppPage = () => {
         {
           id: prev.length + 1,
           type: 'bot',
-          text: 'لدينا 3 باقات: الأساسية (399 ر.س) تشمل API وربط المتجر، باقة النمو (659 ر.س) 🌟 الأكثر طلباً مع شات بوت ذكي، والاحترافية (999 ر.س) مع AI Agent. كل باقة لها 3 شرائح حسب الاستخدام 📊',
+          text: isRTL 
+            ? 'لدينا 3 باقات: الأساسية (399 ر.س) تشمل API وربط المتجر، باقة النمو (659 ر.س) 🌟 الأكثر طلباً مع شات بوت ذكي، والاحترافية (999 ر.س) مع AI Agent. كل باقة لها 3 شرائح حسب الاستخدام 📊'
+            : 'We have 3 packages: Basic (399 SAR) includes API and Store linking, Growth (659 SAR) 🌟 Most popular with Smart Chatbot, and Professional (999 SAR) with AI Agent. Each has 3 tiers 📊',
           buttons: false
         }
       ]);
@@ -405,7 +425,7 @@ export const WhatsAppPage = () => {
           {
             id: prev.length + 1,
             type: 'bot',
-            text: 'هل ترغب بالتحدث مع موظف المبيعات؟',
+            text: isRTL ? 'هل ترغب بالتحدث مع موظف المبيعات؟' : 'Would you like to speak with a sales representative?',
             confirmButton: true
           }
         ]);
@@ -421,7 +441,7 @@ export const WhatsAppPage = () => {
       {
         id: prev.length + 1,
         type: 'user',
-        text: 'نعم',
+        text: isRTL ? 'نعم' : 'Yes',
         buttons: false
       }
     ]);
@@ -433,7 +453,9 @@ export const WhatsAppPage = () => {
         {
           id: prev.length + 1,
           type: 'sales',
-          text: 'مرحباً! معك محمد من فريق المبيعات - المدار 👋 يسعدني مساعدتك في اختيار الباقة المناسبة لاحتياجاتك. هل لديك أي استفسار محدد؟',
+          text: isRTL 
+            ? 'مرحباً! معك محمد من فريق المبيعات - المدار 👋 يسعدني مساعدتك في اختيار الباقة المناسبة لاحتياجاتك. هل لديك أي استفسار محدد؟'
+            : 'Hello! This is Mohammed from ORBIT Sales 👋 I would be happy to help you choose the right package. Do you have any specific questions?',
           buttons: false
         }
       ]);
@@ -441,7 +463,12 @@ export const WhatsAppPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white" data-page="whatsapp">
+    <div 
+      className={`min-h-screen bg-white ${isRTL ? 'font-ibm-plex-arabic' : 'font-ibm-plex'}`} 
+      data-page="whatsapp"
+      style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
+      dir={isRTL ? 'rtl' : 'ltr'}
+    >
       {/* Hero Section */}
       <section className="relative pt-24 md:pt-32 pb-12 md:pb-20 bg-gradient-to-br from-white via-green-50/30 to-orange-50/20 overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzI1RDM2NiIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-40"></div>
@@ -449,20 +476,22 @@ export const WhatsAppPage = () => {
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             {/* النص - اليمين */}
-            <div className="text-right space-y-4 md:space-y-6">
+            <div className={`text-${isRTL ? 'right' : 'left'} space-y-4 md:space-y-6`}>
               <Badge className="bg-[#25D366] text-white border-none px-4 py-2 text-sm">
-                <MessageCircle className="w-4 h-4 ml-2 inline" />
-                واتساب أعمال API المعتمد
+                <MessageCircle className={`w-4 h-4 inline ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                {isRTL ? "واتساب أعمال API المعتمد" : "Official WhatsApp Business API"}
               </Badge>
 
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#161616] leading-tight">
-                تواصل إحترافي مع عملائك
+                {isRTL ? "تواصل إحترافي مع عملائك" : "Professional Communication"}
                 <br />
-                <span className="text-[#25D366]">عبر واتساب أعمال API</span><span className="text-[#F15822]">.</span>
+                <span className="text-[#25D366]">{isRTL ? "عبر واتساب أعمال API" : "via WhatsApp Business API"}</span><span className="text-[#F15822]">.</span>
               </h1>
 
               <p className="text-lg md:text-xl text-[#606161] leading-relaxed max-w-xl">
-                كن أقرب لعملائك. نوفر لك ربطاً رسمياً ومعتمداً بخدمة واتساب مع أدوات متقدمة لإدارة المحادثات، الشات بوت، والحملات التسويقية.
+                {isRTL 
+                  ? "كن أقرب لعملائك. نوفر لك ربطاً رسمياً ومعتمداً بخدمة واتساب مع أدوات متقدمة لإدارة المحادثات، الشات بوت، والحملات التسويقية." 
+                  : "Get closer to your customers. We provide an official WhatsApp integration with advanced tools for chat management, chatbots, and marketing campaigns."}
               </p>
 
               <div className="flex gap-4 flex-wrap">
@@ -472,8 +501,8 @@ export const WhatsAppPage = () => {
                   asChild
                 >
                   <a href="https://wapp.mobile.net.sa/billing-subscription" target="_blank" rel="noopener noreferrer">
-                    اطلب الخدمة الآن
-                    <ArrowRight className="w-5 h-5 mr-2" />
+                    {isRTL ? "اطلب الخدمة الآن" : "Order Service Now"}
+                    <ArrowRight className={`w-5 h-5 ${isRTL ? 'mr-2' : 'ml-2'}`} />
                   </a>
                 </Button>
                 <Button
@@ -487,8 +516,8 @@ export const WhatsAppPage = () => {
                     }
                   }}
                 >
-                  استعرض الباقات
-                  <BarChart3 className="w-5 h-5 mr-2" />
+                  {isRTL ? "استعرض الباقات" : "View Packages"}
+                  <BarChart3 className={`w-5 h-5 ${isRTL ? 'mr-2' : 'ml-2'}`} />
                 </Button>
               </div>
 
@@ -496,15 +525,15 @@ export const WhatsAppPage = () => {
               <div className="grid grid-cols-3 gap-6 pt-8 border-t border-gray-200">
                 <div>
                   <div className="text-3xl font-extrabold text-[#25D366]">98%</div>
-                  <div className="text-sm text-gray-600">معدل الفتح</div>
+                  <div className="text-sm text-gray-600">{isRTL ? "معدل الفتح" : "Open Rate"}</div>
                 </div>
                 <div>
                   <div className="text-3xl font-extrabold text-[#128C7E]">20,000+</div>
-                  <div className="text-sm text-gray-600">عميل نشط</div>
+                  <div className="text-sm text-gray-600">{isRTL ? "عميل نشط" : "Active Clients"}</div>
                 </div>
                 <div>
                   <div className="text-3xl font-extrabold text-[#161616]">24/7</div>
-                  <div className="text-sm text-gray-600">دعم فني</div>
+                  <div className="text-sm text-gray-600">{isRTL ? "دعم فني" : "Support"}</div>
                 </div>
               </div>
             </div>
@@ -535,17 +564,17 @@ export const WhatsAppPage = () => {
                       <div className="flex gap-2 items-start animate-fade-in">
                         <div className="w-8 h-8 bg-blue-500 rounded-full flex-shrink-0"></div>
                         <div className="bg-white p-3 rounded-lg shadow-sm max-w-[70%]">
-                          <div className="text-xs text-gray-500 mb-1">أحمد - قسم المبيعات</div>
-                          <div className="text-sm">مرحباً! كيف يمكنني مساعدتك اليوم؟</div>
-                          <div className="text-xs text-gray-400 mt-1">10:30 صباحاً</div>
+                          <div className="text-xs text-gray-500 mb-1">{isRTL ? "أحمد - قسم المبيعات" : "Ahmed - Sales"}</div>
+                          <div className="text-sm">{isRTL ? "مرحباً! كيف يمكنني مساعدتك اليوم؟" : "Hello! How can I help you today?"}</div>
+                          <div className="text-xs text-gray-400 mt-1">10:30 AM</div>
                         </div>
                       </div>
 
                       <div className="flex gap-2 items-start justify-end animate-fade-in">
                         <div className="bg-[#DCF8C6] p-3 rounded-lg shadow-sm max-w-[70%]">
-                          <div className="text-sm">أريد الاستفسار عن باقات واتساب API</div>
+                          <div className="text-sm">{isRTL ? "أريد الاستفسار عن باقات واتساب API" : "I want to inquire about WhatsApp API packages"}</div>
                           <div className="text-xs text-gray-500 mt-1 flex items-center justify-end gap-1">
-                            10:31 صباحاً
+                            10:31 AM
                             <CheckCircle2 className="w-3 h-3 text-blue-500" />
                           </div>
                         </div>
@@ -558,7 +587,7 @@ export const WhatsAppPage = () => {
                               <div className="bg-[#DCF8C6] p-3 rounded-lg shadow-sm max-w-[70%]">
                                 <div className="text-sm">{msg.text}</div>
                                 <div className="text-xs text-gray-500 mt-1 flex items-center justify-end gap-1">
-                                  {new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' })}
+                                  {new Date().toLocaleTimeString(isRTL ? 'ar-SA' : 'en-US', { hour: '2-digit', minute: '2-digit' })}
                                   <CheckCircle2 className="w-3 h-3 text-blue-500" />
                                 </div>
                               </div>
@@ -567,16 +596,18 @@ export const WhatsAppPage = () => {
                             <div className="flex gap-2 items-start">
                               <div className={`w-8 h-8 ${msg.type === 'bot' ? 'bg-green-500' : 'bg-blue-500'} rounded-full flex-shrink-0`}></div>
                               <div className="bg-white p-3 rounded-lg shadow-sm max-w-[70%]">
-                                <div className="text-xs text-gray-500 mb-1">{msg.type === 'bot' ? 'بوت آلي 🤖' : 'محمد - قسم المبيعات 👤'}</div>
+                                <div className="text-xs text-gray-500 mb-1">
+                                  {msg.type === 'bot' ? (isRTL ? 'بوت آلي 🤖' : 'Automated Bot 🤖') : (isRTL ? 'محمد - قسم المبيعات 👤' : 'Mohammed - Sales 👤')}
+                                </div>
                                 <div className="text-sm">{msg.text}</div>
                                 {msg.buttons && (
                                   <div className="flex gap-2 mt-2">
-                                    <Button size="sm" variant="outline" className="text-xs h-7" onClick={handleShowPackages}>عرض الباقات</Button>
+                                    <Button size="sm" variant="outline" className="text-xs h-7" onClick={handleShowPackages}>{isRTL ? 'عرض الباقات' : 'Show Packages'}</Button>
                                   </div>
                                 )}
                                 {msg.confirmButton && (
                                   <div className="flex gap-2 mt-2">
-                                    <Button size="sm" variant="outline" className="text-xs h-7" onClick={handleConfirmSales}>نعم</Button>
+                                    <Button size="sm" variant="outline" className="text-xs h-7" onClick={handleConfirmSales}>{isRTL ? 'نعم' : 'Yes'}</Button>
                                   </div>
                                 )}
                               </div>
@@ -603,13 +634,13 @@ export const WhatsAppPage = () => {
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-10 md:mb-16">
             <Badge className="bg-green-100 text-[#25D366] border-none px-4 py-2 text-sm mb-3 md:mb-4">
-              المميزات الرئيسية
+              {isRTL ? "المميزات الرئيسية" : "Key Features"}
             </Badge>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#161616] mb-3 md:mb-4">
-              لماذا واتساب الأعمال؟
+              {isRTL ? "لماذا واتساب الأعمال؟" : "Why WhatsApp Business?"}
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              المنصة الأكثر ثقة وانتشاراً للتواصل مع عملائك في المملكة
+              {isRTL ? "المنصة الأكثر ثقة وانتشاراً للتواصل مع عملائك في المملكة" : "The most trusted and widespread platform for communicating with your customers in the Kingdom"}
             </p>
           </div>
 
@@ -642,13 +673,13 @@ export const WhatsAppPage = () => {
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-10 md:mb-16">
             <Badge className="bg-orange-100 text-[#F15822] border-none px-4 py-2 text-sm mb-3 md:mb-4">
-              الحلول المتقدمة
+              {isRTL ? "الحلول المتقدمة" : "Advanced Solutions"}
             </Badge>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#161616] mb-3 md:mb-4">
-              أدوات احترافية لإدارة محادثاتك
+              {isRTL ? "أدوات احترافية لإدارة محادثاتك" : "Professional Tools to Manage Conversations"}
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              كل ما تحتاجه لتحويل واتساب إلى قناة تواصل احترافية مع عملائك
+              {isRTL ? "كل ما تحتاجه لتحويل واتساب إلى قناة تواصل احترافية مع عملائك" : "Everything you need to turn WhatsApp into a professional communication channel with your customers"}
             </p>
           </div>
 
@@ -695,15 +726,15 @@ export const WhatsAppPage = () => {
             {/* أزرار التنقل - ديسكتوب فقط - خارج المحتوى */}
             <button
               onClick={() => setCurrentSolutionIndex(prev => (prev === 0 ? solutions.length - 1 : prev - 1))}
-              className="hidden md:block absolute -right-6 lg:-right-12 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-[#25D366] text-[#25D366] hover:text-white rounded-full p-3 shadow-lg transition-all hover:scale-110"
+              className={`hidden md:block absolute ${isRTL ? '-right-6 lg:-right-12' : '-left-6 lg:-left-12'} top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-[#25D366] text-[#25D366] hover:text-white rounded-full p-3 shadow-lg transition-all hover:scale-110`}
             >
-              <ChevronRight className="w-6 h-6" />
+              {isRTL ? <ChevronRight className="w-6 h-6" /> : <ChevronLeft className="w-6 h-6" />}
             </button>
             <button
               onClick={() => setCurrentSolutionIndex(prev => (prev === solutions.length - 1 ? 0 : prev + 1))}
-              className="hidden md:block absolute -left-6 lg:-left-12 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-[#25D366] text-[#25D366] hover:text-white rounded-full p-3 shadow-lg transition-all hover:scale-110"
+              className={`hidden md:block absolute ${isRTL ? '-left-6 lg:-left-12' : '-right-6 lg:-right-12'} top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-[#25D366] text-[#25D366] hover:text-white rounded-full p-3 shadow-lg transition-all hover:scale-110`}
             >
-              <ChevronLeft className="w-6 h-6" />
+              {isRTL ? <ChevronLeft className="w-6 h-6" /> : <ChevronRight className="w-6 h-6" />}
             </button>
 
             {/* نقاط التنقل */}
@@ -720,7 +751,7 @@ export const WhatsAppPage = () => {
 
             {/* مؤشر السحب للجوال */}
             <div className="md:hidden text-center mt-4">
-              <p className="text-xs text-gray-500">← اسحب لرؤية المزيد →</p>
+              <p className="text-xs text-gray-500">{isRTL ? "← اسحب لرؤية المزيد →" : "← Swipe to see more →"}</p>
             </div>
           </div>
         </div>
@@ -733,13 +764,13 @@ export const WhatsAppPage = () => {
             {/* النص */}
             <div>
               <Badge className="bg-[#F15822] text-white border-none px-4 py-2 text-sm mb-3 md:mb-4">
-                التسويق الذكي
+                {isRTL ? "التسويق الذكي" : "Smart Marketing"}
               </Badge>
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#161616] mb-4 md:mb-6">
-                أطلق حملاتك التسويقية بذكاء
+                {isRTL ? "أطلق حملاتك التسويقية بذكاء" : "Launch Your Campaigns Smartly"}
               </h2>
               <p className="text-lg text-gray-600 mb-6 md:mb-8 leading-relaxed">
-                استهدف عملاءك بدقة، حدد جدولة زمنية للحملات، واستخدم قوالب رسائل جاهزة مع أزرار تفاعلية لزيادة معدلات التحويل.
+                {isRTL ? "استهدف عملاءك بدقة، حدد جدولة زمنية للحملات، واستخدم قوالب رسائل جاهزة مع أزرار تفاعلية لزيادة معدلات التحويل." : "Target your customers accurately, schedule campaigns, and use ready-made message templates with interactive buttons to increase conversion rates."}
               </p>
 
               <div className="space-y-4">
@@ -762,13 +793,13 @@ export const WhatsAppPage = () => {
               <Card className="shadow-2xl border-0 overflow-hidden">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-xl font-bold text-[#161616]">تقرير الحملة الأخيرة</h3>
-                    <Badge className="bg-green-100 text-green-700">نشطة</Badge>
+                    <h3 className="text-xl font-bold text-[#161616]">{isRTL ? "تقرير الحملة الأخيرة" : "Last Campaign Report"}</h3>
+                    <Badge className="bg-green-100 text-green-700">{isRTL ? "نشطة" : "Active"}</Badge>
                   </div>
 
                   <div className="space-y-4 mb-6">
                     <div className="bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-lg">
-                      <div className="text-sm text-gray-600 mb-1">معدل الفتح (Open Rate)</div>
+                      <div className="text-sm text-gray-600 mb-1">{isRTL ? "معدل الفتح" : "Open Rate"}</div>
                       <div className="text-3xl font-extrabold text-[#25D366]">94.2%</div>
                       <div className="w-full bg-white h-2 rounded-full mt-2 overflow-hidden">
                         <div className="bg-[#25D366] h-full rounded-full" style={{ width: '94.2%' }}></div>
@@ -776,7 +807,7 @@ export const WhatsAppPage = () => {
                     </div>
 
                     <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg">
-                      <div className="text-sm text-gray-600 mb-1">معدل النقر (Click Rate)</div>
+                      <div className="text-sm text-gray-600 mb-1">{isRTL ? "معدل النقر" : "Click Rate"}</div>
                       <div className="text-3xl font-extrabold text-blue-600">67.8%</div>
                       <div className="w-full bg-white h-2 rounded-full mt-2 overflow-hidden">
                         <div className="bg-blue-600 h-full rounded-full" style={{ width: '67.8%' }}></div>
@@ -784,7 +815,7 @@ export const WhatsAppPage = () => {
                     </div>
 
                     <div className="bg-gradient-to-r from-orange-50 to-orange-100 p-4 rounded-lg">
-                      <div className="text-sm text-gray-600 mb-1">معدل التحويل (Conversion)</div>
+                      <div className="text-sm text-gray-600 mb-1">{isRTL ? "معدل التحويل" : "Conversion"}</div>
                       <div className="text-3xl font-extrabold text-[#F15822]">23.4%</div>
                       <div className="w-full bg-white h-2 rounded-full mt-2 overflow-hidden">
                         <div className="bg-[#F15822] h-full rounded-full" style={{ width: '23.4%' }}></div>
@@ -795,7 +826,7 @@ export const WhatsAppPage = () => {
                   <div className="grid grid-cols-2 gap-4 text-center pt-4 border-t border-gray-200">
                     <div>
                       <div className="text-2xl font-bold text-[#161616]">12,547</div>
-                      <div className="text-xs text-gray-500">رسالة مرسلة</div>
+                      <div className="text-xs text-gray-500">{isRTL ? "رسالة مرسلة" : "Messages Sent"}</div>
                     </div>
                     <div>
                       <div className="text-2xl font-bold text-[#161616]">2,936</div>
@@ -818,10 +849,10 @@ export const WhatsAppPage = () => {
                 <BadgeCheck className="w-10 h-10 text-white" />
               </div>
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#161616] mb-3 md:mb-4">
-                احصل على الشارة الخضراء (Green Tick)
+                {isRTL ? "احصل على الشارة الخضراء (Green Tick)" : "Get the Green Tick"}
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                عزز ثقة عملائك وتميز عن المنافسين بحساب موثوق رسمياً من واتساب
+                {isRTL ? "عزز ثقة عملائك وتميز عن المنافسين بحساب موثوق رسمياً من واتساب" : "Boost your customers' trust and stand out from competitors with an officially verified WhatsApp account"}
               </p>
             </div>
 
@@ -832,17 +863,17 @@ export const WhatsAppPage = () => {
                   <table className="w-full">
                     <thead>
                       <tr className="bg-gradient-to-r from-green-100 to-green-50">
-                        <th className="text-right p-4 font-bold text-[#161616]">المميزات</th>
+                        <th className={`text-${isRTL ? 'right' : 'left'} p-4 font-bold text-[#161616]`}>{isRTL ? "المميزات" : "Features"}</th>
                         <th className="text-center p-4 font-bold text-gray-600">
-                          بدون توثيق
+                          {isRTL ? "بدون توثيق" : "Unverified"}
                         </th>
                         <th className="text-center p-4 font-bold text-blue-600">
-                          حساب تجاري
-                          <BadgeCheck className="w-5 h-5 inline mr-1 text-blue-500" />
+                          {isRTL ? "حساب تجاري" : "Business Account"}
+                          <BadgeCheck className={`w-5 h-5 inline ${isRTL ? 'mr-1' : 'ml-1'} text-blue-500`} />
                         </th>
                         <th className="text-center p-4 font-bold text-[#25D366]">
-                          حساب موثوق
-                          <BadgeCheck className="w-5 h-5 inline mr-1" />
+                          {isRTL ? "حساب موثوق" : "Verified Account"}
+                          <BadgeCheck className={`w-5 h-5 inline ${isRTL ? 'mr-1' : 'ml-1'}`} />
                         </th>
                       </tr>
                     </thead>
@@ -878,10 +909,10 @@ export const WhatsAppPage = () => {
             <div className="mt-8 text-center bg-green-50 border-2 border-green-200 rounded-xl p-6">
               <Award className="w-12 h-12 text-[#25D366] mx-auto mb-3" />
               <p className="text-lg font-bold text-[#161616] mb-2">
-                فريق المدار يساعدك في تجهيز المتطلبات
+                {isRTL ? "فريق المدار يساعدك في تجهيز المتطلبات" : "ORBIT Team helps you prepare the requirements"}
               </p>
               <p className="text-gray-600 mb-4">
-                نوفر لك الدعم الكامل للحصول على التوثيق الرسمي من واتساب
+                {isRTL ? "نوفر لك الدعم الكامل للحصول على التوثيق الرسمي من واتساب" : "We provide you with full support to get official WhatsApp verification"}
               </p>
             </div>
           </div>
@@ -893,13 +924,13 @@ export const WhatsAppPage = () => {
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-16">
             <Badge className="bg-purple-100 text-purple-700 border-none px-4 py-2 text-sm mb-4">
-              الباقات والأسعار
+              {isRTL ? "الباقات والأسعار" : "Packages and Pricing"}
             </Badge>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#161616] mb-4">
-              اختر الباقة المناسبة لنمو أعمالك
+              {isRTL ? "اختر الباقة المناسبة لنمو أعمالك" : "Choose the right package for your business growth"}
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              باقات مرنة تناسب جميع أحجام الأعمال من الشركات الناشئة إلى المؤسسات الكبرى
+              {isRTL ? "باقات مرنة تناسب جميع أحجام الأعمال من الشركات الناشئة إلى المؤسسات الكبرى" : "Flexible packages suitable for all business sizes from startups to large enterprises"}
             </p>
           </div>
 
@@ -907,7 +938,7 @@ export const WhatsAppPage = () => {
           <div className="relative max-w-6xl mx-auto mb-12">
             {/* مؤشر السحب على الجوال */}
             <div className="md:hidden text-center mb-4">
-              <p className="text-sm text-gray-500">← اسحب لرؤية المزيد →</p>
+              <p className="text-sm text-gray-500">{isRTL ? "← اسحب لرؤية المزيد →" : "← Swipe to see more →"}</p>
             </div>
 
             {/* حاوية الباقات */}
@@ -942,7 +973,7 @@ export const WhatsAppPage = () => {
 
                           {/* Tabs لاختيار الشريحة */}
                           <div className="mb-4 md:mb-6">
-                            <div className="flex gap-1.5 md:gap-2 justify-center mb-3 md:mb-4">
+                            <div className="flex gap-1.5 md:gap-2 justify-center mb-3 md:mb-4 flex-wrap">
                               {plan.tiers.map((tier, index) => (
                                 <button
                                   key={index}
@@ -962,20 +993,20 @@ export const WhatsAppPage = () => {
                           <div className="mb-4 md:mb-6 bg-blue-50 rounded-lg p-3 md:p-4 border-2 border-blue-200">
                             <h4 className="text-[10px] md:text-xs font-bold text-blue-900 mb-2 md:mb-3 flex items-center justify-center gap-1.5 md:gap-2">
                               <BarChart3 className="w-3 md:w-4 h-3 md:h-4" />
-                              السعة والحدود
+                              {isRTL ? "السعة والحدود" : "Capacity and Limits"}
                             </h4>
                             <div className="space-y-1.5 md:space-y-2 text-[10px] md:text-xs">
                               <div className="flex items-center justify-center gap-1.5 md:gap-2">
                                 <CheckCircle2 className="w-3 md:w-4 h-3 md:h-4 text-blue-500 flex-shrink-0" />
-                                <span className="text-gray-700 font-semibold">{currentTier.conversations} محادثة</span>
+                                <span className="text-gray-700 font-semibold">{currentTier.conversations} {isRTL ? "محادثة" : "Conversations"}</span>
                               </div>
                               <div className="flex items-center justify-center gap-1.5 md:gap-2">
                                 <CheckCircle2 className="w-3 md:w-4 h-3 md:h-4 text-blue-500 flex-shrink-0" />
-                                <span className="text-gray-700 font-semibold">{currentTier.broadcastMessages} رسالة بث</span>
+                                <span className="text-gray-700 font-semibold">{currentTier.broadcastMessages} {isRTL ? "رسالة بث" : "Broadcasts"}</span>
                               </div>
                               <div className="flex items-center justify-center gap-1.5 md:gap-2">
                                 <CheckCircle2 className="w-3 md:w-4 h-3 md:h-4 text-blue-500 flex-shrink-0" />
-                                <span className="text-gray-700 font-semibold">حتى {currentTier.users} مستخدمين</span>
+                                <span className="text-gray-700 font-semibold">{isRTL ? `حتى ${currentTier.users} مستخدمين` : `Up to ${currentTier.users} Users`}</span>
                               </div>
                             </div>
                           </div>
@@ -985,11 +1016,11 @@ export const WhatsAppPage = () => {
                             <span className="text-3xl md:text-5xl font-extrabold text-[#161616]">
                               {currentTier.price}
                             </span>
-                            <span className="text-base md:text-xl text-gray-600">ر.س</span>
+                            <span className="text-base md:text-xl text-gray-600">{isRTL ? "ر.س" : "SAR"}</span>
                           </div>
                           <p className="text-xs md:text-sm text-gray-500 mb-0.5 md:mb-1">{plan.period}</p>
-                          <p className="text-[10px] md:text-xs text-gray-400">شامل الضريبة: {currentTier.priceWithTax} ر.س</p>
-                          <p className="text-[10px] md:text-xs text-gray-400">رسوم التأسيس: {currentTier.setupFee} ر.س</p>
+                          <p className="text-[10px] md:text-xs text-gray-400">{isRTL ? `شامل الضريبة: ${currentTier.priceWithTax} ر.س` : `Tax included: ${currentTier.priceWithTax} SAR`}</p>
+                          <p className="text-[10px] md:text-xs text-gray-400">{isRTL ? `رسوم التأسيس: ${currentTier.setupFee} ر.س` : `Setup fee: ${currentTier.setupFee} SAR`}</p>
                         </div>
 
                         <Button
@@ -997,7 +1028,7 @@ export const WhatsAppPage = () => {
                           asChild
                         >
                           <a href="https://wapp.mobile.net.sa/billing-subscription" target="_blank" rel="noopener noreferrer">
-                            اشترك الآن
+                            {isRTL ? "اشترك الآن" : "Subscribe Now"}
                           </a>
                         </Button>
 
@@ -1007,13 +1038,13 @@ export const WhatsAppPage = () => {
                             <div className="w-5 md:w-6 h-5 md:h-6 bg-green-100 rounded-full flex items-center justify-center">
                               <Sparkles className="w-2.5 md:w-3 h-2.5 md:h-3 text-[#25D366]" />
                             </div>
-                            المميزات الإضافية
+                            {isRTL ? "المميزات الإضافية" : "Additional Features"}
                           </h4>
                           <div className="space-y-2 md:space-y-3">
                             {plan.additionalFeatures.map((feature, index) => (
                               <div key={index} className="flex items-start gap-2 md:gap-3">
                                 <CheckCircle2 className="w-4 md:w-5 h-4 md:h-5 text-[#25D366] flex-shrink-0 mt-0.5" />
-                                <span className="text-xs md:text-sm text-gray-700 text-right">{feature}</span>
+                                <span className={`text-xs md:text-sm text-gray-700 text-${isRTL ? 'right' : 'left'}`}>{feature}</span>
                               </div>
                             ))}
                           </div>
@@ -1041,10 +1072,10 @@ export const WhatsAppPage = () => {
           <div className="text-center bg-blue-50 border-2 border-blue-200 rounded-xl p-6 max-w-4xl mx-auto">
             <div className="flex items-center justify-center gap-2 mb-2">
               <Star className="w-5 h-5 text-blue-600" />
-              <p className="font-bold text-[#161616]">ملاحظة مهمة</p>
+              <p className="font-bold text-[#161616]">{isRTL ? "ملاحظة مهمة" : "Important Note"}</p>
             </div>
             <p className="text-gray-600">
-              الأسعار الموضحة تشمل 3 شرائح لكل باقة. تتوفر خصومات خاصة للشركات الكبرى والجهات الحكومية.
+              {isRTL ? "الأسعار الموضحة تشمل 3 شرائح لكل باقة. تتوفر خصومات خاصة للشركات الكبرى والجهات الحكومية." : "The stated prices include 3 tiers for each package. Special discounts are available for large companies and government entities."}
             </p>
           </div>
         </div>
@@ -1056,13 +1087,13 @@ export const WhatsAppPage = () => {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <Badge className="bg-blue-100 text-blue-700 border-none px-4 py-2 text-sm mb-4">
-                تكلفة المحادثات
+                {isRTL ? "تكلفة المحادثات" : "Conversation Costs"}
               </Badge>
               <h2 className="text-3xl md:text-4xl font-extrabold text-[#161616] mb-4">
-                أسعار محادثات واتساب API
+                {isRTL ? "أسعار محادثات واتساب API" : "WhatsApp API Conversation Prices"}
               </h2>
               <p className="text-lg text-gray-600">
-                الأسعار التالية محددة من واتساب (Meta) للسوق السعودي
+                {isRTL ? "الأسعار التالية محددة من واتساب (Meta) للسوق السعودي" : "The following prices are standardized by WhatsApp (Meta) for the Saudi Market"}
               </p>
             </div>
 
@@ -1095,10 +1126,12 @@ export const WhatsAppPage = () => {
                   <Zap className="w-5 h-5 md:w-6 md:h-6 text-white" />
                 </div>
                 <div>
-                  <h4 className="text-sm md:text-base font-bold text-[#161616] mb-1 md:mb-2">💡 نصيحة احترافية</h4>
-                  <p className="text-sm md:text-base text-gray-600">
-                    محادثات خدمة العملاء <span className="font-bold text-[#25D366]">مجانية تماماً</span> خلال 24 ساعة من آخر رسالة!
-                    استفد من هذه الميزة للرد على استفسارات عملائك دون أي تكلفة إضافية.
+                  <h4 className="text-sm md:text-base font-bold text-[#161616] mb-1 md:mb-2 text-start">💡 {isRTL ? "نصيحة احترافية" : "Pro Tip"}</h4>
+                  <p className={`text-sm md:text-base text-gray-600 text-${isRTL ? 'right' : 'left'}`}>
+                    {isRTL 
+                      ? <>محادثات خدمة العملاء <span className="font-bold text-[#25D366]">مجانية تماماً</span> خلال 24 ساعة من آخر رسالة! استفد من هذه الميزة للرد على استفسارات عملائك دون أي تكلفة إضافية.</>
+                      : <>Customer service conversations are <span className="font-bold text-[#25D366]">completely FREE</span> within 24 hours of the last message! Take advantage of this feature to answer customer inquiries at no extra cost.</>
+                    }
                   </p>
                 </div>
               </div>
@@ -1115,10 +1148,10 @@ export const WhatsAppPage = () => {
           <div className="max-w-4xl mx-auto text-center">
             <Sparkles className="w-16 h-16 text-[#25D366] mx-auto mb-6" />
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-6">
-              جاهز لنقل خدمة عملائك لمستوى آخر؟
+              {isRTL ? "جاهز لنقل خدمة عملائك لمستوى آخر؟" : "Ready to take your customer service to the next level?"}
             </h2>
             <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-              فريقنا جاهز لمساعدتك في الحصول على الشارة الخضراء وربط الـ API بكل سهولة واحترافية
+              {isRTL ? "فريقنا جاهز لمساعدتك في الحصول على الشارة الخضراء وربط الـ API بكل سهولة واحترافية" : "Our team is ready to help you get the Green Badge and integrate the API easily and professionally"}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
@@ -1127,8 +1160,8 @@ export const WhatsAppPage = () => {
                 asChild
               >
                 <a href="https://wapp.mobile.net.sa/billing-subscription" target="_blank" rel="noopener noreferrer">
-                  ابدأ رحلتك مع المدار
-                  <ArrowRight className="w-6 h-6 mr-2" />
+                  {isRTL ? "ابدأ رحلتك مع المدار" : "Start your journey with ORBIT"}
+                  <ArrowRight className={`w-6 h-6 ${isRTL ? 'mr-2' : 'ml-2'}`} />
                 </a>
               </Button>
               <Button
@@ -1137,8 +1170,8 @@ export const WhatsAppPage = () => {
                 asChild
               >
                 <a href="https://wa.me/966920006900?text=%E2%80%8E%20%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%2C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%A7%D9%84%D8%AD%D8%AB%20%D9%84%D9%84%D9%85%D8%A8%D9%8A%D8%B9%D8%A7%D8%AA%20%D9%88%D8%A7%D9%84%D8%A5%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AE%D8%AD%D9%85%D8%A9%20%D9%88%D8%A7%D8%AA%D8%B3%D8%A7%D8%A8%20%D8%A3%D8%B9%D9%85%D8%A7%D9%84%20api" target="_blank" rel="noopener noreferrer">
-                  تحدث مع فريق المبيعات
-                  <Headphones className="w-6 h-6 mr-2" />
+                  {isRTL ? "تحدث مع فريق المبيعات" : "Talk to Sales Team"}
+                  <Headphones className={`w-6 h-6 ${isRTL ? 'mr-2' : 'ml-2'}`} />
                 </a>
               </Button>
             </div>

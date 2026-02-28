@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import { Badge } from "../ui/badge";
@@ -18,6 +19,7 @@ const payrollImg = "/otime/payrollOtime.png";
 const attendanceImg = "/otime/attendenceOtime.png";
 
 export const OTimePage = () => {
+  const { isRTL } = useLanguage();
   const [currentScreenshot, setCurrentScreenshot] = useState(0);
   const [currentModule, setCurrentModule] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
@@ -26,18 +28,18 @@ export const OTimePage = () => {
   // Screenshots للنظام
   const screenshots = [
     {
-      title: "لوحة التحكم - مركز القيادة",
-      description: "نظرة شاملة على جميع عمليات الموارد البشرية في لوحة واحدة",
+      title: isRTL ? "لوحة التحكم - مركز القيادة" : "Dashboard - Command Center",
+      description: isRTL ? "نظرة شاملة على جميع عمليات الموارد البشرية في لوحة واحدة" : "Comprehensive overview of all HR operations in a single dashboard",
       image: dashboardImg
     },
     {
-      title: "نظام الرواتب الذكي",
-      description: "حساب وإصدار الرواتب تلقائياً مع التوافق الكامل مع نظام حماية الأجور",
+      title: isRTL ? "نظام الرواتب الذكي" : "Smart Payroll System",
+      description: isRTL ? "حساب وإصدار الرواتب تلقائياً مع التوافق الكامل مع نظام حماية الأجور" : "Automated salary calculation and issuance, fully compliant with the Wage Protection System (WPS)",
       image: payrollImg
     },
     {
-      title: "الحضور والانصراف",
-      description: "تتبع دقيق لساعات العمل مع دعم البصمة والموقع الجغرافي",
+      title: isRTL ? "الحضور والانصراف" : "Attendance & Departure",
+      description: isRTL ? "تتبع دقيق لساعات العمل مع دعم البصمة والموقع الجغرافي" : "Accurate tracking of working hours with biometric and GPS support",
       image: attendanceImg
     }
   ];
@@ -70,22 +72,22 @@ export const OTimePage = () => {
   const valueProps = [
     {
       icon: TrendingUp,
-      title: "التميز التشغيلي",
-      description: "توحيد عمليات الموارد البشرية وتقليل العمل اليدوي والأخطاء بنسبة تصل إلى 80%",
+      title: isRTL ? "التميز التشغيلي" : "Operational Excellence",
+      description: isRTL ? "توحيد عمليات الموارد البشرية وتقليل العمل اليدوي والأخطاء بنسبة تصل إلى 80%" : "Unify HR operations and reduce manual work and errors by up to 80%",
       color: "bg-blue-50",
       iconColor: "text-blue-600"
     },
     {
       icon: BarChart3,
-      title: "قرارات مبنية على البيانات",
-      description: "لوحات تحكم تعرض تحليلات فورية للرواتب، الحضور، والأداء لدعم اتخاذ القرار",
+      title: isRTL ? "قرارات مبنية على البيانات" : "Data-Driven Decisions",
+      description: isRTL ? "لوحات تحكم تعرض تحليلات فورية للرواتب، الحضور، والأداء لدعم اتخاذ القرار" : "Dashboards showing real-time analytics for payroll, attendance, and performance to support decision making",
       color: "bg-green-50",
       iconColor: "text-green-600"
     },
     {
       icon: Shield,
-      title: "أمان وسهولة",
-      description: "نظام سحابي مشفر، متوافق مع كافة الأجهزة، ويدعم الامتثال للأنظمة المحلية",
+      title: isRTL ? "أمان وسهولة" : "Secure & Simple",
+      description: isRTL ? "نظام سحابي مشفر، متوافق مع كافة الأجهزة، ويدعم الامتثال للأنظمة المحلية" : "Encrypted cloud system, compatible with all devices, and supports compliance with local regulations",
       color: "bg-purple-50",
       iconColor: "text-purple-600"
     }
@@ -94,122 +96,122 @@ export const OTimePage = () => {
   const modules = [
     {
       icon: Users,
-      title: "إدارة الموظفين والملفات",
-      description: "سجلات رقمية شاملة لدورة حياة الموظف الكاملة، إدارة العقود، الوثائق، والهيكل التنظيمي الديناميكي",
+      title: isRTL ? "إدارة الموظفين والملفات" : "Employee & File Management",
+      description: isRTL ? "سجلات رقمية شاملة لدورة حياة الموظف الكاملة، إدارة العقود، الوثائق، والهيكل التنظيمي الديناميكي" : "Comprehensive digital records for the entire employee lifecycle, contract and document management, and dynamic organizational structure",
       color: "bg-gradient-to-br from-[#104E8B] to-[#0d3d6e]",
-      features: ["ملفات رقمية شاملة", "إدارة العقود والوثائق", "الهيكل التنظيمي", "المسار المهني"]
+      features: isRTL ? ["ملفات رقمية شاملة", "إدارة العقود والوثائق", "الهيكل التنظيمي", "المسار المهني"] : ["Comprehensive digital files", "Contract and document management", "Organizational structure", "Career path"]
     },
     {
       icon: DollarSign,
-      title: "نظام الرواتب الذكي",
-      description: "إعداد مسيرات الرواتب تلقائياً، حساب البدلات والخصومات، وإصدار قسائم الدفع بما يتوافق مع نظام حماية الأجور",
+      title: isRTL ? "نظام الرواتب الذكي" : "Smart Payroll System",
+      description: isRTL ? "إعداد مسيرات الرواتب تلقائياً، حساب البدلات والخصومات، وإصدار قسائم الدفع بما يتوافق مع نظام حماية الأجور" : "Automate payroll generation, calculate allowances and deductions, and issue payslips in compliance with the Wage Protection System",
       color: "bg-gradient-to-br from-[#FFA502] to-[#e69302]",
-      features: ["حساب آلي للرواتب", "نظام حماية الأجور", "قسائم الراتب", "تقارير مالية"]
+      features: isRTL ? ["حساب آلي للرواتب", "نظام حماية الأجور", "قسائم الراتب", "تقارير مالية"] : ["Automated salary calculation", "Wage protection system", "Payslips", "Financial reports"]
     },
     {
       icon: Clock,
-      title: "الحضور والانصراف",
-      description: "تتبع دقيق لساعات العمل عبر الأجهزة البيومترية أو الموقع الجغرافي، مع إدارة سهلة للإجازات والمغادرات",
+      title: isRTL ? "الحضور والانصراف" : "Attendance & Departure",
+      description: isRTL ? "تتبع دقيق لساعات العمل عبر الأجهزة البيومترية أو الموقع الجغرافي، مع إدارة سهلة للإجازات والمغادرات" : "Accurate tracking of working hours via biometric devices or GPS, with easy management of leaves and early departures",
       color: "bg-gradient-to-br from-[#00BCD4] to-[#0097a7]",
-      features: ["تتبع البصمة", "الموقع الجغرافي", "إدارة الإجازات", "نظام الورديات"]
+      features: isRTL ? ["تتبع البصمة", "الموقع الجغرافي", "إدارة الإجازات", "نظام الورديات"] : ["Biometric tracking", "Geolocation", "Leave management", "Shift management"]
     },
     {
       icon: Target,
-      title: "إدارة الأداء والتقييم",
-      description: "نظام KPIs متطور، تقييمات دورية، ومتابعة أهداف الموظفين لرفع الإنتاجية وتحقيق التميز",
+      title: isRTL ? "إدارة الأداء والتقييم" : "Performance & Evaluation Management",
+      description: isRTL ? "نظام KPIs متطور، تقييمات دورية، ومتابعة أهداف الموظفين لرفع الإنتاجية وتحقيق التميز" : "Advanced KPIs system, periodic evaluations, and tracking employee goals to increase productivity and achieve excellence",
       color: "bg-gradient-to-br from-[#104E8B] to-[#0d3d6e]",
-      features: ["نظام KPIs", "تقييمات دورية", "متابعة الأهداف", "تقارير الأداء"]
+      features: isRTL ? ["نظام KPIs", "تقييمات دورية", "متابعة الأهداف", "تقارير الأداء"] : ["KPIs system", "Periodic evaluations", "Goal tracking", "Performance reports"]
     },
     {
       icon: Briefcase,
-      title: "التوظيف والتهيئة",
-      description: "إدارة دورة التوظيف الكاملة من نشر الوظائف، فرز السير الذاتية، وحتى تهيئة الموظف الجديد (Onboarding)",
+      title: isRTL ? "التوظيف والتهيئة" : "Recruitment & Onboarding",
+      description: isRTL ? "إدارة دورة التوظيف الكاملة من نشر الوظائف، فرز السير الذاتية، وحتى تهيئة الموظف الجديد (Onboarding)" : "Manage the entire recruitment cycle from job posting, resume screening, to new employee onboarding",
       color: "bg-gradient-to-br from-[#FFA502] to-[#e69302]",
-      features: ["نظام ATS", "نشر الوظائف", "إدارة المقابلات", "Onboarding"]
+      features: isRTL ? ["نظام ATS", "نشر الوظائف", "إدارة المقابلات", "Onboarding"] : ["ATS system", "Job posting", "Interview management", "Onboarding"]
     },
     {
       icon: CreditCard,
-      title: "الإدارة المالية والعهدة",
-      description: "تتبع المصروفات، العهد العينية (Assets)، السلف والقروض، وإدارة ميزانية الموارد البشرية بدقة",
+      title: isRTL ? "الإدارة المالية والعهدة" : "Financial & Custody Management",
+      description: isRTL ? "تتبع المصروفات، العهد العينية (Assets)، السلف والقروض، وإدارة ميزانية الموارد البشرية بدقة" : "Track expenses, physical assets, advances and loans, and accurately manage the HR budget",
       color: "bg-gradient-to-br from-[#00BCD4] to-[#0097a7]",
-      features: ["إدارة العهد", "السلف والقروض", "المصروفات", "الميزانية"]
+      features: isRTL ? ["إدارة العهد", "السلف والقروض", "المصروفات", "الميزانية"] : ["Custody management", "Advances and loans", "Expenses", "Budgeting"]
     },
     {
       icon: Smartphone,
-      title: "الخدمة الذاتية للموظف",
-      description: "تطبيق وبوابة تتيح للموظف تقديم الطلبات (إجازات، خطابات، سلف) ومتابعتها دون الرجوع لموظف HR",
+      title: isRTL ? "الخدمة الذاتية للموظف" : "Employee Self-Service",
+      description: isRTL ? "تطبيق وبوابة تتيح للموظف تقديم الطلبات (إجازات، خطابات، سلف) ومتابعتها دون الرجوع لموظف HR" : "An application and portal that allows employees to submit requests (leaves, letters, advances) and track them without returning to the HR employee",
       color: "bg-gradient-to-br from-[#104E8B] to-[#0d3d6e]",
-      features: ["بوابة الموظف", "تقديم الطلبات", "قسائم الراتب", "السجل الوظيفي"]
+      features: isRTL ? ["بوابة الموظف", "تقديم الطلبات", "قسائم الراتب", "السجل الوظيفي"] : ["Employee portal", "Submit requests", "Payslips", "Employment record"]
     },
     {
       icon: GraduationCap,
-      title: "التدريب والتطوير",
-      description: "جدولة الدورات التدريبية، تتبع سجلات التدريب، وإدارة الشهادات لضمان النمو المستمر للموظفين",
+      title: isRTL ? "التدريب والتطوير" : "Training & Development",
+      description: isRTL ? "جدولة الدورات التدريبية، تتبع سجلات التدريب، وإدارة الشهادات لضمان النمو المستمر للموظفين" : "Schedule training courses, track training records, and manage certificates to ensure continuous employee growth",
       color: "bg-gradient-to-br from-[#FFA502] to-[#e69302]",
-      features: ["إدارة الدورات", "سجلات التدريب", "الشهادات", "خطط التطوير"]
+      features: isRTL ? ["إدارة الدورات", "سجلات التدريب", "الشهادات", "خطط التطوير"] : ["Course management", "Training records", "Certificates", "Development plans"]
     }
   ];
 
   const uxFeatures = [
     {
       icon: Bell,
-      title: "تنبيهات فورية",
-      description: "قوالب إشعارات جاهزة للرواتب، الإجازات، والقرارات الإدارية"
+      title: isRTL ? "تنبيهات فورية" : "Instant Notifications",
+      description: isRTL ? "قوالب إشعارات جاهزة للرواتب، الإجازات، والقرارات الإدارية" : "Ready-made notification templates for payroll, leaves, and administrative decisions"
     },
     {
       icon: MessageCircle,
-      title: "تواصل فعال",
-      description: "نظام رسائل داخلي متكامل وتكامل مع Zoom للاجتماعات"
+      title: isRTL ? "تواصل فعال" : "Effective Communication",
+      description: isRTL ? "نظام رسائل داخلي متكامل وتكامل مع Zoom للاجتماعات" : "Integrated internal messaging system and integration with Zoom for meetings"
     },
     {
       icon: FileSpreadsheet,
-      title: "تقارير بضغطة زر",
-      description: "أكثر من 20 تقرير جاهز للتصدير (Excel/PDF) لدعم اتخاذ القرار"
+      title: isRTL ? "تقارير بضغطة زر" : "One-Click Reports",
+      description: isRTL ? "أكثر من 20 تقرير جاهز للتصدير (Excel/PDF) لدعم اتخاذ القرار" : "More than 20 ready-to-export reports (Excel/PDF) to support decision making"
     },
     {
       icon: Languages,
-      title: "واجهة متعددة اللغات",
-      description: "دعم كامل للعربية والإنجليزية مع إمكانية التبديل الفوري"
+      title: isRTL ? "واجهة متعددة اللغات" : "Multilingual Interface",
+      description: isRTL ? "دعم كامل للعربية والإنجليزية مع إمكانية التبديل الفوري" : "Full support for Arabic and English with instant switching capability"
     }
   ];
 
   const technicalSpecs = [
     {
-      category: "المنصات المدعومة",
+      category: isRTL ? "المنصات المدعومة" : "Supported Platforms",
       items: ["Windows", "macOS", "Android", "iOS", "Web Browsers"]
     },
     {
-      category: "المتصفحات",
+      category: isRTL ? "المتصفحات" : "Browsers",
       items: ["Chrome", "Safari", "Firefox", "Edge", "Opera"]
     },
     {
-      category: "الأمان",
-      items: ["تشفير SSL/TLS", "مصادقة ثنائية (2FA)", "صلاحيات دقيقة", "نسخ احتياطي يومي"]
+      category: isRTL ? "الأمان" : "Security",
+      items: isRTL ? ["تشفير SSL/TLS", "مصادقة ثنائية (2FA)", "صلاحيات دقيقة", "نسخ احتياطي يومي"] : ["SSL/TLS Encryption", "Two-Factor Auth (2FA)", "Granular Permissions", "Daily Backups"]
     },
     {
-      category: "التكامل",
-      items: ["Zoom", "Microsoft Teams", "البنوك السعودية", "أجهزة البصمة"]
+      category: isRTL ? "التكامل" : "Integration",
+      items: isRTL ? ["Zoom", "Microsoft Teams", "البنوك السعودية", "أجهزة البصمة"] : ["Zoom", "Microsoft Teams", "Saudi Banks", "Biometric Devices"]
     }
   ];
 
   const localFeatures = [
-    "دعم التقويم الهجري والميلادي",
-    "العطلات الرسمية السعودية",
-    "نظام حماية الأجور (WPS)",
-    "تكامل مع منصة قوى",
-    "دعم الهويات الوطنية والإقامات",
-    "إدارة التأشيرات والجوازات"
+    isRTL ? "دعم التقويم الهجري والميلادي" : "Gregorian and Hijri Calendar Support",
+    isRTL ? "العطلات الرسمية السعودية" : "Saudi Public Holidays",
+    isRTL ? "نظام حماية الأجور (WPS)" : "Wage Protection System (WPS)",
+    isRTL ? "تكامل مع منصة قوى" : "Integration with Qiwa Platform",
+    isRTL ? "دعم الهويات الوطنية والإقامات" : "National ID and Iqama Support",
+    isRTL ? "إدارة التأشيرات والجوازات" : "Visas and Passports Management"
   ];
 
   const stats = [
-    { value: "10,000+", label: "موظف يستخدم النظام" },
-    { value: "500+", label: "شركة تثق في O-Time" },
-    { value: "99.9%", label: "وقت التشغيل" },
-    { value: "24/7", label: "دعم فني متواصل" }
+    { value: "10,000+", label: isRTL ? "موظف يستخدم النظام" : "Employees Use the System" },
+    { value: "500+", label: isRTL ? "شركة تثق في O-Time" : "Companies Trust O-Time" },
+    { value: "99.9%", label: isRTL ? "وقت التشغيل" : "Uptime" },
+    { value: "24/7", label: isRTL ? "دعم فني متواصل" : "Continuous Technical Support" }
   ];
 
   return (
-    <div className="min-h-screen bg-white font-['IBM_Plex_Sans_Arabic']" data-page="otime" style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif" }}>
+    <div className={`min-h-screen bg-white ${isRTL ? "font-['IBM_Plex_Sans_Arabic']" : "font-['IBM_Plex_Sans']"}`} data-page="otime" style={{ fontFamily: isRTL ? "'IBM Plex Sans Arabic', sans-serif" : "'IBM Plex Sans', sans-serif" }}>
       {/* Hero Section */}
       <section className="relative pt-24 md:pt-32 pb-12 md:pb-20 bg-gradient-to-br from-[#E8DCCB] via-white to-[#D4CEC0] overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzdBMUUyRSIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-40"></div>
@@ -220,17 +222,17 @@ export const OTimePage = () => {
             <div className="text-right space-y-4 md:space-y-6">
               <Badge className="bg-gradient-to-r from-[#104E8B] to-[#0d3d6e] text-white border-none px-4 py-2 text-sm">
                 <Sparkles className="w-4 h-4 ml-2 inline" />
-                نظام الموارد البشرية السحابي المتكامل
+                {isRTL ? "نظام الموارد البشرية السحابي المتكامل" : "Integrated Cloud HR System"}
               </Badge>
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#161616] leading-tight">
-                مركز قيادة متكامل
+                {isRTL ? "مركز قيادة متكامل" : "Comprehensive Command Center"}
                 <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#104E8B] to-[#00BCD4]">لإدارة الموارد البشرية</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#104E8B] to-[#00BCD4]">{isRTL ? "لإدارة الموارد البشرية" : "For Human Resources Management"}</span>
               </h1>
               
               <p className="text-lg md:text-xl text-[#606161] leading-relaxed max-w-xl">
-                من التوظيف إلى التقاعد، O-Time يمنحك السيطرة الكاملة على الرواتب، الحضور، الأداء، والتوظيف في منصة سحابية واحدة آمنة وقابلة للتوسع.
+                {isRTL ? "من التوظيف إلى التقاعد، O-Time يمنحك السيطرة الكاملة على الرواتب، الحضور، الأداء، والتوظيف في منصة سحابية واحدة آمنة وقابلة للتوسع." : "From recruitment to retirement, O-Time gives you full control over payroll, attendance, performance, and recruitment in a single, secure, and scalable cloud platform."}
               </p>
               
               <div className="flex gap-4 flex-wrap">
@@ -239,8 +241,8 @@ export const OTimePage = () => {
                   className="bg-gradient-to-r from-[#104E8B] to-[#0d3d6e] hover:from-[#0d3d6e] hover:to-[#0a2f56] text-white font-bold px-8 h-14 text-lg shadow-lg shadow-[#104E8B]/30"
                   onClick={() => window.open('https://wa.me/966920006900?text=%E2%80%8E%20%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A7%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%AA%D8%AC%D8%B1%D8%A8%D8%A9%20%D9%85%D9%86%D8%B5%D8%A9%20otime', '_blank')}
                 >
-                  احجز ديمو الآن
-                  <Play className="w-5 h-5 mr-2" />
+                  {isRTL ? "احجز ديمو الآن" : "Book a Demo Now"}
+                  <Play className={`w-5 h-5 ${isRTL ? "mr-2" : "ml-2"}`} />
                 </Button>
                 <Button 
                   size="lg" 
@@ -248,8 +250,8 @@ export const OTimePage = () => {
                   className="border-2 border-[#FFA502] text-[#FFA502] hover:bg-[#FFA502] hover:text-white font-bold px-8 h-14 text-lg"
                   onClick={() => window.open('https://otime.mobile.sa/register', '_blank')}
                 >
-                  جرب النظام مجاناً
-                  <ArrowRight className="w-5 h-5 mr-2" />
+                  {isRTL ? "جرب النظام مجاناً" : "Try the System for Free"}
+                  <ArrowRight className={`w-5 h-5 ${isRTL ? "mr-2" : "ml-2"}`} />
                 </Button>
               </div>
             </div>
@@ -265,32 +267,32 @@ export const OTimePage = () => {
                       <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
                       <div className="w-3 h-3 rounded-full bg-green-400"></div>
                     </div>
-                    <div className="text-white text-sm mr-2">مركز القيادة - O-Time</div>
+                    <div className="text-white text-sm mr-2">{isRTL ? "مركز القيادة - O-Time" : "Command Center - O-Time"}</div>
                   </div>
                   <div className="p-6 bg-gray-50">
                     {/* محاكاة Dashboard */}
                     <div className="space-y-4">
                       <div className="grid grid-cols-3 gap-3">
                         <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200">
-                          <div className="text-xs text-gray-500 mb-1">إجمالي الموظفين</div>
+                          <div className="text-xs text-gray-500 mb-1">{isRTL ? "إجمالي الموظفين" : "Total Employees"}</div>
                           <div className="text-2xl font-bold text-blue-600">247</div>
-                          <div className="text-xs text-green-500 mt-1">↑ 12 هذا الشهر</div>
+                          <div className="text-xs text-green-500 mt-1">↑ 12 {isRTL ? "هذا الشهر" : "this month"}</div>
                         </div>
                         <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200">
-                          <div className="text-xs text-gray-500 mb-1">حاضر اليوم</div>
+                          <div className="text-xs text-gray-500 mb-1">{isRTL ? "حاضر اليوم" : "Present Today"}</div>
                           <div className="text-2xl font-bold text-green-600">234</div>
                           <div className="text-xs text-gray-500 mt-1">94.7%</div>
                         </div>
                         <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200">
-                          <div className="text-xs text-gray-500 mb-1">في إجازة</div>
+                          <div className="text-xs text-gray-500 mb-1">{isRTL ? "في إجازة" : "On Leave"}</div>
                           <div className="text-2xl font-bold text-orange-600">13</div>
                           <div className="text-xs text-gray-500 mt-1">5.3%</div>
                         </div>
                       </div>
                       <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                         <div className="flex items-center justify-between mb-3">
-                          <div className="text-sm font-bold text-gray-700">معدل الحضور - هذا الأسبوع</div>
-                          <Badge className="bg-green-100 text-green-700 text-xs">ممتاز</Badge>
+                          <div className="text-sm font-bold text-gray-700">{isRTL ? "معدل الحضور - هذا الأسبوع" : "Attendance Rate - This Week"}</div>
+                          <Badge className="bg-green-100 text-green-700 text-xs">{isRTL ? "ممتاز" : "Excellent"}</Badge>
                         </div>
                         <div className="flex items-end gap-2 h-20">
                           {[85, 92, 88, 95, 90, 93, 91].map((val, i) => (
@@ -300,7 +302,7 @@ export const OTimePage = () => {
                                 style={{height: `${val}%`}}
                               ></div>
                               <div className="text-[10px] text-gray-400">
-                                {['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'][i]}
+                                {isRTL ? ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'][i] : ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'][i]}
                               </div>
                             </div>
                           ))}
@@ -308,11 +310,11 @@ export const OTimePage = () => {
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-3 rounded-lg border border-purple-200">
-                          <div className="text-xs text-purple-700 mb-1">طلبات معلقة</div>
+                          <div className="text-xs text-purple-700 mb-1">{isRTL ? "طلبات معلقة" : "Pending Requests"}</div>
                           <div className="text-xl font-bold text-purple-700">8</div>
                         </div>
                         <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-3 rounded-lg border border-orange-200">
-                          <div className="text-xs text-orange-700 mb-1">وظائف مفتوحة</div>
+                          <div className="text-xs text-orange-700 mb-1">{isRTL ? "وظائف مفتوحة" : "Open Jobs"}</div>
                           <div className="text-xl font-bold text-orange-700">5</div>
                         </div>
                       </div>
@@ -328,12 +330,12 @@ export const OTimePage = () => {
                     </div>
                     <div className="p-2 space-y-2 bg-gray-50">
                       <div className="bg-white p-2 rounded shadow-sm">
-                        <div className="text-[8px] text-gray-500">الحضور</div>
-                        <div className="text-xs font-bold text-green-600">8:30 ص</div>
+                        <div className="text-[8px] text-gray-500">{isRTL ? "الحضور" : "Attendance"}</div>
+                        <div className="text-xs font-bold text-green-600">{isRTL ? "8:30 ص" : "8:30 AM"}</div>
                       </div>
                       <div className="bg-white p-2 rounded shadow-sm">
-                        <div className="text-[8px] text-gray-500">الإجازات</div>
-                        <div className="text-xs font-bold text-blue-600">12 يوم</div>
+                        <div className="text-[8px] text-gray-500">{isRTL ? "الإجازات" : "Leaves"}</div>
+                        <div className="text-xs font-bold text-blue-600">{isRTL ? "12 يوم" : "12 Days"}</div>
                       </div>
                     </div>
                   </div>
@@ -354,13 +356,13 @@ export const OTimePage = () => {
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-10 md:mb-16">
             <Badge className="bg-blue-100 text-blue-700 border-none px-4 py-2 text-sm mb-3 md:mb-4">
-              لماذا O-Time؟
+              {isRTL ? "لماذا O-Time؟" : "Why O-Time?"}
             </Badge>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#161616] mb-3 md:mb-4">
-              القيمة الاستراتيجية التي تحتاجها
+              {isRTL ? "القيمة الاستراتيجية التي تحتاجها" : "The Strategic Value You Need"}
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              منصة سحابية متكاملة تحول إدارة الموارد البشرية من عملية روتينية إلى ميزة تنافسية
+              {isRTL ? "منصة سحابية متكاملة تحول إدارة الموارد البشرية من عملية روتينية إلى ميزة تنافسية" : "An integrated cloud platform that transforms HR management from a routine process into a competitive advantage"}
             </p>
           </div>
 
@@ -389,13 +391,13 @@ export const OTimePage = () => {
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-10 md:mb-16">
             <Badge className="bg-indigo-100 text-indigo-700 border-none px-4 py-2 text-sm mb-3 md:mb-4">
-              الوحدات الأساسية
+              {isRTL ? "الوحدات الأساسية" : "Core Modules"}
             </Badge>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#161616] mb-3 md:mb-4">
-              نظام شامل لكل احتياجاتك
+              {isRTL ? "نظام شامل لكل احتياجاتك" : "A Comprehensive System for All Your Needs"}
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              من التوظيف إلى التقاعد - إدارة دورة حياة الموظف الكاملة في منصة واحدة متكاملة
+              {isRTL ? "من التوظيف إلى التقاعد - إدارة دورة حياة الموظف الكاملة في منصة واحدة متكاملة" : "From recruitment to retirement - Manage the full employee lifecycle in a single integrated platform"}
             </p>
           </div>
 
@@ -470,13 +472,13 @@ export const OTimePage = () => {
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-10 md:mb-12">
             <Badge className="bg-white/20 text-white border-none px-4 py-2 text-sm mb-3 md:mb-4">
-              UX/UI متقدم
+              {isRTL ? "UX/UI متقدم" : "Advanced UX/UI"}
             </Badge>
             <h2 className="text-3xl md:text-4xl font-extrabold mb-3 md:mb-4">
-              تجربة مستخدم لا تضاهى
+              {isRTL ? "تجربة مستخدم لا تضاهى" : "Unmatched User Experience"}
             </h2>
             <p className="text-lg text-white/90 max-w-2xl mx-auto">
-              واجهة بديهية مصممة بعناية لتوفير أفضل تجربة لجميع المستخدمين
+              {isRTL ? "واجهة بديهية مصممة بعناية لتوفير أفضل تجربة لجميع المستخدمين" : "An intuitive interface carefully designed to provide the best experience for all users"}
             </p>
           </div>
 
@@ -504,14 +506,14 @@ export const OTimePage = () => {
               <CardContent className="p-6">
                 <div className="bg-white rounded-xl p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h4 className="font-bold text-gray-900">التنبيهات الأخيرة</h4>
-                    <Badge className="bg-red-100 text-red-700">3 جديد</Badge>
+                    <h4 className="font-bold text-gray-900">{isRTL ? "التنبيهات الأخيرة" : "Recent Notifications"}</h4>
+                    <Badge className="bg-red-100 text-red-700">{isRTL ? "3 جديد" : "3 New"}</Badge>
                   </div>
                   <div className="space-y-3">
                     {[
-                      { icon: DollarSign, text: "تم إصدار مسير رواتب شهر يناير", time: "قبل ساعة", color: "green" },
-                      { icon: Calendar, text: "طلب إجازة جديد من أحمد محمد", time: "قبل ساعتين", color: "blue" },
-                      { icon: Users, text: "5 متقدمين جدد لوظيفة مدير تسويق", time: "قبل 3 ساعات", color: "orange" }
+                      { icon: DollarSign, text: isRTL ? "تم إصدار مسير رواتب شهر يناير" : "January payroll issued", time: isRTL ? "قبل ساعة" : "an hour ago", color: "green" },
+                      { icon: Calendar, text: isRTL ? "طلب إجازة جديد من أحمد محمد" : "New leave request from Ahmed", time: isRTL ? "قبل ساعتين" : "2 hours ago", color: "blue" },
+                      { icon: Users, text: isRTL ? "5 متقدمين جدد لوظيفة مدير تسويق" : "5 new applicants for Marketing Manager", time: isRTL ? "قبل 3 ساعات" : "3 hours ago", color: "orange" }
                     ].map((notif, i) => (
                       <div key={i} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                         <div className={`bg-${notif.color}-100 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0`}>
@@ -536,13 +538,13 @@ export const OTimePage = () => {
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-10 md:mb-16">
             <Badge className="bg-[#FFA502]/10 text-[#FFA502] border-none px-4 py-2 text-sm mb-3 md:mb-4">
-              جولة في النظام
+              {isRTL ? "جولة في النظام" : "System Tour"}
             </Badge>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#161616] mb-3 md:mb-4">
-              شاهد O-Time في العمل
+              {isRTL ? "شاهد O-Time في العمل" : "See O-Time in Action"}
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              لقطات حقيقية من داخل النظام توضح سهولة الاستخدام والقوة الشاملة
+              {isRTL ? "لقطات حقيقية من داخل النظام توضح سهولة الاستخدام والقوة الشاملة" : "Real screenshots from inside the system showing ease of use and comprehensive power"}
             </p>
           </div>
 
@@ -604,7 +606,7 @@ export const OTimePage = () => {
 
             <div className="text-center mt-8 bg-[#00BCD4]/10 border-2 border-[#00BCD4]/30 rounded-xl p-4">
               <p className="text-sm text-[#161616]">
-                💡 <strong>نصيحة:</strong> احجز عرضاً توضيحياً مباشراً لرؤية جميع المميزات والتفاعل مع النظام الحي
+                💡 <strong>{isRTL ? "نصيحة:" : "Tip:"}</strong> {isRTL ? "احجز عرضاً توضيحياً مباشراً لرؤية جميع المميزات والتفاعل مع النظام الحي" : "Book a live demo to see all features and interact with the live system"}
               </p>
             </div>
           </div>
@@ -617,13 +619,13 @@ export const OTimePage = () => {
           <div className="text-center mb-10 md:mb-12">
             <Badge className="bg-white/20 text-white border-none px-4 py-2 text-sm mb-3 md:mb-4">
               <Server className="w-4 h-4 ml-2 inline" />
-              المواصفات التقنية
+              {isRTL ? "المواصفات التقنية" : "Technical Specifications"}
             </Badge>
             <h2 className="text-3xl md:text-4xl font-extrabold mb-3 md:mb-4">
-              بنية تحتية قوية وآمنة
+              {isRTL ? "بنية تحتية قوية وآمنة" : "Robost & Secure Infrastructure"}
             </h2>
             <p className="text-lg text-white/80 max-w-2xl mx-auto">
-              تقنية حديثة مع أعلى معايير الأمان والتوافق
+              {isRTL ? "تقنية حديثة مع أعلى معايير الأمان والتوافق" : "Modern technology with the highest standards of security and compatibility"}
             </p>
           </div>
 
@@ -655,12 +657,12 @@ export const OTimePage = () => {
           <div className="max-w-4xl mx-auto">
             <Card className="bg-white/5 backdrop-blur-sm border-white/10">
               <CardContent className="p-6 md:p-8">
-                <h3 className="text-xl font-bold text-white mb-6 text-center">نظام صلاحيات متقدم</h3>
+                <h3 className="text-xl font-bold text-white mb-6 text-center">{isRTL ? "نظام صلاحيات متقدم" : "Advanced Permission System"}</h3>
                 <div className="grid md:grid-cols-3 gap-4">
                   {[
-                    { role: "Admin", desc: "صلاحيات كاملة", icon: Settings, color: "red" },
-                    { role: "HR Manager", desc: "إدارة الموارد البشرية", icon: Users, color: "blue" },
-                    { role: "Employee", desc: "الخدمة الذاتية", icon: Smartphone, color: "green" }
+                    { role: "Admin", desc: isRTL ? "صلاحيات كاملة" : "Full Access", icon: Settings, color: "red" },
+                    { role: "HR Manager", desc: isRTL ? "إدارة الموارد البشرية" : "HR Management", icon: Users, color: "blue" },
+                    { role: "Employee", desc: isRTL ? "الخدمة الذاتية" : "Self Service", icon: Smartphone, color: "green" }
                   ].map((role, i) => (
                     <div key={i} className="bg-white/10 rounded-lg p-4 text-center">
                       <div className={`bg-${role.color}-500/20 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3`}>
@@ -684,13 +686,13 @@ export const OTimePage = () => {
             <div className="text-center mb-10">
               <Badge className="bg-white/20 text-white border-none px-4 py-2 text-sm mb-3 md:mb-4">
                 <MapPin className="w-4 h-4 ml-2 inline" />
-                مصمم للسوق السعودي
+                {isRTL ? "مصمم للسوق السعودي" : "Designed for the Saudi Market"}
               </Badge>
               <h2 className="text-3xl md:text-4xl font-extrabold mb-3 md:mb-4">
-                متوافق 100% مع الأنظمة المحلية
+                {isRTL ? "متوافق 100% مع الأنظمة المحلية" : "100% Compatible with Local Regulations"}
               </h2>
               <p className="text-lg text-white/90 max-w-2xl mx-auto">
-                دعم كامل للأنظمة واللوائح السعودية مع تحديثات مستمرة
+                {isRTL ? "دعم كامل للأنظمة واللوائح السعودية مع تحديثات مستمرة" : "Full support for Saudi regulations and policies with continuous updates"}
               </p>
             </div>
 
@@ -709,9 +711,9 @@ export const OTimePage = () => {
 
             <div className="mt-10 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 text-center">
               <Award className="w-12 h-12 text-yellow-300 mx-auto mb-3" />
-              <h4 className="text-xl font-bold text-white mb-2">معتمد من الجهات الرسمية</h4>
+              <h4 className="text-xl font-bold text-white mb-2">{isRTL ? "معتمد من الجهات الرسمية" : "Officially Certified"}</h4>
               <p className="text-white/80">
-                متوافق مع متطلبات وزارة الموارد البشرية والتنمية الاجتماعية
+                {isRTL ? "متوافق مع متطلبات وزارة الموارد البشرية والتنمية الاجتماعية" : "Compliant with the requirements of the Ministry of Human Resources and Social Development"}
               </p>
             </div>
           </div>
@@ -726,10 +728,10 @@ export const OTimePage = () => {
           <div className="max-w-4xl mx-auto text-center">
             <Sparkles className="w-16 h-16 text-[#FFA502] mx-auto mb-6" />
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-4">
-              هل أنت مستعد لنقل إدارة الموارد البشرية إلى مستوى جديد؟
+              {isRTL ? "هل أنت مستعد لنقل إدارة الموارد البشرية إلى مستوى جديد؟" : "Are you ready to take your HR management to a new level?"}
             </h2>
             <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-              انضم إلى الشركات التي تعتمد على O-Time لتحقيق الكفاءة والامتثال
+              {isRTL ? "انضم إلى الشركات التي تعتمد على O-Time لتحقيق الكفاءة والامتثال" : "Join the companies relying on O-Time to achieve efficiency and compliance"}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
               <Button 
@@ -737,8 +739,8 @@ export const OTimePage = () => {
                 className="bg-[#FFA502] text-white hover:bg-[#e69302] font-bold px-10 h-14 text-lg shadow-2xl"
                 onClick={() => window.open('https://otime.mobile.sa/register', '_blank')}
               >
-                جرب النظام مجاناً
-                <ArrowRight className="w-6 h-6 mr-2" />
+                {isRTL ? "جرب النظام مجاناً" : "Try for Free"}
+                <ArrowRight className={`w-6 h-6 ${isRTL ? "mr-2" : "ml-2"}`} />
               </Button>
               <Button 
                 size="lg" 
@@ -746,8 +748,8 @@ export const OTimePage = () => {
                 className="bg-white/10 border-2 border-[#00BCD4] text-[#00BCD4] hover:bg-[#00BCD4] hover:text-white font-bold px-10 h-14 text-lg backdrop-blur-sm"
                 onClick={() => window.open('https://wa.me/966920006900?text=%E2%80%8E%20%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A7%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%AA%D8%AC%D8%B1%D8%A8%D8%A9%20%D9%85%D9%86%D8%B5%D8%A9%20otime', '_blank')}
               >
-                <Play className="w-6 h-6 ml-2" />
-                احجز ديمو مباشر
+                <Play className={`w-6 h-6 ${isRTL ? "ml-2" : "mr-2"}`} />
+                {isRTL ? "احجز ديمو مباشر" : "Book a Live Demo"}
               </Button>
             </div>
 
@@ -763,7 +765,7 @@ export const OTimePage = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Video className="w-5 h-5 text-[#FFA502]" />
-                <span className="text-sm">احجز ديمو</span>
+                <span className="text-sm">{isRTL ? "احجز ديمو" : "Book Demo"}</span>
               </div>
             </div>
           </div>

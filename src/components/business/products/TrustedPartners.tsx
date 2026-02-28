@@ -1,10 +1,12 @@
 'use client';
 
-import React, { useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { encodeImagePath } from "@/utils/imagePath";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export const TrustedPartners = () => {
+  const { isRTL } = useLanguage();
   // All logos from TrustedLogos folder - each file appears ONCE (excluding duplicate files with "(1)")
   const logoFiles = [
     'images-removebg-preview.png',
@@ -71,14 +73,20 @@ export const TrustedPartners = () => {
   ];
 
   // Shuffle logos to avoid similar ones being together
-  const shuffledLogos = useMemo(() => {
-    const shuffled = [...logoFiles];
-    // Fisher-Yates shuffle algorithm
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
+  const [shuffledLogos, setShuffledLogos] = useState<string[]>(logoFiles);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const shuffled = [...logoFiles];
+      // Fisher-Yates shuffle algorithm
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      setShuffledLogos(shuffled);
+    }, 0);
+    return () => clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Create partners array from shuffled logo files - each logo appears ONCE only
@@ -94,14 +102,25 @@ export const TrustedPartners = () => {
   const row2 = partners.slice(midPoint);
 
   return (
-    <section className="py-16 bg-gradient-to-b from-white to-[#E8DCCB]/30 overflow-hidden">
-      <div className="container mx-auto px-4">
+    <section 
+      className="py-16 bg-gradient-to-b from-white to-[#E8DCCB]/30 overflow-hidden"
+      style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
+    >
+      <div className="container mx-auto px-4" dir={isRTL ? 'rtl' : 'ltr'}>
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-[#7A1E2E] mb-3">
-            شركاء النجاح
+            {isRTL ? 'شركاء النجاح' : 'Our Success Partners'}
           </h2>
           <p className="text-slate-600 text-lg">
-            يثق بنا أكثر من <span className="font-bold text-[#7A1E2E]">20,000+</span> جهة حكومية وخاصة في المملكة
+            {isRTL ? (
+              <>
+                يثق بنا أكثر من <span className="font-bold text-[#7A1E2E]">20,000+</span> جهة حكومية وخاصة في المملكة
+              </>
+            ) : (
+              <>
+                Trusted by over <span className="font-bold text-[#7A1E2E]">20,000+</span> government and private entities in the Kingdom
+              </>
+            )}
           </p>
         </div>
 

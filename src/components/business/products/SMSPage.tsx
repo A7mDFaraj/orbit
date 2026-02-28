@@ -3,14 +3,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/business/ui/button";
-import { Card, CardContent } from "@/components/business/ui/card";
 import {
-  MessageSquare, Check, Zap, Shield, BarChart, Code,
-  Store, Building2, Truck, Heart, GraduationCap,
-  TrendingUp, Users, Globe, Lock, Smartphone,
-  ArrowRight, Star, Gift, Award, BadgeCheck,
-  CheckCircle2, Rocket, ShieldCheck, Headphones,
-  Calendar, Handshake, Code2, ArrowLeft
+  MessageSquare, Zap, Rocket, ShieldCheck, Headphones,
+  Calendar, Handshake, Code2, ArrowLeft, ArrowRight,
+  Store, Building2, GraduationCap, Truck, Heart, Smartphone,
+  CheckCircle2
 } from "lucide-react";
 import { TrustedPartners } from "./TrustedPartners";
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -88,7 +85,7 @@ export const SMSPage = () => {
 
     // Check on mount and window resize
     const handleResize = () => {
-      setShowStickyTabs(false);
+      // Intentionally empty to keep sticky tabs hidden
     };
 
     window.addEventListener('resize', handleResize);
@@ -169,7 +166,12 @@ export const SMSPage = () => {
   ];
 
   return (
-    <div className="font-sans">
+    <div 
+      className={`min-h-screen bg-white ${isRTL ? 'font-ibm-plex-arabic' : 'font-ibm-plex'}`}
+      data-page="sms"
+      style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
+      dir={isRTL ? 'rtl' : 'ltr'}
+    >
 
       {/* Sticky Tab Navigation (Mobile Only) - Shows when scrolled past hero */}
       {showStickyTabs && (
@@ -201,7 +203,7 @@ export const SMSPage = () => {
                       }
                     `}
                   >
-                    <Icon className={`w-4 h-4 ${activeTab === index ? "text-white" : "text-slate-400"}`} />
+                    <Icon className={`w-4 h-4 ${activeTab === index ? "text-white" : "text-slate-400"} ${isRTL ? 'ml-1' : 'mr-1'}`} />
                     <span>{tab.label}</span>
                   </button>
                 );
@@ -239,7 +241,7 @@ export const SMSPage = () => {
                       }
                     `}
                   >
-                    <Icon className={`w-4 h-4 md:w-5 md:h-5 ${activeTab === index ? "text-white" : "text-slate-400"}`} />
+                    <Icon className={`w-4 h-4 md:w-5 md:h-5 ${activeTab === index ? "text-white" : "text-slate-400"} ${isRTL ? 'ml-1' : 'mr-1'}`} />
                     <span>{tab.label}</span>
                   </button>
                 );
@@ -463,11 +465,11 @@ export const SMSPage = () => {
                 <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
                   <Smartphone className="w-5 h-5 text-slate-600" />
                 </div>
-                <div>
-                  <h4 className="font-bold text-slate-900">سجل الإرسال المباشر</h4>
+                <div className={`text-${isRTL ? 'right' : 'left'}`}>
+                  <h4 className="font-bold text-slate-900">{isRTL ? "سجل الإرسال المباشر" : "Live Delivery Log"}</h4>
                   <span className="text-xs text-green-600 flex items-center gap-1">
                     <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                    متصل الآن
+                    {isRTL ? "متصل الآن" : "Online Now"}
                   </span>
                 </div>
               </div>
@@ -480,9 +482,11 @@ export const SMSPage = () => {
                     <div>
                       <div className="flex justify-between items-center w-full gap-8 mb-1">
                         <span className="text-xs font-bold text-slate-700">96650xxxxxxx</span>
-                        <span className="text-[10px] text-slate-400">الآن</span>
+                        <span className="text-[10px] text-slate-400">{isRTL ? "الآن" : "Now"}</span>
                       </div>
-                      <p className="text-xs text-slate-500">تم استلام طلبك رقم #8821 بنجاح وسيتم تجهيزه...</p>
+                      <p className={`text-xs text-slate-500 text-${isRTL ? 'right' : 'left'}`}>
+                        {isRTL ? "تم استلام طلبك رقم #8821 بنجاح وسيتم تجهيزه..." : "Your order #8821 has been received successfully and will be processed..."}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -550,7 +554,9 @@ export const SMSPage = () => {
                 )}
 
                 <div className="mb-4 text-center">
-                  <h3 className="text-xl font-bold text-slate-900">{pkg.messages ? `${pkg.messages.toLocaleString()} رسالة` : "مخصص"}</h3>
+                  <h3 className="text-xl font-bold text-slate-900">
+                    {pkg.messages ? `${pkg.messages.toLocaleString()} ${isRTL ? 'رسالة' : 'Messages'}` : (isRTL ? "مخصص" : "Custom")}
+                  </h3>
                   <p className="text-sm text-slate-500 mt-1">{pkg.description}</p>
                 </div>
 
@@ -582,7 +588,7 @@ export const SMSPage = () => {
                     <Link href="/contact">{t.products.sms.packages.buttons.contact}</Link>
                   ) : (
                     <a href="https://app.mobile.net.sa/reg" target="_blank" rel="noopener noreferrer">
-                      {pkg.featured ? "اشحن الآن" : "اختر الباقة"}
+                      {pkg.featured ? (isRTL ? "اشحن الآن" : "Top Up Now") : (isRTL ? "اختر الباقة" : "Choose Package")}
                     </a>
                   )}
                 </Button>
@@ -608,10 +614,10 @@ export const SMSPage = () => {
 
               <div className="flex flex-wrap items-center gap-3 mb-8">
                 {/* Platform Badges */}
-                <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">دفترة</span>
-                <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">سلة</span>
-                <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">نظام نور</span>
-                <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">إتقان</span>
+                <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">{isRTL ? "دفترة" : "Daftra"}</span>
+                <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">{isRTL ? "سلة" : "Salla"}</span>
+                <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">{isRTL ? "نظام نور" : "Noor"}</span>
+                <span className="bg-white border px-3 py-1 rounded text-sm font-bold text-slate-600">{isRTL ? "إتقان" : "Itqan"}</span>
               </div>
 
               <a href="#" className="flex items-center gap-2 text-[#7A1E2E] font-bold hover:underline">
@@ -625,13 +631,13 @@ export const SMSPage = () => {
                 <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
                 <div className="w-3 h-3 rounded-full bg-green-500"></div>
               </div>
-              <p className="text-slate-400 mb-2">// Send SMS Example</p>
+              <p className="text-slate-400 mb-2">{`// Send SMS Example`}</p>
               <p className="mb-1"><span className="text-purple-400">await</span> orbit.send({`{`}</p>
-              <p className="pl-4"><span className="text-blue-400">to</span>: <span className="text-green-400">"96650xxxxxxx"</span>,</p>
-              <p className="pl-4"><span className="text-blue-400">body</span>: <span className="text-green-400">"Your OTP is 1234"</span>,</p>
-              <p className="pl-4"><span className="text-blue-400">sender</span>: <span className="text-green-400">"MyStore"</span></p>
+              <p className="pl-4"><span className="text-blue-400">to</span>: <span className="text-green-400">&quot;96650xxxxxxx&quot;</span>,</p>
+              <p className="pl-4"><span className="text-blue-400">body</span>: <span className="text-green-400">&quot;Your OTP is 1234&quot;</span>,</p>
+              <p className="pl-4"><span className="text-blue-400">sender</span>: <span className="text-green-400">&quot;MyStore&quot;</span></p>
               <p className="mb-1">{`}`});</p>
-              <p className="mt-2 text-green-500">// Result: Message Sent ✅</p>
+              <p className="mt-2 text-green-500">{`// Result: Message Sent ✅`}</p>
             </div>
           </div>
         </div>
