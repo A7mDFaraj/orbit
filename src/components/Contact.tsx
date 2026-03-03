@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
+import { MessageCircle } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import OrbitSectionBackground from './OrbitSectionBackground';
 import { getCmsField } from '@/lib/cms/helpers';
@@ -344,13 +345,25 @@ export default function Contact({ cmsPage = null, footerData }: ContactProps) {
                     href={whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group block rounded-2xl border border-[#E8DCCB]/45 bg-gradient-to-r from-[#1C8A63] via-[#167858] to-[#135E4B] px-5 py-4 text-white shadow-[0_14px_28px_-16px_rgba(19,94,75,0.95)] transition-all duration-300 hover:-translate-y-0.5 hover:from-[#20946C] hover:via-[#1A8461] hover:to-[#176A55] hover:shadow-[0_18px_32px_-14px_rgba(23,106,85,0.95)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900"
+                    className="group relative block overflow-hidden rounded-2xl border border-[#E8DCCB]/70 bg-[linear-gradient(120deg,#7A1E2E_0%,#662130_42%,#1A6D56_100%)] px-5 py-4 text-white shadow-[0_18px_34px_-20px_rgba(122,30,46,0.95)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_24px_40px_-18px_rgba(86,27,41,0.95)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900"
+                    aria-label={isRTL ? 'تحدث معنا عبر واتساب' : 'Chat with us on WhatsApp'}
                   >
-                    <div className="flex items-center justify-between gap-3">
-                      <span className={`text-sm sm:text-base font-semibold text-white/95 ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
-                        {whatsappTitle}
-                      </span>
-                      <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-white/15 transition-colors duration-300 group-hover:bg-white/25">
+                    <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_88%_12%,rgba(255,255,255,0.22),transparent_42%)] opacity-90" />
+                    <div className="relative flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-white/16 ring-1 ring-white/30 transition-all duration-300 group-hover:bg-white/24">
+                          <MessageCircle className="h-5 w-5 text-white" />
+                        </span>
+                        <div className="min-w-0">
+                          <p className={`text-sm sm:text-base font-semibold leading-tight text-white ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                            {whatsappTitle}
+                          </p>
+                          <p className={`text-[11px] sm:text-xs text-white/80 mt-1 ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                            {isRTL ? 'رد سريع خلال ساعات العمل' : 'Fast response during business hours'}
+                          </p>
+                        </div>
+                      </div>
+                      <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-white/16 transition-colors duration-300 group-hover:bg-white/26">
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                         </svg>
