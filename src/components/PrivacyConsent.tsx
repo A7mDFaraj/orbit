@@ -10,7 +10,7 @@ interface PrivacyConsentProps {
 
 /**
  * Privacy Consent Banner for GDPR compliance
- * Manages cookie consent and triggers Clarity initialization
+ * Manages cookie consent and triggers analytics consent updates
  */
 export default function PrivacyConsent({ onConsentChange }: PrivacyConsentProps) {
   const [showBanner, setShowBanner] = useState(false);
@@ -33,7 +33,7 @@ export default function PrivacyConsent({ onConsentChange }: PrivacyConsentProps)
 
     setShowBanner(false);
 
-    // Dispatch custom event for Clarity component
+    // Dispatch custom event for analytics listeners
     window.dispatchEvent(new CustomEvent('cookie-consent-changed', {
       detail: { consent: true }
     }));
@@ -47,7 +47,7 @@ export default function PrivacyConsent({ onConsentChange }: PrivacyConsentProps)
 
     setShowBanner(false);
 
-    // Dispatch custom event for Clarity component
+    // Dispatch custom event for analytics listeners
     window.dispatchEvent(new CustomEvent('cookie-consent-changed', {
       detail: { consent: false }
     }));

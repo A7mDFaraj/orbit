@@ -87,6 +87,8 @@ const serializePlansList = (plans: PricingPlan[]): string => plans
 export const SMSPage = ({ cmsPage = null, partners = [] }: SMSPageProps) => {
   const { t, isRTL } = useLanguage();
   const headingFontClass = isRTL ? "font-ibm-plex-arabic" : "font-ibm-plex";
+  const numberFormatter = useMemo(() => new Intl.NumberFormat('en-US'), []);
+  const formatNumber = useCallback((value: number) => numberFormatter.format(value), [numberFormatter]);
   const [activeTab, setActiveTab] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const heroSectionRef = useRef<HTMLDivElement>(null);
@@ -126,6 +128,11 @@ export const SMSPage = ({ cmsPage = null, partners = [] }: SMSPageProps) => {
       },
     ];
   }, [cmsPage, isRTL]);
+  const heroBadgePrefix = getCmsField(cmsPage, 'sms-hero', 'general_badge_prefix', isRTL, t.common.solutions);
+  const heroClientsCount = getCmsField(cmsPage, 'sms-hero', 'general_clients_count', isRTL, '+20,000');
+  const heroClientsLabel = getCmsField(cmsPage, 'sms-hero', 'general_clients_label', isRTL, t.common.clientsTrustUs);
+  const heroMsg1Time = getCmsField(cmsPage, 'sms-hero', 'general_msg1_time', isRTL, t.common.now);
+  const heroMsg2Time = getCmsField(cmsPage, 'sms-hero', 'general_msg2_time', isRTL, t.common.oneMinAgo);
 
   // Handle mouse down
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -212,7 +219,12 @@ export const SMSPage = ({ cmsPage = null, partners = [] }: SMSPageProps) => {
       color: "bg-green-50",
       imgColor: "bg-green-100"
     }
-  ], [cmsPage, getHeroMessages, isRTL, t]);
+  ], [
+    cmsPage,
+    getHeroMessages,
+    isRTL,
+    t
+  ]);
 
   const defaultPackages: PricingPlan[] = useMemo(() => [
     { messages: 1000, price: 110, feature: t.products.sms.packages.items.startup.feature, description: t.products.sms.packages.items.startup.description },
@@ -313,7 +325,7 @@ export const SMSPage = ({ cmsPage = null, partners = [] }: SMSPageProps) => {
             {/* Right Content */}
             <div className="space-y-2 md:space-y-6 max-w-2xl animate-in slide-in-from-right-8 duration-500 fade-in key={safeActiveTab} text-center lg:text-right">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-full text-xs md:text-sm font-medium text-slate-600 mx-auto lg:mx-0">
-                <span>{isRTL ? `${t.common.solutions} ${currentHeroTab.label}` : `${currentHeroTab.label} ${t.common.solutions}`}</span>
+                <span>{`${heroBadgePrefix} ${currentHeroTab.label}`}</span>
               </div>
               <h1 className={`${headingFontClass} text-2xl md:text-6xl font-extrabold text-[#7A1E2E] leading-tight`}>
                 {currentHeroTab.title}
@@ -349,8 +361,8 @@ export const SMSPage = ({ cmsPage = null, partners = [] }: SMSPageProps) => {
                     ))}
                   </div>
                   <div className="text-sm">
-                    <p className="font-bold text-slate-900">+20,000</p>
-                    <p className="text-slate-500 text-xs">{t.common.clientsTrustUs}</p>
+                    <p className="font-bold text-slate-900">{heroClientsCount}</p>
+                    <p className="text-slate-500 text-xs">{heroClientsLabel}</p>
                   </div>
                 </div>
               </div>
@@ -378,7 +390,7 @@ export const SMSPage = ({ cmsPage = null, partners = [] }: SMSPageProps) => {
                             </div>
                             <div className="text-right">
                               <p className="font-bold text-slate-900 text-xs md:text-sm">{currentHeroTab.messages[0].sender}</p>
-                              <p className="text-[9px] md:text-[10px] text-slate-400">{t.common.now}</p>
+                              <p className="text-[9px] md:text-[10px] text-slate-400">{heroMsg1Time}</p>
                             </div>
                           </div>
                           <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-blue-500 animate-pulse"></div>
@@ -399,7 +411,7 @@ export const SMSPage = ({ cmsPage = null, partners = [] }: SMSPageProps) => {
                             </div>
                             <div className="text-right">
                               <p className="font-bold text-slate-900 text-xs md:text-sm">{currentHeroTab.messages[1].sender}</p>
-                              <p className="text-[9px] md:text-[10px] text-slate-400">{t.common.oneMinAgo}</p>
+                              <p className="text-[9px] md:text-[10px] text-slate-400">{heroMsg2Time}</p>
                             </div>
                           </div>
                           <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-green-500"></div>
@@ -628,7 +640,7 @@ export const SMSPage = ({ cmsPage = null, partners = [] }: SMSPageProps) => {
 
                 <div className="mb-4 text-center">
                   <h3 className={`${headingFontClass} text-xl font-bold text-slate-900`}>
-                    {pkg.messages ? `${pkg.messages.toLocaleString()} ${isRTL ? 'رسالة' : 'Messages'}` : (isRTL ? "مخصص" : "Custom")}
+                    {pkg.messages ? `${formatNumber(pkg.messages)} ${isRTL ? 'رسالة' : 'Messages'}` : (isRTL ? "مخصص" : "Custom")}
                   </h3>
                   <p className="text-sm text-slate-500 mt-1">{pkg.description}</p>
                 </div>
@@ -636,7 +648,7 @@ export const SMSPage = ({ cmsPage = null, partners = [] }: SMSPageProps) => {
                 {!pkg.isCustom && pkg.price !== null ? (
                   <div className="mb-6 text-center">
                     <div className="flex items-baseline gap-1 justify-center">
-                      <span className="text-3xl font-extrabold text-[#7A1E2E]">{pkg.price.toLocaleString()}</span>
+                      <span className="text-3xl font-extrabold text-[#7A1E2E]">{formatNumber(pkg.price)}</span>
                       <span className="inline-flex items-center">
                         <Image
                           src="/trustedby/Saudi_Riyal_Symbol.svg.png"

@@ -1,26 +1,21 @@
-'use client';
-
-import { useLanguage } from '@/contexts/LanguageContext';
 import Navbar from '@/components/Navbar';
 import About from '@/components/About';
 import WhyOrbit from '@/components/WhyOrbit';
 import Footer from '@/components/Footer';
-import AnimatedSection from '@/components/AnimatedSection';
+import { getMainPageSettingsSnapshot } from '@/lib/mainPageSettings.server';
 
-export default function AboutUs() {
-  useLanguage();
+export const revalidate = 300;
+
+export default async function AboutUs() {
+  const settings = await getMainPageSettingsSnapshot();
 
   return (
     <div className="min-h-screen" style={{ minHeight: '100dvh' }}>
       <Navbar />
 
-      <AnimatedSection delay={0.2}>
-        <About />
-      </AnimatedSection>
+      <About data={settings.about} />
 
-      <AnimatedSection delay={0.2}>
-        <WhyOrbit />
-      </AnimatedSection>
+      <WhyOrbit data={settings.whyOrbit} />
 
       <Footer />
     </div>

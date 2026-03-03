@@ -234,38 +234,38 @@ export const translations = {
           retail: {
             title: 'Turn abandoned carts into instant sales',
             description: 'A complete solution to boost sales in your online stores and enhance loyalty in traditional retail branches. From automatically recovering abandoned carts to sending exclusive offers and discounts to branch visitors, we are your partner in converting interest into actual purchases.',
-            cta: 'Start more professionally',
+            cta: 'Start with greater professionalism',
             label: 'E-commerce',
             messages: [
-              { text: 'Hi Sarah, you forgot your favorite perfumes in the cart! Use code (SAVE10) to get a 10% discount immediately.', sender: 'Store' },
-              { text: 'Dear customer, benefit from the exclusive White Friday offer! 30% discount on all products in our branches. Offer valid until the end of the week.', sender: 'Retail' }
+              { text: 'Hi Sarah, you left your favorite perfumes in the cart! Use code (SAVE10) to get 10% off instantly.', sender: 'Store' },
+              { text: 'Dear customer, enjoy our exclusive White Friday offer! 30% off all products in our branches. Offer valid until the end of the week.', sender: 'Retail' }
             ]
           },
           finance: {
-            title: 'Superior security & unmatched speed',
-            description: 'We ensure the delivery of OTPs and bank/government notifications via direct routes that adhere to the highest cybersecurity and privacy standards, fully compatible with the government messaging gateway (Gov Gate).',
-            cta: 'Start with higher security',
+            title: 'Superior security and unmatched speed for critical sectors',
+            description: 'We ensure the delivery of OTP messages and banking/government notifications through direct routes that comply with the highest standards of cybersecurity and privacy, with full compatibility with the government messaging gateway (Gov Gate).',
+            cta: 'Start with stronger security',
             label: 'Finance & Gov',
             messages: [
-              { text: 'Dear customer, the OTP for one-time login is: 5821. Do not share the code with anyone for your account security.', sender: 'Bank' },
-              { text: 'We inform you that license (....) has been successfully renewed. You can view the details via the official platform.', sender: 'Gov' }
+              { text: 'Dear customer, your one-time login verification code is: 5821. Do not share this code with anyone for your account security.', sender: 'Bank' },
+              { text: 'We would like to inform you that permit (....) has been successfully renewed. You can view the details through the official platform.', sender: 'Gov' }
             ]
           },
           education: {
             title: 'Interactive bridges between school and home',
             description: 'Keep parents and students informed about everything related to the educational journey. From absence and attendance notifications to exam results and events, we provide you with the fastest link to your academic systems.',
             cta: 'Start communicating effectively',
-            label: 'Education',
+            label: 'Education & Training',
             messages: [
-              { text: 'Dear Parent, we inform you of the absence of Student/ Khaled from classes today. Please contact the administration.', sender: 'School' },
-              { text: 'Welcome to the (Digital Marketing) course. The first lecture starts tomorrow at 5:00 PM. Link: [Link]', sender: 'Academy' }
+              { text: 'Dear parent, we inform you that student/ Khaled was absent from classes today. Please contact the administration.', sender: 'School' },
+              { text: 'Welcome to the (Digital Marketing) course. The first lecture starts tomorrow at 5:00 PM. Classroom link: [Link]', sender: 'Academy' }
             ]
           },
           logistics: {
             title: 'Enhance customer experience with live tracking',
             description: 'Whether you manage a public transport fleet or an express delivery company, our solutions ensure your customer stays in the loop. Full automation of ticket booking notifications, real-time shipment tracking, and arrival alerts to improve field operations efficiency.',
             cta: 'Connect your systems via API',
-            label: 'Logistics',
+            label: 'Transport & Logistics',
             messages: [
               { text: 'Your order #1234 is now "Out for Delivery". The representative is on their way to you, contact: 050XXXXXXX', sender: 'Delivery' },
               { text: 'Dear customer, to receive your shipment, please provide the confirmation code: 9920', sender: 'Delivery' }
@@ -275,9 +275,9 @@ export const translations = {
             title: 'Precise healthcare & smarter communication',
             description: 'Unify your communication with patients and clients. We provide specialized solutions for hospitals to manage appointments, and for service companies (Legal, Consulting, Maintenance, Beauty) to schedule appointments and send alerts, reducing operational waste and increasing satisfaction.',
             cta: 'Automate your communication',
-            label: 'Health/Services',
+            label: 'Health & Services',
             messages: [
-              { text: 'Dear patient, referencing your appointment at the Dental Clinic tomorrow at 5:00 PM.', sender: 'Clinic' },
+              { text: 'Dear patient, this is a reminder of your appointment at the dental clinic tomorrow at 5:00 PM.', sender: 'Clinic' },
               { text: 'The maintenance technician is on their way to you now to fix (....). Visit code: 552.', sender: 'Service' }
             ]
           }

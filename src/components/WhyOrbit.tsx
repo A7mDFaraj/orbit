@@ -5,111 +5,32 @@ import { useInView } from 'react-intersection-observer';
 import { useLanguage } from '@/contexts/LanguageContext';
 import OrbitSectionBackground from './OrbitSectionBackground';
 import OrbitAnimatedBackground from './OrbitAnimatedBackground';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { createMainPageSettingsDefaults, type WhyOrbitSectionData } from '@/lib/mainPageSettings';
 
-export default function WhyOrbit() {
+interface WhyOrbitProps {
+  data?: WhyOrbitSectionData;
+}
+
+export default function WhyOrbit({ data }: WhyOrbitProps) {
   const { t, isRTL } = useLanguage();
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
   });
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [whyOrbitData, setWhyOrbitData] = useState({
-    stats: [
-      { number: '20+', labelEn: 'Years of Experience', labelAr: 'عامًا خبرة' },
-      { number: '20,000+', labelEn: 'Government and Private Entities', labelAr: 'جهة حكومية وخاصة' },
-      { number: '180+', labelEn: 'Million Messages Monthly', labelAr: 'مليون رسالة شهريًا' },
-      { number: '98%+', labelEn: 'Customer Satisfaction Rate', labelAr: 'نسبة رضا عملاء تتجاوز' }
-    ],
-    features: [
-      {
-        textEn: 'Local Expertise',
-        textAr: 'خبرة محلية وفهم لاحتياجات السوق',
-        descriptionEn: 'Deep understanding of local market needs',
-        descriptionAr: 'فهم عميق للسوق المحلي واحتياجاته الفريدة'
-      },
-      {
-        textEn: 'High-Performance Infrastructure',
-        textAr: 'بنية تقنية عالية الأداء',
-        descriptionEn: 'Robust and stable infrastructure supporting your operations',
-        descriptionAr: 'بنية تحتية قوية ومستقرة تدعم عملياتك'
-      },
-      {
-        textEn: 'Specialized Support',
-        textAr: 'دعم فني واستشارات متخصصة',
-        descriptionEn: 'Professional support team ready to assist you every step',
-        descriptionAr: 'فريق دعم محترف جاهز لمساعدتك في كل خطوة'
-      },
-      {
-        textEn: 'Scalable Solutions',
-        textAr: 'حلول قابلة للتوسع',
-        descriptionEn: 'Solutions that grow with your business expansion',
-        descriptionAr: 'حلول تنمو مع نمو أعمالك وتوسعها'
-      },
-      {
-        textEn: 'Government Compliance',
-        textAr: 'توافق كامل مع المتطلبات الحكومية',
-        descriptionEn: 'Full compliance with government standards and regulations',
-        descriptionAr: 'امتثال تام للمعايير واللوائح الحكومية'
-      },
-      {
-        textEn: 'Fast Deployment',
-        textAr: 'سرعة تشغيل وتكامل سلس مع الأنظمة',
-        descriptionEn: 'Quick and seamless integration with your existing systems',
-        descriptionAr: 'تكامل سريع وسلس مع أنظمتك الحالية'
-      }
-    ]
-  });
+  const whyOrbit = data ?? createMainPageSettingsDefaults().whyOrbit;
 
-  useEffect(() => {
-    const fetchWhyOrbitData = async () => {
-      try {
-        const res = await fetch('/api/main-page-settings');
-        const data = await res.json();
-        
-        if (data.success && data.settings?.whyOrbit) {
-          // Only update if we have valid data
-          if (data.settings.whyOrbit.stats && data.settings.whyOrbit.stats.length > 0 &&
-              data.settings.whyOrbit.features && data.settings.whyOrbit.features.length > 0) {
-            setWhyOrbitData({
-              stats: data.settings.whyOrbit.stats,
-              features: data.settings.whyOrbit.features
-            });
-          }
-        }
-      } catch (error) {
-        console.error('Failed to fetch Why ORBIT data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchWhyOrbitData();
-  }, []);
-
-  const stats = whyOrbitData.stats.map((stat: any) => ({
+  const stats = whyOrbit.stats.map((stat) => ({
     number: stat.number,
     label: isRTL ? stat.labelAr : stat.labelEn
   }));
 
-  const features = whyOrbitData.features.map((feature: any) => ({
+  const features = whyOrbit.features.map((feature) => ({
     text: isRTL ? feature.textAr : feature.textEn,
     textAr: feature.textAr,
     description: isRTL ? feature.descriptionAr : feature.descriptionEn,
   }));
-
-  if (loading) {
-    return (
-      <section className="py-24 bg-gradient-to-br from-primary via-[#8a2a3d] to-primary text-white">
-        <div className="text-center">
-          <div className="text-xl font-heading text-white/80">
-            {isRTL ? 'جاري التحميل...' : 'Loading...'}
-          </div>
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section id="why-orbit" className="py-24 lg:py-32 bg-gradient-to-br from-primary via-[#8a2a3d] to-primary text-white relative overflow-hidden">

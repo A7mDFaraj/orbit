@@ -127,8 +127,9 @@ export default function Footer() {
     'site-footer-data',
     fetchFooterData,
     {
-      revalidateOnFocus: true,
-      dedupingInterval: 3000,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      dedupingInterval: 60000,
     }
   );
 

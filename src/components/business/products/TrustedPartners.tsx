@@ -115,7 +115,7 @@ export const TrustedPartners = ({ partners = [] }: TrustedPartnersProps) => {
 
   return (
     <section 
-      className="py-16 bg-gradient-to-b from-white to-[#E8DCCB]/30 overflow-hidden"
+      className="trusted-partners py-16 bg-gradient-to-b from-white to-[#E8DCCB]/30 overflow-hidden"
       style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
     >
       <div className="container mx-auto px-4" dir={isRTL ? 'rtl' : 'ltr'}>
@@ -181,7 +181,7 @@ export const TrustedPartners = ({ partners = [] }: TrustedPartnersProps) => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style jsx global>{`
         @keyframes scroll-row1 {
           0% {
             transform: translateX(0);
@@ -201,31 +201,31 @@ export const TrustedPartners = ({ partners = [] }: TrustedPartnersProps) => {
         }
 
         @media (min-width: 768px) {
-          .animate-scroll-row1 {
+          .trusted-partners .animate-scroll-row1 {
             animation: scroll-row1 80s linear infinite;
             will-change: transform;
           }
 
-          .animate-scroll-row2 {
+          .trusted-partners .animate-scroll-row2 {
             animation: scroll-row2 80s linear infinite;
             will-change: transform;
           }
         }
 
         @media (max-width: 767px) {
-          .animate-scroll-row1 {
+          .trusted-partners .animate-scroll-row1 {
             animation: scroll-row1 60s linear infinite;
             will-change: transform;
           }
 
-          .animate-scroll-row2 {
+          .trusted-partners .animate-scroll-row2 {
             animation: scroll-row2 60s linear infinite;
             will-change: transform;
           }
         }
 
-        .animate-scroll-row1:hover,
-        .animate-scroll-row2:hover {
+        .trusted-partners .animate-scroll-row1:hover,
+        .trusted-partners .animate-scroll-row2:hover {
           animation-play-state: paused;
         }
       `}</style>

@@ -254,8 +254,56 @@ const defaultPageSectionsById: Record<string, SeedSection[]> = {
   home: defaultHomeSections,
   sms: [
     { id: 'sms-hero', name: 'SMS Hero', nameEn: 'SMS Hero', visible: true, fields: [
-      { key: 'retail_title', label: 'عنوان الشريحة الرئيسية', labelEn: 'Primary Segment Title', type: 'text', value: 'رسائل SMS للأعمال', valueEn: 'SMS for Business' },
-      { key: 'retail_description', label: 'الوصف', labelEn: 'Description', type: 'textarea', value: 'منصة مرنة للرسائل النصية الجماعية والفردية.', valueEn: 'Flexible platform for bulk and transactional SMS.' },
+      { key: 'general_badge_prefix', label: 'بادج الهيرو (بادئة)', labelEn: 'Hero Badge Prefix', type: 'text', value: 'حلول', valueEn: 'Solutions' },
+      { key: 'general_clients_count', label: 'عدد العملاء', labelEn: 'Clients Count', type: 'text', value: '+20,000', valueEn: '+20,000' },
+      { key: 'general_clients_label', label: 'وصف العملاء', labelEn: 'Clients Label', type: 'text', value: 'عميل يثق بنا', valueEn: 'clients trust us' },
+      { key: 'general_msg1_time', label: 'وقت الرسالة الأولى', labelEn: 'Message 1 Time', type: 'text', value: 'الآن', valueEn: 'Now' },
+      { key: 'general_msg2_time', label: 'وقت الرسالة الثانية', labelEn: 'Message 2 Time', type: 'text', value: 'منذ دقيقة', valueEn: '1 min ago' },
+
+      { key: 'retail_label', label: 'اسم تبويب المتاجر', labelEn: 'Retail Tab Label', type: 'text', value: 'متاجر إلكترونية', valueEn: 'E-commerce' },
+      { key: 'retail_title', label: 'عنوان المتاجر', labelEn: 'Retail Title', type: 'text', value: 'حوّل السلات المتروكة إلى مبيعات فورية', valueEn: 'Turn abandoned carts into instant sales' },
+      { key: 'retail_description', label: 'وصف المتاجر', labelEn: 'Retail Description', type: 'textarea', value: 'حل متكامل لرفع المبيعات في متاجرك الإلكترونية وتعزيز الولاء في فروع التجزئة التقليدية. من استعادة السلات المتروكة آلياً إلى إرسال العروض الحصرية والخصومات لرواد الفروع، نحن شريكك في تحويل الاهتمام إلى عمليات شراء فعلية.', valueEn: 'A complete solution to boost sales in your online stores and strengthen loyalty across traditional retail branches. From automatically recovering abandoned carts to sending exclusive offers and discounts to in-store visitors, we help you turn interest into real purchases.' },
+      { key: 'retail_cta', label: 'زر المتاجر', labelEn: 'Retail CTA', type: 'text', value: 'أبدأ بإحترافية أكثر', valueEn: 'Start with greater professionalism' },
+      { key: 'retail_msg1_sender', label: 'مرسل الرسالة الأولى - المتاجر', labelEn: 'Retail Message 1 Sender', type: 'text', value: 'Store', valueEn: 'Store' },
+      { key: 'retail_msg1_text', label: 'نص الرسالة الأولى - المتاجر', labelEn: 'Retail Message 1 Text', type: 'textarea', value: 'أهلاً سارة، نسيتِ عطورك المفضلة في السلة! استخدمي كود (SAVE10) للحصول على خصم 10% فوراً.', valueEn: 'Hi Sarah, you left your favorite perfumes in the cart! Use code (SAVE10) to get 10% off instantly.' },
+      { key: 'retail_msg2_sender', label: 'مرسل الرسالة الثانية - المتاجر', labelEn: 'Retail Message 2 Sender', type: 'text', value: 'Retail', valueEn: 'Retail' },
+      { key: 'retail_msg2_text', label: 'نص الرسالة الثانية - المتاجر', labelEn: 'Retail Message 2 Text', type: 'textarea', value: 'عزيزي العميل، استفد من عرض الجمعة البيضاء الحصري! خصم 30% على جميع المنتجات في فروعنا. العرض ساري حتى نهاية الأسبوع.', valueEn: 'Dear customer, enjoy our exclusive White Friday offer! 30% off all products in our branches. Offer valid until the end of the week.' },
+
+      { key: 'finance_label', label: 'اسم تبويب المالية', labelEn: 'Finance Tab Label', type: 'text', value: 'مالية وحكومي', valueEn: 'Finance & Gov' },
+      { key: 'finance_title', label: 'عنوان المالية', labelEn: 'Finance Title', type: 'text', value: 'أمان فائق وسرعة لا تُضاهى للقطاعات الحيوية', valueEn: 'Superior security and unmatched speed for critical sectors' },
+      { key: 'finance_description', label: 'وصف المالية', labelEn: 'Finance Description', type: 'textarea', value: 'نضمن وصول رسائل التحقق (OTP) والإشعارات البنكية والحكومية عبر مسارات مباشرة تلتزم بأعلى معايير الأمن السيبراني والخصوصية، مع توافق كامل مع بوابة الرسائل الحكومية (Gov Gate).', valueEn: 'We ensure delivery of OTP messages and banking/government notifications through direct routes that comply with the highest cybersecurity and privacy standards, with full compatibility with the government messaging gateway (Gov Gate).' },
+      { key: 'finance_cta', label: 'زر المالية', labelEn: 'Finance CTA', type: 'text', value: 'إبدأ بأمان أعلى', valueEn: 'Start with stronger security' },
+      { key: 'finance_msg1_sender', label: 'مرسل الرسالة الأولى - المالية', labelEn: 'Finance Message 1 Sender', type: 'text', value: 'Bank', valueEn: 'Bank' },
+      { key: 'finance_msg1_text', label: 'نص الرسالة الأولى - المالية', labelEn: 'Finance Message 1 Text', type: 'textarea', value: 'عميلنا العزيز، رمز التحقق للدخول لمرة واحدة هو: 5821. لا تشارك الرمز مع أي شخص لأمان حسابك.', valueEn: 'Dear customer, your one-time login verification code is: 5821. Do not share this code with anyone for your account security.' },
+      { key: 'finance_msg2_sender', label: 'مرسل الرسالة الثانية - المالية', labelEn: 'Finance Message 2 Sender', type: 'text', value: 'Gov', valueEn: 'Gov' },
+      { key: 'finance_msg2_text', label: 'نص الرسالة الثانية - المالية', labelEn: 'Finance Message 2 Text', type: 'textarea', value: 'نحيطكم علماً بأنه تم تجديد تصريح (....) بنجاح. يمكنك الاطلاع على التفاصيل عبر المنصة الرسمية.', valueEn: 'We would like to inform you that permit (....) has been successfully renewed. You can view details through the official platform.' },
+
+      { key: 'education_label', label: 'اسم تبويب التعليم', labelEn: 'Education Tab Label', type: 'text', value: 'تعليم وتدريب', valueEn: 'Education & Training' },
+      { key: 'education_title', label: 'عنوان التعليم', labelEn: 'Education Title', type: 'text', value: 'جسور تواصل تفاعلية بين الصرح التعليمي والأسرة', valueEn: 'Interactive communication bridges between educational institutions and families' },
+      { key: 'education_description', label: 'وصف التعليم', labelEn: 'Education Description', type: 'textarea', value: 'ابقِ أولياء الأمور والطلاب على اطلاع دائم بكل ما يخص المسيرة التعليمية. من إشعارات الغياب والحضور إلى نتائج الاختبارات والفعاليات، نحن نوفر لك الربط الأسرع مع أنظمتك الأكاديمية.', valueEn: 'Keep parents and students continuously informed about every part of the learning journey. From absence and attendance alerts to exam results and school events, we provide the fastest connection to your academic systems.' },
+      { key: 'education_cta', label: 'زر التعليم', labelEn: 'Education CTA', type: 'text', value: 'أبدأ التواصل بفاعلية', valueEn: 'Start communicating effectively' },
+      { key: 'education_msg1_sender', label: 'مرسل الرسالة الأولى - التعليم', labelEn: 'Education Message 1 Sender', type: 'text', value: 'School', valueEn: 'School' },
+      { key: 'education_msg1_text', label: 'نص الرسالة الأولى - التعليم', labelEn: 'Education Message 1 Text', type: 'textarea', value: 'ولي الأمر العزيز، نفيدكم بغياب الطالب/ خالد عن الحصص الدراسية اليوم. يرجى التواصل مع الإدارة.', valueEn: 'Dear parent, we inform you that student/ Khaled was absent from classes today. Please contact the administration.' },
+      { key: 'education_msg2_sender', label: 'مرسل الرسالة الثانية - التعليم', labelEn: 'Education Message 2 Sender', type: 'text', value: 'Academy', valueEn: 'Academy' },
+      { key: 'education_msg2_text', label: 'نص الرسالة الثانية - التعليم', labelEn: 'Education Message 2 Text', type: 'textarea', value: 'مرحباً بك في دورة (التسويق الرقمي). تبدأ المحاضرة الأولى غداً الساعة 5:00 م. رابط القاعة: [رابط]', valueEn: 'Welcome to the (Digital Marketing) course. The first lecture starts tomorrow at 5:00 PM. Classroom link: [Link]' },
+
+      { key: 'logistics_label', label: 'اسم تبويب اللوجستيك', labelEn: 'Logistics Tab Label', type: 'text', value: 'نقل ولوجستيك', valueEn: 'Transport & Logistics' },
+      { key: 'logistics_title', label: 'عنوان اللوجستيك', labelEn: 'Logistics Title', type: 'text', value: 'عزز تجربة عملائك بمتابعة لحظية لشحناتهم', valueEn: 'Enhance your customer experience with real-time shipment tracking' },
+      { key: 'logistics_description', label: 'وصف اللوجستيك', labelEn: 'Logistics Description', type: 'textarea', value: 'سواء كنت تدير أسطولاً للنقل الجماعي أو شركة شحن بريد سريع، حلولنا تضمن بقاء عميلك في قلب الحدث. أتمتة كاملة لإشعارات حجز التذاكر، تتبع الشحنات لحظياً، وتنبيهات وصول الحافلات أو المناديب لرفع كفاءة العمليات الميدانية.', valueEn: 'Whether you manage a public transportation fleet or an express shipping company, our solutions keep your customer fully informed. Complete automation for ticket-booking notifications, live shipment tracking, and bus/courier arrival alerts to improve field operations efficiency.' },
+      { key: 'logistics_cta', label: 'زر اللوجستيك', labelEn: 'Logistics CTA', type: 'text', value: 'أربط أنظمتك بAPI', valueEn: 'Connect your systems via API' },
+      { key: 'logistics_msg1_sender', label: 'مرسل الرسالة الأولى - اللوجستيك', labelEn: 'Logistics Message 1 Sender', type: 'text', value: 'Delivery', valueEn: 'Delivery' },
+      { key: 'logistics_msg1_text', label: 'نص الرسالة الأولى - اللوجستيك', labelEn: 'Logistics Message 1 Text', type: 'textarea', value: 'طلبك رقم #1234 أصبح الآن "قيد التوصيل". المندوب في طريقه إليك، للتواصل: 050XXXXXXX', valueEn: 'Your order #1234 is now "Out for Delivery". The courier is on the way to you. Contact: 050XXXXXXX' },
+      { key: 'logistics_msg2_sender', label: 'مرسل الرسالة الثانية - اللوجستيك', labelEn: 'Logistics Message 2 Sender', type: 'text', value: 'Delivery', valueEn: 'Delivery' },
+      { key: 'logistics_msg2_text', label: 'نص الرسالة الثانية - اللوجستيك', labelEn: 'Logistics Message 2 Text', type: 'textarea', value: 'عزيزي العميل، لاستلام شحنتك من المندوب، يرجى تزويده برمز التأكيد: 9920', valueEn: 'Dear customer, to receive your shipment from the courier, please provide confirmation code: 9920' },
+
+      { key: 'health_label', label: 'اسم تبويب الصحة والخدمات', labelEn: 'Health Tab Label', type: 'text', value: 'صحة وخدمات', valueEn: 'Health & Services' },
+      { key: 'health_title', label: 'عنوان الصحة والخدمات', labelEn: 'Health Title', type: 'text', value: 'رعاية صحية أدق.. وتواصل أذكى مع المراجعين', valueEn: 'More precise healthcare and smarter communication with clients' },
+      { key: 'health_description', label: 'وصف الصحة والخدمات', labelEn: 'Health Description', type: 'textarea', value: 'وحّد تواصلك مع المراجعين والعملاء. نوفر حلولاً مخصصة للمستشفيات لإدارة المواعيد، ولشركات الخدمات (القانونية، الاستشارية، الصيانة، والجمال) لجدولة المواعيد وإرسال التنبيهات، مما يقلل الهدر التشغيلي ويرفع مستوى الرضا.', valueEn: 'Unify your communication with patients and clients. We provide tailored solutions for hospitals to manage appointments, and for service companies (legal, consulting, maintenance, and beauty) to schedule visits and send alerts, reducing operational waste and increasing satisfaction.' },
+      { key: 'health_cta', label: 'زر الصحة والخدمات', labelEn: 'Health CTA', type: 'text', value: 'أتمت تواصلك بفاعلية', valueEn: 'Automate your communication effectively' },
+      { key: 'health_msg1_sender', label: 'مرسل الرسالة الأولى - الصحة', labelEn: 'Health Message 1 Sender', type: 'text', value: 'Clinic', valueEn: 'Clinic' },
+      { key: 'health_msg1_text', label: 'نص الرسالة الأولى - الصحة', labelEn: 'Health Message 1 Text', type: 'textarea', value: 'عزيزي المراجع، نذكرك بموعدك في عيادة الأسنان غداً الساعة 5:00 م.', valueEn: 'Dear patient, this is a reminder of your appointment at the dental clinic tomorrow at 5:00 PM.' },
+      { key: 'health_msg2_sender', label: 'مرسل الرسالة الثانية - الصحة', labelEn: 'Health Message 2 Sender', type: 'text', value: 'Service', valueEn: 'Service' },
+      { key: 'health_msg2_text', label: 'نص الرسالة الثانية - الصحة', labelEn: 'Health Message 2 Text', type: 'textarea', value: 'فني الصيانة في طريقه إليك الآن لإصلاح (....). كود الزيارة: 552.', valueEn: 'The maintenance technician is on the way now to fix (....). Visit code: 552.' },
     ] },
     { id: 'sms-pricing', name: 'تسعير SMS', nameEn: 'SMS Pricing', visible: true, fields: [
       { key: 'title', label: 'عنوان التسعير', labelEn: 'Pricing Title', type: 'text', value: 'باقات الرسائل', valueEn: 'SMS Packages' },
@@ -335,6 +383,11 @@ const normalizeSection = (value: unknown, index: number): SeedSection => {
   };
 };
 
+const shouldForceTemplateField = (pageId: string, sectionId: string): boolean => {
+  if (pageId === 'sms' && sectionId === 'sms-hero') return true;
+  return false;
+};
+
 const mergeTemplateIntoPage = (page: SeedPage, templateSections: SeedSection[]): SeedPage => {
   const currentSections = Array.isArray(page.sections) ? page.sections : [];
   const byId = new Map(currentSections.map((section) => [section.id, section]));
@@ -347,9 +400,26 @@ const mergeTemplateIntoPage = (page: SeedPage, templateSections: SeedSection[]):
       continue;
     }
     const existingFields = Array.isArray(existing.fields) ? existing.fields : [];
-    const existingKeys = new Set(existingFields.map((field) => field.key));
-    const missingFields = template.fields.filter((field) => !existingKeys.has(field.key)).map(cloneField);
-    merged.push(missingFields.length ? { ...existing, fields: [...existingFields, ...missingFields] } : existing);
+    const existingByKey = new Map(existingFields.map((field) => [field.key, field]));
+
+    const mergedFields: SeedSectionField[] = template.fields.map((templateField) => {
+      const existingField = existingByKey.get(templateField.key);
+      if (!existingField) {
+        return cloneField(templateField);
+      }
+      if (shouldForceTemplateField(page.id, template.id)) {
+        return {
+          ...existingField,
+          ...cloneField(templateField),
+          value: templateField.value,
+          valueEn: templateField.valueEn,
+        };
+      }
+      return existingField;
+    });
+
+    const extraFields = existingFields.filter((field) => !template.fields.some((templateField) => templateField.key === field.key));
+    merged.push({ ...existing, fields: [...mergedFields, ...extraFields] });
   }
 
   for (const section of currentSections) {
@@ -408,7 +478,11 @@ const normalizePages = (input: unknown): SeedPage[] => {
     if (!used.has(blueprint.id)) normalized.push(buildDefaultPage(blueprint));
   }
 
-  return ensureHomeSolutionsFields(ensureHomeHeroFields(normalized));
+  const normalizedWithTemplates = normalized.map((page) =>
+    mergeTemplateIntoPage(page, defaultPageSectionsById[page.id] || [])
+  );
+
+  return ensureHomeSolutionsFields(ensureHomeHeroFields(normalizedWithTemplates));
 };
 
 const normalizePartners = (input: unknown) => {

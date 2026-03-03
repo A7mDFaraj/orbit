@@ -52,15 +52,15 @@ export const Hero = ({ pageData = null, partners = [] }: HeroProps) => {
       <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
 
       <div className="container mx-auto px-4 md:px-6">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-start lg:items-center">
           {/* Text Content */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className={`space-y-6 ${isRTL ? 'text-right' : 'text-left'}`}
+            className={`space-y-5 sm:space-y-6 max-w-full ${isRTL ? 'text-right' : 'text-left'}`}
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent border border-primary/20 text-primary text-sm font-medium">
+            <div className="inline-flex max-w-full items-center gap-2 px-3 py-1 rounded-full bg-accent border border-primary/20 text-primary text-sm font-medium whitespace-normal break-words">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
@@ -68,34 +68,43 @@ export const Hero = ({ pageData = null, partners = [] }: HeroProps) => {
               {badgeText}
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 leading-tight">
+            <h1
+              className={`font-bold text-slate-900 tracking-tight leading-[1.08] w-full max-w-full whitespace-normal break-words [overflow-wrap:anywhere] [word-break:break-word] ${
+                isRTL ? 'text-4xl md:text-5xl lg:text-6xl' : 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl'
+              }`}
+            >
               {titleLine1}
             </h1>
 
-            <p className="text-lg text-slate-600 max-w-xl leading-relaxed">
+            <p className="text-base sm:text-lg text-slate-600 max-w-xl leading-relaxed">
               {description}
             </p>
 
-            <div className="flex flex-wrap gap-4 pt-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-3 w-full max-w-xl">
               <Button
                 size="lg"
-                className="bg-primary hover:bg-primary/90 text-white font-bold h-12 px-8 text-lg shadow-lg shadow-primary/25"
+                className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white font-bold min-h-12 h-auto px-5 sm:px-8 py-3 text-base sm:text-lg text-center leading-snug whitespace-normal break-words shadow-lg shadow-primary/25"
                 asChild
               >
                 <a href={ctaStartUrl} target="_blank" rel="noopener noreferrer">
-                  {ctaStart}
-                  {isRTL ? <ArrowLeft className="mr-2 h-5 w-5" /> : <ArrowRight className="ml-2 h-5 w-5" />}
+                  <span className="min-w-0 whitespace-normal break-words">{ctaStart}</span>
+                  {isRTL ? <ArrowLeft className="mr-2 h-5 w-5 shrink-0" /> : <ArrowRight className="ml-2 h-5 w-5 shrink-0" />}
                 </a>
               </Button>
-              <Button size="lg" variant="outline" className="h-12 px-8 text-lg border-slate-300 hover:bg-slate-50 text-slate-700" asChild>
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full sm:w-auto min-h-12 h-auto px-5 sm:px-8 py-3 text-base sm:text-lg border-slate-300 hover:bg-slate-50 text-slate-700 text-center whitespace-normal break-words"
+                asChild
+              >
                 <Link href="/contact">
-                  <MessageCircle className={`${isRTL ? 'ml-2' : 'mr-2'} h-5 w-5`} />
-                  {ctaSales}
+                  <MessageCircle className={`${isRTL ? 'ml-2' : 'mr-2'} h-5 w-5 shrink-0`} />
+                  <span className="min-w-0 whitespace-normal break-words">{ctaSales}</span>
                 </Link>
               </Button>
             </div>
 
-            <div className="pt-4 flex items-center gap-4 text-sm text-slate-500">
+            <div className="pt-2 sm:pt-4 flex flex-wrap items-center gap-3 sm:gap-4 text-sm text-slate-500">
               <div className="flex -space-x-3 space-x-reverse overflow-visible">
                 {trustedBadgeLogos.map((logo, idx) => (
                   <div
@@ -114,7 +123,7 @@ export const Hero = ({ pageData = null, partners = [] }: HeroProps) => {
                   </div>
                 ))}
               </div>
-              <p>{trustText}</p>
+              <p className="leading-relaxed">{trustText}</p>
             </div>
           </motion.div>
 
