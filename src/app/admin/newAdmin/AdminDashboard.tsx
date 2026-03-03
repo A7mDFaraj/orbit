@@ -6,7 +6,7 @@ import {
   Eye, ChevronLeft, Bell, Search,
   Globe, Edit3, Trash2, Plus, EyeOff,
   Handshake, Save, ChevronDown, ChevronUp, ExternalLink,
-  Upload, CheckCircle, XCircle,
+  Upload, CheckCircle, XCircle, X,
   Mail, MessageSquare, Phone, Inbox, PanelBottom, Newspaper
 } from "lucide-react";
 import Link from "next/link";
@@ -24,6 +24,22 @@ const adminLogoSrc = encodeImagePath("/logo/شعار المدار-01.svg");
 const ADMIN_EMAIL = "admin@corbit";
 const ADMIN_PASSWORD = "AAaa12341234";
 const ADMIN_AUTH_STORAGE_KEY = "orbit-admin-authenticated";
+const MOBILE_BREAKPOINT_QUERY = "(max-width: 1023px)";
+
+const isRemoteLogo = (logo: string) => /^(https?:\/\/|data:|blob:)/i.test(logo);
+
+const resolvePartnerLogoSrc = (logo: string) => {
+  const trimmed = logo.trim();
+  if (!trimmed) return "";
+  if (isRemoteLogo(trimmed)) return trimmed;
+  const normalized = trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+  return encodeImagePath(normalized);
+};
+
+const isTrustedFolderLogo = (logo: string) => {
+  const normalized = logo.trim().replace(/\\/g, "/");
+  return normalized.toLowerCase().startsWith("/trustedlogos/");
+};
 
 export const AdminDashboard = () => {
   const router = useRouter();
@@ -31,6 +47,7 @@ export const AdminDashboard = () => {
   const searchParams = useSearchParams();
   const [currentView, setCurrentView] = useState<AdminView>("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [editingPage, setEditingPage] = useState<string | null>(null);
   const [lang, setLang] = useState<"ar" | "en">("ar");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -92,7 +109,12 @@ export const AdminDashboard = () => {
     }
   }, [isAuthenticated, pathname, searchParams]);
 
+  React.useEffect(() => {
+    setMobileSidebarOpen(false);
+  }, [pathname]);
+
   const navigateToView = (view: AdminView, options?: { pageId?: string }) => {
+    setMobileSidebarOpen(false);
     if (view === "page-editor") {
       const id = options?.pageId || editingPage || "home";
       router.push(`${viewToPath[view]}?id=${encodeURIComponent(id)}`);
@@ -130,6 +152,14 @@ export const AdminDashboard = () => {
     setEditingPage(null);
     router.push("/admin");
     toast.success(isAr ? "تم تسجيل الخروج" : "Signed out");
+  };
+
+  const toggleSidebar = () => {
+    if (typeof window !== "undefined" && window.matchMedia(MOBILE_BREAKPOINT_QUERY).matches) {
+      setMobileSidebarOpen((prev) => !prev);
+      return;
+    }
+    setSidebarOpen((prev) => !prev);
   };
 
   const renderContent = () => {
@@ -207,23 +237,45 @@ export const AdminDashboard = () => {
     );
   }
 
+  const desktopSidebarOffsetClass = sidebarOpen
+    ? (isAr ? "lg:mr-64" : "lg:ml-64")
+    : (isAr ? "lg:mr-20" : "lg:ml-20");
+  const sidebarEdgeClass = isAr ? "right-0" : "left-0";
+  const mobileSidebarTranslateClass = mobileSidebarOpen
+    ? "translate-x-0"
+    : (isAr ? "translate-x-full lg:translate-x-0" : "-translate-x-full lg:translate-x-0");
+  const showSidebarLabels = sidebarOpen || mobileSidebarOpen;
+
   return (
-    <div className="min-h-screen bg-gray-50 flex" dir={isAr ? "rtl" : "ltr"} style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif" }}>
+    <div className="min-h-screen bg-gray-50" dir={isAr ? "rtl" : "ltr"} style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif" }}>
+      {mobileSidebarOpen && (
+        <button
+          type="button"
+          onClick={() => setMobileSidebarOpen(false)}
+          className="fixed inset-0 z-40 bg-slate-900/40 lg:hidden"
+          aria-label={isAr ? "إغلاق القائمة الجانبية" : "Close sidebar"}
+        />
+      )}
+
+      <div className="flex min-h-screen">
       {/* Sidebar */}
-      <aside className={`${sidebarOpen ? "w-64" : "w-20"} bg-[#0A2647] text-white transition-all duration-300 flex flex-col fixed h-full z-40`}>
+      <aside className={`fixed ${sidebarEdgeClass} top-0 h-full w-72 max-w-[85vw] ${sidebarOpen ? "lg:w-64" : "lg:w-20"} ${mobileSidebarTranslateClass} bg-[#0A2647] text-white transition-all duration-300 flex flex-col z-50`}>
         <div className="p-4 flex items-center justify-between border-b border-white/10">
-          {sidebarOpen && (
+          {showSidebarLabels && (
             <div className="flex items-center gap-2">
               <img src={adminLogoSrc} alt="Orbit" className="h-10 w-auto brightness-0 invert" />
               <span className="text-sm text-white/60">CMS</span>
             </div>
           )}
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 hover:bg-white/10 rounded-lg transition-colors">
+          <button onClick={toggleSidebar} className="p-2 hover:bg-white/10 rounded-lg transition-colors hidden lg:flex">
             {sidebarOpen ? <ChevronLeft className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+          <button onClick={() => setMobileSidebarOpen(false)} className="p-2 hover:bg-white/10 rounded-lg transition-colors lg:hidden">
+            <X className="w-5 h-5" />
           </button>
         </div>
 
-        <nav className="flex-1 p-3 space-y-1">
+        <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
           {sidebarItems.map((item) => (
             <button
               key={item.id}
@@ -235,8 +287,8 @@ export const AdminDashboard = () => {
               }`}
             >
               <item.icon className="w-5 h-5 flex-shrink-0" />
-              {sidebarOpen && <span className="flex-1">{item.label}</span>}
-              {sidebarOpen && item.id === "submissions" && unreadCount > 0 && (
+              {showSidebarLabels && <span className="flex-1">{item.label}</span>}
+              {showSidebarLabels && item.id === "submissions" && unreadCount > 0 && (
                 <span className="bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full min-w-[18px] text-center">{unreadCount}</span>
               )}
             </button>
@@ -249,35 +301,43 @@ export const AdminDashboard = () => {
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-all text-sm"
           >
             <Globe className="w-5 h-5 flex-shrink-0" />
-            {sidebarOpen && <span>{isAr ? "English" : "العربية"}</span>}
+            {showSidebarLabels && <span>{isAr ? "English" : "العربية"}</span>}
           </button>
           <button
             onClick={handleLogout}
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/70 hover:bg-red-500/20 hover:text-red-300 transition-all text-sm"
           >
             <LogOut className="w-5 h-5 flex-shrink-0" />
-            {sidebarOpen && <span>{isAr ? "تسجيل الخروج" : "Sign Out"}</span>}
+            {showSidebarLabels && <span>{isAr ? "تسجيل الخروج" : "Sign Out"}</span>}
           </button>
           <Link
             href="/"
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-all text-sm"
           >
             <ExternalLink className="w-5 h-5 flex-shrink-0" />
-            {sidebarOpen && <span>{isAr ? "العودة للموقع" : "Back to Site"}</span>}
+            {showSidebarLabels && <span>{isAr ? "العودة للموقع" : "Back to Site"}</span>}
           </Link>
         </div>
       </aside>
 
       {/* Main Content */}
-      <main className={`flex-1 ${sidebarOpen ? (isAr ? "mr-64" : "ml-64") : (isAr ? "mr-20" : "ml-20")} transition-all duration-300`}>
-        <header className="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between sticky top-0 z-30">
-          <div className="flex items-center gap-4">
-            <h1 className="text-lg text-[#104E8B]">
+      <main className={`flex-1 min-w-0 ${desktopSidebarOffsetClass} transition-all duration-300`}>
+        <header className="bg-white border-b border-gray-200 px-3 sm:px-4 lg:px-6 py-3 flex items-center justify-between gap-2 sticky top-0 z-30">
+          <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+            <button
+              type="button"
+              onClick={() => setMobileSidebarOpen(true)}
+              className="p-2 rounded-lg hover:bg-gray-100 lg:hidden"
+              aria-label={isAr ? "فتح القائمة الجانبية" : "Open sidebar"}
+            >
+              <Menu className="w-5 h-5 text-gray-600" />
+            </button>
+            <h1 className="text-base sm:text-lg text-[#104E8B] truncate">
               {currentView === "page-editor" ? (isAr ? "محرر الصفحة" : "Page Editor") : sidebarItems.find(i => i.id === currentView)?.label}
             </h1>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="relative">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="relative hidden md:block">
               <Search className="w-4 h-4 absolute top-2.5 text-gray-400" style={{ [isAr ? "right" : "left"]: "10px" }} />
               <input
                 type="text"
@@ -286,21 +346,22 @@ export const AdminDashboard = () => {
                 style={{ [isAr ? "paddingRight" : "paddingLeft"]: "36px", [isAr ? "paddingLeft" : "paddingRight"]: "12px" }}
               />
             </div>
-            <button className="relative p-2 hover:bg-gray-100 rounded-lg">
+            <button className="relative p-2 hover:bg-gray-100 rounded-lg hidden sm:flex">
               <Bell className="w-5 h-5 text-gray-500" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
             </button>
-            <div className="flex items-center gap-2 bg-gray-100 rounded-lg px-3 py-1.5">
+            <div className="flex items-center gap-2 bg-gray-100 rounded-lg px-2 sm:px-3 py-1.5">
               <div className="w-7 h-7 bg-[#104E8B] rounded-full flex items-center justify-center text-white text-xs">A</div>
-              <span className="text-sm text-gray-700">Admin</span>
+              <span className="text-sm text-gray-700 hidden sm:inline">Admin</span>
             </div>
           </div>
         </header>
 
-        <div className="p-6">
+        <div className="p-3 sm:p-4 lg:p-6">
           {renderContent()}
         </div>
       </main>
+      </div>
     </div>
   );
 };
@@ -1043,60 +1104,62 @@ const PagesView = ({ isAr, onEdit }: { isAr: boolean; onEdit: (id: string) => vo
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-2">
         <p className="text-sm text-gray-500">{isAr ? "الصفحات الثابتة - المحتوى قابل للتعديل فقط" : "Fixed pages - content editable only"}</p>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <table className="w-full">
-          <thead>
-            <tr className="bg-gray-50 border-b border-gray-100">
-              <th className="text-start p-4 text-sm text-gray-600">{isAr ? "الصفحة" : "Page"}</th>
-              <th className="text-start p-4 text-sm text-gray-600">{isAr ? "المسار" : "Path"}</th>
-              <th className="text-center p-4 text-sm text-gray-600">{isAr ? "الأقسام" : "Sections"}</th>
-              <th className="text-center p-4 text-sm text-gray-600">{isAr ? "آخر تعديل" : "Last Edit"}</th>
-              <th className="text-center p-4 text-sm text-gray-600">{isAr ? "الحالة" : "Status"}</th>
-              <th className="text-center p-4 text-sm text-gray-600">{isAr ? "إجراءات" : "Actions"}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {pages.map((page) => (
-              <tr key={page.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                <td className="p-4">
-                  <div className="flex items-center gap-3">
-                    <FileText className="w-5 h-5 text-[#104E8B]" />
-                    <span className="text-sm text-gray-900">{isAr ? page.title : page.titleEn}</span>
-                  </div>
-                </td>
-                <td className="p-4">
-                  <code className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600" dir="ltr">{page.path}</code>
-                </td>
-                <td className="p-4 text-center text-sm text-gray-600">{page.sections.length}</td>
-                <td className="p-4 text-center text-sm text-gray-500">{page.lastEdited}</td>
-                <td className="p-4 text-center">
-                  <Badge className="bg-green-100 text-green-700 text-xs">{isAr ? "منشور" : "Published"}</Badge>
-                </td>
-                <td className="p-4 text-center">
-                  <div className="flex items-center justify-center gap-2">
-                    <Button
-                      size="sm"
-                      onClick={() => onEdit(page.id)}
-                      className="bg-[#104E8B] hover:bg-[#0A2647] text-white text-xs h-8"
-                    >
-                      <Edit3 className="w-3.5 h-3.5" />
-                      {isAr ? "تحرير" : "Edit"}
-                    </Button>
-                    <Button size="sm" variant="outline" className="text-xs h-8 border-gray-200" asChild>
-                      <a href={page.path} target="_blank" rel="noopener noreferrer">
-                        <Eye className="w-3.5 h-3.5" />
-                      </a>
-                    </Button>
-                  </div>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[760px]">
+            <thead>
+              <tr className="bg-gray-50 border-b border-gray-100">
+                <th className="text-start p-4 text-sm text-gray-600">{isAr ? "الصفحة" : "Page"}</th>
+                <th className="text-start p-4 text-sm text-gray-600">{isAr ? "المسار" : "Path"}</th>
+                <th className="text-center p-4 text-sm text-gray-600">{isAr ? "الأقسام" : "Sections"}</th>
+                <th className="text-center p-4 text-sm text-gray-600">{isAr ? "آخر تعديل" : "Last Edit"}</th>
+                <th className="text-center p-4 text-sm text-gray-600">{isAr ? "الحالة" : "Status"}</th>
+                <th className="text-center p-4 text-sm text-gray-600">{isAr ? "إجراءات" : "Actions"}</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {pages.map((page) => (
+                <tr key={page.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                  <td className="p-4">
+                    <div className="flex items-center gap-3">
+                      <FileText className="w-5 h-5 text-[#104E8B]" />
+                      <span className="text-sm text-gray-900">{isAr ? page.title : page.titleEn}</span>
+                    </div>
+                  </td>
+                  <td className="p-4">
+                    <code className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600" dir="ltr">{page.path}</code>
+                  </td>
+                  <td className="p-4 text-center text-sm text-gray-600">{page.sections.length}</td>
+                  <td className="p-4 text-center text-sm text-gray-500">{page.lastEdited}</td>
+                  <td className="p-4 text-center">
+                    <Badge className="bg-green-100 text-green-700 text-xs">{isAr ? "منشور" : "Published"}</Badge>
+                  </td>
+                  <td className="p-4 text-center">
+                    <div className="flex items-center justify-center gap-2">
+                      <Button
+                        size="sm"
+                        onClick={() => onEdit(page.id)}
+                        className="bg-[#104E8B] hover:bg-[#0A2647] text-white text-xs h-8"
+                      >
+                        <Edit3 className="w-3.5 h-3.5" />
+                        {isAr ? "تحرير" : "Edit"}
+                      </Button>
+                      <Button size="sm" variant="outline" className="text-xs h-8 border-gray-200" asChild>
+                        <a href={page.path} target="_blank" rel="noopener noreferrer">
+                          <Eye className="w-3.5 h-3.5" />
+                        </a>
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
@@ -1235,23 +1298,23 @@ const PageEditorView = ({ isAr, pageId, onBack }: { isAr: boolean; pageId: strin
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <Button variant="ghost" onClick={onBack} className="text-gray-500 hover:text-[#104E8B]">
             <ChevronLeft className="w-4 h-4" />
             {isAr ? "العودة" : "Back"}
           </Button>
-          <span className="text-gray-300">|</span>
-          <h2 className="text-lg text-[#104E8B]">{isAr ? page.title : page.titleEn}</h2>
+          <span className="text-gray-300 hidden sm:inline">|</span>
+          <h2 className="text-base sm:text-lg text-[#104E8B] truncate">{isAr ? page.title : page.titleEn}</h2>
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" className="border-gray-200 text-gray-600 h-9" asChild>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="outline" className="border-gray-200 text-gray-600 h-9 w-full sm:w-auto" asChild>
             <a href={page.path} target="_blank" rel="noopener noreferrer">
               <ExternalLink className="w-4 h-4" />
               {isAr ? "معاينة" : "Preview"}
             </a>
           </Button>
-          <Button onClick={handleSave} className="bg-[#FFA502] hover:bg-[#E59400] text-white h-9">
+          <Button onClick={handleSave} className="bg-[#FFA502] hover:bg-[#E59400] text-white h-9 w-full sm:w-auto">
             <Save className="w-4 h-4" />
             {isAr ? "حفظ ونشر" : "Save & Publish"}
           </Button>
@@ -1259,16 +1322,16 @@ const PageEditorView = ({ isAr, pageId, onBack }: { isAr: boolean; pageId: strin
       </div>
 
       {/* Language Tabs */}
-      <div className="flex gap-2 bg-white rounded-lg p-1 shadow-sm border border-gray-100 w-fit">
+      <div className="flex gap-2 bg-white rounded-lg p-1 shadow-sm border border-gray-100 w-full sm:w-fit">
         <button
           onClick={() => setActiveTab("ar")}
-          className={`px-4 py-2 rounded-md text-sm transition-all ${activeTab === "ar" ? "bg-[#104E8B] text-white" : "text-gray-600 hover:bg-gray-100"}`}
+          className={`flex-1 sm:flex-none px-4 py-2 rounded-md text-sm transition-all ${activeTab === "ar" ? "bg-[#104E8B] text-white" : "text-gray-600 hover:bg-gray-100"}`}
         >
           العربية
         </button>
         <button
           onClick={() => setActiveTab("en")}
-          className={`px-4 py-2 rounded-md text-sm transition-all ${activeTab === "en" ? "bg-[#104E8B] text-white" : "text-gray-600 hover:bg-gray-100"}`}
+          className={`flex-1 sm:flex-none px-4 py-2 rounded-md text-sm transition-all ${activeTab === "en" ? "bg-[#104E8B] text-white" : "text-gray-600 hover:bg-gray-100"}`}
         >
           English
         </button>
@@ -1283,15 +1346,15 @@ const PageEditorView = ({ isAr, pageId, onBack }: { isAr: boolean; pageId: strin
             <Card key={section.id} className={`border shadow-sm overflow-hidden ${!section.visible ? "opacity-60" : ""} ${isExpanded ? "border-[#104E8B]/30" : "border-gray-100"}`}>
               {/* Section Header */}
               <div
-                className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50/50 transition-colors"
+                className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50/50 transition-colors gap-3"
                 onClick={() => toggleSection(section.id)}
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 min-w-0">
                   <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#104E8B]/10 text-[#104E8B] text-sm">
                     {sIndex + 1}
                   </div>
-                  <div>
-                    <p className="text-sm text-gray-900">{isAr ? section.name : section.nameEn}</p>
+                  <div className="min-w-0">
+                    <p className="text-sm text-gray-900 truncate">{isAr ? section.name : section.nameEn}</p>
                     <p className="text-xs text-gray-400">
                       {isExternallyManagedSection
                         ? (isAr ? "يُدار مركزياً" : "Managed centrally")
@@ -1641,17 +1704,31 @@ const PartnersView = ({ isAr }: { isAr: boolean }) => {
     setEditingName("");
   };
 
+  const handlePartnerDelete = (partner: { id: string; logo: string; active: boolean }) => {
+    if (isTrustedFolderLogo(partner.logo)) {
+      if (partner.active) {
+        togglePartner(partner.id);
+        toast.success(isAr ? "تم إخفاء الشريك من العرض" : "Partner hidden from display");
+      } else {
+        toast.success(isAr ? "هذا الشريك مخفي بالفعل" : "This partner is already hidden");
+      }
+      return;
+    }
+    removePartner(partner.id);
+    toast.success(isAr ? "تم حذف الشريك" : "Partner removed");
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
           <p className="text-sm text-gray-500">
             {isAr
               ? `إدارة شعارات شركاء النجاح المعروضة في الصفحة الرئيسية وصفحة الرسائل النصية`
               : `Manage success partner logos displayed on the Home and SMS pages`}
           </p>
-          <div className="flex items-center gap-3 mt-2">
+          <div className="flex items-center flex-wrap gap-2 sm:gap-3 mt-2">
             <Badge className="bg-[#104E8B]/10 text-[#104E8B]">{partners.length} {isAr ? "إجمالي" : "total"}</Badge>
             <Badge className="bg-green-100 text-green-700">{activeCount} {isAr ? "نشط" : "active"}</Badge>
             <Badge className="bg-gray-100 text-gray-500">{partners.length - activeCount} {isAr ? "معطل" : "inactive"}</Badge>
@@ -1659,7 +1736,7 @@ const PartnersView = ({ isAr }: { isAr: boolean }) => {
         </div>
         <Button
           onClick={() => setShowAddForm(true)}
-          className="bg-[#104E8B] hover:bg-[#0A2647] text-white"
+          className="bg-[#104E8B] hover:bg-[#0A2647] text-white w-full sm:w-auto"
         >
           <Plus className="w-4 h-4" />
           {isAr ? "إضافة شريك جديد" : "Add New Partner"}
@@ -1697,7 +1774,7 @@ const PartnersView = ({ isAr }: { isAr: boolean }) => {
             </div>
             <div>
               <label className="text-xs text-gray-500 mb-1 block">{isAr ? "شعار الشريك" : "Partner Logo"}</label>
-              <div className="flex items-center gap-3">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 <input
                   type="text"
                   value={newLogoUrl}
@@ -1710,7 +1787,7 @@ const PartnersView = ({ isAr }: { isAr: boolean }) => {
                 <Button
                   variant="outline"
                   onClick={() => fileInputRef.current?.click()}
-                  className="border-gray-200 text-gray-600 h-9"
+                  className="border-gray-200 text-gray-600 h-9 w-full sm:w-auto"
                 >
                   <Upload className="w-4 h-4" />
                   {isAr ? "رفع" : "Upload"}
@@ -1718,16 +1795,16 @@ const PartnersView = ({ isAr }: { isAr: boolean }) => {
               </div>
               {newLogoUrl && (
                 <div className="mt-2 p-3 bg-gray-50 rounded-lg border border-gray-200 inline-block">
-                  <img src={newLogoUrl} alt="Preview" className="h-12 max-w-[120px] object-contain" />
+                  <img src={resolvePartnerLogoSrc(newLogoUrl)} alt="Preview" className="h-12 max-w-[120px] object-contain" />
                 </div>
               )}
             </div>
-            <div className="flex items-center gap-2">
-              <Button onClick={handleAdd} className="bg-[#104E8B] hover:bg-[#0A2647] text-white">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+              <Button onClick={handleAdd} className="bg-[#104E8B] hover:bg-[#0A2647] text-white w-full sm:w-auto">
                 <CheckCircle className="w-4 h-4" />
                 {isAr ? "إضافة" : "Add"}
               </Button>
-              <Button variant="outline" onClick={() => { setShowAddForm(false); setNewName(""); setNewLogoUrl(""); }} className="border-gray-200 text-gray-600">
+              <Button variant="outline" onClick={() => { setShowAddForm(false); setNewName(""); setNewLogoUrl(""); }} className="border-gray-200 text-gray-600 w-full sm:w-auto">
                 <XCircle className="w-4 h-4" />
                 {isAr ? "إلغاء" : "Cancel"}
               </Button>
@@ -1748,7 +1825,7 @@ const PartnersView = ({ isAr }: { isAr: boolean }) => {
             {/* Logo Preview */}
             <div className="aspect-[2/1] bg-white flex items-center justify-center p-4 border-b border-gray-100 relative">
               <img
-                src={partner.logo}
+                src={resolvePartnerLogoSrc(partner.logo)}
                 alt={partner.name}
                 className={`max-h-full max-w-full object-contain transition-all ${
                   partner.active ? "grayscale-0 opacity-100" : "grayscale opacity-40"
@@ -1778,10 +1855,10 @@ const PartnersView = ({ isAr }: { isAr: boolean }) => {
                   </button>
                 </div>
               ) : (
-                <p className="text-sm text-gray-800 truncate">{partner.name}</p>
+                <p className="text-sm text-gray-800 truncate" title={partner.name}>{partner.name}</p>
               )}
 
-              <div className="flex items-center justify-between mt-2">
+              <div className="flex items-center justify-between mt-2 gap-2">
                 <div className="flex items-center gap-1">
                   <button
                     onClick={() => startEditing(partner.id, partner.name)}
@@ -1791,12 +1868,11 @@ const PartnersView = ({ isAr }: { isAr: boolean }) => {
                     <Edit3 className="w-3.5 h-3.5" />
                   </button>
                   <button
-                    onClick={() => {
-                      removePartner(partner.id);
-                      toast.success(isAr ? "تم حذف الشريك" : "Partner removed");
-                    }}
+                    onClick={() => handlePartnerDelete(partner)}
                     className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
-                    title={isAr ? "حذف" : "Delete"}
+                    title={isTrustedFolderLogo(partner.logo)
+                      ? (isAr ? "إخفاء (مُدار من مجلد TrustedLogos)" : "Hide (managed from TrustedLogos folder)")
+                      : (isAr ? "حذف" : "Delete")}
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -1856,7 +1932,7 @@ const SubmissionsView = ({ isAr }: { isAr: boolean }) => {
                 <div className="divide-y divide-gray-100">
                   {contactSubmissions.map((sub) => (
                     <div key={sub.id} onClick={() => { setSelectedId(sub.id); if (!sub.read) markSubmissionRead(sub.id); }}
-                      className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors ${selectedId === sub.id ? "bg-[#104E8B]/5 border-r-4 border-[#104E8B]" : ""} ${!sub.read ? "bg-blue-50/30" : ""}`}>
+                      className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors ${selectedId === sub.id ? `bg-[#104E8B]/5 ${isAr ? "border-r-4" : "border-l-4"} border-[#104E8B]` : ""} ${!sub.read ? "bg-blue-50/30" : ""}`}>
                       <div className="flex items-start justify-between">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
@@ -1879,7 +1955,7 @@ const SubmissionsView = ({ isAr }: { isAr: boolean }) => {
         </div>
         <div>
           {selected ? (
-            <Card className="border-0 shadow-sm sticky top-20">
+            <Card className="border-0 shadow-sm lg:sticky lg:top-20">
               <CardHeader><CardTitle className="text-sm text-[#104E8B]">{isAr ? "تفاصيل الطلب" : "Details"}</CardTitle></CardHeader>
               <CardContent className="space-y-4">
                 <div><label className="text-xs text-gray-400">{isAr ? "الاسم" : "Name"}</label><p className="text-sm text-gray-800">{selected.name}</p></div>
@@ -2080,9 +2156,9 @@ const FooterView = ({ isAr }: { isAr: boolean }) => {
 
       <Card className="border-0 shadow-sm">
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <CardTitle className="text-lg text-[#104E8B]">{isAr ? "روابط التواصل الاجتماعي" : "Social Media Links"}</CardTitle>
-            <Button size="sm" className="bg-[#104E8B] hover:bg-[#0A2647] text-white" onClick={addSocialItem}>
+            <Button size="sm" className="bg-[#104E8B] hover:bg-[#0A2647] text-white w-full sm:w-auto" onClick={addSocialItem}>
               <Plus className="w-3.5 h-3.5" />
               {isAr ? "إضافة منصة" : "Add Platform"}
             </Button>
@@ -2154,9 +2230,9 @@ const FooterView = ({ isAr }: { isAr: boolean }) => {
 
       <Card className="border-0 shadow-sm">
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-3">
             <CardTitle className="text-lg text-[#104E8B]">{isAr ? "روابط سريعة" : "Quick Links"}</CardTitle>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <Button
                 size="sm"
                 variant="outline"
@@ -2194,9 +2270,9 @@ const FooterView = ({ isAr }: { isAr: boolean }) => {
 
       <Card className="border-0 shadow-sm">
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <CardTitle className="text-lg text-[#104E8B]">{isAr ? "روابط المنتجات" : "Products Links"}</CardTitle>
-            <Button size="sm" className="bg-[#104E8B] hover:bg-[#0A2647] text-white" onClick={() => addNavItem("solutions")}><Plus className="w-3.5 h-3.5" />{isAr ? "إضافة" : "Add"}</Button>
+            <Button size="sm" className="bg-[#104E8B] hover:bg-[#0A2647] text-white w-full sm:w-auto" onClick={() => addNavItem("solutions")}><Plus className="w-3.5 h-3.5" />{isAr ? "إضافة" : "Add"}</Button>
           </div>
         </CardHeader>
         <CardContent className="space-y-3">

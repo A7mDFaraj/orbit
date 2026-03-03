@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { revalidateTag } from 'next/cache';
 import { connectDB } from '@/lib/mongodb';
 import SiteCms from '@/models/SiteCms';
+import { mergePartnersWithTrustedLogos } from '@/lib/cms/trustedLogos';
 
 interface ExistingSiteDoc {
   pages?: unknown[];
@@ -18,9 +19,30 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   try {
     await connectDB();
-    const site = await SiteCms.findOne({ key: 'primary', isActive: true }).lean();
+    const site = (await SiteCms.findOne({ key: 'primary', isActive: true }).lean()) as (ExistingSiteDoc & {
+      key?: string;
+      isActive?: boolean;
+      pages?: unknown[];
+      socialLinks?: unknown[];
+      contactSubmissions?: unknown[];
+      notificationEmail?: string;
+      footerData?: Record<string, unknown>;
+    }) | null;
+    const partners = await mergePartnersWithTrustedLogos(Array.isArray(site?.partners) ? site.partners : []);
+    const responseSite = site
+      ? { ...site, partners }
+      : {
+          key: 'primary',
+          isActive: true,
+          pages: [],
+          partners,
+          socialLinks: [],
+          contactSubmissions: [],
+          notificationEmail: 'sales@orbit.sa',
+          footerData: {},
+        };
     return NextResponse.json(
-      { success: true, site },
+      { success: true, site: responseSite },
       { headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate' } }
     );
   } catch (error: unknown) {
