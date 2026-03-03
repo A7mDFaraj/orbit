@@ -344,15 +344,17 @@ export default function Contact({ cmsPage = null, footerData }: ContactProps) {
                     href={whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block rounded-xl bg-green-500 hover:bg-green-600 transition-colors text-white px-5 py-4 shadow-lg"
+                    className="group block rounded-2xl border border-[#E8DCCB]/45 bg-gradient-to-r from-[#1C8A63] via-[#167858] to-[#135E4B] px-5 py-4 text-white shadow-[0_14px_28px_-16px_rgba(19,94,75,0.95)] transition-all duration-300 hover:-translate-y-0.5 hover:from-[#20946C] hover:via-[#1A8461] hover:to-[#176A55] hover:shadow-[0_18px_32px_-14px_rgba(23,106,85,0.95)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900"
                   >
                     <div className="flex items-center justify-between gap-3">
-                      <span className={`text-sm sm:text-base font-semibold ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                      <span className={`text-sm sm:text-base font-semibold text-white/95 ${isRTL ? 'font-ibm-plex-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
                         {whatsappTitle}
                       </span>
-                      <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
+                      <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-white/15 transition-colors duration-300 group-hover:bg-white/25">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                      </span>
                     </div>
                   </a>
                 </div>
