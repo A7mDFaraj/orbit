@@ -12,7 +12,7 @@ import ThemeToggle from './ThemeToggle';
 import { encodeImagePath } from '@/utils/imagePath';
 
 // Nav items visibility - set true to re-enable
-const SHOW_NAV_ABOUT = false;
+const SHOW_NAV_ABOUT = true;
 const SHOW_NAV_OFFERS = false;
 
 // Solutions from ProductsShowcase - Current solutions on landing page
@@ -93,7 +93,8 @@ export default function Navbar() {
   const navbarIsDark = isInDarkSection ? false : isDark;
 
   // Detect pages where navbar needs better text contrast (light pages with white background)
-  const needsHighContrast = pathname === '/enterprise' || pathname === '/healthcare' || pathname === '/packages' || pathname === '/offers' || pathname === '/news' || pathname === '/request-quote';
+  const isBlogRoute = pathname?.startsWith('/blog') || pathname?.startsWith('/news');
+  const needsHighContrast = pathname === '/enterprise' || pathname === '/healthcare' || pathname === '/packages' || pathname === '/offers' || isBlogRoute || pathname === '/request-quote';
   const isLandingPage = pathname === '/';
   const isWhatsAppPage = pathname === '/products/whatsapp';
 
@@ -243,8 +244,8 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
 
-            {/* News - الاخبار */}
-            <NavLink item={{ name: t.nav.news, href: '/news' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={3} />
+            {/* Blog - المدونة */}
+            <NavLink item={{ name: isRTL ? 'المدونة' : 'Blog', href: '/blog' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={3} />
 
             {SHOW_NAV_OFFERS && (
               <NavLink item={{ name: t.nav.offers, href: '/offers' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} index={5} />
@@ -519,6 +520,9 @@ function MobileMenu({ setIsOpen, navbarIsDark, isRTL, solutionsList, textColorCl
           <nav className="space-y-2">
             {/* Home */}
             <MobileNavLink item={{ name: t.nav.home, href: '/' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} setIsOpen={setIsOpen} />
+            {SHOW_NAV_ABOUT && (
+              <MobileNavLink item={{ name: t.nav.about, href: '/about-us' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} setIsOpen={setIsOpen} />
+            )}
 
             {/* Solutions with Accordion */}
             <div>
@@ -566,8 +570,8 @@ function MobileMenu({ setIsOpen, navbarIsDark, isRTL, solutionsList, textColorCl
               </AnimatePresence>
             </div>
 
-            {/* News - الاخبار */}
-            <MobileNavLink item={{ name: t.nav.news, href: '/news' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} setIsOpen={setIsOpen} />
+            {/* Blog - المدونة */}
+            <MobileNavLink item={{ name: isRTL ? 'المدونة' : 'Blog', href: '/blog' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} setIsOpen={setIsOpen} />
 
             {SHOW_NAV_OFFERS && (
               <MobileNavLink item={{ name: t.nav.offers, href: '/offers' }} isRTL={isRTL} navbarIsDark={navbarIsDark} textColorClass={textColorClass} setIsOpen={setIsOpen} />

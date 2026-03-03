@@ -203,6 +203,28 @@ export const translations = {
           ],
           cta: 'Explore SMS Services',
         },
+        otime: {
+          title: 'O-Time HR Software',
+          description: 'A complete HR operations platform for attendance, payroll, and employee lifecycle management.',
+          items: [
+            'Attendance and leave management',
+            'Automated payroll workflows',
+            'Employee self-service portal',
+            'Real-time HR analytics dashboards'
+          ],
+          cta: 'Explore O-Time',
+        },
+        govgate: {
+          title: 'Gov Gate',
+          description: 'Secure enterprise messaging gateway with dedicated infrastructure, compliance, and advanced controls.',
+          items: [
+            'Private secure messaging portal',
+            'Granular role-based permissions',
+            'Enterprise-grade security and compliance',
+            'Detailed operational audit reporting'
+          ],
+          cta: 'Explore Gov Gate',
+        },
       },
     },
     products: {
@@ -620,6 +642,28 @@ export const translations = {
           ],
           cta: 'اكتشف خدمات SMS',
         },
+        otime: {
+          title: 'O-Time برنامج الموارد البشرية',
+          description: 'منصة متكاملة لإدارة الموارد البشرية تشمل الحضور والرواتب ودورة حياة الموظف بالكامل.',
+          items: [
+            'إدارة الحضور والإجازات',
+            'أتمتة مسيرات الرواتب',
+            'بوابة الخدمة الذاتية للموظف',
+            'لوحات تحكم وتحليلات فورية'
+          ],
+          cta: 'اكتشف O-Time',
+        },
+        govgate: {
+          title: 'Gov Gate',
+          description: 'بوابة مراسلة مؤسسية آمنة ببنية مخصصة وامتثال كامل وتحكم متقدم.',
+          items: [
+            'بوابة مراسلة خاصة وآمنة',
+            'صلاحيات دقيقة بحسب الأدوار',
+            'أمان مؤسسي وامتثال تشريعي',
+            'تقارير تشغيلية وسجل تدقيق مفصل'
+          ],
+          cta: 'اكتشف Gov Gate',
+        },
       },
     },
     products: {
@@ -835,4 +879,3 @@ export const translations = {
     },
   },
 };
-

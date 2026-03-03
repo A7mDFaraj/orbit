@@ -1,6 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidateTag } from 'next/cache';
 import { connectDB } from '@/lib/mongodb';
 import Contact from '@/models/Contact';
+import SiteCms from '@/models/SiteCms';
+
+const normalizeText = (value: unknown): string => (typeof value === 'string' ? value.trim() : '');
+
+const normalizeProduct = (productValue: unknown, serviceTypeValue: unknown): string => {
+  const raw = (normalizeText(productValue) || normalizeText(serviceTypeValue)).toLowerCase();
+  const aliases: Record<string, string> = {
+    sms: 'sms',
+    'sms-platform': 'sms',
+    whatsapp: 'whatsapp',
+    'whatsapp-business-api': 'whatsapp',
+    'o-time': 'o-time',
+    otime: 'o-time',
+    'gov-gate': 'gov-gate',
+    govgate: 'gov-gate',
+    other: 'other',
+    'general-inquiry': 'other',
+    general: 'other',
+  };
+  return aliases[raw] || 'other';
+};
 
 export async function GET() {
   try {
@@ -19,21 +41,73 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     await connectDB();
-    const data = await request.json();
+    const data = (await request.json()) as Record<string, unknown>;
 
-    // Also save to ClientInquiry for unified management
+    const name = normalizeText(data.name);
+    const email = normalizeText(data.email);
+    const phone = normalizeText(data.phone);
+    const company = normalizeText(data.company);
+    const subject = normalizeText(data.subject);
+    const message = normalizeText(data.message);
+    const source = normalizeText(data.source) || 'contact-page';
+    const serviceType = normalizeText(data.serviceType) || 'general-inquiry';
+    const product = normalizeProduct(data.product, serviceType);
+
+    if (!name || !email || !phone || !message) {
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 }
+      );
+    }
+
     const ClientInquiry = (await import('@/models/ClientInquiry')).default;
     const inquiry = await ClientInquiry.create({
-      ...data,
+      name,
+      email,
+      phone,
+      company,
+      subject,
+      message,
+      source,
       type: 'contact',
-      serviceType: data.serviceType || 'general-inquiry',
+      serviceType,
     });
 
-    // Keep the old Contact model for backwards compatibility (optional)
-    const contact = await Contact.create(data);
+    const contact = await Contact.create({
+      name,
+      email,
+      phone,
+      company,
+      product,
+      subject,
+      message,
+    });
+
+    const submission = {
+      id: `cs${Date.now()}`,
+      name,
+      email,
+      phone,
+      company,
+      message,
+      product,
+      date: new Date().toISOString(),
+      read: false,
+    };
+
+    await SiteCms.findOneAndUpdate(
+      { key: 'primary' },
+      {
+        $setOnInsert: { key: 'primary', isActive: true },
+        $push: { contactSubmissions: { $each: [submission], $position: 0 } },
+      },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+
+    revalidateTag('site-cms', 'max');
 
     return NextResponse.json(
-      { message: 'Contact form submitted successfully', contact, inquiry },
+      { message: 'Contact form submitted successfully', contact, inquiry, submission },
       { status: 201 }
     );
   } catch (error) {
@@ -44,13 +118,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-

@@ -5,11 +5,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/business/
 import { ShoppingBag, Code2, Terminal, FileText, ExternalLink, ArrowRight, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/business/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
+import type { CmsPage } from "@/lib/cms/types";
+import { getCmsField } from "@/lib/cms/helpers";
 
 const API_DOCS_PDF_URL = "https://drive.google.com/file/d/1xhdFti973PHqik0T5rGGDipm_30gq064/view?usp=drive_link";
 
-export const PersonaTabs = () => {
+interface PersonaTabsProps {
+  pageData?: CmsPage | null;
+}
+
+export const PersonaTabs = ({ pageData = null }: PersonaTabsProps) => {
   const { isRTL } = useLanguage();
+  const apiDocsUrl = getCmsField(pageData, 'home-hero', 'cta_api_docs_url', isRTL, API_DOCS_PDF_URL);
 
   return (
     <section 
@@ -79,6 +86,14 @@ export const PersonaTabs = () => {
                 <Button 
                   className="mt-4 group gap-2 px-8 py-6 text-lg font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 rounded-2xl bg-primary hover:bg-primary/90 text-white border-0" 
                   size="lg"
+                  onClick={() => {
+                    const hero = document.getElementById('hero');
+                    if (hero) {
+                      hero.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    } else {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                  }}
                 >
                   {isRTL ? 'ابدأ حملتك الأولى الآن' : 'Start Your First Campaign Now'}
                   {isRTL ? (
@@ -140,7 +155,7 @@ export const PersonaTabs = () => {
                   asChild
                 >
                   <a
-                    href={API_DOCS_PDF_URL}
+                    href={apiDocsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center gap-2.5"
@@ -158,6 +173,5 @@ export const PersonaTabs = () => {
     </section>
   );
 };
-
 
 

@@ -2,8 +2,14 @@
 
 import React from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import type { CmsPage } from '@/lib/cms/types';
+import { getCmsField } from '@/lib/cms/helpers';
 
-export const Integrations = () => {
+interface IntegrationsProps {
+  pageData?: CmsPage | null;
+}
+
+export const Integrations = ({ pageData = null }: IntegrationsProps) => {
   const { isRTL } = useLanguage();
     const integrations = [
         { name: "سلة", icon: "/1/salla.svg" },
@@ -13,6 +19,9 @@ export const Integrations = () => {
         { name: "حضوري", icon: "/1/huddari.png" },
     ];
 
+  const title = getCmsField(pageData, 'home-integrations', 'title', isRTL, isRTL ? 'نعمل مع أدواتك المفضلة' : 'We Work with Your Favorite Tools');
+  const subtitle = getCmsField(pageData, 'home-integrations', 'subtitle', isRTL, isRTL ? 'لن تضطر لتغيير نظام عملك الحالي، نحن نندمج معه بسهولة.' : 'You won\'t have to change your current workflow; we integrate with it seamlessly.');
+
   return (
     <section 
       className="py-16 bg-slate-50 border-t border-slate-200"
@@ -20,10 +29,10 @@ export const Integrations = () => {
     >
       <div className="container mx-auto px-4 text-center" dir={isRTL ? 'rtl' : 'ltr'}>
         <h3 className="text-2xl font-bold text-slate-900 mb-2">
-          {isRTL ? 'نعمل مع أدواتك المفضلة' : 'We Work with Your Favorite Tools'}
+          {title}
         </h3>
         <p className="text-slate-500 mb-10">
-          {isRTL ? 'لن تضطر لتغيير نظام عملك الحالي، نحن نندمج معه بسهولة.' : 'You won\'t have to change your current workflow; we integrate with it seamlessly.'}
+          {subtitle}
         </p>
         
         <div className="flex flex-wrap justify-center gap-6">
@@ -47,6 +56,5 @@ export const Integrations = () => {
     </section>
   );
 };
-
 
 

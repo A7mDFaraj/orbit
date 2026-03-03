@@ -1,14 +1,17 @@
-'use client';
-
 import { WhatsAppPage } from '@/components/business/products/WhatsAppPage';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { getSiteCmsSnapshot } from '@/lib/cms/siteCms';
+import { getCmsPageById } from '@/lib/cms/helpers';
 
-export default function WhatsAppProductPage() {
+export default async function WhatsAppProductPage() {
+  const snapshot = await getSiteCmsSnapshot();
+  const cmsPage = getCmsPageById(snapshot, 'whatsapp');
+
   return (
     <>
       <Navbar />
-      <WhatsAppPage />
+      <WhatsAppPage cmsPage={cmsPage} />
       <Footer />
     </>
   );

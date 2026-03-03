@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
@@ -10,6 +12,8 @@ import {
 } from "lucide-react";
 import { ImageWithFallback } from "../../figma/ImageWithFallback";
 import { useLanguage } from "@/contexts/LanguageContext";
+import type { CmsPage } from '@/lib/cms/types';
+import { getCmsField } from '@/lib/cms/helpers';
 
 const cstLogo = "/WhatsAppPage/cst.png";
 const metaLogo = "/WhatsAppPage/meta.png";
@@ -19,8 +23,13 @@ const solutionChatbot = "/WhatsAppPage/الموقع - الردود الالية.
 const solutionBroadcast = "/WhatsAppPage/الموقع - فلترة الرسائل.jpg.jpeg";
 const solutionSchedule = "/WhatsAppPage/الموقع - جدولة الرسائل.jpg.jpeg";
 const solutionReports = "/WhatsAppPage/الموقع - تقارير تفصيلية.jpg.jpeg";
+const saudiRiyalSymbol = "/trustedby/Saudi_Riyal_Symbol.svg.png";
 
-export const WhatsAppPage = () => {
+interface WhatsAppPageProps {
+  cmsPage?: CmsPage | null;
+}
+
+export const WhatsAppPage = ({ cmsPage = null }: WhatsAppPageProps) => {
   const { isRTL } = useLanguage();
   const [selectedPlan, setSelectedPlan] = useState(1);
   const [activePlanIndex, setActivePlanIndex] = useState(1);
@@ -39,6 +48,37 @@ export const WhatsAppPage = () => {
   const [currentSolutionIndex, setCurrentSolutionIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+  const heroBadge = getCmsField(cmsPage, 'wa-hero', 'badge', isRTL, isRTL ? "واتساب أعمال API المعتمد" : "Official WhatsApp Business API");
+  const heroTitle = getCmsField(cmsPage, 'wa-hero', 'title', isRTL, isRTL ? "تواصل إحترافي مع عملائك" : "Professional Communication");
+  const heroSubtitle = getCmsField(cmsPage, 'wa-hero', 'subtitle', isRTL, isRTL ? "عبر واتساب أعمال API" : "via WhatsApp Business API");
+  const heroDescription = getCmsField(
+    cmsPage,
+    'wa-hero',
+    'description',
+    isRTL,
+    isRTL
+      ? "كن أقرب لعملائك. نوفر لك ربطاً رسمياً ومعتمداً بخدمة واتساب مع أدوات متقدمة لإدارة المحادثات، الشات بوت، والحملات التسويقية."
+      : "Get closer to your customers. We provide an official WhatsApp integration with advanced tools for chat management, chatbots, and marketing campaigns."
+  );
+  const pricingTitle = getCmsField(
+    cmsPage,
+    'wa-pricing',
+    'title',
+    isRTL,
+    isRTL ? "اختر الباقة المناسبة لنمو أعمالك" : "Choose the right package for your business growth"
+  );
+  const pricingSubtitle = getCmsField(cmsPage, 'wa-pricing', 'subtitle', isRTL, isRTL ? "باقات مرنة تناسب جميع أحجام الأعمال من الشركات الناشئة إلى المؤسسات الكبرى" : "Flexible packages suitable for all business sizes from startups to large enterprises");
+  const pricingPlansNote = getCmsField(cmsPage, 'wa-pricing', 'plans_note', isRTL, isRTL ? "ملاحظة مهمة" : "Important Note");
+  const pricingContactNote = getCmsField(cmsPage, 'wa-pricing', 'contact_note', isRTL, isRTL ? "الأسعار الموضحة تشمل 3 شرائح لكل باقة. تتوفر خصومات خاصة للشركات الكبرى والجهات الحكومية." : "The stated prices include 3 tiers for each package. Special discounts are available for large companies and government entities.");
+  const featuresSectionTitle = getCmsField(cmsPage, 'wa-features', 'title', isRTL, isRTL ? "أدوات احترافية لإدارة محادثاتك" : "Professional Tools to Manage Conversations");
+  const featuresSectionSubtitle = getCmsField(cmsPage, 'wa-features', 'subtitle', isRTL, isRTL ? "كل ما تحتاجه لتحويل واتساب إلى قناة تواصل احترافية مع عملائك" : "Everything you need to turn WhatsApp into a professional communication channel with your customers");
+  const solutionsTitle = getCmsField(cmsPage, 'wa-features', 'solutions_title', isRTL, featuresSectionTitle);
+  const campaignsTitle = getCmsField(cmsPage, 'wa-features', 'campaigns_title', isRTL, isRTL ? "أطلق حملاتك التسويقية بذكاء" : "Launch Your Campaigns Smartly");
+  const apiPricingTitle = getCmsField(cmsPage, 'wa-features', 'api_pricing_title', isRTL, isRTL ? "أسعار محادثات واتساب API" : "WhatsApp API Conversation Prices");
+  const primaryCtaText = getCmsField(cmsPage, 'wa-hero', 'cta_primary_text', isRTL, isRTL ? "اطلب الخدمة الآن" : "Order Service Now");
+  const primaryCtaUrl = getCmsField(cmsPage, 'wa-hero', 'cta_primary_url', isRTL, "https://wapp.mobile.net.sa/billing-subscription");
+  const secondaryCtaText = getCmsField(cmsPage, 'wa-hero', 'cta_secondary_text', isRTL, isRTL ? "استعرض الباقات" : "View Packages");
+  const secondaryCtaUrl = getCmsField(cmsPage, 'wa-hero', 'cta_secondary_url', isRTL, "https://wa.me/966920006900");
 
   // Handle touch swipe
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -255,7 +295,7 @@ export const WhatsAppPage = () => {
       popular: true,
       color: "border-[#F15822]",
       bgColor: "bg-gradient-to-br from-orange-50 to-white",
-      buttonColor: "bg-[#F15822 hover:bg-[#d94a1a]",
+      buttonColor: "bg-[#F15822] hover:bg-[#d94a1a]",
       badge: isRTL ? "الأكثر طلباً" : "Most Popular",
       additionalFeatures: isRTL ? [
         "كل مميزات الباقة الأساسية",
@@ -370,21 +410,21 @@ export const WhatsAppPage = () => {
     },
     {
       type: isRTL ? "رسائل التحقق (OTP)" : "Verification Messages (OTP)",
-      price: isRTL ? "0.04 ر.س" : "0.04 SAR",
+      price: "0.04",
       duration: isRTL ? "للرسالة" : "per msg",
       description: isRTL ? "رموز التحقق وتأكيد الهوية للمصادقة الآمنة" : "Verification codes and identity confirmation for secure authentication",
       color: "bg-purple-50 border-purple-200"
     },
     {
       type: isRTL ? "محادثات التفعيل" : "Activation Conversations",
-      price: isRTL ? "0.08 ر.س" : "0.08 SAR",
+      price: "0.08",
       duration: isRTL ? "للرسالة" : "per msg",
       description: isRTL ? "تأكيد الطلبات، إشعارات الشحن، وتحديثات الحساب" : "Order confirmations, shipping notices, and account updates",
       color: "bg-blue-50 border-blue-200"
     },
     {
       type: isRTL ? "محادثات التسويق" : "Marketing Conversations",
-      price: isRTL ? "0.17 ر.س" : "0.17 SAR",
+      price: "0.17",
       duration: isRTL ? "للرسالة" : "per msg",
       description: isRTL ? "رسائل ترويجية وحملات إعلانية للعملاء" : "Promotional messages and ad campaigns for customers",
       color: "bg-orange-50 border-orange-200"
@@ -479,19 +519,17 @@ export const WhatsAppPage = () => {
             <div className={`text-${isRTL ? 'right' : 'left'} space-y-4 md:space-y-6`}>
               <Badge className="bg-[#25D366] text-white border-none px-4 py-2 text-sm">
                 <MessageCircle className={`w-4 h-4 inline ${isRTL ? 'ml-2' : 'mr-2'}`} />
-                {isRTL ? "واتساب أعمال API المعتمد" : "Official WhatsApp Business API"}
+                {heroBadge}
               </Badge>
 
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#161616] leading-tight">
-                {isRTL ? "تواصل إحترافي مع عملائك" : "Professional Communication"}
+                {heroTitle}
                 <br />
-                <span className="text-[#25D366]">{isRTL ? "عبر واتساب أعمال API" : "via WhatsApp Business API"}</span><span className="text-[#F15822]">.</span>
+                <span className="text-[#25D366]">{heroSubtitle}</span><span className="text-[#F15822]">.</span>
               </h1>
 
               <p className="text-lg md:text-xl text-[#606161] leading-relaxed max-w-xl">
-                {isRTL 
-                  ? "كن أقرب لعملائك. نوفر لك ربطاً رسمياً ومعتمداً بخدمة واتساب مع أدوات متقدمة لإدارة المحادثات، الشات بوت، والحملات التسويقية." 
-                  : "Get closer to your customers. We provide an official WhatsApp integration with advanced tools for chat management, chatbots, and marketing campaigns."}
+                {heroDescription}
               </p>
 
               <div className="flex gap-4 flex-wrap">
@@ -500,8 +538,8 @@ export const WhatsAppPage = () => {
                   className="bg-[#128C7E] hover:bg-[#0d6b5f] text-white font-bold px-8 h-14 text-lg shadow-lg shadow-[#128C7E]/30"
                   asChild
                 >
-                  <a href="https://wapp.mobile.net.sa/billing-subscription" target="_blank" rel="noopener noreferrer">
-                    {isRTL ? "اطلب الخدمة الآن" : "Order Service Now"}
+                  <a href={primaryCtaUrl} target="_blank" rel="noopener noreferrer">
+                    {primaryCtaText}
                     <ArrowRight className={`w-5 h-5 ${isRTL ? 'mr-2' : 'ml-2'}`} />
                   </a>
                 </Button>
@@ -516,7 +554,7 @@ export const WhatsAppPage = () => {
                     }
                   }}
                 >
-                  {isRTL ? "استعرض الباقات" : "View Packages"}
+                  {secondaryCtaText}
                   <BarChart3 className={`w-5 h-5 ${isRTL ? 'mr-2' : 'ml-2'}`} />
                 </Button>
               </div>
@@ -676,10 +714,10 @@ export const WhatsAppPage = () => {
               {isRTL ? "الحلول المتقدمة" : "Advanced Solutions"}
             </Badge>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#161616] mb-3 md:mb-4">
-              {isRTL ? "أدوات احترافية لإدارة محادثاتك" : "Professional Tools to Manage Conversations"}
+              {solutionsTitle}
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              {isRTL ? "كل ما تحتاجه لتحويل واتساب إلى قناة تواصل احترافية مع عملائك" : "Everything you need to turn WhatsApp into a professional communication channel with your customers"}
+              {featuresSectionSubtitle}
             </p>
           </div>
 
@@ -767,7 +805,7 @@ export const WhatsAppPage = () => {
                 {isRTL ? "التسويق الذكي" : "Smart Marketing"}
               </Badge>
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#161616] mb-4 md:mb-6">
-                {isRTL ? "أطلق حملاتك التسويقية بذكاء" : "Launch Your Campaigns Smartly"}
+                {campaignsTitle}
               </h2>
               <p className="text-lg text-gray-600 mb-6 md:mb-8 leading-relaxed">
                 {isRTL ? "استهدف عملاءك بدقة، حدد جدولة زمنية للحملات، واستخدم قوالب رسائل جاهزة مع أزرار تفاعلية لزيادة معدلات التحويل." : "Target your customers accurately, schedule campaigns, and use ready-made message templates with interactive buttons to increase conversion rates."}
@@ -927,10 +965,10 @@ export const WhatsAppPage = () => {
               {isRTL ? "الباقات والأسعار" : "Packages and Pricing"}
             </Badge>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#161616] mb-4">
-              {isRTL ? "اختر الباقة المناسبة لنمو أعمالك" : "Choose the right package for your business growth"}
+              {pricingTitle}
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              {isRTL ? "باقات مرنة تناسب جميع أحجام الأعمال من الشركات الناشئة إلى المؤسسات الكبرى" : "Flexible packages suitable for all business sizes from startups to large enterprises"}
+              {pricingSubtitle}
             </p>
           </div>
 
@@ -1016,11 +1054,39 @@ export const WhatsAppPage = () => {
                             <span className="text-3xl md:text-5xl font-extrabold text-[#161616]">
                               {currentTier.price}
                             </span>
-                            <span className="text-base md:text-xl text-gray-600">{isRTL ? "ر.س" : "SAR"}</span>
+                            <span className="inline-flex items-center">
+                              <ImageWithFallback
+                                src={saudiRiyalSymbol}
+                                alt={isRTL ? "رمز الريال السعودي" : "Saudi Riyal symbol"}
+                                width={20}
+                                height={20}
+                                className="w-[18px] h-[18px] md:w-[20px] md:h-[20px] object-contain opacity-70"
+                              />
+                            </span>
                           </div>
                           <p className="text-xs md:text-sm text-gray-500 mb-0.5 md:mb-1">{plan.period}</p>
-                          <p className="text-[10px] md:text-xs text-gray-400">{isRTL ? `شامل الضريبة: ${currentTier.priceWithTax} ر.س` : `Tax included: ${currentTier.priceWithTax} SAR`}</p>
-                          <p className="text-[10px] md:text-xs text-gray-400">{isRTL ? `رسوم التأسيس: ${currentTier.setupFee} ر.س` : `Setup fee: ${currentTier.setupFee} SAR`}</p>
+                          <p className="text-[10px] md:text-xs text-gray-400 inline-flex items-center justify-center gap-1">
+                            <span>{isRTL ? "شامل الضريبة:" : "Tax included:"}</span>
+                            <span>{currentTier.priceWithTax}</span>
+                            <ImageWithFallback
+                              src={saudiRiyalSymbol}
+                              alt={isRTL ? "رمز الريال السعودي" : "Saudi Riyal symbol"}
+                              width={12}
+                              height={12}
+                              className="w-[10px] h-[10px] md:w-[12px] md:h-[12px] object-contain opacity-70"
+                            />
+                          </p>
+                          <p className="text-[10px] md:text-xs text-gray-400 inline-flex items-center justify-center gap-1">
+                            <span>{isRTL ? "رسوم التأسيس:" : "Setup fee:"}</span>
+                            <span>{currentTier.setupFee}</span>
+                            <ImageWithFallback
+                              src={saudiRiyalSymbol}
+                              alt={isRTL ? "رمز الريال السعودي" : "Saudi Riyal symbol"}
+                              width={12}
+                              height={12}
+                              className="w-[10px] h-[10px] md:w-[12px] md:h-[12px] object-contain opacity-70"
+                            />
+                          </p>
                         </div>
 
                         <Button
@@ -1072,10 +1138,10 @@ export const WhatsAppPage = () => {
           <div className="text-center bg-blue-50 border-2 border-blue-200 rounded-xl p-6 max-w-4xl mx-auto">
             <div className="flex items-center justify-center gap-2 mb-2">
               <Star className="w-5 h-5 text-blue-600" />
-              <p className="font-bold text-[#161616]">{isRTL ? "ملاحظة مهمة" : "Important Note"}</p>
+              <p className="font-bold text-[#161616]">{pricingPlansNote}</p>
             </div>
             <p className="text-gray-600">
-              {isRTL ? "الأسعار الموضحة تشمل 3 شرائح لكل باقة. تتوفر خصومات خاصة للشركات الكبرى والجهات الحكومية." : "The stated prices include 3 tiers for each package. Special discounts are available for large companies and government entities."}
+              {pricingContactNote}
             </p>
           </div>
         </div>
@@ -1090,7 +1156,7 @@ export const WhatsAppPage = () => {
                 {isRTL ? "تكلفة المحادثات" : "Conversation Costs"}
               </Badge>
               <h2 className="text-3xl md:text-4xl font-extrabold text-[#161616] mb-4">
-                {isRTL ? "أسعار محادثات واتساب API" : "WhatsApp API Conversation Prices"}
+                {apiPricingTitle}
               </h2>
               <p className="text-lg text-gray-600">
                 {isRTL ? "الأسعار التالية محددة من واتساب (Meta) للسوق السعودي" : "The following prices are standardized by WhatsApp (Meta) for the Saudi Market"}
@@ -1109,6 +1175,17 @@ export const WhatsAppPage = () => {
                         <span className="text-3xl font-extrabold text-[#161616]">
                           {pricing.price}
                         </span>
+                        {pricing.price !== (isRTL ? "مجانية" : "Free") && (
+                          <span className="inline-flex items-center">
+                            <ImageWithFallback
+                              src={saudiRiyalSymbol}
+                              alt={isRTL ? "رمز الريال السعودي" : "Saudi Riyal symbol"}
+                              width={16}
+                              height={16}
+                              className="w-[14px] h-[14px] object-contain opacity-70"
+                            />
+                          </span>
+                        )}
                       </div>
                       <p className="text-xs text-gray-500 mt-1">{pricing.duration}</p>
                     </div>
@@ -1159,8 +1236,8 @@ export const WhatsAppPage = () => {
                 className="bg-[#F15822] hover:bg-[#d94a1a] text-white font-bold px-10 h-14 text-lg shadow-2xl shadow-[#F15822]/50"
                 asChild
               >
-                <a href="https://wapp.mobile.net.sa/billing-subscription" target="_blank" rel="noopener noreferrer">
-                  {isRTL ? "ابدأ رحلتك مع المدار" : "Start your journey with ORBIT"}
+                <a href={primaryCtaUrl} target="_blank" rel="noopener noreferrer">
+                  {primaryCtaText}
                   <ArrowRight className={`w-6 h-6 ${isRTL ? 'mr-2' : 'ml-2'}`} />
                 </a>
               </Button>
@@ -1169,8 +1246,8 @@ export const WhatsAppPage = () => {
                 className="bg-[#25D366] hover:bg-[#1ea952] border-2 border-[#25D366] text-white font-bold px-10 h-14 text-lg shadow-2xl shadow-[#25D366]/50"
                 asChild
               >
-                <a href="https://wa.me/966920006900?text=%E2%80%8E%20%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%2C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%A7%D9%84%D8%AD%D8%AB%20%D9%84%D9%84%D9%85%D8%A8%D9%8A%D8%B9%D8%A7%D8%AA%20%D9%88%D8%A7%D9%84%D8%A5%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AE%D8%AD%D9%85%D8%A9%20%D9%88%D8%A7%D8%AA%D8%B3%D8%A7%D8%A8%20%D8%A3%D8%B9%D9%85%D8%A7%D9%84%20api" target="_blank" rel="noopener noreferrer">
-                  {isRTL ? "تحدث مع فريق المبيعات" : "Talk to Sales Team"}
+                <a href={secondaryCtaUrl} target="_blank" rel="noopener noreferrer">
+                  {secondaryCtaText}
                   <Headphones className={`w-6 h-6 ${isRTL ? 'mr-2' : 'ml-2'}`} />
                 </a>
               </Button>

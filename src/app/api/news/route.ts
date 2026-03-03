@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import { News } from '@/models/News';
-import { requireAdmin } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
+
+const errorMessage = (error: unknown) =>
+  error instanceof Error ? error.message : 'Internal server error';
 
 // GET all news
 export async function GET(request: NextRequest) {
@@ -29,8 +31,6 @@ export async function GET(request: NextRequest) {
 // POST new news (Admin only)
 export async function POST(request: NextRequest) {
   try {
-    await requireAdmin();
-    
     const body = await request.json();
     
     // Auto-generate slug if not provided
@@ -42,11 +42,11 @@ export async function POST(request: NextRequest) {
     
     const news = await News.create(body);
     return NextResponse.json({ news }, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error creating news:', error);
     return NextResponse.json(
-      { error: error.message || 'Internal server error' },
-      { status: error.message === 'Unauthorized - Admin access required' ? 401 : 500 }
+      { error: errorMessage(error) },
+      { status: 500 }
     );
   }
 }

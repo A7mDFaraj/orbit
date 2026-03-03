@@ -22,16 +22,18 @@ const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
 });
 
 export const metadata: Metadata = {
-  title: "Orbit | المدار التقني",
+  title: "CorBit | شركة المدار",
+  applicationName: "CorBit | شركة المدار",
   description: "Pioneering integrated solutions that elevate brands and transform visions into reality | حلول متكاملة رائدة ترفع العلامات التجارية وتحول الرؤى إلى واقع",
-  keywords: "ORBIT, Business Solutions, Marketing, Events, Real Estate, Saudi Arabia, Integrated Services",
+  keywords: "CorBit, ORBIT, Business Solutions, Marketing, Events, Real Estate, Saudi Arabia, Integrated Services",
   icons: {
     icon: '/logo/' + encodeURIComponent('شعار المدار-03.svg'),
     apple: '/logo/' + encodeURIComponent('شعار المدار-03.svg'),
   },
   openGraph: {
-    title: "ORBIT - Launch Your Success",
+    title: "CorBit | شركة المدار",
     description: "Pioneering integrated solutions that elevate brands and transform visions into reality",
+    siteName: "CorBit | شركة المدار",
     type: "website",
     locale: "en_US",
     alternateLocale: "ar_SA",

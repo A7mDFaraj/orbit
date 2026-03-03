@@ -3,32 +3,38 @@
 import React from "react";
 import { Headphones, Shield, CreditCard } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import type { CmsPage } from '@/lib/cms/types';
+import { getCmsField } from '@/lib/cms/helpers';
 
-export const WhyUs = () => {
+interface WhyUsProps {
+  pageData?: CmsPage | null;
+}
+
+export const WhyUs = ({ pageData = null }: WhyUsProps) => {
   const { isRTL } = useLanguage();
   const features = [
     {
       icon: <Headphones className="h-8 w-8 text-white" />,
-      titleEn: "Local Support",
-      titleAr: "دعم فني محلي",
-      descriptionEn: "A Saudi team answering you via WhatsApp/phone 24/7 to serve you.",
-      descriptionAr: "فريق سعودي يرد عليك واتساب/هاتف على مدار الساعة لخدمتك.",
+      titleEn: getCmsField(pageData, 'home-whyus', 'support_title', false, "Local Support"),
+      titleAr: getCmsField(pageData, 'home-whyus', 'support_title', true, "دعم فني محلي"),
+      descriptionEn: getCmsField(pageData, 'home-whyus', 'support_desc', false, "A Saudi team answering you via WhatsApp/phone 24/7 to serve you."),
+      descriptionAr: getCmsField(pageData, 'home-whyus', 'support_desc', true, "فريق سعودي يرد عليك واتساب/هاتف على مدار الساعة لخدمتك."),
       color: "bg-primary",
     },
     {
       icon: <Shield className="h-8 w-8 text-white" />,
-      titleEn: "High Security",
-      titleAr: "أمان عالي",
-      descriptionEn: "Your data is encrypted and stored in Saudi Arabia (Compliance with NCA).",
-      descriptionAr: "بياناتك مشفرة ومحفوظة داخل السعودية (امتثال للأمن السيبراني).",
+      titleEn: getCmsField(pageData, 'home-whyus', 'security_title', false, "High Security"),
+      titleAr: getCmsField(pageData, 'home-whyus', 'security_title', true, "أمان عالي"),
+      descriptionEn: getCmsField(pageData, 'home-whyus', 'security_desc', false, "Your data is encrypted and stored in Saudi Arabia (Compliance with NCA)."),
+      descriptionAr: getCmsField(pageData, 'home-whyus', 'security_desc', true, "بياناتك مشفرة ومحفوظة داخل السعودية (امتثال للأمن السيبراني)."),
       color: "bg-green-600",
     },
     {
       icon: <CreditCard className="h-8 w-8 text-white" />,
-      titleEn: "Flexible Payment",
-      titleAr: "الدفع المرن",
-      descriptionEn: "Bank transfer, Mada, Visa, or Deferred (for large companies).",
-      descriptionAr: "تحويل بنكي، مدى، فيزا، أو آجل (للشركات الكبرى).",
+      titleEn: getCmsField(pageData, 'home-whyus', 'payment_title', false, "Flexible Payment"),
+      titleAr: getCmsField(pageData, 'home-whyus', 'payment_title', true, "الدفع المرن"),
+      descriptionEn: getCmsField(pageData, 'home-whyus', 'payment_desc', false, "Bank transfer, Mada, Visa, or Deferred (for large companies)."),
+      descriptionAr: getCmsField(pageData, 'home-whyus', 'payment_desc', true, "تحويل بنكي، مدى، فيزا، أو آجل (للشركات الكبرى)."),
       color: "bg-blue-600",
     },
   ];
@@ -54,5 +60,4 @@ export const WhyUs = () => {
     </section>
   );
 };
-
 

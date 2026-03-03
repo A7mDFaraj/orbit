@@ -1,38 +1,19 @@
-'use client';
-
-import { Suspense } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Contact from '@/components/Contact';
+import { getSiteCmsSnapshot } from '@/lib/cms/siteCms';
+import { getCmsPageById } from '@/lib/cms/helpers';
 
-function ContactPageContent() {
+export default async function ContactPage() {
+  const snapshot = await getSiteCmsSnapshot();
+  const cmsPage = getCmsPageById(snapshot, 'contact');
+  const footerData = snapshot?.footerData;
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <Navbar />
-      <Contact />
+      <Contact cmsPage={cmsPage} footerData={footerData} />
       <Footer />
     </div>
   );
 }
-
-export default function ContactPage() {
-  return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-      </div>
-    }>
-      <ContactPageContent />
-    </Suspense>
-  );
-}
-
-
-
-
-
-
-
-
-
-

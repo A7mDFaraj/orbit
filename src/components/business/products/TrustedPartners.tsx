@@ -4,8 +4,13 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { encodeImagePath } from "@/utils/imagePath";
 import { useLanguage } from "@/contexts/LanguageContext";
+import type { CmsPartner } from '@/lib/cms/types';
 
-export const TrustedPartners = () => {
+interface TrustedPartnersProps {
+  partners?: CmsPartner[];
+}
+
+export const TrustedPartners = ({ partners = [] }: TrustedPartnersProps) => {
   const { isRTL } = useLanguage();
   // All logos from TrustedLogos folder - each file appears ONCE (excluding duplicate files with "(1)")
   const logoFiles = [
@@ -72,12 +77,19 @@ export const TrustedPartners = () => {
     'شعار-هدف.png',
   ];
 
+  const initialLogos = React.useMemo(() => {
+    const dbPartners = partners.filter((partner) => partner.active && partner.logo);
+    return dbPartners.length
+      ? dbPartners.map((partner) => partner.logo)
+      : logoFiles;
+  }, [partners]);
+
   // Shuffle logos to avoid similar ones being together
-  const [shuffledLogos, setShuffledLogos] = useState<string[]>(logoFiles);
+  const [shuffledLogos, setShuffledLogos] = useState<string[]>(initialLogos);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      const shuffled = [...logoFiles];
+      const shuffled = [...initialLogos];
       // Fisher-Yates shuffle algorithm
       for (let i = shuffled.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -87,19 +99,19 @@ export const TrustedPartners = () => {
     }, 0);
     return () => clearTimeout(timer);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [initialLogos]);
 
   // Create partners array from shuffled logo files - each logo appears ONCE only
-  const partners = shuffledLogos.map((logoFile, index) => ({
+  const logoPartners = shuffledLogos.map((logoFile, index) => ({
     id: `partner-${index}`,
     name: `شريك ${index + 1}`,
-    logo: `/TrustedLogos/${logoFile}`,
+    logo: logoFile.startsWith('/') ? logoFile : `/TrustedLogos/${logoFile}`,
   }));
 
   // Split into two rows - distribute logos evenly
-  const midPoint = Math.ceil(partners.length / 2);
-  const row1 = partners.slice(0, midPoint);
-  const row2 = partners.slice(midPoint);
+  const midPoint = Math.ceil(logoPartners.length / 2);
+  const row1 = logoPartners.slice(0, midPoint);
+  const row2 = logoPartners.slice(midPoint);
 
   return (
     <section 

@@ -2,18 +2,49 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/business/ui/button";
 import { ArrowLeft, ArrowRight, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
+import { encodeImagePath } from "@/utils/imagePath";
 
 import { useLanguage } from '@/contexts/LanguageContext';
+import type { CmsPage, CmsPartner } from '@/lib/cms/types';
+import { getCmsField } from '@/lib/cms/helpers';
 
-export const Hero = () => {
+interface HeroProps {
+  pageData?: CmsPage | null;
+  partners?: CmsPartner[];
+}
+
+export const Hero = ({ pageData = null, partners = [] }: HeroProps) => {
   const { t, isRTL } = useLanguage();
+  const badgeText = getCmsField(pageData, 'home-hero', 'badge', isRTL, t.landing.heroNew.badge);
+  const titleLine1 = getCmsField(pageData, 'home-hero', 'title', isRTL, `${t.landing.heroNew.titlePart1} ${t.landing.heroNew.titlePart2}${t.landing.heroNew.titlePart3}`);
+  const description = getCmsField(pageData, 'home-hero', 'description', isRTL, t.landing.heroNew.description);
+  const ctaStart = getCmsField(pageData, 'home-hero', 'cta1_text', isRTL, t.landing.heroNew.ctaStart);
+  const ctaStartUrl = getCmsField(pageData, 'home-hero', 'cta1_url', isRTL, "https://app.mobile.net.sa/reg");
+  const ctaSales = getCmsField(pageData, 'home-hero', 'cta2_text', isRTL, t.landing.heroNew.ctaSales);
+  const trustText = getCmsField(pageData, 'home-hero', 'trust_text', isRTL, t.landing.heroNew.trustedBy);
+  const trustedBadgeLogos = React.useMemo(() => {
+    const dbLogos = partners
+      .filter((partner) => partner.active && partner.logo)
+      .map((partner) => partner.logo);
+    if (dbLogos.length) {
+      return dbLogos.slice(0, 4);
+    }
+    return [
+      '/TrustedLogos/images.png',
+      '/TrustedLogos/magrabi-health.png',
+      '/TrustedLogos/logo_006-removebg-preview.png',
+      '/TrustedLogos/logo_010-removebg-preview.png',
+    ];
+  }, [partners]);
 
   return (
     <section 
       className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden"
+      id="hero"
       style={{ fontFamily: isRTL ? 'IBM Plex Sans Arabic, sans-serif' : 'IBM Plex Sans, sans-serif' }}
     >
       {/* Background Decor */}
@@ -34,17 +65,15 @@ export const Hero = () => {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
               </span>
-              {t.landing.heroNew.badge}
+              {badgeText}
             </div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 leading-tight">
-              {t.landing.heroNew.titlePart1} <span className="text-primary">{t.landing.heroNew.titlePart2}</span>{t.landing.heroNew.titlePart3}
-              <br />
-              {t.landing.heroNew.subtitle}
+              {titleLine1}
             </h1>
 
             <p className="text-lg text-slate-600 max-w-xl leading-relaxed">
-              {t.landing.heroNew.description}
+              {description}
             </p>
 
             <div className="flex flex-wrap gap-4 pt-4">
@@ -53,26 +82,39 @@ export const Hero = () => {
                 className="bg-primary hover:bg-primary/90 text-white font-bold h-12 px-8 text-lg shadow-lg shadow-primary/25"
                 asChild
               >
-                <a href="https://app.mobile.net.sa/reg" target="_blank" rel="noopener noreferrer">
-                  {t.landing.heroNew.ctaStart}
+                <a href={ctaStartUrl} target="_blank" rel="noopener noreferrer">
+                  {ctaStart}
                   {isRTL ? <ArrowLeft className="mr-2 h-5 w-5" /> : <ArrowRight className="ml-2 h-5 w-5" />}
                 </a>
               </Button>
               <Button size="lg" variant="outline" className="h-12 px-8 text-lg border-slate-300 hover:bg-slate-50 text-slate-700" asChild>
                 <Link href="/contact">
                   <MessageCircle className={`${isRTL ? 'ml-2' : 'mr-2'} h-5 w-5`} />
-                  {t.landing.heroNew.ctaSales}
+                  {ctaSales}
                 </Link>
               </Button>
             </div>
 
             <div className="pt-4 flex items-center gap-4 text-sm text-slate-500">
-              <div className="flex -space-x-2 space-x-reverse overflow-hidden">
-                {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="inline-block h-8 w-8 rounded-full ring-2 ring-white bg-slate-200" />
+              <div className="flex -space-x-3 space-x-reverse overflow-visible">
+                {trustedBadgeLogos.map((logo, idx) => (
+                  <div
+                    key={`${logo}-${idx}`}
+                    className="inline-flex h-11 w-11 rounded-full ring-2 ring-white/95 bg-white shadow-sm overflow-hidden items-center justify-center p-1.5"
+                  >
+                    <Image
+                      src={encodeImagePath(logo)}
+                      alt={`Trusted partner ${idx + 1}`}
+                      width={48}
+                      height={48}
+                      quality={100}
+                      sizes="44px"
+                      className="h-full w-full object-contain"
+                    />
+                  </div>
                 ))}
               </div>
-              <p>{t.landing.heroNew.trustedBy}</p>
+              <p>{trustText}</p>
             </div>
           </motion.div>
 
@@ -112,5 +154,3 @@ export const Hero = () => {
     </section>
   );
 };
-
-

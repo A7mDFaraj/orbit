@@ -17,6 +17,14 @@ const contactSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    company: {
+      type: String,
+      trim: true,
+    },
+    product: {
+      type: String,
+      trim: true,
+    },
     subject: {
       type: String,
       trim: true,

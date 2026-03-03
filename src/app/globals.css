@@ -93,6 +93,16 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.2;
 }
 
+/* Ensure Arabic headings render with IBM Plex Sans Arabic in any RTL container */
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] h4,
+[dir="rtl"] h5,
+[dir="rtl"] h6 {
+  font-family: var(--font-ibm-plex-arabic), var(--font-ibm-plex), sans-serif !important;
+}
+
 /* Custom scrollbar - Light mode */
 ::-webkit-scrollbar {
   width: 12px;

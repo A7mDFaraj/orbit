@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -7,7 +8,99 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Facebook, Github, Globe, Instagram, Linkedin, Twitter, Youtube } from 'lucide-react';
+import useSWR from 'swr';
 import { encodeImagePath } from '@/utils/imagePath';
+
+interface FooterNavItem {
+  id: string;
+  labelAr: string;
+  labelEn: string;
+  href: string;
+}
+
+interface FooterCmsData {
+  logoDefault?: string;
+  logoDark?: string;
+  logoWhatsApp?: string;
+  licensedByAr?: string;
+  licensedByEn?: string;
+  madeInSaudiAr?: string;
+  madeInSaudiEn?: string;
+  quickLinks?: FooterNavItem[];
+  solutions?: FooterNavItem[];
+  phoneLabelAr?: string;
+  phoneLabelEn?: string;
+  phoneNumber?: string;
+  emailLabelAr?: string;
+  emailLabelEn?: string;
+  emailAddress?: string;
+  addressLabelAr?: string;
+  addressLabelEn?: string;
+  addressDetailAr?: string;
+  addressDetailEn?: string;
+  socialItems?: Array<{
+    id: string;
+    platform: string;
+    icon: 'instagram' | 'twitter' | 'linkedin' | 'facebook' | 'youtube' | 'github' | 'globe';
+    url: string;
+    active: boolean;
+    openInNewTab: boolean;
+  }>;
+  copyrightAr?: string;
+  copyrightEn?: string;
+  countryAr?: string;
+  countryEn?: string;
+  commercialRegistryAr?: string;
+  commercialRegistryEn?: string;
+  licenseAr?: string;
+  licenseEn?: string;
+}
+
+const cmsFooterDefaults: Required<FooterCmsData> = {
+  logoDefault: "/logo/شعار المدار-04.svg",
+  logoDark: "/logo/شعار المدار-04.svg",
+  logoWhatsApp: "/logo/شعار المدار-04.svg",
+  licensedByAr: "مرخصة من هيئة الاتصالات والفضاء والتقنية",
+  licensedByEn: "Licensed by CST",
+  madeInSaudiAr: "صنع في السعودية",
+  madeInSaudiEn: "Made in Saudi",
+  quickLinks: [
+    { id: "ql-home", labelAr: "الرئيسية", labelEn: "Home", href: "/" },
+    { id: "ql-about", labelAr: "من نحن", labelEn: "About", href: "/about-us" },
+    { id: "ql-products", labelAr: "المنتجات", labelEn: "Products", href: "#footer-products" },
+    { id: "ql-blog", labelAr: "المدونة", labelEn: "Blog", href: "/blog" },
+    { id: "ql-contact", labelAr: "تواصل", labelEn: "Contact", href: "/contact" },
+  ],
+  solutions: [
+    { id: "sl-sms", labelAr: "خدمة الرسائل النصية SMS", labelEn: "SMS Service", href: "/products/sms" },
+    { id: "sl-whatsapp", labelAr: "واتساب للأعمال", labelEn: "WhatsApp Business", href: "/products/whatsapp" },
+    { id: "sl-otime", labelAr: "O-Time", labelEn: "O-Time", href: "/products/o-time" },
+    { id: "sl-govgate", labelAr: "Gov Gate", labelEn: "Gov Gate", href: "/products/gov-gate" },
+  ],
+  phoneLabelAr: "الهاتف",
+  phoneLabelEn: "Phone",
+  phoneNumber: "920006900",
+  emailLabelAr: "البريد الإلكتروني",
+  emailLabelEn: "Email",
+  emailAddress: "marketing@corbit.sa",
+  addressLabelAr: "العنوان",
+  addressLabelEn: "Address",
+  addressDetailAr: "المملكة العربية السعودية",
+  addressDetailEn: "Saudi Arabia",
+  socialItems: [
+    { id: "social-instagram", platform: "Instagram", icon: "instagram", url: "https://www.instagram.com/orbittec_sa?igsh=MXFqZmluMWhrbXk0dg==", active: true, openInNewTab: true },
+    { id: "social-x", platform: "X", icon: "twitter", url: "https://x.com/orbittec_sa", active: true, openInNewTab: true },
+  ],
+  copyrightAr: "جميع الحقوق محفوظة لشركة المدار",
+  copyrightEn: "All rights reserved to Orbit",
+  countryAr: "المملكة العربية السعودية",
+  countryEn: "Saudi Arabia",
+  commercialRegistryAr: "السجل التجاري: 1010956877",
+  commercialRegistryEn: "CR: 1010956877",
+  licenseAr: "رقم الترخيص: 16-01-001098",
+  licenseEn: "License: 16-01-001098",
+};
 
 export default function Footer() {
   const { t, isRTL } = useLanguage();
@@ -18,20 +111,119 @@ export default function Footer() {
     triggerOnce: true,
     threshold: 0.1,
   });
+  const fetchFooterData = React.useCallback(async (): Promise<FooterCmsData | null> => {
+    try {
+      const res = await fetch('/api/cms/site', { cache: 'no-store' });
+      if (!res.ok) return null;
+      const data = await res.json();
+      return (data?.site?.footerData as FooterCmsData) || null;
+    } catch (error) {
+      console.error('Failed to load footer CMS:', error);
+      return null;
+    }
+  }, []);
 
-  const footerLinks = [
-    { name: t.nav.home, href: '/' },
-    { name: t.nav.about, href: '#about' },
-    { name: t.nav.solutions, href: '#solutions' },
-    { name: t.nav.contact, href: '/contact' },
-  ];
+  const { data: footerData, mutate } = useSWR<FooterCmsData | null>(
+    'site-footer-data',
+    fetchFooterData,
+    {
+      revalidateOnFocus: true,
+      dedupingInterval: 3000,
+    }
+  );
 
-  const solutions = [
-    { name: t.products.sms.title, href: '/products/sms' },
-    { name: t.products.whatsapp.title, href: '/products/whatsapp' },
-    { name: t.products.otime.title, href: '/products/o-time' },
-    { name: t.products.govgate.title, href: '/products/gov-gate' },
-  ];
+  React.useEffect(() => {
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === 'orbit_cms_site_updated_at') {
+        void mutate();
+      }
+    };
+    const onCmsUpdated = () => {
+      void mutate();
+    };
+    window.addEventListener('storage', onStorage);
+    window.addEventListener('orbit-cms-updated', onCmsUpdated as EventListener);
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener('orbit-cms-updated', onCmsUpdated as EventListener);
+    };
+  }, [mutate]);
+
+  const normalizeQuickLinkHref = (id: string, href: string) => {
+    const normalizedHref = href.trim();
+    if (id === 'ql-about' && normalizedHref === '#about') return '/about-us';
+    if (normalizedHref === '#solutions' || normalizedHref === '#products' || normalizedHref === '/#solutions') return '#footer-products';
+    if (normalizedHref === '#news' || normalizedHref === '#blog') return '/blog';
+    if (normalizedHref === '/news') return '/blog';
+    return normalizedHref;
+  };
+
+  const mergeNavItems = (items: FooterNavItem[], defaults: FooterNavItem[]) => {
+    const valid = items.filter((item) => item && item.id && item.href);
+    const byId = new Map(valid.map((item) => [item.id, item]));
+    for (const def of defaults) {
+      if (!byId.has(def.id)) {
+        byId.set(def.id, def);
+      }
+    }
+    return Array.from(byId.values());
+  };
+
+  const resolvedFooterData = {
+    ...cmsFooterDefaults,
+    ...(footerData || {}),
+    quickLinks: Array.isArray(footerData?.quickLinks)
+      ? mergeNavItems(footerData.quickLinks, cmsFooterDefaults.quickLinks)
+      : cmsFooterDefaults.quickLinks,
+    solutions: Array.isArray(footerData?.solutions)
+      ? mergeNavItems(footerData.solutions, cmsFooterDefaults.solutions)
+      : cmsFooterDefaults.solutions,
+    socialItems: Array.isArray(footerData?.socialItems) && footerData.socialItems.length ? footerData.socialItems : cmsFooterDefaults.socialItems,
+  } as Required<FooterCmsData>;
+
+  const footerLinks = resolvedFooterData.quickLinks.map((link) => ({
+      id: link.id === 'ql-solutions' ? 'ql-products' : link.id,
+      name: isRTL
+        ? (link.id === 'ql-solutions' ? 'المنتجات' : link.labelAr)
+        : (link.id === 'ql-solutions' ? 'Products' : link.labelEn),
+      href: (link.id === 'ql-solutions' || link.id === 'ql-products')
+        ? '#footer-products'
+        : normalizeQuickLinkHref(link.id === 'ql-solutions' ? 'ql-products' : link.id, link.href || '/'),
+    }));
+
+  const solutions = resolvedFooterData.solutions.map((link) => ({ name: isRTL ? link.labelAr : link.labelEn, href: link.href }));
+
+  const resolveFooterLogo = (value?: string) => {
+    if (!value?.trim()) return '';
+    return value.trim();
+  };
+  const logoSrc = isWhatsAppPage
+    ? resolveFooterLogo(resolvedFooterData.logoWhatsApp)
+    : isDark
+      ? resolveFooterLogo(resolvedFooterData.logoDark)
+      : resolveFooterLogo(resolvedFooterData.logoDefault);
+  const licensedByText = isRTL ? resolvedFooterData.licensedByAr : resolvedFooterData.licensedByEn;
+  const madeInSaudiText = isRTL ? resolvedFooterData.madeInSaudiAr : resolvedFooterData.madeInSaudiEn;
+  const phoneLabel = isRTL ? resolvedFooterData.phoneLabelAr : resolvedFooterData.phoneLabelEn;
+  const phoneNumber = resolvedFooterData.phoneNumber;
+  const emailLabel = isRTL ? resolvedFooterData.emailLabelAr : resolvedFooterData.emailLabelEn;
+  const emailAddress = resolvedFooterData.emailAddress;
+  const addressLabel = isRTL ? resolvedFooterData.addressLabelAr : resolvedFooterData.addressLabelEn;
+  const addressDetail = isRTL ? resolvedFooterData.addressDetailAr : resolvedFooterData.addressDetailEn;
+  const socialItems = resolvedFooterData.socialItems;
+  const iconMap = {
+    instagram: Instagram,
+    twitter: Twitter,
+    linkedin: Linkedin,
+    facebook: Facebook,
+    youtube: Youtube,
+    github: Github,
+    globe: Globe,
+  } as const;
+  const copyrightText = isRTL ? resolvedFooterData.copyrightAr : resolvedFooterData.copyrightEn;
+  const countryText = isRTL ? resolvedFooterData.countryAr : resolvedFooterData.countryEn;
+  const commercialRegistry = isRTL ? resolvedFooterData.commercialRegistryAr : resolvedFooterData.commercialRegistryEn;
+  const licenseText = isRTL ? resolvedFooterData.licenseAr : resolvedFooterData.licenseEn;
 
   return (
     <footer
@@ -54,36 +246,32 @@ export default function Footer() {
           {/* Logo & Company Info */}
           <div className="lg:col-span-1">
             <motion.div
-              className={`relative ${isWhatsAppPage ? 'h-64' : 'h-48'} w-full mb-8 -ml-4 pr-4`}
+              className={`relative ${isWhatsAppPage ? 'h-44' : 'h-36'} w-full mb-4 overflow-hidden`}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={inView ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <Image
-                src={
-                  isWhatsAppPage
-                    ? encodeImagePath("/logo/شعار المدار-04.svg")
-                    : isDark
-                      ? encodeImagePath("/logo/شعار المدار0-0٤.png")
-                      : encodeImagePath("/logo/شعار المدار1-0١.png")
-                }
-                alt="ORBIT Logo"
-                fill
-                className="object-contain object-left"
-                priority
-                quality={95}
-                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 450px"
-              />
+              {logoSrc ? (
+                <Image
+                  src={encodeImagePath(logoSrc)}
+                  alt="ORBIT Logo"
+                  fill
+                  className="object-cover object-left scale-[1.25]"
+                  priority
+                  quality={95}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 450px"
+                />
+              ) : null}
             </motion.div>
             <p
               className="text-gray-400 mb-4"
               dir={isRTL ? 'rtl' : 'ltr'}
             >
-              {t.footer.licensedBy}
+              {licensedByText}
             </p>
             <div className="flex items-center gap-2 text-sm text-gray-400">
               <span dir={isRTL ? 'rtl' : 'ltr'}>
-                {t.nav.madeInSaudi}
+                {madeInSaudiText}
               </span>
             </div>
           </div>
@@ -98,7 +286,7 @@ export default function Footer() {
             </h4>
             <ul className="space-y-3">
               {footerLinks.map((link, index) => (
-                <li key={link.href}>
+                <li key={link.id}>
                   <motion.a
                     href={link.href}
                     initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
@@ -125,12 +313,12 @@ export default function Footer() {
           </div>
 
           {/* Solutions */}
-          <div>
+          <div id="footer-products">
             <h4
               className="text-lg font-heading mb-4 text-white"
               dir={isRTL ? 'rtl' : 'ltr'}
             >
-              {t.footer.ourSolutions}
+              {t.nav.products}
             </h4>
             <ul className="space-y-3">
               {solutions.map((solution, index) => (
@@ -178,11 +366,13 @@ export default function Footer() {
                   </div>
                   <div>
                     <p className="text-gray-400 text-sm mb-1" dir={isRTL ? 'rtl' : 'ltr'}>
-                      {t.footer.phone}
+                      {phoneLabel}
                     </p>
-                    <a href="tel:920006900" className="text-white hover:text-primary transition-colors" dir="ltr">
-                      920006900
-                    </a>
+                    {phoneNumber ? (
+                      <a href={`tel:${phoneNumber}`} className="text-white hover:text-primary transition-colors" dir="ltr">
+                        {phoneNumber}
+                      </a>
+                    ) : null}
                   </div>
                 </motion.div>
               </li>
@@ -202,11 +392,13 @@ export default function Footer() {
                   </div>
                   <div>
                     <p className="text-gray-400 text-sm mb-1" dir={isRTL ? 'rtl' : 'ltr'}>
-                      {t.footer.email}
+                      {emailLabel}
                     </p>
-                    <a href="mailto:marketing@corbit.sa" className="text-white hover:text-primary transition-colors" dir="ltr">
-                      marketing@corbit.sa
-                    </a>
+                    {emailAddress ? (
+                      <a href={`mailto:${emailAddress}`} className="text-white hover:text-primary transition-colors" dir="ltr">
+                        {emailAddress}
+                      </a>
+                    ) : null}
                   </div>
                 </motion.div>
               </li>
@@ -227,10 +419,10 @@ export default function Footer() {
                   </div>
                   <div>
                     <p className="text-gray-400 text-sm mb-1" dir={isRTL ? 'rtl' : 'ltr'}>
-                      {t.footer.address}
+                      {addressLabel}
                     </p>
                     <p className="text-white" dir={isRTL ? 'rtl' : 'ltr'}>
-                      {t.footer.addressDetail}
+                      {addressDetail}
                     </p>
                   </div>
                 </motion.div>
@@ -239,36 +431,26 @@ export default function Footer() {
 
             {/* Social Media */}
             <div className="flex items-center gap-4 mt-8">
-              <motion.a
-                href="https://www.instagram.com/orbittec_sa?igsh=MXFqZmluMWhrbXk0dg=="
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-primary transition-all"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={inView ? { opacity: 1, scale: 1 } : {}}
-                transition={{ duration: 0.5, delay: 0.9 }}
-              >
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                </svg>
-              </motion.a>
-              <motion.a
-                href="https://x.com/orbittec_sa"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-primary transition-all"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={inView ? { opacity: 1, scale: 1 } : {}}
-                transition={{ duration: 0.5, delay: 1.0 }}
-              >
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932L18.901 1.153zM17.61 20.644h2.039L6.486 3.24H4.298L17.61 20.644z" />
-                </svg>
-              </motion.a>
+              {socialItems.filter((item) => item.active && item.url).map((item, index) => {
+                const Icon = iconMap[item.icon] || Globe;
+                return (
+                  <motion.a
+                    key={item.id}
+                    href={item.url}
+                    target={item.openInNewTab ? "_blank" : "_self"}
+                    rel={item.openInNewTab ? "noopener noreferrer" : undefined}
+                    aria-label={item.platform}
+                    className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-primary transition-all"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={inView ? { opacity: 1, scale: 1 } : {}}
+                    transition={{ duration: 0.5, delay: 0.9 + (index * 0.08) }}
+                  >
+                    <Icon className="w-5 h-5 text-white" />
+                  </motion.a>
+                );
+              })}
             </div>
           </div>
         </motion.div>
@@ -281,11 +463,11 @@ export default function Footer() {
           transition={{ duration: 0.8, delay: 0.9 }}
           dir={isRTL ? 'rtl' : 'ltr'}
         >
-          <p>{t.contact.copyright}</p>
-          <p className="mt-2">{t.contact.country}</p>
+          <p>{copyrightText}</p>
+          <p className="mt-2">{countryText}</p>
           <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-4 text-white/40">
-            <span>{t.footer.commercialRegistry}</span>
-            <span>{t.footer.license}</span>
+            <span>{commercialRegistry}</span>
+            <span>{licenseText}</span>
           </div>
         </motion.div>
       </div>

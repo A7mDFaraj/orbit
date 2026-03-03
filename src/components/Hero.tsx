@@ -222,7 +222,7 @@ export default function Hero() {
               : 'Please add solutions from the admin panel'}
           </p>
           <Link
-            href="/admin/solutions"
+            href="/admin/pages"
             className="inline-block px-6 py-3 bg-primary text-white rounded-lg font-heading hover:bg-primary/90 transition-colors"
           >
             {isRTL ? 'إضافة حلول' : 'Add Solutions'}

@@ -1,14 +1,17 @@
-'use client';
-
 import { OTimePage } from '@/components/business/products/OTimePage';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { getSiteCmsSnapshot } from '@/lib/cms/siteCms';
+import { getCmsPageById } from '@/lib/cms/helpers';
 
-export default function OTimeProductPage() {
+export default async function OTimeProductPage() {
+  const snapshot = await getSiteCmsSnapshot();
+  const cmsPage = getCmsPageById(snapshot, 'otime');
+
   return (
     <>
       <Navbar />
-      <OTimePage />
+      <OTimePage cmsPage={cmsPage} />
       <Footer />
     </>
   );

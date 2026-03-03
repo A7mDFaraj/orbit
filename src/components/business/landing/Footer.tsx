@@ -16,7 +16,7 @@ export const Footer = () => {
             <div className="flex items-center gap-2">
               {/* Logo size doubled from h-20 to h-40 */}
               <Image 
-                src={encodeImagePath("/logo/شعار المدار1-0٢.png")} 
+                src={encodeImagePath("/logo/شعار المدار-04.svg")} 
                 alt="Orbit Logo" 
                 width={160} 
                 height={160} 
@@ -47,7 +47,7 @@ export const Footer = () => {
           <div>
             <h4 className="text-white font-bold mb-6">الشركة</h4>
             <ul className="space-y-4 text-sm text-[#E8DCCB]/80">
-              <li><a href="#" className="hover:text-white transition-colors">من نحن</a></li>
+              <li><Link href="/about-us" className="hover:text-white transition-colors">من نحن</Link></li>
               <li><a href="#" className="hover:text-white transition-colors">اتصل بنا</a></li>
               <li><a href="#" className="hover:text-white transition-colors">المدونة</a></li>
               <li><a href="#" className="hover:text-white transition-colors">سياسة الخصوصية</a></li>
@@ -88,6 +88,4 @@ export const Footer = () => {
     </footer>
   );
 };
-
-
 

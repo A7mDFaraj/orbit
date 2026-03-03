@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import { News } from '@/models/News';
-import { requireAdmin } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
+
+const errorMessage = (error: unknown) =>
+  error instanceof Error ? error.message : 'Internal server error';
 
 // GET single news by ID
 export async function GET(
@@ -39,8 +41,6 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await requireAdmin();
-    
     const { id } = await params;
     const body = await request.json();
     await connectDB();
@@ -59,11 +59,11 @@ export async function PUT(
     }
     
     return NextResponse.json({ news });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error updating news:', error);
     return NextResponse.json(
-      { error: error.message || 'Internal server error' },
-      { status: error.message === 'Unauthorized - Admin access required' ? 401 : 500 }
+      { error: errorMessage(error) },
+      { status: 500 }
     );
   }
 }
@@ -74,7 +74,6 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await requireAdmin();
     const { id } = await params;
     await connectDB();
     
@@ -88,12 +87,11 @@ export async function DELETE(
     }
     
     return NextResponse.json({ message: 'News deleted successfully' });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error deleting news:', error);
     return NextResponse.json(
-      { error: error.message || 'Internal server error' },
-      { status: error.message === 'Unauthorized - Admin access required' ? 401 : 500 }
+      { error: errorMessage(error) },
+      { status: 500 }
     );
   }
 }
-

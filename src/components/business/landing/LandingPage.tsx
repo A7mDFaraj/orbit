@@ -7,19 +7,22 @@ import { Solutions } from "./Solutions";
 import { PersonaTabs } from "./PersonaTabs";
 import { Integrations } from "./Integrations";
 import { WhyUs } from "./WhyUs";
+import type { CmsPage, CmsPartner } from '@/lib/cms/types';
 
-export const LandingPage = () => {
+interface LandingPageProps {
+  pageData?: CmsPage | null;
+  partners?: CmsPartner[];
+}
+
+export const LandingPage = ({ pageData = null, partners = [] }: LandingPageProps) => {
   return (
     <>
-      <Hero />
-      <TrustSection />
-      <Solutions />
-      <PersonaTabs />
-      <Integrations />
-      <WhyUs />
+      <Hero pageData={pageData} partners={partners} />
+      <TrustSection pageData={pageData} partners={partners} />
+      <Solutions pageData={pageData} />
+      <PersonaTabs pageData={pageData} />
+      <Integrations pageData={pageData} />
+      <WhyUs pageData={pageData} />
     </>
   );
 };
-
-
-

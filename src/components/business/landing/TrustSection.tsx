@@ -5,8 +5,15 @@ import Image from "next/image";
 import { encodeImagePath } from "@/utils/imagePath";
 
 import { useLanguage } from '@/contexts/LanguageContext';
+import type { CmsPage, CmsPartner } from '@/lib/cms/types';
+import { getCmsField } from '@/lib/cms/helpers';
 
-export const TrustSection = () => {
+interface TrustSectionProps {
+  pageData?: CmsPage | null;
+  partners?: CmsPartner[];
+}
+
+export const TrustSection = ({ pageData = null, partners = [] }: TrustSectionProps) => {
   const { t, isRTL } = useLanguage();
   // All logos from TrustedLogos folder - each file appears ONCE (excluding duplicate files with "(1)")
   const logoFiles = [
@@ -73,13 +80,20 @@ export const TrustSection = () => {
     'شعار-هدف.png',
   ];
 
+  const initialLogos = React.useMemo(() => {
+    const dbPartners = partners.filter((partner) => partner.active && partner.logo);
+    return dbPartners.length
+      ? dbPartners.map((partner) => partner.logo)
+      : logoFiles;
+  }, [partners]);
+
   // State to hold partners, initialized with static list to match Server Side Rendering
-  const [shuffledLogos, setShuffledLogos] = React.useState(logoFiles);
+  const [shuffledLogos, setShuffledLogos] = React.useState(initialLogos);
 
   useEffect(() => {
     // Shuffle logos only on the client side after mount to avoid hydration mismatch
     const timer = setTimeout(() => {
-      const shuffled = [...logoFiles];
+      const shuffled = [...initialLogos];
       // Fisher-Yates shuffle algorithm
       for (let i = shuffled.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -89,19 +103,28 @@ export const TrustSection = () => {
     }, 0);
     return () => clearTimeout(timer);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [initialLogos]);
 
   // Create partners array from shuffled logo files - each logo appears ONCE only
-  const partners = shuffledLogos.map((logoFile, index) => ({
+  const sectionPartners = shuffledLogos.map((logoFile, index) => ({
     id: `partner-${index}`,
     name: `Partner ${index + 1}`,
-    logo: `/TrustedLogos/${logoFile}`,
+    logo: logoFile.startsWith('/') ? logoFile : `/TrustedLogos/${logoFile}`,
   }));
 
   // Split into two rows - distribute logos evenly
-  const midPoint = Math.ceil(partners.length / 2);
-  const row1 = partners.slice(0, midPoint);
-  const row2 = partners.slice(midPoint);
+  const midPoint = Math.ceil(sectionPartners.length / 2);
+  const row1 = sectionPartners.slice(0, midPoint);
+  const row2 = sectionPartners.slice(midPoint);
+
+  const title = getCmsField(pageData, 'home-trust', 'title', isRTL, t.landing.trust.title);
+  const subtitle = getCmsField(
+    pageData,
+    'home-trust',
+    'subtitle',
+    isRTL,
+    `${t.landing.trust.descriptionPart1} ${t.landing.trust.descriptionPart2} ${t.landing.trust.descriptionPart3}`
+  );
 
   // ... (lines 73-95 omitted)
 
@@ -113,10 +136,10 @@ export const TrustSection = () => {
       <div className="container mx-auto px-4" dir={isRTL ? 'rtl' : 'ltr'}>
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-[#7A1E2E] mb-3">
-            {t.landing.trust.title}
+            {title}
           </h2>
           <p className="text-slate-600 text-lg">
-            {t.landing.trust.descriptionPart1} <span className="font-bold text-[#7A1E2E]">{t.landing.trust.descriptionPart2}</span> {t.landing.trust.descriptionPart3}
+            {subtitle}
           </p>
         </div>
 
@@ -216,6 +239,4 @@ export const TrustSection = () => {
     </section>
   );
 };
-
-
 

@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/business/ui/button";
 import {
   MessageSquare, Zap, Rocket, ShieldCheck, Headphones,
@@ -11,15 +12,120 @@ import {
 } from "lucide-react";
 import { TrustedPartners } from "./TrustedPartners";
 import { useLanguage } from '@/contexts/LanguageContext';
+import type { CmsPage, CmsPartner } from '@/lib/cms/types';
+import { getCmsField } from '@/lib/cms/helpers';
+import { encodeImagePath } from '@/utils/imagePath';
 
-export const SMSPage = () => {
+interface SMSPageProps {
+  cmsPage?: CmsPage | null;
+  partners?: CmsPartner[];
+}
+
+interface PricingPlan {
+  messages: number | null;
+  price: number | null;
+  feature: string;
+  description: string;
+  featured?: boolean;
+  isCustom?: boolean;
+}
+
+const parsePlanBoolean = (value: string | undefined): boolean => {
+  if (!value) return false;
+  return value.trim().toLowerCase() === "true";
+};
+
+const parsePlansList = (raw: string, fallback: PricingPlan[]): PricingPlan[] => {
+  const lines = raw
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  if (!lines.length) {
+    return fallback;
+  }
+
+  const parsed = lines
+    .map((line) => {
+      const [messagesRaw, priceRaw, featureRaw, descriptionRaw, featuredRaw, customRaw] = line.split("|");
+      const messagesIsCustom = (messagesRaw || "").trim().toLowerCase() === "custom";
+      const messages = messagesIsCustom ? null : Number(messagesRaw);
+      const price = priceRaw?.trim() ? Number(priceRaw) : null;
+      const feature = (featureRaw || "").trim();
+      const description = (descriptionRaw || "").trim();
+      const featured = parsePlanBoolean(featuredRaw);
+      const isCustom = parsePlanBoolean(customRaw) || messagesIsCustom;
+
+      const hasInvalidMessages = !messagesIsCustom && (typeof messages !== "number" || !Number.isFinite(messages) || messages <= 0);
+      const hasInvalidPrice = !isCustom && price !== null && !Number.isFinite(price);
+      if (hasInvalidMessages || hasInvalidPrice) {
+        return null;
+      }
+
+      return {
+        messages: messagesIsCustom ? null : messages,
+        price: Number.isFinite(price ?? NaN) ? price : null,
+        feature,
+        description,
+        featured,
+        isCustom,
+      } as PricingPlan;
+    })
+    .filter((item): item is PricingPlan => Boolean(item));
+
+  return parsed.length ? parsed : fallback;
+};
+
+const serializePlansList = (plans: PricingPlan[]): string => plans
+  .map((plan) => {
+    const messages = plan.isCustom ? "custom" : String(plan.messages ?? "");
+    const price = plan.price ?? "";
+    return `${messages}|${price}|${plan.feature}|${plan.description}|${Boolean(plan.featured)}|${Boolean(plan.isCustom)}`;
+  })
+  .join("\n");
+
+export const SMSPage = ({ cmsPage = null, partners = [] }: SMSPageProps) => {
   const { t, isRTL } = useLanguage();
+  const headingFontClass = isRTL ? "font-ibm-plex-arabic" : "font-ibm-plex";
   const [activeTab, setActiveTab] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const heroSectionRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const cmsValueTitle = getCmsField(cmsPage, 'sms-value', 'title', isRTL, t.products.sms.valueProps.title);
+  const cmsPricingTitle = getCmsField(cmsPage, 'sms-pricing', 'title', isRTL, t.products.sms.packages.title);
+  const trustedBadgeLogos = React.useMemo(() => {
+    const dbLogos = partners
+      .filter((partner) => partner.active && partner.logo)
+      .map((partner) => partner.logo);
+    if (dbLogos.length) {
+      return dbLogos.slice(0, 3);
+    }
+    return [
+      '/TrustedLogos/images.png',
+      '/TrustedLogos/magrabi-health.png',
+      '/TrustedLogos/logo_006-removebg-preview.png',
+    ];
+  }, [partners]);
+  const getHeroMessages = useCallback((
+    prefix: "retail" | "finance" | "education" | "logistics" | "health",
+    fallback: { sender: string; text: string }[]
+  ) => {
+    const first = fallback[0] || { sender: "", text: "" };
+    const second = fallback[1] || { sender: "", text: "" };
+
+    return [
+      {
+        sender: getCmsField(cmsPage, "sms-hero", `${prefix}_msg1_sender`, isRTL, first.sender),
+        text: getCmsField(cmsPage, "sms-hero", `${prefix}_msg1_text`, isRTL, first.text),
+      },
+      {
+        sender: getCmsField(cmsPage, "sms-hero", `${prefix}_msg2_sender`, isRTL, second.sender),
+        text: getCmsField(cmsPage, "sms-hero", `${prefix}_msg2_text`, isRTL, second.text),
+      },
+    ];
+  }, [cmsPage, isRTL]);
 
   // Handle mouse down
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -50,65 +156,65 @@ export const SMSPage = () => {
 
 
 
-  const heroTabs = [
+  const heroTabs = useMemo(() => [
     {
       id: "retail",
-      title: t.products.sms.heroTabs.retail.title,
-      description: t.products.sms.heroTabs.retail.description,
-      cta: t.products.sms.heroTabs.retail.cta,
+      title: getCmsField(cmsPage, 'sms-hero', 'retail_title', isRTL, t.products.sms.heroTabs.retail.title),
+      description: getCmsField(cmsPage, 'sms-hero', 'retail_description', isRTL, t.products.sms.heroTabs.retail.description),
+      cta: getCmsField(cmsPage, 'sms-hero', 'retail_cta', isRTL, t.products.sms.heroTabs.retail.cta),
       icon: Store,
-      label: t.products.sms.heroTabs.retail.label,
-      messages: t.products.sms.heroTabs.retail.messages,
+      label: getCmsField(cmsPage, 'sms-hero', 'retail_label', isRTL, t.products.sms.heroTabs.retail.label),
+      messages: getHeroMessages("retail", t.products.sms.heroTabs.retail.messages),
       color: "bg-pink-50",
       imgColor: "bg-pink-100"
     },
     {
       id: "finance",
-      title: t.products.sms.heroTabs.finance.title,
-      description: t.products.sms.heroTabs.finance.description,
-      cta: t.products.sms.heroTabs.finance.cta,
+      title: getCmsField(cmsPage, 'sms-hero', 'finance_title', isRTL, t.products.sms.heroTabs.finance.title),
+      description: getCmsField(cmsPage, 'sms-hero', 'finance_description', isRTL, t.products.sms.heroTabs.finance.description),
+      cta: getCmsField(cmsPage, 'sms-hero', 'finance_cta', isRTL, t.products.sms.heroTabs.finance.cta),
       icon: Building2,
-      label: t.products.sms.heroTabs.finance.label,
-      messages: t.products.sms.heroTabs.finance.messages,
+      label: getCmsField(cmsPage, 'sms-hero', 'finance_label', isRTL, t.products.sms.heroTabs.finance.label),
+      messages: getHeroMessages("finance", t.products.sms.heroTabs.finance.messages),
       color: "bg-blue-50",
       imgColor: "bg-blue-100"
     },
     {
       id: "education",
-      title: t.products.sms.heroTabs.education.title,
-      description: t.products.sms.heroTabs.education.description,
-      cta: t.products.sms.heroTabs.education.cta,
+      title: getCmsField(cmsPage, 'sms-hero', 'education_title', isRTL, t.products.sms.heroTabs.education.title),
+      description: getCmsField(cmsPage, 'sms-hero', 'education_description', isRTL, t.products.sms.heroTabs.education.description),
+      cta: getCmsField(cmsPage, 'sms-hero', 'education_cta', isRTL, t.products.sms.heroTabs.education.cta),
       icon: GraduationCap,
-      label: t.products.sms.heroTabs.education.label,
-      messages: t.products.sms.heroTabs.education.messages,
+      label: getCmsField(cmsPage, 'sms-hero', 'education_label', isRTL, t.products.sms.heroTabs.education.label),
+      messages: getHeroMessages("education", t.products.sms.heroTabs.education.messages),
       color: "bg-purple-50",
       imgColor: "bg-purple-100"
     },
     {
       id: "logistics",
-      title: t.products.sms.heroTabs.logistics.title,
-      description: t.products.sms.heroTabs.logistics.description,
-      cta: t.products.sms.heroTabs.logistics.cta,
+      title: getCmsField(cmsPage, 'sms-hero', 'logistics_title', isRTL, t.products.sms.heroTabs.logistics.title),
+      description: getCmsField(cmsPage, 'sms-hero', 'logistics_description', isRTL, t.products.sms.heroTabs.logistics.description),
+      cta: getCmsField(cmsPage, 'sms-hero', 'logistics_cta', isRTL, t.products.sms.heroTabs.logistics.cta),
       icon: Truck,
-      label: t.products.sms.heroTabs.logistics.label,
-      messages: t.products.sms.heroTabs.logistics.messages,
+      label: getCmsField(cmsPage, 'sms-hero', 'logistics_label', isRTL, t.products.sms.heroTabs.logistics.label),
+      messages: getHeroMessages("logistics", t.products.sms.heroTabs.logistics.messages),
       color: "bg-orange-50",
       imgColor: "bg-orange-100"
     },
     {
       id: "health",
-      title: t.products.sms.heroTabs.health.title,
-      description: t.products.sms.heroTabs.health.description,
-      cta: t.products.sms.heroTabs.health.cta,
+      title: getCmsField(cmsPage, 'sms-hero', 'health_title', isRTL, t.products.sms.heroTabs.health.title),
+      description: getCmsField(cmsPage, 'sms-hero', 'health_description', isRTL, t.products.sms.heroTabs.health.description),
+      cta: getCmsField(cmsPage, 'sms-hero', 'health_cta', isRTL, t.products.sms.heroTabs.health.cta),
       icon: Heart,
-      label: t.products.sms.heroTabs.health.label,
-      messages: t.products.sms.heroTabs.health.messages,
+      label: getCmsField(cmsPage, 'sms-hero', 'health_label', isRTL, t.products.sms.heroTabs.health.label),
+      messages: getHeroMessages("health", t.products.sms.heroTabs.health.messages),
       color: "bg-green-50",
       imgColor: "bg-green-100"
     }
-  ];
+  ], [cmsPage, getHeroMessages, isRTL, t]);
 
-  const packages = [
+  const defaultPackages: PricingPlan[] = useMemo(() => [
     { messages: 1000, price: 110, feature: t.products.sms.packages.items.startup.feature, description: t.products.sms.packages.items.startup.description },
     { messages: 3000, price: 311, feature: t.products.sms.packages.items.strong.feature, description: t.products.sms.packages.items.strong.description },
     { messages: 5000, price: 489, feature: t.products.sms.packages.items.medium.feature, description: t.products.sms.packages.items.medium.description },
@@ -117,7 +223,46 @@ export const SMSPage = () => {
     { messages: 50000, price: 3738, feature: t.products.sms.packages.items.huge.feature, description: t.products.sms.packages.items.huge.description },
     { messages: 100000, price: 6900, feature: t.products.sms.packages.items.massive.feature, description: t.products.sms.packages.items.massive.description },
     { messages: null, price: null, feature: t.products.sms.packages.items.custom.feature, description: t.products.sms.packages.items.custom.description, isCustom: true },
-  ];
+  ], [t]);
+  const cmsPricingSubtitle = getCmsField(cmsPage, 'sms-pricing', 'subtitle', isRTL, t.products.sms.packages.subtitle);
+  const pricingBenefits = useMemo(() => [
+    {
+      label: getCmsField(cmsPage, "sms-pricing", "benefit1_label", isRTL, t.products.sms.packages.benefits.validity),
+      description: getCmsField(cmsPage, "sms-pricing", "benefit1_desc", isRTL, t.products.sms.packages.benefits.validityDesc),
+    },
+    {
+      label: getCmsField(cmsPage, "sms-pricing", "benefit2_label", isRTL, t.products.sms.packages.benefits.senderId),
+      description: getCmsField(cmsPage, "sms-pricing", "benefit2_desc", isRTL, t.products.sms.packages.benefits.senderIdDesc),
+    },
+    {
+      label: getCmsField(cmsPage, "sms-pricing", "benefit3_label", isRTL, t.products.sms.packages.benefits.instant),
+      description: getCmsField(cmsPage, "sms-pricing", "benefit3_desc", isRTL, t.products.sms.packages.benefits.instantDesc),
+    },
+  ], [cmsPage, isRTL, t]);
+  const cmsPlansRaw = useMemo(() => getCmsField(
+    cmsPage,
+    "sms-pricing",
+    "plans_list",
+    isRTL,
+    serializePlansList(defaultPackages),
+  ), [cmsPage, defaultPackages, isRTL]);
+  const packages = useMemo(() => parsePlansList(cmsPlansRaw, defaultPackages), [cmsPlansRaw, defaultPackages]);
+  const safeActiveTab = heroTabs.length ? activeTab % heroTabs.length : 0;
+  const currentHeroTab = heroTabs[safeActiveTab];
+  const handleTabSelect = useCallback((index: number) => {
+    setActiveTab(index);
+  }, []);
+
+  useEffect(() => {
+    if (!heroTabs.length) return;
+    const autoplay = window.setInterval(() => {
+      setActiveTab((prev) => (prev + 1) % heroTabs.length);
+    }, 3000);
+
+    return () => {
+      window.clearInterval(autoplay);
+    };
+  }, [heroTabs.length]);
 
   return (
     <div 
@@ -129,7 +274,7 @@ export const SMSPage = () => {
 
 
       {/* 1. Tabbed Hero Section */}
-      <section ref={heroSectionRef} className={`pt-24 pb-8 md:pt-24 md:pb-16 overflow-hidden transition-colors duration-500 ${heroTabs[activeTab].color} min-h-[80vh] md:min-h-0 flex flex-col justify-center`}>
+      <section ref={heroSectionRef} className={`pt-24 pb-8 md:pt-24 md:pb-16 overflow-hidden transition-colors duration-500 ${currentHeroTab.color} min-h-[80vh] md:min-h-0 flex flex-col justify-center`}>
         <div className="container mx-auto px-3 md:px-6 flex flex-col h-full">
 
           {/* Tab Navigation - At top for mobile, bottom for desktop */}
@@ -147,16 +292,16 @@ export const SMSPage = () => {
                 return (
                   <button
                     key={tab.id}
-                    onClick={() => setActiveTab(index)}
+                    onClick={() => handleTabSelect(index)}
                     className={`
                       flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 rounded-lg md:rounded-xl transition-all duration-300 font-bold text-xs md:text-base whitespace-nowrap shrink-0
-                      ${activeTab === index
+                      ${safeActiveTab === index
                         ? "bg-[#7A1E2E] text-white shadow-md md:shadow-lg shadow-[#7A1E2E]/20 scale-100 md:scale-105"
                         : "bg-white/60 md:bg-transparent text-slate-500 hover:bg-slate-100 hover:text-slate-900 border border-slate-200 md:border-transparent"
                       }
                     `}
                   >
-                    <Icon className={`w-4 h-4 md:w-5 md:h-5 ${activeTab === index ? "text-white" : "text-slate-400"} ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                    <Icon className={`w-4 h-4 md:w-5 md:h-5 ${safeActiveTab === index ? "text-white" : "text-slate-400"} ${isRTL ? 'ml-1' : 'mr-1'}`} />
                     <span>{tab.label}</span>
                   </button>
                 );
@@ -166,15 +311,15 @@ export const SMSPage = () => {
 
           <div className="grid lg:grid-cols-2 gap-3 md:gap-8 items-center flex-1 order-2 md:order-1">
             {/* Right Content */}
-            <div className="space-y-2 md:space-y-6 max-w-2xl animate-in slide-in-from-right-8 duration-500 fade-in key={activeTab} text-center lg:text-right">
+            <div className="space-y-2 md:space-y-6 max-w-2xl animate-in slide-in-from-right-8 duration-500 fade-in key={safeActiveTab} text-center lg:text-right">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-full text-xs md:text-sm font-medium text-slate-600 mx-auto lg:mx-0">
-                <span>{isRTL ? `${t.common.solutions} ${heroTabs[activeTab].label}` : `${heroTabs[activeTab].label} ${t.common.solutions}`}</span>
+                <span>{isRTL ? `${t.common.solutions} ${currentHeroTab.label}` : `${currentHeroTab.label} ${t.common.solutions}`}</span>
               </div>
-              <h1 className="text-2xl md:text-6xl font-extrabold text-[#7A1E2E] leading-tight">
-                {heroTabs[activeTab].title}
+              <h1 className={`${headingFontClass} text-2xl md:text-6xl font-extrabold text-[#7A1E2E] leading-tight`}>
+                {currentHeroTab.title}
               </h1>
               <p className="text-xs md:text-xl text-slate-600 leading-relaxed max-w-lg mx-auto lg:mx-0">
-                {heroTabs[activeTab].description}
+                {currentHeroTab.description}
               </p>
 
               <div className="flex flex-col sm:flex-row gap-2 md:gap-4 pt-1 md:pt-4 justify-center lg:justify-start">
@@ -182,12 +327,25 @@ export const SMSPage = () => {
                   onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
                   className="bg-[#7A1E2E] hover:bg-[#601824] text-white h-10 md:h-14 px-5 md:px-8 text-sm md:text-lg font-bold rounded-xl shadow-lg shadow-[#7A1E2E]/20 w-full sm:w-auto"
                 >
-                  {heroTabs[activeTab].cta}
+                  {currentHeroTab.cta}
                 </Button>
                 <div className="hidden sm:flex items-center gap-3 px-4 py-2">
-                  <div className="flex -space-x-3 space-x-reverse">
-                    {[1, 2, 3].map(i => (
-                      <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-slate-200"></div>
+                  <div className="flex -space-x-3 space-x-reverse overflow-visible">
+                    {trustedBadgeLogos.map((logo, idx) => (
+                      <div
+                        key={`${logo}-${idx}`}
+                        className="w-12 h-12 rounded-full border-2 border-white bg-white shadow-sm overflow-hidden flex items-center justify-center p-1.5"
+                      >
+                        <Image
+                          src={encodeImagePath(logo)}
+                          alt={`Trusted partner ${idx + 1}`}
+                          width={48}
+                          height={48}
+                          quality={100}
+                          sizes="48px"
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
                     ))}
                   </div>
                   <div className="text-sm">
@@ -199,14 +357,14 @@ export const SMSPage = () => {
             </div>
 
             {/* Left Content (Visual & Message Bubble) */}
-            <div className="relative flex justify-center lg:justify-end animate-in slide-in-from-left-8 duration-700 fade-in key={activeTab + '-img'} z-10 mt-2 md:mt-0">
+            <div className="relative flex justify-center lg:justify-end animate-in slide-in-from-left-8 duration-700 fade-in key={safeActiveTab + '-img'} z-10 mt-2 md:mt-0">
               {/* Abstract Background Blob */}
-              <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[500px] h-[300px] md:h-[500px] rounded-full blur-3xl opacity-50 ${heroTabs[activeTab].imgColor}`}></div>
+              <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[500px] h-[300px] md:h-[500px] rounded-full blur-3xl opacity-50 ${currentHeroTab.imgColor}`}></div>
 
               <div className="relative w-full max-w-[280px] md:max-w-md">
                 {/* Main Image Placeholder - Representative of the sector */}
                 <div className="aspect-[4/5] md:aspect-[4/5] rounded-2xl md:rounded-[2rem] bg-slate-900/5 backdrop-blur-sm border border-white/20 shadow-xl md:shadow-2xl overflow-hidden relative group">
-                  <div className={`absolute inset-0 opacity-20 ${heroTabs[activeTab].imgColor}`}></div>
+                  <div className={`absolute inset-0 opacity-20 ${currentHeroTab.imgColor}`}></div>
 
                   {/* Floating SMS Bubbles - Two Messages */}
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] md:w-[90%] space-y-2 md:space-y-4">
@@ -216,17 +374,17 @@ export const SMSPage = () => {
                         <div className="flex items-center justify-between mb-1.5 md:mb-3 pb-1.5 md:pb-3 border-b border-slate-100">
                           <div className="flex items-center gap-2">
                             <div className="w-7 h-7 md:w-9 md:h-9 rounded-full bg-[#7A1E2E] flex items-center justify-center text-white text-[9px] md:text-xs font-bold shadow-md">
-                              {heroTabs[activeTab].messages[0].sender.charAt(0)}
+                              {currentHeroTab.messages[0].sender.charAt(0)}
                             </div>
                             <div className="text-right">
-                              <p className="font-bold text-slate-900 text-xs md:text-sm">{heroTabs[activeTab].messages[0].sender}</p>
+                              <p className="font-bold text-slate-900 text-xs md:text-sm">{currentHeroTab.messages[0].sender}</p>
                               <p className="text-[9px] md:text-[10px] text-slate-400">{t.common.now}</p>
                             </div>
                           </div>
                           <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-blue-500 animate-pulse"></div>
                         </div>
                         <p className="text-slate-800 font-medium leading-relaxed text-xs md:text-base text-right">
-                          {heroTabs[activeTab].messages[0].text}
+                          {currentHeroTab.messages[0].text}
                         </p>
                       </div>
                     </div>
@@ -237,17 +395,17 @@ export const SMSPage = () => {
                         <div className="flex items-center justify-between mb-1.5 md:mb-3 pb-1.5 md:pb-3 border-b border-slate-100">
                           <div className="flex items-center gap-2">
                             <div className="w-7 h-7 md:w-9 md:h-9 rounded-full bg-[#7A1E2E] flex items-center justify-center text-white text-[9px] md:text-xs font-bold shadow-md">
-                              {heroTabs[activeTab].messages[1].sender.charAt(0)}
+                              {currentHeroTab.messages[1].sender.charAt(0)}
                             </div>
                             <div className="text-right">
-                              <p className="font-bold text-slate-900 text-xs md:text-sm">{heroTabs[activeTab].messages[1].sender}</p>
+                              <p className="font-bold text-slate-900 text-xs md:text-sm">{currentHeroTab.messages[1].sender}</p>
                               <p className="text-[9px] md:text-[10px] text-slate-400">{t.common.oneMinAgo}</p>
                             </div>
                           </div>
                           <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-green-500"></div>
                         </div>
                         <p className="text-slate-800 font-medium leading-relaxed text-xs md:text-base text-right">
-                          {heroTabs[activeTab].messages[1].text}
+                          {currentHeroTab.messages[1].text}
                         </p>
                       </div>
                     </div>
@@ -260,13 +418,13 @@ export const SMSPage = () => {
       </section>
 
       {/* 2. Trusted Partners Section */}
-      <TrustedPartners />
+      <TrustedPartners partners={partners} />
 
       {/* 3. Value Proposition */}
       <section className="py-24 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#7A1E2E] mb-4">{t.products.sms.valueProps.title}</h2>
+            <h2 className={`${headingFontClass} text-3xl md:text-4xl font-bold text-[#7A1E2E] mb-4`}>{cmsValueTitle}</h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -275,7 +433,7 @@ export const SMSPage = () => {
                 <div className="w-12 h-12 bg-[#7A1E2E]/10 rounded-xl flex items-center justify-center shrink-0">
                   <Rocket className="w-6 h-6 text-[#7A1E2E]" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900">{t.products.sms.valueProps.zeroLatency.title}</h3>
+                <h3 className={`${headingFontClass} text-xl font-bold text-slate-900`}>{t.products.sms.valueProps.zeroLatency.title}</h3>
               </div>
               <p className="text-slate-600 leading-relaxed">
                 {t.products.sms.valueProps.zeroLatency.description}
@@ -287,7 +445,7 @@ export const SMSPage = () => {
                 <div className="w-12 h-12 bg-[#7A1E2E]/10 rounded-xl flex items-center justify-center shrink-0">
                   <ShieldCheck className="w-6 h-6 text-[#7A1E2E]" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900">{t.products.sms.valueProps.senderId.title}</h3>
+                <h3 className={`${headingFontClass} text-xl font-bold text-slate-900`}>{t.products.sms.valueProps.senderId.title}</h3>
               </div>
               <p className="text-slate-600 leading-relaxed">
                 {t.products.sms.valueProps.senderId.description}
@@ -299,7 +457,7 @@ export const SMSPage = () => {
                 <div className="w-12 h-12 bg-[#7A1E2E]/10 rounded-xl flex items-center justify-center shrink-0">
                   <Headphones className="w-6 h-6 text-[#7A1E2E]" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900">{t.products.sms.valueProps.support.title}</h3>
+                <h3 className={`${headingFontClass} text-xl font-bold text-slate-900`}>{t.products.sms.valueProps.support.title}</h3>
               </div>
               <p className="text-slate-600 leading-relaxed">
                 {t.products.sms.valueProps.support.description}
@@ -318,7 +476,7 @@ export const SMSPage = () => {
           <div className="inline-block bg-white/10 backdrop-blur-sm px-4 py-1 rounded-full text-sm font-medium mb-6 border border-white/20">
             {t.products.sms.specialOffer.badge}
           </div>
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">
+          <h2 className={`${headingFontClass} text-3xl md:text-5xl font-bold mb-6`}>
             {t.products.sms.specialOffer.titlePart1}<br />
             <span className="text-[#F8A36B] mt-4 block">{t.products.sms.specialOffer.titlePart2}</span>
           </h2>
@@ -339,14 +497,14 @@ export const SMSPage = () => {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-3xl font-bold text-[#7A1E2E] mb-8">{t.products.sms.useCases.title}</h2>
+              <h2 className={`${headingFontClass} text-3xl font-bold text-[#7A1E2E] mb-8`}>{t.products.sms.useCases.title}</h2>
               <div className="space-y-6">
                 <div className="flex gap-4">
                   <div className="mt-1">
                     <CheckCircle2 className="w-6 h-6 text-[#7A1E2E]" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-slate-900 mb-2">{t.products.sms.useCases.otp.title}</h3>
+                    <h3 className={`${headingFontClass} text-xl font-bold text-slate-900 mb-2`}>{t.products.sms.useCases.otp.title}</h3>
                     <p className="text-slate-600">{t.products.sms.useCases.otp.description}</p>
                   </div>
                 </div>
@@ -355,7 +513,7 @@ export const SMSPage = () => {
                     <CheckCircle2 className="w-6 h-6 text-[#7A1E2E]" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-slate-900 mb-2">{t.products.sms.useCases.api.title}</h3>
+                    <h3 className={`${headingFontClass} text-xl font-bold text-slate-900 mb-2`}>{t.products.sms.useCases.api.title}</h3>
                     <p className="text-slate-600">
                       {t.products.sms.useCases.api.description}
                     </p>
@@ -366,7 +524,7 @@ export const SMSPage = () => {
                     <CheckCircle2 className="w-6 h-6 text-[#7A1E2E]" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-slate-900 mb-2">{t.products.sms.useCases.marketing.title}</h3>
+                    <h3 className={`${headingFontClass} text-xl font-bold text-slate-900 mb-2`}>{t.products.sms.useCases.marketing.title}</h3>
                     <p className="text-slate-600">
                       {t.products.sms.useCases.marketing.description}
                     </p>
@@ -381,7 +539,7 @@ export const SMSPage = () => {
                   <Smartphone className="w-5 h-5 text-slate-600" />
                 </div>
                 <div className={`text-${isRTL ? 'right' : 'left'}`}>
-                  <h4 className="font-bold text-slate-900">{isRTL ? "سجل الإرسال المباشر" : "Live Delivery Log"}</h4>
+                  <h4 className={`${headingFontClass} font-bold text-slate-900`}>{isRTL ? "سجل الإرسال المباشر" : "Live Delivery Log"}</h4>
                   <span className="text-xs text-green-600 flex items-center gap-1">
                     <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
                     {isRTL ? "متصل الآن" : "Online Now"}
@@ -417,11 +575,11 @@ export const SMSPage = () => {
 
           {/* Header & Global Features */}
           <div className="text-center max-w-4xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-5xl font-extrabold text-[#7A1E2E] mb-4">
-              {t.products.sms.packages.title}
+            <h2 className={`${headingFontClass} text-3xl md:text-5xl font-extrabold text-[#7A1E2E] mb-4`}>
+              {cmsPricingTitle}
             </h2>
             <p className="text-slate-500 text-lg mb-8">
-              {t.products.sms.packages.subtitle}
+              {cmsPricingSubtitle}
             </p>
 
             {/* Benefits Bar */}
@@ -430,21 +588,21 @@ export const SMSPage = () => {
                 <div className="bg-[#7A1E2E]/10 p-2 rounded-full">
                   <Calendar className="w-5 h-5 text-[#7A1E2E]" />
                 </div>
-                <span><span className="font-bold">{t.products.sms.packages.benefits.validity}:</span> {t.products.sms.packages.benefits.validityDesc}</span>
+                <span><span className="font-bold">{pricingBenefits[0].label}:</span> {pricingBenefits[0].description}</span>
               </div>
               <div className="hidden md:block w-px h-10 bg-slate-200"></div>
               <div className="flex items-center gap-3 text-sm md:text-base text-slate-700">
                 <div className="bg-[#7A1E2E]/10 p-2 rounded-full">
                   <Handshake className="w-5 h-5 text-[#7A1E2E]" />
                 </div>
-                <span><span className="font-bold">{t.products.sms.packages.benefits.senderId}:</span> {t.products.sms.packages.benefits.senderIdDesc}</span>
+                <span><span className="font-bold">{pricingBenefits[1].label}:</span> {pricingBenefits[1].description}</span>
               </div>
               <div className="hidden md:block w-px h-10 bg-slate-200"></div>
               <div className="flex items-center gap-3 text-sm md:text-base text-slate-700">
                 <div className="bg-[#7A1E2E]/10 p-2 rounded-full">
                   <Zap className="w-5 h-5 text-[#7A1E2E]" />
                 </div>
-                <span><span className="font-bold">{t.products.sms.packages.benefits.instant}:</span> {t.products.sms.packages.benefits.instantDesc}</span>
+                <span><span className="font-bold">{pricingBenefits[2].label}:</span> {pricingBenefits[2].description}</span>
               </div>
             </div>
           </div>
@@ -469,7 +627,7 @@ export const SMSPage = () => {
                 )}
 
                 <div className="mb-4 text-center">
-                  <h3 className="text-xl font-bold text-slate-900">
+                  <h3 className={`${headingFontClass} text-xl font-bold text-slate-900`}>
                     {pkg.messages ? `${pkg.messages.toLocaleString()} ${isRTL ? 'رسالة' : 'Messages'}` : (isRTL ? "مخصص" : "Custom")}
                   </h3>
                   <p className="text-sm text-slate-500 mt-1">{pkg.description}</p>
@@ -479,7 +637,15 @@ export const SMSPage = () => {
                   <div className="mb-6 text-center">
                     <div className="flex items-baseline gap-1 justify-center">
                       <span className="text-3xl font-extrabold text-[#7A1E2E]">{pkg.price.toLocaleString()}</span>
-                      <span className="text-slate-500 text-sm">{isRTL ? 'ريال' : 'SAR'}</span>
+                      <span className="inline-flex items-center">
+                        <Image
+                          src="/trustedby/Saudi_Riyal_Symbol.svg.png"
+                          alt={isRTL ? "رمز الريال السعودي" : "Saudi Riyal symbol"}
+                          width={18}
+                          height={18}
+                          className="w-[18px] h-[18px] object-contain opacity-70"
+                        />
+                      </span>
                     </div>
                   </div>
                 ) : (
@@ -522,7 +688,7 @@ export const SMSPage = () => {
               <div className="inline-flex items-center gap-2 text-[#7A1E2E] bg-[#7A1E2E]/10 px-3 py-1 rounded-full text-xs font-bold mb-4">
                 <Code2 className="w-4 h-4" /> {t.products.sms.developers.badge}
               </div>
-              <h2 className="text-3xl font-bold text-[#7A1E2E] mb-4">{t.products.sms.developers.title}</h2>
+              <h2 className={`${headingFontClass} text-3xl font-bold text-[#7A1E2E] mb-4`}>{t.products.sms.developers.title}</h2>
               <p className="text-slate-600 leading-relaxed mb-6">
                 {t.products.sms.developers.description}
               </p>
@@ -562,7 +728,7 @@ export const SMSPage = () => {
       <section className="py-24 bg-white text-center">
         <div className="container mx-auto px-4 max-w-2xl">
           <MessageSquare className="w-16 h-16 text-[#7A1E2E] mx-auto mb-6 opacity-20" />
-          <h2 className="text-3xl font-bold text-[#7A1E2E] mb-6">{t.products.sms.finalCta.title}</h2>
+          <h2 className={`${headingFontClass} text-3xl font-bold text-[#7A1E2E] mb-6`}>{t.products.sms.finalCta.title}</h2>
           <Button
             size="lg"
             className="bg-[#7A1E2E] hover:bg-[#601824] text-white text-lg px-10 h-16 rounded-xl shadow-xl shadow-[#7A1E2E]/20"

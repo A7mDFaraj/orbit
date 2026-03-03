@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useRef, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "../ui/button";
@@ -12,18 +14,51 @@ import {
   CheckSquare, CreditCard, MapPin, Mail, Phone, Video
 } from "lucide-react";
 import { ImageWithFallback } from "../../figma/ImageWithFallback";
+import type { CmsPage } from '@/lib/cms/types';
+import { getCmsField } from '@/lib/cms/helpers';
 
 // استخدام الصور من المجلد العام
 const dashboardImg = "/otime/dashboardOtime.png";
 const payrollImg = "/otime/payrollOtime.png";
 const attendanceImg = "/otime/attendenceOtime.png";
 
-export const OTimePage = () => {
+interface OTimePageProps {
+  cmsPage?: CmsPage | null;
+}
+
+export const OTimePage = ({ cmsPage = null }: OTimePageProps) => {
   const { isRTL } = useLanguage();
   const [currentScreenshot, setCurrentScreenshot] = useState(0);
   const [currentModule, setCurrentModule] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+  const heroBadge = getCmsField(cmsPage, 'ot-hero', 'badge', isRTL, isRTL ? "نظام الموارد البشرية السحابي المتكامل" : "Integrated Cloud HR System");
+  const heroTitle = getCmsField(
+    cmsPage,
+    'ot-hero',
+    'title',
+    isRTL,
+    isRTL ? "مركز قيادة متكامل" : "Comprehensive Command Center"
+  );
+  const heroDescription = getCmsField(
+    cmsPage,
+    'ot-hero',
+    'description',
+    isRTL,
+    isRTL
+      ? "من التوظيف إلى التقاعد، O-Time يمنحك السيطرة الكاملة على الرواتب، الحضور، الأداء، والتوظيف في منصة سحابية واحدة آمنة وقابلة للتوسع."
+      : "From recruitment to retirement, O-Time gives you full control over payroll, attendance, performance, and recruitment in a single, secure, and scalable cloud platform."
+  );
+  const heroHighlight = getCmsField(cmsPage, 'ot-hero', 'highlight', isRTL, isRTL ? "لإدارة الموارد البشرية" : "For Human Resources Management");
+  const primaryCtaText = getCmsField(cmsPage, 'ot-hero', 'cta_primary_text', isRTL, isRTL ? "احجز ديمو الآن" : "Book a Demo Now");
+  const primaryCtaUrl = getCmsField(cmsPage, 'ot-hero', 'cta_primary_url', isRTL, "https://wa.me/966920006900");
+  const secondaryCtaText = getCmsField(cmsPage, 'ot-hero', 'cta_secondary_text', isRTL, isRTL ? "جرب النظام مجاناً" : "Try the System for Free");
+  const secondaryCtaUrl = getCmsField(cmsPage, 'ot-hero', 'cta_secondary_url', isRTL, "https://otime.mobile.sa/register");
+  const valueSectionTitle = getCmsField(cmsPage, 'ot-features', 'title', isRTL, isRTL ? "لماذا O-Time؟" : "Why O-Time?");
+  const valueSectionSubtitle = getCmsField(cmsPage, 'ot-features', 'subtitle', isRTL, isRTL ? "منصة موحدة تجمع كل ما تحتاجه لإدارة الموارد البشرية بكفاءة عالية." : "A unified platform covering everything you need to manage HR efficiently.");
+  const modulesSectionTitle = getCmsField(cmsPage, 'ot-features', 'modules_title', isRTL, isRTL ? "وحدات متكاملة لإدارة الموارد البشرية" : "Integrated HR Management Modules");
+  const screenshotsSectionTitle = getCmsField(cmsPage, 'ot-features', 'screenshots_title', isRTL, isRTL ? "شاهد O-Time في العمل" : "See O-Time in Action");
+  const techSectionTitle = getCmsField(cmsPage, 'ot-features', 'tech_title', isRTL, isRTL ? "بنية تحتية قوية وآمنة" : "Robost & Secure Infrastructure");
 
   // Screenshots للنظام
   const screenshots = [
@@ -211,7 +246,12 @@ export const OTimePage = () => {
   ];
 
   return (
-    <div className={`min-h-screen bg-white ${isRTL ? "font-['IBM_Plex_Sans_Arabic']" : "font-['IBM_Plex_Sans']"}`} data-page="otime" style={{ fontFamily: isRTL ? "'IBM Plex Sans Arabic', sans-serif" : "'IBM Plex Sans', sans-serif" }}>
+    <div
+      className={`min-h-screen bg-white ${isRTL ? "font-ibm-plex-arabic" : "font-ibm-plex"}`}
+      data-page="otime"
+      style={{ fontFamily: isRTL ? "'IBM Plex Sans Arabic', sans-serif" : "'IBM Plex Sans', sans-serif" }}
+      dir={isRTL ? "rtl" : "ltr"}
+    >
       {/* Hero Section */}
       <section className="relative pt-24 md:pt-32 pb-12 md:pb-20 bg-gradient-to-br from-[#E8DCCB] via-white to-[#D4CEC0] overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzdBMUUyRSIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-40"></div>
@@ -222,35 +262,35 @@ export const OTimePage = () => {
             <div className="text-right space-y-4 md:space-y-6">
               <Badge className="bg-gradient-to-r from-[#104E8B] to-[#0d3d6e] text-white border-none px-4 py-2 text-sm">
                 <Sparkles className="w-4 h-4 ml-2 inline" />
-                {isRTL ? "نظام الموارد البشرية السحابي المتكامل" : "Integrated Cloud HR System"}
+                {heroBadge}
               </Badge>
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#161616] leading-tight">
-                {isRTL ? "مركز قيادة متكامل" : "Comprehensive Command Center"}
+                {heroTitle}
                 <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#104E8B] to-[#00BCD4]">{isRTL ? "لإدارة الموارد البشرية" : "For Human Resources Management"}</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#104E8B] to-[#00BCD4]">{heroHighlight}</span>
               </h1>
               
               <p className="text-lg md:text-xl text-[#606161] leading-relaxed max-w-xl">
-                {isRTL ? "من التوظيف إلى التقاعد، O-Time يمنحك السيطرة الكاملة على الرواتب، الحضور، الأداء، والتوظيف في منصة سحابية واحدة آمنة وقابلة للتوسع." : "From recruitment to retirement, O-Time gives you full control over payroll, attendance, performance, and recruitment in a single, secure, and scalable cloud platform."}
+                {heroDescription}
               </p>
               
               <div className="flex gap-4 flex-wrap">
                 <Button 
                   size="lg" 
                   className="bg-gradient-to-r from-[#104E8B] to-[#0d3d6e] hover:from-[#0d3d6e] hover:to-[#0a2f56] text-white font-bold px-8 h-14 text-lg shadow-lg shadow-[#104E8B]/30"
-                  onClick={() => window.open('https://wa.me/966920006900?text=%E2%80%8E%20%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A7%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%AA%D8%AC%D8%B1%D8%A8%D8%A9%20%D9%85%D9%86%D8%B5%D8%A9%20otime', '_blank')}
+                  onClick={() => window.open(primaryCtaUrl, '_blank')}
                 >
-                  {isRTL ? "احجز ديمو الآن" : "Book a Demo Now"}
+                  {primaryCtaText}
                   <Play className={`w-5 h-5 ${isRTL ? "mr-2" : "ml-2"}`} />
                 </Button>
                 <Button 
                   size="lg" 
                   variant="outline" 
                   className="border-2 border-[#FFA502] text-[#FFA502] hover:bg-[#FFA502] hover:text-white font-bold px-8 h-14 text-lg"
-                  onClick={() => window.open('https://otime.mobile.sa/register', '_blank')}
+                  onClick={() => window.open(secondaryCtaUrl, '_blank')}
                 >
-                  {isRTL ? "جرب النظام مجاناً" : "Try the System for Free"}
+                  {secondaryCtaText}
                   <ArrowRight className={`w-5 h-5 ${isRTL ? "mr-2" : "ml-2"}`} />
                 </Button>
               </div>
@@ -356,13 +396,13 @@ export const OTimePage = () => {
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-10 md:mb-16">
             <Badge className="bg-blue-100 text-blue-700 border-none px-4 py-2 text-sm mb-3 md:mb-4">
-              {isRTL ? "لماذا O-Time؟" : "Why O-Time?"}
+              {valueSectionTitle}
             </Badge>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#161616] mb-3 md:mb-4">
               {isRTL ? "القيمة الاستراتيجية التي تحتاجها" : "The Strategic Value You Need"}
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              {isRTL ? "منصة سحابية متكاملة تحول إدارة الموارد البشرية من عملية روتينية إلى ميزة تنافسية" : "An integrated cloud platform that transforms HR management from a routine process into a competitive advantage"}
+              {valueSectionSubtitle}
             </p>
           </div>
 
@@ -391,7 +431,7 @@ export const OTimePage = () => {
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-10 md:mb-16">
             <Badge className="bg-indigo-100 text-indigo-700 border-none px-4 py-2 text-sm mb-3 md:mb-4">
-              {isRTL ? "الوحدات الأساسية" : "Core Modules"}
+              {modulesSectionTitle}
             </Badge>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#161616] mb-3 md:mb-4">
               {isRTL ? "نظام شامل لكل احتياجاتك" : "A Comprehensive System for All Your Needs"}
@@ -541,7 +581,7 @@ export const OTimePage = () => {
               {isRTL ? "جولة في النظام" : "System Tour"}
             </Badge>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#161616] mb-3 md:mb-4">
-              {isRTL ? "شاهد O-Time في العمل" : "See O-Time in Action"}
+              {screenshotsSectionTitle}
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               {isRTL ? "لقطات حقيقية من داخل النظام توضح سهولة الاستخدام والقوة الشاملة" : "Real screenshots from inside the system showing ease of use and comprehensive power"}
@@ -622,7 +662,7 @@ export const OTimePage = () => {
               {isRTL ? "المواصفات التقنية" : "Technical Specifications"}
             </Badge>
             <h2 className="text-3xl md:text-4xl font-extrabold mb-3 md:mb-4">
-              {isRTL ? "بنية تحتية قوية وآمنة" : "Robost & Secure Infrastructure"}
+              {techSectionTitle}
             </h2>
             <p className="text-lg text-white/80 max-w-2xl mx-auto">
               {isRTL ? "تقنية حديثة مع أعلى معايير الأمان والتوافق" : "Modern technology with the highest standards of security and compatibility"}
@@ -737,19 +777,19 @@ export const OTimePage = () => {
               <Button 
                 size="lg" 
                 className="bg-[#FFA502] text-white hover:bg-[#e69302] font-bold px-10 h-14 text-lg shadow-2xl"
-                onClick={() => window.open('https://otime.mobile.sa/register', '_blank')}
+                onClick={() => window.open(secondaryCtaUrl, '_blank')}
               >
-                {isRTL ? "جرب النظام مجاناً" : "Try for Free"}
+                {secondaryCtaText}
                 <ArrowRight className={`w-6 h-6 ${isRTL ? "mr-2" : "ml-2"}`} />
               </Button>
               <Button 
                 size="lg" 
                 variant="outline" 
                 className="bg-white/10 border-2 border-[#00BCD4] text-[#00BCD4] hover:bg-[#00BCD4] hover:text-white font-bold px-10 h-14 text-lg backdrop-blur-sm"
-                onClick={() => window.open('https://wa.me/966920006900?text=%E2%80%8E%20%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A7%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%AA%D8%AC%D8%B1%D8%A8%D8%A9%20%D9%85%D9%86%D8%B5%D8%A9%20otime', '_blank')}
+                onClick={() => window.open(primaryCtaUrl, '_blank')}
               >
                 <Play className={`w-6 h-6 ${isRTL ? "ml-2" : "mr-2"}`} />
-                {isRTL ? "احجز ديمو مباشر" : "Book a Live Demo"}
+                {primaryCtaText}
               </Button>
             </div>
 

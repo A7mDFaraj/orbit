@@ -1,3 +1,5 @@
+'use client';
+
 import React from "react";
 import { motion } from "framer-motion";
 import { 
@@ -14,6 +16,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/business/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
+import type { CmsPage } from '@/lib/cms/types';
+import { getCmsField } from '@/lib/cms/helpers';
 
 const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) => (
   <motion.div 
@@ -42,9 +46,21 @@ const WhyUsCard = ({ icon, title, description }: { icon: React.ReactNode, title:
   </div>
 );
 
-export const GovGatePage = () => {
+interface GovGatePageProps {
+  cmsPage?: CmsPage | null;
+}
+
+export const GovGatePage = ({ cmsPage = null }: GovGatePageProps) => {
   const { t, isRTL } = useLanguage();
   const g = t.products.govgate;
+  const heroBadge = getCmsField(cmsPage, 'gg-hero', 'badge', isRTL, g.subtitle);
+  const heroTitle = getCmsField(cmsPage, 'gg-hero', 'title', isRTL, g.heroTitle);
+  const heroSubtitle = getCmsField(cmsPage, 'gg-hero', 'subtitle', isRTL, g.heroSubtitle);
+  const heroDescription = getCmsField(cmsPage, 'gg-hero', 'description', isRTL, g.heroDescription);
+  const ctaText = getCmsField(cmsPage, 'gg-cta', 'cta_text', isRTL, g.cta);
+  const ctaUrl = getCmsField(cmsPage, 'gg-cta', 'cta_url', isRTL, `https://wa.me/966920006900?text=${encodeURIComponent(isRTL ? "مرحبا، أرغب أنا مهتم بـ GoveGate" : "Hello, I am interested in GoveGate")}`);
+  const finalCtaTitle = getCmsField(cmsPage, 'gg-cta', 'final_cta_title', isRTL, g.finalCta.title);
+  const finalCtaDescription = getCmsField(cmsPage, 'gg-cta', 'final_cta_description', isRTL, g.finalCta.description);
 
   return (
     <div 
@@ -72,14 +88,14 @@ export const GovGatePage = () => {
               transition={{ duration: 0.6 }}
             >
               <span className="inline-block py-1 px-3 rounded-full bg-[#00BCD4]/10 text-[#00BCD4] text-sm font-semibold mb-6 border border-[#00BCD4]/20">
-                {g.subtitle}
+                {heroBadge}
               </span>
               <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-                {g.heroTitle} <br />
-                <span className="text-[#00BCD4]">{g.heroSubtitle}</span>
+                {heroTitle} <br />
+                <span className="text-[#00BCD4]">{heroSubtitle}</span>
               </h1>
               <p className="text-lg md:text-xl text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-                {g.heroDescription}
+                {heroDescription}
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -87,8 +103,8 @@ export const GovGatePage = () => {
                   className="bg-[#FFA502] hover:bg-[#E59400] text-[#0A2647] font-bold text-lg px-8 py-6 h-auto w-full sm:w-auto shadow-lg hover:shadow-xl transition-all"
                   asChild
                 >
-                  <a href={`https://wa.me/966920006900?text=${encodeURIComponent(isRTL ? "مرحبا، أرغب أنا مهتم بـ GoveGate" : "Hello, I am interested in GoveGate")}`} target="_blank" rel="noopener noreferrer">
-                    {g.cta}
+                  <a href={ctaUrl} target="_blank" rel="noopener noreferrer">
+                    {ctaText}
                   </a>
                 </Button>
               </div>
@@ -241,16 +257,16 @@ export const GovGatePage = () => {
       {/* CTA Section */}
       <section className="py-20 bg-[#104E8B] text-white text-center">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">{g.finalCta.title}</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">{finalCtaTitle}</h2>
           <p className="text-xl text-slate-200 mb-8 max-w-2xl mx-auto">
-            {g.finalCta.description}
+            {finalCtaDescription}
           </p>
           <Button 
             className="bg-[#FFA502] hover:bg-[#E59400] text-[#0A2647] font-bold text-lg px-10 py-6 h-auto shadow-lg"
             asChild
           >
-            <a href={`https://wa.me/966920006900?text=${encodeURIComponent(isRTL ? "مرحبا، أرغب أنا مهتم بـ GoveGate" : "Hello, I am interested in GoveGate")}`} target="_blank" rel="noopener noreferrer">
-              {g.cta}
+            <a href={ctaUrl} target="_blank" rel="noopener noreferrer">
+              {ctaText}
             </a>
           </Button>
         </div>
