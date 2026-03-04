@@ -1,19 +1,27 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import { Badge } from "../ui/badge";
 import {
-  MessageCircle, Check, Users, Shield, Smartphone, Globe,
+  MessageCircle, Users, Shield, Smartphone, Globe,
   CheckCircle2, Zap, Bot, Send, BarChart3, Star,
   Clock, TrendingUp, Award, Target, Headphones, Sparkles,
-  Building2, ShoppingBag, GraduationCap, BadgeCheck, ArrowRight, Rocket, ChevronDown, X, ChevronLeft, ChevronRight
+  BadgeCheck, ArrowRight, X, ChevronLeft, ChevronRight
 } from "lucide-react";
 import { ImageWithFallback } from "../../figma/ImageWithFallback";
 import { useLanguage } from "@/contexts/LanguageContext";
 import type { CmsPage } from '@/lib/cms/types';
 import { getCmsField } from '@/lib/cms/helpers';
+import {
+  getDefaultWhatsAppConversationPrices,
+  getDefaultWhatsAppPlans,
+  parseWhatsAppConversationPrices,
+  parseWhatsAppPlans,
+  serializeWhatsAppConversationPrices,
+  serializeWhatsAppPlans,
+} from '@/lib/cms/whatsappPricing';
 
 const cstLogo = "/WhatsAppPage/cst.png";
 const metaLogo = "/WhatsAppPage/meta.png";
@@ -31,13 +39,8 @@ interface WhatsAppPageProps {
 
 export const WhatsAppPage = ({ cmsPage = null }: WhatsAppPageProps) => {
   const { isRTL } = useLanguage();
-  const [selectedPlan, setSelectedPlan] = useState(1);
-  const [activePlanIndex, setActivePlanIndex] = useState(1);
-  const [selectedTiers, setSelectedTiers] = useState<{ [key: number]: number }>({
-    0: 0, // الباقة الأساسية - الشريحة 1
-    1: 0, // باقة النمو - الشريحة 1
-    2: 0  // الباقة الاحترافية - الشريحة 1
-  });
+  const [activePlanIndex, setActivePlanIndex] = useState(0);
+  const [selectedTiers, setSelectedTiers] = useState<Record<number, number>>({});
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [chatMessages, setChatMessages] = useState<Array<{ id: number, type: 'user' | 'bot' | 'sales', text: string, buttons?: boolean, confirmButton?: boolean }>>([
     { id: 1, type: 'bot', text: isRTL ? 'بالتأكيد! لدينا 3 باقات رئيسية تبدأ من 399 ر.س شهرياً...' : 'Absolutely! We have 3 main packages starting from 399 SAR monthly...', buttons: true }
@@ -74,7 +77,30 @@ export const WhatsAppPage = ({ cmsPage = null }: WhatsAppPageProps) => {
   const featuresSectionSubtitle = getCmsField(cmsPage, 'wa-features', 'subtitle', isRTL, isRTL ? "كل ما تحتاجه لتحويل واتساب إلى قناة تواصل احترافية مع عملائك" : "Everything you need to turn WhatsApp into a professional communication channel with your customers");
   const solutionsTitle = getCmsField(cmsPage, 'wa-features', 'solutions_title', isRTL, featuresSectionTitle);
   const campaignsTitle = getCmsField(cmsPage, 'wa-features', 'campaigns_title', isRTL, isRTL ? "أطلق حملاتك التسويقية بذكاء" : "Launch Your Campaigns Smartly");
-  const apiPricingTitle = getCmsField(cmsPage, 'wa-features', 'api_pricing_title', isRTL, isRTL ? "أسعار محادثات واتساب API" : "WhatsApp API Conversation Prices");
+  const apiPricingTitle = getCmsField(
+    cmsPage,
+    'wa-pricing',
+    'api_title',
+    isRTL,
+    getCmsField(cmsPage, 'wa-features', 'api_pricing_title', isRTL, isRTL ? "أسعار محادثات واتساب API" : "WhatsApp API Conversation Prices")
+  );
+  const apiPricingSubtitle = getCmsField(
+    cmsPage,
+    'wa-pricing',
+    'api_subtitle',
+    isRTL,
+    isRTL ? "الأسعار التالية محددة من واتساب (Meta) للسوق السعودي" : "The following prices are standardized by WhatsApp (Meta) for the Saudi Market"
+  );
+  const apiTipTitle = getCmsField(cmsPage, 'wa-pricing', 'api_tip_title', isRTL, isRTL ? "نصيحة احترافية" : "Pro Tip");
+  const apiTipDescription = getCmsField(
+    cmsPage,
+    'wa-pricing',
+    'api_tip_description',
+    isRTL,
+    isRTL
+      ? "محادثات خدمة العملاء مجانية تماماً خلال 24 ساعة من آخر رسالة! استفد من هذه الميزة للرد على استفسارات عملائك دون أي تكلفة إضافية."
+      : "Customer service conversations are completely free within 24 hours of the last message. Use this to answer customer questions with no extra cost."
+  );
   const primaryCtaText = getCmsField(cmsPage, 'wa-hero', 'cta_primary_text', isRTL, isRTL ? "اطلب الخدمة الآن" : "Order Service Now");
   const primaryCtaUrl = getCmsField(cmsPage, 'wa-hero', 'cta_primary_url', isRTL, "https://wapp.mobile.net.sa/billing-subscription");
   const secondaryCtaText = getCmsField(cmsPage, 'wa-hero', 'cta_secondary_text', isRTL, isRTL ? "استعرض الباقات" : "View Packages");
@@ -240,158 +266,21 @@ export const WhatsAppPage = ({ cmsPage = null }: WhatsAppPageProps) => {
     }
   ];
 
-  const pricingPlans = [
-    {
-      id: 0,
-      name: isRTL ? "الباقة الأساسية" : "Basic Package",
-      period: isRTL ? "شهرياً" : "Monthly",
-      popular: false,
-      color: "border-gray-300",
-      bgColor: "bg-white",
-      buttonColor: "bg-gray-700 hover:bg-gray-800",
-      additionalFeatures: isRTL ? [
-        "الويب هوك وواجهة برمجة التطبيقات",
-        "ربط المتجر مع المنصة",
-        "دعم فني فضي"
-      ] : [
-        "Webhooks and API",
-        "Store integration with platform",
-        "Silver technical support"
-      ],
-      tiers: [
-        {
-          name: isRTL ? "الشريحة 1" : "Tier 1",
-          price: "399",
-          priceWithTax: "459",
-          setupFee: "850",
-          conversations: "1,000",
-          broadcastMessages: "10,000",
-          users: "7"
-        },
-        {
-          name: isRTL ? "الشريحة 2" : "Tier 2",
-          price: "699",
-          priceWithTax: "804",
-          setupFee: "850",
-          conversations: "2,500",
-          broadcastMessages: "25,000",
-          users: "15"
-        },
-        {
-          name: isRTL ? "الشريحة 3" : "Tier 3",
-          price: "1,199",
-          priceWithTax: "1,379",
-          setupFee: "850",
-          conversations: "5,000",
-          broadcastMessages: "50,000",
-          users: "25"
-        }
-      ]
-    },
-    {
-      id: 1,
-      name: isRTL ? "باقة النمو" : "Growth Package",
-      period: isRTL ? "شهرياً" : "Monthly",
-      popular: true,
-      color: "border-[#F15822]",
-      bgColor: "bg-gradient-to-br from-orange-50 to-white",
-      buttonColor: "bg-[#F15822] hover:bg-[#d94a1a]",
-      badge: isRTL ? "الأكثر طلباً" : "Most Popular",
-      additionalFeatures: isRTL ? [
-        "كل مميزات الباقة الأساسية",
-        "ربط أكثر من متجر مع المنصة",
-        "شات بوت ذكي (Smart Chatbot)",
-        "مدير حساب مخصص",
-        "دعم فني ذهبي"
-      ] : [
-        "All features of the Basic Package",
-        "Multiple store integrations",
-        "Smart Chatbot",
-        "Dedicated Account Manager",
-        "Gold technical support"
-      ],
-      tiers: [
-        {
-          name: isRTL ? "الشريحة 1" : "Tier 1",
-          price: "659",
-          priceWithTax: "758",
-          setupFee: "1,919",
-          conversations: "1,000",
-          broadcastMessages: "10,000",
-          users: "7"
-        },
-        {
-          name: isRTL ? "الشريحة 2" : "Tier 2",
-          price: "999",
-          priceWithTax: "1,149",
-          setupFee: "1,919",
-          conversations: "2,500",
-          broadcastMessages: "25,000",
-          users: "15"
-        },
-        {
-          name: isRTL ? "الشريحة 3" : "Tier 3",
-          price: "1,619",
-          priceWithTax: "1,862",
-          setupFee: "1,919",
-          conversations: "5,000",
-          broadcastMessages: "50,000",
-          users: "25"
-        }
-      ]
-    },
-    {
-      id: 2,
-      name: isRTL ? "الباقة الاحترافية" : "Professional Package",
-      period: isRTL ? "شهرياً" : "Monthly",
-      popular: false,
-      color: "border-purple-400",
-      bgColor: "bg-gradient-to-br from-purple-50 to-white",
-      buttonColor: "bg-purple-700 hover:bg-purple-800",
-      additionalFeatures: isRTL ? [
-        "كل مميزات باقة النمو",
-        "موظف ذكاء اصطناعي (AI Agent)",
-        "استضافة محلية (حسب الطلب)",
-        "مدير حساب VIP",
-        "دعم فني بلاتيني"
-      ] : [
-        "All features of the Growth Package",
-        "AI Agent Employee",
-        "Local Hosting (Upon request)",
-        "VIP Account Manager",
-        "Platinum technical support"
-      ],
-      tiers: [
-        {
-          name: isRTL ? "الشريحة 1" : "Tier 1",
-          price: "999",
-          priceWithTax: "1,149",
-          setupFee: "2,919",
-          conversations: "1,000",
-          broadcastMessages: "10,000",
-          users: "7"
-        },
-        {
-          name: isRTL ? "الشريحة 2" : "Tier 2",
-          price: "1,499",
-          priceWithTax: "1,724",
-          setupFee: "2,919",
-          conversations: "2,500",
-          broadcastMessages: "25,000",
-          users: "15"
-        },
-        {
-          name: isRTL ? "الشريحة 3" : "Tier 3",
-          price: "2,199",
-          priceWithTax: "2,529",
-          setupFee: "2,919",
-          conversations: "5,000",
-          broadcastMessages: "50,000",
-          users: "25"
-        }
-      ]
-    }
-  ];
+  const defaultPricingPlans = useMemo(() => getDefaultWhatsAppPlans(isRTL), [isRTL]);
+  const cmsPricingPlansRaw = useMemo(
+    () => getCmsField(
+      cmsPage,
+      'wa-pricing',
+      'plans_list',
+      isRTL,
+      serializeWhatsAppPlans(defaultPricingPlans)
+    ),
+    [cmsPage, defaultPricingPlans, isRTL]
+  );
+  const pricingPlans = useMemo(
+    () => parseWhatsAppPlans(cmsPricingPlansRaw, defaultPricingPlans),
+    [cmsPricingPlansRaw, defaultPricingPlans]
+  );
 
   const greenTickComparison = [
     { feature: isRTL ? "ظهور اسم الشركة" : "Company Name Visibility", basic: true, verified: true, unverified: false },
@@ -400,36 +289,47 @@ export const WhatsAppPage = ({ cmsPage = null }: WhatsAppPageProps) => {
     { feature: isRTL ? "رسائل غير محدودة" : "Unlimited Messages", basic: false, verified: true, unverified: false }
   ];
 
-  const apiPricing = [
-    {
-      type: isRTL ? "محادثات خدمة العملاء" : "Customer Service Conversations",
-      price: isRTL ? "مجانية" : "Free",
-      duration: isRTL ? "24 ساعة" : "24 Hours",
-      description: isRTL ? "الرد على استفسارات العملاء خلال 24 ساعة من آخر رسالة" : "Reply to customer inquiries within 24 hours of their last message",
-      color: "bg-green-50 border-green-200"
-    },
-    {
-      type: isRTL ? "رسائل التحقق (OTP)" : "Verification Messages (OTP)",
-      price: "0.04",
-      duration: isRTL ? "للرسالة" : "per msg",
-      description: isRTL ? "رموز التحقق وتأكيد الهوية للمصادقة الآمنة" : "Verification codes and identity confirmation for secure authentication",
-      color: "bg-purple-50 border-purple-200"
-    },
-    {
-      type: isRTL ? "محادثات التفعيل" : "Activation Conversations",
-      price: "0.08",
-      duration: isRTL ? "للرسالة" : "per msg",
-      description: isRTL ? "تأكيد الطلبات، إشعارات الشحن، وتحديثات الحساب" : "Order confirmations, shipping notices, and account updates",
-      color: "bg-blue-50 border-blue-200"
-    },
-    {
-      type: isRTL ? "محادثات التسويق" : "Marketing Conversations",
-      price: "0.17",
-      duration: isRTL ? "للرسالة" : "per msg",
-      description: isRTL ? "رسائل ترويجية وحملات إعلانية للعملاء" : "Promotional messages and ad campaigns for customers",
-      color: "bg-orange-50 border-orange-200"
-    }
+  const defaultApiPricing = useMemo(() => getDefaultWhatsAppConversationPrices(isRTL), [isRTL]);
+  const cmsApiPricingRaw = useMemo(
+    () => getCmsField(
+      cmsPage,
+      'wa-pricing',
+      'api_prices_list',
+      isRTL,
+      serializeWhatsAppConversationPrices(defaultApiPricing)
+    ),
+    [cmsPage, defaultApiPricing, isRTL]
+  );
+  const apiPricing = useMemo(
+    () => parseWhatsAppConversationPrices(cmsApiPricingRaw, defaultApiPricing),
+    [cmsApiPricingRaw, defaultApiPricing]
+  );
+
+  const planThemes = [
+    { color: "border-gray-300", bgColor: "bg-white", buttonColor: "bg-gray-700 hover:bg-gray-800" },
+    { color: "border-[#F15822]", bgColor: "bg-gradient-to-br from-orange-50 to-white", buttonColor: "bg-[#F15822] hover:bg-[#d94a1a]" },
+    { color: "border-purple-400", bgColor: "bg-gradient-to-br from-purple-50 to-white", buttonColor: "bg-purple-700 hover:bg-purple-800" },
   ];
+  const apiCardColors = ["bg-green-50 border-green-200", "bg-purple-50 border-purple-200", "bg-blue-50 border-blue-200", "bg-orange-50 border-orange-200"];
+  const packageSummaryText = useMemo(() => {
+    if (!pricingPlans.length) {
+      return isRTL
+        ? "يمكننا تجهيز باقة مخصصة لك حسب احتياج نشاطك."
+        : "We can prepare a custom package based on your business needs.";
+    }
+
+    const summary = pricingPlans.map((plan) => {
+      const firstTier = plan.tiers[0];
+      const priceLabel = firstTier?.price
+        ? `${firstTier.price} ${isRTL ? "ر.س" : "SAR"}`
+        : (isRTL ? "سعر حسب الطلب" : "Custom pricing");
+      return `${plan.name} (${priceLabel})`;
+    });
+
+    return isRTL
+      ? `لدينا ${pricingPlans.length} باقات: ${summary.join("، ")}. كل باقة تحتوي على شرائح استخدام مختلفة حسب حجم أعمالك.`
+      : `We have ${pricingPlans.length} packages: ${summary.join(", ")}. Each package includes multiple usage tiers for different business sizes.`;
+  }, [pricingPlans, isRTL]);
 
   // التعامل مع الضغط على زر عرض الباقات
   const handleShowPackages = () => {
@@ -451,9 +351,7 @@ export const WhatsAppPage = ({ cmsPage = null }: WhatsAppPageProps) => {
         {
           id: prev.length + 1,
           type: 'bot',
-          text: isRTL 
-            ? 'لدينا 3 باقات: الأساسية (399 ر.س) تشمل API وربط المتجر، باقة النمو (659 ر.س) 🌟 الأكثر طلباً مع شات بوت ذكي، والاحترافية (999 ر.س) مع AI Agent. كل باقة لها 3 شرائح حسب الاستخدام 📊'
-            : 'We have 3 packages: Basic (399 SAR) includes API and Store linking, Growth (659 SAR) 🌟 Most popular with Smart Chatbot, and Professional (999 SAR) with AI Agent. Each has 3 tiers 📊',
+          text: packageSummaryText,
           buttons: false
         }
       ]);
@@ -986,19 +884,27 @@ export const WhatsAppPage = ({ cmsPage = null }: WhatsAppPageProps) => {
             >
               <div className="flex md:grid md:grid-cols-3 gap-6 lg:gap-8 min-w-max md:min-w-0">
                 {pricingPlans.map((plan, planIndex) => {
-                  const currentTier = plan.tiers[selectedTiers[plan.id]];
+                  const theme = planThemes[planIndex] || planThemes[0];
+                  const rawTierIndex = selectedTiers[planIndex] ?? 0;
+                  const currentTierIndex = Math.min(Math.max(rawTierIndex, 0), Math.max(plan.tiers.length - 1, 0));
+                  const currentTier = plan.tiers[currentTierIndex] || plan.tiers[0];
+                  const popularBadge = plan.badge || (isRTL ? "الأكثر طلباً" : "Most Popular");
+                  const subscribeLabel = plan.subscribeLabel || (isRTL ? "اشترك الآن" : "Subscribe Now");
+                  const subscribeUrl = plan.subscribeUrl || primaryCtaUrl;
+                  const featureItems = plan.additionalFeatures.length
+                    ? plan.additionalFeatures
+                    : [isRTL ? "يمكنك إضافة مميزات إضافية من لوحة التحكم" : "Add more features from CMS"];
 
                   return (
                     <Card
-                      key={plan.id}
+                      key={plan.id || `plan-${planIndex}`}
                       data-plan-card
-                      className={`relative overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 flex-shrink-0 w-[85vw] md:w-auto snap-center ${plan.popular ? 'border-4 ' + plan.color + ' shadow-xl md:scale-105' : 'border-2 ' + plan.color
-                        } ${plan.bgColor}`}
+                      className={`relative overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 flex-shrink-0 w-[85vw] md:w-auto snap-center ${plan.popular ? `border-4 ${theme.color} shadow-xl md:scale-105` : `border-2 ${theme.color}`} ${theme.bgColor}`}
                     >
                       {plan.popular && (
                         <div className="absolute top-0 left-0 right-0">
                           <div className="bg-[#F15822] text-white text-center py-2 text-sm font-bold">
-                            ⭐ {plan.badge}
+                            ⭐ {popularBadge}
                           </div>
                         </div>
                       )}
@@ -1015,8 +921,8 @@ export const WhatsAppPage = ({ cmsPage = null }: WhatsAppPageProps) => {
                               {plan.tiers.map((tier, index) => (
                                 <button
                                   key={index}
-                                  onClick={() => handleTierChange(plan.id, index)}
-                                  className={`px-2.5 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-bold transition-all ${selectedTiers[plan.id] === index
+                                  onClick={() => handleTierChange(planIndex, index)}
+                                  className={`px-2.5 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-bold transition-all ${currentTierIndex === index
                                     ? 'bg-[#128C7E] text-white shadow-lg scale-105'
                                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                     }`}
@@ -1064,7 +970,7 @@ export const WhatsAppPage = ({ cmsPage = null }: WhatsAppPageProps) => {
                               />
                             </span>
                           </div>
-                          <p className="text-xs md:text-sm text-gray-500 mb-0.5 md:mb-1">{plan.period}</p>
+                          <p className="text-xs md:text-sm text-gray-500 mb-0.5 md:mb-1">{plan.period || (isRTL ? "شهرياً" : "Monthly")}</p>
                           <p className="text-[10px] md:text-xs text-gray-400 inline-flex items-center justify-center gap-1">
                             <span>{isRTL ? "شامل الضريبة:" : "Tax included:"}</span>
                             <span>{currentTier.priceWithTax}</span>
@@ -1090,11 +996,11 @@ export const WhatsAppPage = ({ cmsPage = null }: WhatsAppPageProps) => {
                         </div>
 
                         <Button
-                          className={`w-full ${plan.buttonColor} text-white font-bold mb-4 md:mb-6 h-10 md:h-12 text-sm md:text-base`}
+                          className={`w-full ${theme.buttonColor} text-white font-bold mb-4 md:mb-6 h-10 md:h-12 text-sm md:text-base`}
                           asChild
                         >
-                          <a href="https://wapp.mobile.net.sa/billing-subscription" target="_blank" rel="noopener noreferrer">
-                            {isRTL ? "اشترك الآن" : "Subscribe Now"}
+                          <a href={subscribeUrl} target="_blank" rel="noopener noreferrer">
+                            {subscribeLabel}
                           </a>
                         </Button>
 
@@ -1107,7 +1013,7 @@ export const WhatsAppPage = ({ cmsPage = null }: WhatsAppPageProps) => {
                             {isRTL ? "المميزات الإضافية" : "Additional Features"}
                           </h4>
                           <div className="space-y-2 md:space-y-3">
-                            {plan.additionalFeatures.map((feature, index) => (
+                            {featureItems.map((feature, index) => (
                               <div key={index} className="flex items-start gap-2 md:gap-3">
                                 <CheckCircle2 className="w-4 md:w-5 h-4 md:h-5 text-[#25D366] flex-shrink-0 mt-0.5" />
                                 <span className={`text-xs md:text-sm text-gray-700 text-${isRTL ? 'right' : 'left'}`}>{feature}</span>
@@ -1159,13 +1065,13 @@ export const WhatsAppPage = ({ cmsPage = null }: WhatsAppPageProps) => {
                 {apiPricingTitle}
               </h2>
               <p className="text-lg text-gray-600">
-                {isRTL ? "الأسعار التالية محددة من واتساب (Meta) للسوق السعودي" : "The following prices are standardized by WhatsApp (Meta) for the Saudi Market"}
+                {apiPricingSubtitle}
               </p>
             </div>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
               {apiPricing.map((pricing, index) => (
-                <Card key={index} className={`border-2 ${pricing.color} hover:shadow-lg transition-all`}>
+                <Card key={index} className={`border-2 ${apiCardColors[index % apiCardColors.length]} hover:shadow-lg transition-all`}>
                   <CardContent className="p-6">
                     <div className="text-center mb-4">
                       <h3 className="text-lg font-bold text-[#161616] mb-2">
@@ -1175,7 +1081,7 @@ export const WhatsAppPage = ({ cmsPage = null }: WhatsAppPageProps) => {
                         <span className="text-3xl font-extrabold text-[#161616]">
                           {pricing.price}
                         </span>
-                        {pricing.price !== (isRTL ? "مجانية" : "Free") && (
+                        {!pricing.isFree && (
                           <span className="inline-flex items-center">
                             <ImageWithFallback
                               src={saudiRiyalSymbol}
@@ -1203,12 +1109,9 @@ export const WhatsAppPage = ({ cmsPage = null }: WhatsAppPageProps) => {
                   <Zap className="w-5 h-5 md:w-6 md:h-6 text-white" />
                 </div>
                 <div>
-                  <h4 className="text-sm md:text-base font-bold text-[#161616] mb-1 md:mb-2 text-start">💡 {isRTL ? "نصيحة احترافية" : "Pro Tip"}</h4>
+                  <h4 className="text-sm md:text-base font-bold text-[#161616] mb-1 md:mb-2 text-start">💡 {apiTipTitle}</h4>
                   <p className={`text-sm md:text-base text-gray-600 text-${isRTL ? 'right' : 'left'}`}>
-                    {isRTL 
-                      ? <>محادثات خدمة العملاء <span className="font-bold text-[#25D366]">مجانية تماماً</span> خلال 24 ساعة من آخر رسالة! استفد من هذه الميزة للرد على استفسارات عملائك دون أي تكلفة إضافية.</>
-                      : <>Customer service conversations are <span className="font-bold text-[#25D366]">completely FREE</span> within 24 hours of the last message! Take advantage of this feature to answer customer inquiries at no extra cost.</>
-                    }
+                    {apiTipDescription}
                   </p>
                 </div>
               </div>

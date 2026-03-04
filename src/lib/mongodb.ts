@@ -20,7 +20,7 @@ declare global {
   var mongoose: MongooseCache | undefined;
 }
 
-let cached: MongooseCache = global.mongoose || { conn: null, promise: null };
+const cached: MongooseCache = global.mongoose || { conn: null, promise: null };
 
 if (!global.mongoose) {
   global.mongoose = cached;
@@ -63,4 +63,3 @@ export async function connectDB() {
     throw new Error(`Database connection failed: ${errorMessage}. Please check your MONGODB_URI in .env.local`);
   }
 }
-

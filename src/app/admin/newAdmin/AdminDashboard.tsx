@@ -17,6 +17,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/business/
 import { Badge } from "@/components/business/ui/badge";
 import { encodeImagePath } from "@/utils/imagePath";
 import { useSiteData, type FooterData, type FooterNavItem, type FooterSocialItem, type SectionField } from "./SiteDataContext";
+import {
+  parseWhatsAppConversationPrices,
+  parseWhatsAppPlans,
+  serializeWhatsAppConversationPrices,
+  serializeWhatsAppPlans,
+  type WhatsAppConversationPrice,
+  type WhatsAppPlanConfig,
+  type WhatsAppPlanTier,
+} from "@/lib/cms/whatsappPricing";
 
 type AdminView = "dashboard" | "pages" | "page-editor" | "partners" | "settings" | "submissions" | "footer" | "blog";
 
@@ -1228,6 +1237,7 @@ const PageEditorView = ({ isAr, pageId, onBack }: { isAr: boolean; pageId: strin
       hero: { ar: "محتوى البانر", en: "Hero Content" },
       feature: { ar: "بطاقات المميزات", en: "Feature Cards" },
       pricing: { ar: "إعدادات الأسعار", en: "Pricing Settings" },
+      plans: { ar: "الباقات", en: "Packages" },
       modules: { ar: "قسم الوحدات", en: "Modules Section" },
       screenshots: { ar: "قسم لقطات النظام", en: "Screenshots Section" },
       tech: { ar: "قسم المواصفات التقنية", en: "Technical Section" },
@@ -1263,7 +1273,7 @@ const PageEditorView = ({ isAr, pageId, onBack }: { isAr: boolean; pageId: strin
       "sms-pricing": ["general", "benefit1", "benefit2", "benefit3", "plans"],
       "wa-hero": ["general", "cta"],
       "wa-features": ["general", "solutions", "campaigns", "api"],
-      "wa-pricing": ["general", "plans", "contact"],
+      "wa-pricing": ["general", "plans", "api", "contact"],
       "home-solutions": ["general", "wa", "sms", "otime", "govgate"],
       "ot-hero": ["general", "cta"],
       "ot-features": ["general", "modules", "screenshots", "tech"],
@@ -1391,6 +1401,20 @@ const PageEditorView = ({ isAr, pageId, onBack }: { isAr: boolean; pageId: strin
                             {groupFields.map((field) => (
                               section.id === "sms-pricing" && field.key === "plans_list" ? (
                                 <SmsPlansListEditor
+                                  key={field.key}
+                                  value={activeTab === "en" ? (field.valueEn || "") : field.value}
+                                  onChange={(val) => handleFieldChange(section.id, field.key, val)}
+                                  isAr={isAr}
+                                />
+                              ) : section.id === "wa-pricing" && field.key === "plans_list" ? (
+                                <WhatsAppPlansEditor
+                                  key={field.key}
+                                  value={activeTab === "en" ? (field.valueEn || "") : field.value}
+                                  onChange={(val) => handleFieldChange(section.id, field.key, val)}
+                                  isAr={isAr}
+                                />
+                              ) : section.id === "wa-pricing" && field.key === "api_prices_list" ? (
+                                <WhatsAppApiPricesEditor
                                   key={field.key}
                                   value={activeTab === "en" ? (field.valueEn || "") : field.value}
                                   onChange={(val) => handleFieldChange(section.id, field.key, val)}
@@ -1572,6 +1596,393 @@ const SmsPlansListEditor = ({ value, onChange, isAr }: { value: string; onChange
         {isAr
           ? "يتم الحفظ بصيغة قابلة للتوسع تلقائياً مع أي عدد باقات."
           : "Saved in a scalable format and supports any number of plans."}
+      </p>
+    </div>
+  );
+};
+
+const defaultWhatsAppPlanTier = (isAr: boolean): WhatsAppPlanTier => ({
+  name: isAr ? "شريحة جديدة" : "New Tier",
+  price: "",
+  priceWithTax: "",
+  setupFee: "",
+  conversations: "",
+  broadcastMessages: "",
+  users: "",
+});
+
+const defaultWhatsAppPlan = (isAr: boolean): WhatsAppPlanConfig => ({
+  id: `plan_${Date.now()}`,
+  name: isAr ? "باقة جديدة" : "New Package",
+  period: isAr ? "شهرياً" : "Monthly",
+  popular: false,
+  badge: isAr ? "الأكثر طلباً" : "Most Popular",
+  subscribeLabel: isAr ? "اشترك الآن" : "Subscribe Now",
+  subscribeUrl: "https://wapp.mobile.net.sa/billing-subscription",
+  additionalFeatures: [""],
+  tiers: [defaultWhatsAppPlanTier(isAr)],
+});
+
+const defaultWhatsAppApiPrice = (isAr: boolean): WhatsAppConversationPrice => ({
+  type: isAr ? "نوع المحادثة" : "Conversation Type",
+  price: "",
+  duration: isAr ? "للرسالة" : "per msg",
+  description: "",
+  isFree: false,
+});
+
+const WhatsAppPlansEditor = ({ value, onChange, isAr }: { value: string; onChange: (value: string) => void; isAr: boolean }) => {
+  const plans = parseWhatsAppPlans(value, []);
+
+  const commit = (next: WhatsAppPlanConfig[]) => {
+    onChange(serializeWhatsAppPlans(next));
+  };
+
+  const updatePlan = (index: number, patch: Partial<WhatsAppPlanConfig>) => {
+    const next = plans.map((plan, i) => {
+      if (i !== index) return plan;
+      return { ...plan, ...patch };
+    });
+    commit(next);
+  };
+
+  const updateTier = (planIndex: number, tierIndex: number, patch: Partial<WhatsAppPlanTier>) => {
+    const next = plans.map((plan, pIndex) => {
+      if (pIndex !== planIndex) return plan;
+      return {
+        ...plan,
+        tiers: plan.tiers.map((tier, tIndex) => (tIndex === tierIndex ? { ...tier, ...patch } : tier)),
+      };
+    });
+    commit(next);
+  };
+
+  const addPlan = () => {
+    commit([...plans, defaultWhatsAppPlan(isAr)]);
+  };
+
+  const removePlan = (index: number) => {
+    commit(plans.filter((_, i) => i !== index));
+  };
+
+  const addTier = (planIndex: number) => {
+    const next = plans.map((plan, i) => {
+      if (i !== planIndex) return plan;
+      return { ...plan, tiers: [...plan.tiers, defaultWhatsAppPlanTier(isAr)] };
+    });
+    commit(next);
+  };
+
+  const removeTier = (planIndex: number, tierIndex: number) => {
+    const next = plans.map((plan, i) => {
+      if (i !== planIndex) return plan;
+      return { ...plan, tiers: plan.tiers.filter((_, idx) => idx !== tierIndex) };
+    });
+    commit(next);
+  };
+
+  const addFeature = (planIndex: number) => {
+    const next = plans.map((plan, i) => {
+      if (i !== planIndex) return plan;
+      return { ...plan, additionalFeatures: [...plan.additionalFeatures, ""] };
+    });
+    commit(next);
+  };
+
+  const updateFeature = (planIndex: number, featureIndex: number, valueText: string) => {
+    const next = plans.map((plan, i) => {
+      if (i !== planIndex) return plan;
+      return {
+        ...plan,
+        additionalFeatures: plan.additionalFeatures.map((feature, idx) => (idx === featureIndex ? valueText : feature)),
+      };
+    });
+    commit(next);
+  };
+
+  const removeFeature = (planIndex: number, featureIndex: number) => {
+    const next = plans.map((plan, i) => {
+      if (i !== planIndex) return plan;
+      return { ...plan, additionalFeatures: plan.additionalFeatures.filter((_, idx) => idx !== featureIndex) };
+    });
+    commit(next);
+  };
+
+  return (
+    <div className="space-y-4">
+      <label className="text-xs text-gray-500 block">{isAr ? "تفاصيل باقات واتساب" : "WhatsApp package details"}</label>
+      {plans.map((plan, planIndex) => (
+        <div key={`${plan.id}-${planIndex}`} className="border border-gray-200 rounded-xl p-4 bg-white space-y-4">
+          <div className="flex items-center justify-between">
+            <h5 className="text-sm text-[#104E8B]">{isAr ? `الباقة ${planIndex + 1}` : `Package ${planIndex + 1}`}</h5>
+            <button
+              onClick={() => removePlan(planIndex)}
+              className="text-xs text-red-500 hover:text-red-600 hover:underline"
+            >
+              {isAr ? "حذف الباقة" : "Delete package"}
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <input
+              type="text"
+              value={plan.name}
+              onChange={(e) => updatePlan(planIndex, { name: e.target.value })}
+              placeholder={isAr ? "اسم الباقة" : "Package name"}
+              className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm"
+            />
+            <input
+              type="text"
+              value={plan.period}
+              onChange={(e) => updatePlan(planIndex, { period: e.target.value })}
+              placeholder={isAr ? "الدورية (مثال: شهرياً)" : "Period (e.g. Monthly)"}
+              className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm"
+            />
+            <input
+              type="text"
+              value={plan.badge}
+              onChange={(e) => updatePlan(planIndex, { badge: e.target.value })}
+              placeholder={isAr ? "شارة الباقة الشائعة" : "Popular badge text"}
+              className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm"
+            />
+            <label className="flex items-center gap-2 text-xs text-gray-600 px-1">
+              <input
+                type="checkbox"
+                checked={plan.popular}
+                onChange={(e) => updatePlan(planIndex, { popular: e.target.checked })}
+              />
+              {isAr ? "تمييز هذه الباقة كالأكثر طلباً" : "Mark this package as most popular"}
+            </label>
+            <input
+              type="text"
+              value={plan.subscribeLabel}
+              onChange={(e) => updatePlan(planIndex, { subscribeLabel: e.target.value })}
+              placeholder={isAr ? "نص زر الاشتراك" : "Subscribe button text"}
+              className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm"
+            />
+            <input
+              type="url"
+              value={plan.subscribeUrl}
+              onChange={(e) => updatePlan(planIndex, { subscribeUrl: e.target.value })}
+              placeholder={isAr ? "رابط الاشتراك" : "Subscribe URL"}
+              className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm"
+              dir="ltr"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-gray-500">{isAr ? "المميزات الإضافية" : "Additional features"}</p>
+              <button
+                onClick={() => addFeature(planIndex)}
+                className="text-xs text-[#104E8B] hover:text-[#0A2647] hover:underline"
+              >
+                {isAr ? "إضافة ميزة" : "Add feature"}
+              </button>
+            </div>
+            {plan.additionalFeatures.map((feature, featureIndex) => (
+              <div key={featureIndex} className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={feature}
+                  onChange={(e) => updateFeature(planIndex, featureIndex, e.target.value)}
+                  placeholder={isAr ? "ميزة الباقة" : "Package feature"}
+                  className="flex-1 border border-gray-200 rounded-md px-3 py-2 text-sm"
+                />
+                <button
+                  onClick={() => removeFeature(planIndex, featureIndex)}
+                  className="text-xs text-red-500 hover:text-red-600 hover:underline"
+                >
+                  {isAr ? "حذف" : "Delete"}
+                </button>
+              </div>
+            ))}
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-gray-500">{isAr ? "شرائح الباقة" : "Package tiers"}</p>
+              <button
+                onClick={() => addTier(planIndex)}
+                className="text-xs text-[#104E8B] hover:text-[#0A2647] hover:underline"
+              >
+                {isAr ? "إضافة شريحة" : "Add tier"}
+              </button>
+            </div>
+
+            {plan.tiers.map((tier, tierIndex) => (
+              <div key={tierIndex} className="border border-gray-100 rounded-lg p-3 space-y-2 bg-gray-50">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs text-gray-600">{isAr ? `الشريحة ${tierIndex + 1}` : `Tier ${tierIndex + 1}`}</p>
+                  <button
+                    onClick={() => removeTier(planIndex, tierIndex)}
+                    className="text-xs text-red-500 hover:text-red-600 hover:underline"
+                  >
+                    {isAr ? "حذف الشريحة" : "Delete tier"}
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                  <input
+                    type="text"
+                    value={tier.name}
+                    onChange={(e) => updateTier(planIndex, tierIndex, { name: e.target.value })}
+                    placeholder={isAr ? "اسم الشريحة" : "Tier name"}
+                    className="border border-gray-200 rounded-md px-2.5 py-2 text-xs"
+                  />
+                  <input
+                    type="text"
+                    value={tier.price}
+                    onChange={(e) => updateTier(planIndex, tierIndex, { price: e.target.value })}
+                    placeholder={isAr ? "السعر" : "Price"}
+                    className="border border-gray-200 rounded-md px-2.5 py-2 text-xs"
+                  />
+                  <input
+                    type="text"
+                    value={tier.priceWithTax}
+                    onChange={(e) => updateTier(planIndex, tierIndex, { priceWithTax: e.target.value })}
+                    placeholder={isAr ? "السعر شامل الضريبة" : "Tax-included price"}
+                    className="border border-gray-200 rounded-md px-2.5 py-2 text-xs"
+                  />
+                  <input
+                    type="text"
+                    value={tier.setupFee}
+                    onChange={(e) => updateTier(planIndex, tierIndex, { setupFee: e.target.value })}
+                    placeholder={isAr ? "رسوم التأسيس" : "Setup fee"}
+                    className="border border-gray-200 rounded-md px-2.5 py-2 text-xs"
+                  />
+                  <input
+                    type="text"
+                    value={tier.conversations}
+                    onChange={(e) => updateTier(planIndex, tierIndex, { conversations: e.target.value })}
+                    placeholder={isAr ? "عدد المحادثات" : "Conversations"}
+                    className="border border-gray-200 rounded-md px-2.5 py-2 text-xs"
+                  />
+                  <input
+                    type="text"
+                    value={tier.broadcastMessages}
+                    onChange={(e) => updateTier(planIndex, tierIndex, { broadcastMessages: e.target.value })}
+                    placeholder={isAr ? "رسائل البث" : "Broadcast messages"}
+                    className="border border-gray-200 rounded-md px-2.5 py-2 text-xs"
+                  />
+                  <input
+                    type="text"
+                    value={tier.users}
+                    onChange={(e) => updateTier(planIndex, tierIndex, { users: e.target.value })}
+                    placeholder={isAr ? "عدد المستخدمين" : "Users"}
+                    className="border border-gray-200 rounded-md px-2.5 py-2 text-xs"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <button
+        onClick={addPlan}
+        className="flex items-center gap-1 text-xs text-[#104E8B] hover:text-[#0A2647] transition-colors"
+      >
+        <Plus className="w-3.5 h-3.5" />
+        {isAr ? "إضافة باقة واتساب" : "Add WhatsApp package"}
+      </button>
+      <p className="text-[11px] text-gray-400">
+        {isAr
+          ? "يتم حفظ الباقات والشرائح بصيغة منظمة لعرضها تلقائياً في صفحة المنتج."
+          : "Packages and tiers are saved in a structured format for automatic product-page rendering."}
+      </p>
+    </div>
+  );
+};
+
+const WhatsAppApiPricesEditor = ({ value, onChange, isAr }: { value: string; onChange: (value: string) => void; isAr: boolean }) => {
+  const rows = parseWhatsAppConversationPrices(value, []);
+
+  const commit = (next: WhatsAppConversationPrice[]) => {
+    onChange(serializeWhatsAppConversationPrices(next));
+  };
+
+  const updateRow = (index: number, patch: Partial<WhatsAppConversationPrice>) => {
+    const next = rows.map((row, i) => {
+      if (i !== index) return row;
+      const updated = { ...row, ...patch };
+      if (updated.isFree && !updated.price.trim()) {
+        return { ...updated, price: isAr ? "مجانية" : "Free" };
+      }
+      return updated;
+    });
+    commit(next);
+  };
+
+  const addRow = () => {
+    commit([...rows, defaultWhatsAppApiPrice(isAr)]);
+  };
+
+  const removeRow = (index: number) => {
+    commit(rows.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div className="space-y-3">
+      <label className="text-xs text-gray-500 block">{isAr ? "أسعار محادثات API" : "API conversation prices"}</label>
+      {rows.map((row, index) => (
+        <div key={index} className="border border-gray-200 rounded-lg p-3 bg-white space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <input
+              type="text"
+              value={row.type}
+              onChange={(e) => updateRow(index, { type: e.target.value })}
+              placeholder={isAr ? "نوع المحادثة" : "Conversation type"}
+              className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm"
+            />
+            <input
+              type="text"
+              value={row.price}
+              onChange={(e) => updateRow(index, { price: e.target.value })}
+              placeholder={isAr ? "السعر (أو مجانية)" : "Price (or Free)"}
+              className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm"
+            />
+            <input
+              type="text"
+              value={row.duration}
+              onChange={(e) => updateRow(index, { duration: e.target.value })}
+              placeholder={isAr ? "المدة" : "Duration"}
+              className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm"
+            />
+            <label className="flex items-center gap-2 text-xs text-gray-600 px-1">
+              <input
+                type="checkbox"
+                checked={row.isFree}
+                onChange={(e) => updateRow(index, { isFree: e.target.checked })}
+              />
+              {isAr ? "محادثة مجانية" : "Free conversation"}
+            </label>
+          </div>
+          <textarea
+            rows={2}
+            value={row.description}
+            onChange={(e) => updateRow(index, { description: e.target.value })}
+            placeholder={isAr ? "وصف المحادثة" : "Conversation description"}
+            className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm resize-none"
+          />
+          <button
+            onClick={() => removeRow(index)}
+            className="text-xs text-red-500 hover:text-red-600 hover:underline"
+          >
+            {isAr ? "حذف النوع" : "Delete type"}
+          </button>
+        </div>
+      ))}
+      <button
+        onClick={addRow}
+        className="flex items-center gap-1 text-xs text-[#104E8B] hover:text-[#0A2647] transition-colors"
+      >
+        <Plus className="w-3.5 h-3.5" />
+        {isAr ? "إضافة نوع محادثة" : "Add conversation type"}
+      </button>
+      <p className="text-[11px] text-gray-400">
+        {isAr
+          ? "يمكنك التحكم الكامل في أنواع المحادثات وتسعيرها كما تظهر في صفحة واتساب."
+          : "You can fully control conversation types and their pricing as shown on the WhatsApp page."}
       </p>
     </div>
   );

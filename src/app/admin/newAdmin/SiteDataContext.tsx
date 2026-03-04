@@ -1,6 +1,12 @@
 'use client';
 
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import {
+  getDefaultWhatsAppConversationPrices,
+  getDefaultWhatsAppPlans,
+  serializeWhatsAppConversationPrices,
+  serializeWhatsAppPlans,
+} from "@/lib/cms/whatsappPricing";
 
 export interface Partner {
   id: string;
@@ -323,6 +329,137 @@ const ensureHomeSolutionsFields = (pages: PageData[]): PageData[] => {
     });
 
     return pageChanged ? { ...page, sections } : page;
+  });
+};
+
+const defaultWhatsAppPricingFields: SectionField[] = [
+  {
+    key: "title",
+    label: "عنوان قسم الباقات",
+    labelEn: "Packages Section Title",
+    type: "text",
+    value: "اختر الباقة المناسبة لنمو أعمالك",
+    valueEn: "Choose the right package for your business growth",
+  },
+  {
+    key: "subtitle",
+    label: "وصف قسم الباقات",
+    labelEn: "Packages Section Subtitle",
+    type: "textarea",
+    value: "باقات مرنة تناسب جميع أحجام الأعمال من الشركات الناشئة إلى المؤسسات الكبرى",
+    valueEn: "Flexible packages suitable for all business sizes from startups to large enterprises",
+  },
+  {
+    key: "plans_note",
+    label: "عنوان ملاحظة الباقات",
+    labelEn: "Plans Note Title",
+    type: "text",
+    value: "ملاحظة مهمة",
+    valueEn: "Important Note",
+  },
+  {
+    key: "contact_note",
+    label: "نص ملاحظة الباقات",
+    labelEn: "Plans Note Text",
+    type: "textarea",
+    value: "الأسعار الموضحة تشمل 3 شرائح لكل باقة. تتوفر خصومات خاصة للشركات الكبرى والجهات الحكومية.",
+    valueEn: "The stated prices include 3 tiers for each package. Special discounts are available for large companies and government entities.",
+  },
+  {
+    key: "plans_list",
+    label: "تفاصيل الباقات والشرائح",
+    labelEn: "Packages and Tiers Details",
+    type: "list",
+    value: serializeWhatsAppPlans(getDefaultWhatsAppPlans(true)),
+    valueEn: serializeWhatsAppPlans(getDefaultWhatsAppPlans(false)),
+  },
+  {
+    key: "api_title",
+    label: "عنوان أسعار محادثات API",
+    labelEn: "API Pricing Title",
+    type: "text",
+    value: "أسعار محادثات واتساب API",
+    valueEn: "WhatsApp API Conversation Prices",
+  },
+  {
+    key: "api_subtitle",
+    label: "وصف أسعار محادثات API",
+    labelEn: "API Pricing Subtitle",
+    type: "textarea",
+    value: "الأسعار التالية محددة من واتساب (Meta) للسوق السعودي",
+    valueEn: "The following prices are standardized by WhatsApp (Meta) for the Saudi Market",
+  },
+  {
+    key: "api_prices_list",
+    label: "قائمة أسعار محادثات API",
+    labelEn: "API Conversation Pricing List",
+    type: "list",
+    value: serializeWhatsAppConversationPrices(getDefaultWhatsAppConversationPrices(true)),
+    valueEn: serializeWhatsAppConversationPrices(getDefaultWhatsAppConversationPrices(false)),
+  },
+  {
+    key: "api_tip_title",
+    label: "عنوان النصيحة",
+    labelEn: "Tip Title",
+    type: "text",
+    value: "نصيحة احترافية",
+    valueEn: "Pro Tip",
+  },
+  {
+    key: "api_tip_description",
+    label: "وصف النصيحة",
+    labelEn: "Tip Description",
+    type: "textarea",
+    value: "محادثات خدمة العملاء مجانية تماماً خلال 24 ساعة من آخر رسالة! استفد من هذه الميزة للرد على استفسارات عملائك دون أي تكلفة إضافية.",
+    valueEn: "Customer service conversations are completely free within 24 hours of the last message. Use this to answer customer questions with no extra cost.",
+  },
+];
+
+const ensureWhatsAppPricingFields = (pages: PageData[]): PageData[] => {
+  return pages.map((page) => {
+    if (page.id !== "whatsapp" && page.path !== "/products/whatsapp") {
+      return page;
+    }
+    if (!Array.isArray(page.sections)) {
+      return page;
+    }
+
+    const pricingSectionIndex = page.sections.findIndex((section) => section.id === "wa-pricing");
+    if (pricingSectionIndex === -1) {
+      return {
+        ...page,
+        sections: [
+          ...page.sections,
+          {
+            id: "wa-pricing",
+            name: "تسعير واتساب",
+            nameEn: "WhatsApp Pricing",
+            visible: true,
+            fields: defaultWhatsAppPricingFields.map((field) => ({ ...field })),
+          },
+        ],
+      };
+    }
+
+    const pricingSection = page.sections[pricingSectionIndex];
+    const safeFields = Array.isArray(pricingSection.fields) ? pricingSection.fields : [];
+    const existingKeys = new Set(safeFields.map((field) => field.key));
+    const missingFields = defaultWhatsAppPricingFields
+      .filter((field) => !existingKeys.has(field.key))
+      .map((field) => ({ ...field }));
+
+    if (!missingFields.length) {
+      return page;
+    }
+
+    return {
+      ...page,
+      sections: page.sections.map((section, index) =>
+        index === pricingSectionIndex
+          ? { ...section, fields: [...safeFields, ...missingFields] }
+          : section
+      ),
+    };
   });
 };
 
@@ -730,7 +867,11 @@ export const SiteDataProvider = ({ children }: { children: React.ReactNode }) =>
         }
 
         const loadedPages = Array.isArray(site.pages) ? (site.pages as PageData[]) : [];
-        const enhancedPages = ensureContactPageFields(ensureHomeHeroFields(ensureHomeSolutionsFields(loadedPages)));
+        const enhancedPages = ensureContactPageFields(
+          ensureWhatsAppPricingFields(
+            ensureHomeHeroFields(ensureHomeSolutionsFields(loadedPages))
+          )
+        );
         const mergedFooterData = mergeFooterData(site.footerData);
         normalizedDataChanged =
           JSON.stringify(loadedPages) !== JSON.stringify(enhancedPages) ||

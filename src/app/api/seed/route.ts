@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import SiteCms from '@/models/SiteCms';
 import { cleanupLegacyCollections } from '@/lib/db/legacyCleanup';
+import {
+  getDefaultWhatsAppConversationPrices,
+  getDefaultWhatsAppPlans,
+  serializeWhatsAppConversationPrices,
+  serializeWhatsAppPlans,
+} from '@/lib/cms/whatsappPricing';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -314,13 +320,34 @@ const defaultPageSectionsById: Record<string, SeedSection[]> = {
   ],
   whatsapp: [
     { id: 'wa-hero', name: 'WhatsApp Hero', nameEn: 'WhatsApp Hero', visible: true, fields: [
+      { key: 'badge', label: 'شارة واتساب', labelEn: 'WhatsApp Badge', type: 'text', value: 'واتساب أعمال API المعتمد', valueEn: 'Official WhatsApp Business API' },
       { key: 'title', label: 'العنوان', labelEn: 'Title', type: 'text', value: 'واتساب أعمال API', valueEn: 'WhatsApp Business API' },
       { key: 'subtitle', label: 'الوصف المختصر', labelEn: 'Subtitle', type: 'text', value: 'تواصل احترافي مع عملائك', valueEn: 'Professional customer communication' },
+      { key: 'description', label: 'الوصف التفصيلي', labelEn: 'Detailed Description', type: 'textarea', value: 'كن أقرب لعملائك. نوفر لك ربطاً رسمياً ومعتمداً بخدمة واتساب مع أدوات متقدمة لإدارة المحادثات، الشات بوت، والحملات التسويقية.', valueEn: 'Get closer to your customers. We provide an official WhatsApp integration with advanced tools for chat management, chatbots, and marketing campaigns.' },
       { key: 'cta_primary_text', label: 'نص الزر الأساسي', labelEn: 'Primary CTA Text', type: 'text', value: 'اطلب الخدمة الآن', valueEn: 'Order Service Now' },
       { key: 'cta_primary_url', label: 'رابط الزر الأساسي', labelEn: 'Primary CTA URL', type: 'url', value: 'https://wapp.mobile.net.sa/billing-subscription', valueEn: 'https://wapp.mobile.net.sa/billing-subscription' },
+      { key: 'cta_secondary_text', label: 'نص الزر الثانوي', labelEn: 'Secondary CTA Text', type: 'text', value: 'استعرض الباقات', valueEn: 'View Packages' },
+      { key: 'cta_secondary_url', label: 'رابط الزر الثانوي', labelEn: 'Secondary CTA URL', type: 'url', value: 'https://wa.me/966920006900', valueEn: 'https://wa.me/966920006900' },
     ] },
-    { id: 'wa-features', name: 'مميزات واتساب', nameEn: 'WhatsApp Features', visible: true, fields: [] },
-    { id: 'wa-pricing', name: 'تسعير واتساب', nameEn: 'WhatsApp Pricing', visible: true, fields: [] },
+    { id: 'wa-features', name: 'مميزات واتساب', nameEn: 'WhatsApp Features', visible: true, fields: [
+      { key: 'title', label: 'عنوان قسم المميزات', labelEn: 'Features Section Title', type: 'text', value: 'أدوات احترافية لإدارة محادثاتك', valueEn: 'Professional Tools to Manage Conversations' },
+      { key: 'subtitle', label: 'وصف قسم المميزات', labelEn: 'Features Section Subtitle', type: 'textarea', value: 'كل ما تحتاجه لتحويل واتساب إلى قناة تواصل احترافية مع عملائك', valueEn: 'Everything you need to turn WhatsApp into a professional communication channel with your customers' },
+      { key: 'solutions_title', label: 'عنوان قسم الحلول', labelEn: 'Solutions Section Title', type: 'text', value: 'أدوات احترافية لإدارة محادثاتك', valueEn: 'Professional Tools to Manage Conversations' },
+      { key: 'campaigns_title', label: 'عنوان قسم الحملات', labelEn: 'Campaigns Section Title', type: 'text', value: 'أطلق حملاتك التسويقية بذكاء', valueEn: 'Launch Your Campaigns Smartly' },
+      { key: 'api_pricing_title', label: 'عنوان أسعار محادثات API (قديم)', labelEn: 'API Conversation Prices Title (Legacy)', type: 'text', value: 'أسعار محادثات واتساب API', valueEn: 'WhatsApp API Conversation Prices' },
+    ] },
+    { id: 'wa-pricing', name: 'تسعير واتساب', nameEn: 'WhatsApp Pricing', visible: true, fields: [
+      { key: 'title', label: 'عنوان قسم الباقات', labelEn: 'Packages Section Title', type: 'text', value: 'اختر الباقة المناسبة لنمو أعمالك', valueEn: 'Choose the right package for your business growth' },
+      { key: 'subtitle', label: 'وصف قسم الباقات', labelEn: 'Packages Section Subtitle', type: 'textarea', value: 'باقات مرنة تناسب جميع أحجام الأعمال من الشركات الناشئة إلى المؤسسات الكبرى', valueEn: 'Flexible packages suitable for all business sizes from startups to large enterprises' },
+      { key: 'plans_note', label: 'عنوان ملاحظة الباقات', labelEn: 'Plans Note Title', type: 'text', value: 'ملاحظة مهمة', valueEn: 'Important Note' },
+      { key: 'contact_note', label: 'نص ملاحظة الباقات', labelEn: 'Plans Note Text', type: 'textarea', value: 'الأسعار الموضحة تشمل 3 شرائح لكل باقة. تتوفر خصومات خاصة للشركات الكبرى والجهات الحكومية.', valueEn: 'The stated prices include 3 tiers for each package. Special discounts are available for large companies and government entities.' },
+      { key: 'plans_list', label: 'تفاصيل الباقات والشرائح', labelEn: 'Packages and Tiers Details', type: 'list', value: serializeWhatsAppPlans(getDefaultWhatsAppPlans(true)), valueEn: serializeWhatsAppPlans(getDefaultWhatsAppPlans(false)) },
+      { key: 'api_title', label: 'عنوان أسعار محادثات API', labelEn: 'API Pricing Title', type: 'text', value: 'أسعار محادثات واتساب API', valueEn: 'WhatsApp API Conversation Prices' },
+      { key: 'api_subtitle', label: 'وصف أسعار محادثات API', labelEn: 'API Pricing Subtitle', type: 'textarea', value: 'الأسعار التالية محددة من واتساب (Meta) للسوق السعودي', valueEn: 'The following prices are standardized by WhatsApp (Meta) for the Saudi Market' },
+      { key: 'api_prices_list', label: 'قائمة أسعار محادثات API', labelEn: 'API Conversation Pricing List', type: 'list', value: serializeWhatsAppConversationPrices(getDefaultWhatsAppConversationPrices(true)), valueEn: serializeWhatsAppConversationPrices(getDefaultWhatsAppConversationPrices(false)) },
+      { key: 'api_tip_title', label: 'عنوان النصيحة', labelEn: 'Tip Title', type: 'text', value: 'نصيحة احترافية', valueEn: 'Pro Tip' },
+      { key: 'api_tip_description', label: 'وصف النصيحة', labelEn: 'Tip Description', type: 'textarea', value: 'محادثات خدمة العملاء مجانية تماماً خلال 24 ساعة من آخر رسالة! استفد من هذه الميزة للرد على استفسارات عملائك دون أي تكلفة إضافية.', valueEn: 'Customer service conversations are completely free within 24 hours of the last message. Use this to answer customer questions with no extra cost.' },
+    ] },
   ],
   otime: [
     { id: 'ot-hero', name: 'O-Time Hero', nameEn: 'O-Time Hero', visible: true, fields: [
