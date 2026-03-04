@@ -7,8 +7,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import GoogleTagManager from "@/components/GoogleTagManager";
 import PrivacyConsent from "@/components/PrivacyConsent";
 
-const analyticsEnabled = process.env.NEXT_PUBLIC_ENABLE_ANALYTICS === 'true';
 const gtmId = process.env.NEXT_PUBLIC_GTM_ID?.trim();
+const analyticsEnabled = Boolean(gtmId) && process.env.NEXT_PUBLIC_ENABLE_ANALYTICS !== 'false';
 
 const ibmPlexSans = IBM_Plex_Sans({
   weight: ['300', '400', '500', '600', '700'],
@@ -58,9 +58,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`scroll-smooth overflow-x-hidden ${ibmPlexSans.variable} ${ibmPlexSansArabic.variable}`}>
       <body className="antialiased transition-colors duration-300 overflow-x-hidden" style={{ width: '100%', maxWidth: '100vw' }} suppressHydrationWarning>
+        {analyticsEnabled && gtmId ? <GoogleTagManager gtmId={gtmId} /> : null}
         <ThemeProvider>
           <LanguageProvider>
-            {analyticsEnabled && gtmId ? <GoogleTagManager gtmId={gtmId} /> : null}
             {analyticsEnabled ? <PrivacyConsent /> : null}
 
             {children}

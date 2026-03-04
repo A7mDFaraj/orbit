@@ -553,10 +553,10 @@ function MobileMenu({ setIsOpen, navbarIsDark, isRTL, solutionsList, textColorCl
                     className="overflow-hidden"
                   >
                     <div className={`${isRTL ? 'pr-4' : 'pl-4'} space-y-1`}>
-                      {solutionsList.map((solution: { slug: string; nameEn: string; nameAr: string }) => (
+                      {solutionsList.map((solution: { slug: string; nameEn: string; nameAr: string; href: string }) => (
                         <Link
                           key={solution.slug}
-                          href={`/products/${solution.slug === 'sms-platform' ? 'sms' : solution.slug === 'whatsapp-business-api' ? 'whatsapp' : solution.slug}`}
+                          href={solution.href}
                           className={`block px-4 py-3 rounded-lg transition-all ${navbarIsDark ? 'hover:bg-white/5 text-gray-200' : needsHighContrast ? 'hover:bg-gray-100 text-gray-900' : 'hover:bg-gray-100 text-gray-700'} ${isRTL ? 'font-ibm-plex-arabic' : ''}`}
                           dir={isRTL ? 'rtl' : 'ltr'}
                           onClick={() => setIsOpen(false)}
